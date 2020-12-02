@@ -1,3 +1,5 @@
+# DalamudSamplePlugin
+
 Sample Plugin template that uses things I often use including my common code library.
 
 ## Preview
