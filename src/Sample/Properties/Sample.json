@@ -1,0 +1,11 @@
+{
+    "Author": "kalilistic",
+    "Name": "Sample",
+    "Description": "This is a sample plugin.",
+    "InternalName": "Sample",
+    "AssemblyVersion": "<%version%>",
+    "RepoUrl": "https://github.com/kalilistic/DalamudSamplePlugin",
+    "Tags": ["sample", "dalamud"],
+    "ApplicableVersion": "any",
+    "DalamudApiLevel": "1"
+}

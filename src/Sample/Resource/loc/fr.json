@@ -1,0 +1,223 @@
+{
+    "SellOnMarketboard": {
+        "message": "Vendre sur le marché",
+        "description": "Result.UpdateLanguage"
+    },
+    "FailedToGetData": {
+        "message": "Impossible d'obtenir les données",
+        "description": "Result.UpdateLanguage"
+    },
+    "NoDataAvailable": {
+        "message": "Aucun donné disponible",
+        "description": "Result.UpdateLanguage"
+    },
+    "NoRecentDataAvailable": {
+        "message": "Aucune donnée récente",
+        "description": "Result.UpdateLanguage"
+    },
+    "BelowVendor": {
+        "message": "Vendre au vendeur",
+        "description": "Result.UpdateLanguage"
+    },
+    "BelowMinimum": {
+        "message": "Below minimum price",
+        "description": "Result.UpdateLanguage"
+    },
+    "Unmarketable": {
+        "message": "Impossible de vendre sur le marché",
+        "description": "Result.UpdateLanguage"
+    },
+    "HelpMessage": {
+        "message":
+            "To check prices, hold your keybind and then hover over an item in your inventory or linked in chat. You can set your keybind (or disable it) in the Sample settings. The prices are averages from Universalis and will not match any specific listings you see on the market board. You can use /samp to open the overlay and /sampconfig to open settings. If you need help, reach out on discord or open an issue on GitHub. If you want to help add translations, you can submit updates on Crowdin. Links to both GitHub and Crowdin are available in settings.",
+        "description": "SamplePlugin.PrintHelpMessage"
+    },
+    "InstallThankYou": {
+        "message": "Merci d'avoir installé Sample !",
+        "description": "SamplePlugin.HandleFreshInstall"
+    },
+    "SettingsWindow": {
+        "message": "Sample Settings",
+        "description": "SettingsWindow.DrawWindow"
+    },
+    "General": {
+        "message": "General",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "Overlay": {
+        "message": "Overlay",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "Chat": {
+        "message": "Chat",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "Keybind": {
+        "message": "Raccourcis clavier",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "Thresholds": {
+        "message": "Thresholds",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "Other": {
+        "message": "Other",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "PluginEnabled": {
+        "message": "Plugin Enabled",
+        "description": "SettingsWindow.DrawGeneral"
+    },
+    "PluginEnabled_HelpMarker": {
+        "message": "toggle the plugin on/off",
+        "description": "SettingsWindow.DrawGeneral"
+    },
+    "ShowPrices": {
+        "message": "Afficher les prix",
+        "description": "SettingsWindow.DrawGeneral"
+    },
+    "ShowPrices_HelpMarker": {
+        "message": "afficher le prix ou voir les conseils",
+        "description": "SettingsWindow.DrawGeneral"
+    },
+    "ShowUnmarketable": {
+        "message": "Show Unmarketable",
+        "description": "SettingsWindow.DrawGeneral"
+    },
+    "ShowUnmarketable_HelpMarker": {
+        "message": "toggle whether to show items unmarketable items",
+        "description": "SettingsWindow.DrawGeneral"
+    },
+    "HoverDelay": {
+        "message": "Hover Delay",
+        "description": "SettingsWindow.DrawGeneral"
+    },
+    "HoverDelay_HelpMarker": {
+        "message": "delay (in seconds) before processing after hovering",
+        "description": "SettingsWindow.DrawGeneral"
+    },
+    "Language": {
+        "message": "Language",
+        "description": "SettingsWindow.DrawGeneral"
+    },
+    "Language_HelpMarker": {
+        "message": "use default or override plugin ui language",
+        "description": "SettingsWindow.DrawGeneral"
+    },
+    "ShowOverlay": {
+        "message": "Show Overlay",
+        "description": "SettingsWindow.DrawOverlay"
+    },
+    "ShowOverlay_HelpMarker": {
+        "message": "show price check results in overlay window",
+        "description": "SettingsWindow.DrawOverlay"
+    },
+    "UseOverlayColors": {
+        "message": "Use Overlay Colors",
+        "description": "SettingsWindow.DrawOverlay"
+    },
+    "UseOverlayColors_HelpMarker": {
+        "message": "use different colors for overlay based on result",
+        "description": "SettingsWindow.DrawOverlay"
+    },
+    "MaxItems": {
+        "message": "Max Items",
+        "description": "SettingsWindow.DrawOverlay"
+    },
+    "MaxItems_HelpMarker": {
+        "message": "set max number of items in overlay at a time",
+        "description": "SettingsWindow.DrawOverlay"
+    },
+    "ShowInChat": {
+        "message": "Show in Chat",
+        "description": "SettingsWindow.DrawChat"
+    },
+    "ShowInChat_HelpMarker": {
+        "message": "show price check results in chat",
+        "description": "SettingsWindow.DrawChat"
+    },
+    "UseChatColors": {
+        "message": "Use Chat Colors",
+        "description": "SettingsWindow.DrawChat"
+    },
+    "UseChatColors_HelpMarker": {
+        "message": "use different colors for chat based on result",
+        "description": "SettingsWindow.DrawChat"
+    },
+    "UseItemLinks": {
+        "message": "Use Item Links",
+        "description": "SettingsWindow.DrawChat"
+    },
+    "UseItemLinks_HelpMarker": {
+        "message": "use item links in chat results",
+        "description": "SettingsWindow.DrawChat"
+    },
+    "KeybindEnabled": {
+        "message": "Use Keybind",
+        "description": "SettingsWindow.DrawKeybind"
+    },
+    "KeybindEnabled_HelpMarker": {
+        "message": "toggle if keybind is used or just hover",
+        "description": "SettingsWindow.DrawKeybind"
+    },
+    "ModifierKeybind": {
+        "message": "Modifier",
+        "description": "SettingsWindow.DrawKeybind"
+    },
+    "ModifierKeybind_HelpMarker": {
+        "message": "set your modifier key (e.g. shift)",
+        "description": "SettingsWindow.DrawKeybind"
+    },
+    "PrimaryKeybind": {
+        "message": "Primary",
+        "description": "SettingsWindow.DrawKeybind"
+    },
+    "PrimaryKeybind_HelpMarker": {
+        "message": "set your primary key (e.g. None, Z)",
+        "description": "SettingsWindow.DrawKeybind"
+    },
+    "MinimumPrice": {
+        "message": "Minimum Price",
+        "description": "SettingsWindow.DrawThresholds"
+    },
+    "MinimumPrice_HelpMarker": {
+        "message": "set minimum price at which actual average will be displayed",
+        "description": "SettingsWindow.DrawThresholds"
+    },
+    "MaxUploadDays": {
+        "message": "Max Upload Days",
+        "description": "SettingsWindow.DrawThresholds"
+    },
+    "MaxUploadDays_HelpMarker": {
+        "message": "set maximum age to avoid using old data",
+        "description": "SettingsWindow.DrawThresholds"
+    },
+    "OpenGithub": {
+        "message": "Open Github",
+        "description": "SettingsWindow.DrawOther"
+    },
+    "PrintHelp": {
+        "message": "Print Help",
+        "description": "SettingsWindow.DrawOther"
+    },
+    "ImproveTranslate": {
+        "message": "Improve Translations",
+        "description": "SettingsWindow.DrawOther"
+    },
+    "UpdateLoc": {
+        "message": "Update Loc",
+        "description": "SettingsWindow.DrawOther"
+    },
+    "OverlayWindow": {
+        "message": "Sample Overlay",
+        "description": "OverlayWindow.DrawWindow"
+    },
+    "PluginDisabled": {
+        "message": "SamplePlugin is disabled.",
+        "description": "OverlayWindow.DrawWindow"
+    },
+    "WaitingForItems": {
+        "message": "En attente d'objets.",
+        "description": "OverlayWindow.DrawWindow"
+    }
+}
