@@ -1,0 +1,3 @@
+[submodule "src/Sample/Common"]
+	path = src/Sample/Common
+	url = https://github.com/kalilistic/DalamudPluginCommon
