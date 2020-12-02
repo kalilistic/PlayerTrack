@@ -1,5 +1,3 @@
-# Sample [![Download count](https://img.shields.io/endpoint?url=https%3A%2F%2Fvz32sgcoal.execute-api.us-east-1.amazonaws.com%2FSample)](https://github.com/kalilistic/sample) [![Crowdin](https://badges.crowdin.net/sample/localized.svg)](https://crowdin.com/project/sample)
-
 Sample Plugin template that uses things I often use including my common code library.
 
 ## Preview
