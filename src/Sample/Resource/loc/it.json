@@ -1,223 +1,62 @@
 {
-    "SellOnMarketboard": {
-        "message": "Vendi sul mercato",
-        "description": "Result.UpdateLanguage"
-    },
-    "FailedToGetData": {
-        "message": "Impossibile ottenere i dati",
-        "description": "Result.UpdateLanguage"
-    },
-    "NoDataAvailable": {
-        "message": "Dati non disponibili",
-        "description": "Result.UpdateLanguage"
-    },
-    "NoRecentDataAvailable": {
-        "message": "Nessun dato recente",
-        "description": "Result.UpdateLanguage"
-    },
-    "BelowVendor": {
-        "message": "Vendi al venditore",
-        "description": "Result.UpdateLanguage"
-    },
-    "BelowMinimum": {
-        "message": "Sotto il prezzo minimo",
-        "description": "Result.UpdateLanguage"
-    },
-    "Unmarketable": {
-        "message": "Impossibile vendere sul mercato",
-        "description": "Result.UpdateLanguage"
-    },
     "HelpMessage": {
-        "message":
-            "Per controllare i prezzi, tieni premuta la scorciatoia e poi passa sopra un oggetto nel tuo inventario o in chat. È possibile la scorciatoia (o disattivarla) nelle impostazioni di Sample. I prezzi sono la media in Universalis e non corrisponderanno ad alcun elenco specifico visibile dalla market board. È possibile usare il comando /samp per aprire l'overlay e /sampconfig per aprire le impostazioni. Se hai bisogno di aiuto, segnalalo su Discord o apri un ticket su GitHub. Se vuoi aiutare ad aggiungere traduzioni, puoi contribuire revisionandole su Crowdin. I link a GitHub e Crowdin sono disponibili nelle impostazioni.",
+        "message": "This is a helpful message!",
         "description": "SamplePlugin.PrintHelpMessage"
     },
     "InstallThankYou": {
-        "message": "Grazie per aver installato Sample!",
+        "message": "Thank you for installing Sample Plugin!",
         "description": "SamplePlugin.HandleFreshInstall"
     },
     "SettingsWindow": {
-        "message": "Impostazioni Sample",
+        "message": "Sample Settings",
         "description": "SettingsWindow.DrawWindow"
     },
     "General": {
-        "message": "Generale",
-        "description": "SettingsWindow.DrawTabs"
-    },
-    "Overlay": {
-        "message": "Overlay",
-        "description": "SettingsWindow.DrawTabs"
-    },
-    "Chat": {
-        "message": "Chat",
-        "description": "SettingsWindow.DrawTabs"
-    },
-    "Keybind": {
-        "message": "Scorciatoie",
-        "description": "SettingsWindow.DrawTabs"
-    },
-    "Thresholds": {
-        "message": "Soglie",
+        "message": "General",
         "description": "SettingsWindow.DrawTabs"
     },
     "Other": {
-        "message": "Altro",
+        "message": "Other",
         "description": "SettingsWindow.DrawTabs"
     },
     "PluginEnabled": {
-        "message": "Plugin Abilitato",
+        "message": "Plugin Enabled",
         "description": "SettingsWindow.DrawGeneral"
     },
     "PluginEnabled_HelpMarker": {
-        "message": "attiva/disattiva il plugin",
-        "description": "SettingsWindow.DrawGeneral"
-    },
-    "ShowPrices": {
-        "message": "Mostra prezzi",
-        "description": "SettingsWindow.DrawGeneral"
-    },
-    "ShowPrices_HelpMarker": {
-        "message": "mostra prezzo o mostra consigli",
-        "description": "SettingsWindow.DrawGeneral"
-    },
-    "ShowUnmarketable": {
-        "message": "Mostra Non Commerciabili",
-        "description": "SettingsWindow.DrawGeneral"
-    },
-    "ShowUnmarketable_HelpMarker": {
-        "message": "attiva o disattiva la visualizzazione di elementi non commercializzabili",
-        "description": "SettingsWindow.DrawGeneral"
-    },
-    "HoverDelay": {
-        "message": "Ritardo passaggio puntatore",
-        "description": "SettingsWindow.DrawGeneral"
-    },
-    "HoverDelay_HelpMarker": {
-        "message": "ritardo (in secondi) prima di elaborare dopo il passaggio del puntatore",
-        "description": "SettingsWindow.DrawGeneral"
-    },
-    "Language": {
-        "message": "Lingua",
-        "description": "SettingsWindow.DrawGeneral"
-    },
-    "Language_HelpMarker": {
-        "message": "usa la lingua predefinita o sovrascrivi il plugin di traduzione",
+        "message": "toggle the plugin on/off",
         "description": "SettingsWindow.DrawGeneral"
     },
     "ShowOverlay": {
-        "message": "Mostra overlay",
-        "description": "SettingsWindow.DrawOverlay"
+        "message": "Show Overlay",
+        "description": "SettingsWindow.DrawGeneral"
     },
     "ShowOverlay_HelpMarker": {
-        "message": "mostra i risultati del controllo dei prezzi nella finestra di sovrapposizione",
-        "description": "SettingsWindow.DrawOverlay"
+        "message": "show overlay window",
+        "description": "SettingsWindow.DrawGeneral"
     },
-    "UseOverlayColors": {
-        "message": "Usa Colori Sovrapposizione",
-        "description": "SettingsWindow.DrawOverlay"
+    "Language": {
+        "message": "Language",
+        "description": "SettingsWindow.DrawGeneral"
     },
-    "UseOverlayColors_HelpMarker": {
-        "message": "usa colori diversi per la sovrapposizione in base al risultato",
-        "description": "SettingsWindow.DrawOverlay"
-    },
-    "MaxItems": {
-        "message": "Oggetti Massimi",
-        "description": "SettingsWindow.DrawOverlay"
-    },
-    "MaxItems_HelpMarker": {
-        "message": "imposta il numero massimo di elementi in sovrapposizione alla volta",
-        "description": "SettingsWindow.DrawOverlay"
-    },
-    "ShowInChat": {
-        "message": "Mostra in chat",
-        "description": "SettingsWindow.DrawChat"
-    },
-    "ShowInChat_HelpMarker": {
-        "message": "mostra i risultati del controllo dei prezzi in chat",
-        "description": "SettingsWindow.DrawChat"
-    },
-    "UseChatColors": {
-        "message": "Usa Colori Chat",
-        "description": "SettingsWindow.DrawChat"
-    },
-    "UseChatColors_HelpMarker": {
-        "message": "usa colori diversi per la chat in base al risultato",
-        "description": "SettingsWindow.DrawChat"
-    },
-    "UseItemLinks": {
-        "message": "Usa Collegamenti Oggetto",
-        "description": "SettingsWindow.DrawChat"
-    },
-    "UseItemLinks_HelpMarker": {
-        "message": "usa collegamenti oggetto nei risultati della chat",
-        "description": "SettingsWindow.DrawChat"
-    },
-    "KeybindEnabled": {
-        "message": "Usa Scorciatoia",
-        "description": "SettingsWindow.DrawKeybind"
-    },
-    "KeybindEnabled_HelpMarker": {
-        "message": "attiva/disattiva scorciatoia o il passaggio del puntatore",
-        "description": "SettingsWindow.DrawKeybind"
-    },
-    "ModifierKeybind": {
-        "message": "Modificatore",
-        "description": "SettingsWindow.DrawKeybind"
-    },
-    "ModifierKeybind_HelpMarker": {
-        "message": "imposta il tasto modificatore (maiusc o tab)",
-        "description": "SettingsWindow.DrawKeybind"
-    },
-    "PrimaryKeybind": {
-        "message": "Carattere",
-        "description": "SettingsWindow.DrawKeybind"
-    },
-    "PrimaryKeybind_HelpMarker": {
-        "message": "imposta tasto carattere (es: nessuno, Z)",
-        "description": "SettingsWindow.DrawKeybind"
-    },
-    "MinimumPrice": {
-        "message": "Prezzo Minimo",
-        "description": "SettingsWindow.DrawThresholds"
-    },
-    "MinimumPrice_HelpMarker": {
-        "message": "imposta il prezzo minimo per la quale verrà visualizzata la media effettiva",
-        "description": "SettingsWindow.DrawThresholds"
-    },
-    "MaxUploadDays": {
-        "message": "Giorni Massimi Di Caricamento",
-        "description": "SettingsWindow.DrawThresholds"
-    },
-    "MaxUploadDays_HelpMarker": {
-        "message": "impostare l'età massima per evitare di usare dati vecchi",
-        "description": "SettingsWindow.DrawThresholds"
+    "Language_HelpMarker": {
+        "message": "use default or override plugin ui language",
+        "description": "SettingsWindow.DrawGeneral"
     },
     "OpenGithub": {
-        "message": "Apri in GitHub",
-        "description": "SettingsWindow.DrawOther"
-    },
-    "PrintHelp": {
-        "message": "Guida all'uso",
+        "message": "Github",
         "description": "SettingsWindow.DrawOther"
     },
     "ImproveTranslate": {
-        "message": "Migliora traduzione",
+        "message": "Translations",
         "description": "SettingsWindow.DrawOther"
     },
-    "UpdateLoc": {
-        "message": "Aggiorna Localizzazione",
+    "PrintHelp": {
+        "message": "Instructions",
         "description": "SettingsWindow.DrawOther"
     },
     "OverlayWindow": {
         "message": "Sample Overlay",
-        "description": "OverlayWindow.DrawWindow"
-    },
-    "PluginDisabled": {
-        "message": "SamplePlugin è disabilitato.",
-        "description": "OverlayWindow.DrawWindow"
-    },
-    "WaitingForItems": {
-        "message": "In attesa di oggetti.",
         "description": "OverlayWindow.DrawWindow"
     }
 }
