@@ -59,19 +59,8 @@ Task("Run-Unit-Tests")
         });
 });
 
-Task("Install")
-    .IsDependentOn ("Run-Unit-Tests")
-    .Does(() => {
-        var pluginDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/XIVLauncher/devPlugins/" + pluginName;
-        EnsureDirectoryExists(pluginDir);
-        CleanDirectory(pluginDir);
-        CopyFile("./src/" + pluginName + "/bin/" + pluginName + ".json", pluginDir + "/" + pluginName + ".json");
-        CopyFile("./src/" + pluginName + "/bin/" + pluginName + ".dll", pluginDir +  "/" + pluginName + ".dll");
-        Information("Installed into devPlugins.");
-});
-
 Task("Publish")
-    .IsDependentOn ("Install")
+    .IsDependentOn ("Run-Unit-Tests")
     .Does(() => {
         CreateDirectory("./src/" + pluginName + "/bin/latest");
         CopyFile("./src/" + pluginName + "/bin/" + pluginName + ".json", "./src/" + pluginName + "/bin/latest/" + pluginName + ".json");
@@ -108,7 +97,6 @@ Task ("Default")
     .IsDependentOn ("Update-Plugin-Json")
     .IsDependentOn ("Build")
     .IsDependentOn ("Run-Unit-Tests")
-    .IsDependentOn ("Install")
     .IsDependentOn ("Publish")
     .IsDependentOn ("Cleanup");
 
