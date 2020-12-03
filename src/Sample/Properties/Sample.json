@@ -7,5 +7,5 @@
     "RepoUrl": "https://github.com/kalilistic/DalamudSamplePlugin",
     "Tags": ["sample", "dalamud"],
     "ApplicableVersion": "any",
-    "DalamudApiLevel": "1"
+    "DalamudApiLevel": "2"
 }
