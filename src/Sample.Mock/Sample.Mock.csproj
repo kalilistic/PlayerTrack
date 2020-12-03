@@ -34,8 +34,8 @@
     <Reference Include="Lumina">
       <HintPath>..\..\..\Dalamud\Dalamud\bin\Debug\Lumina.dll</HintPath>
     </Reference>
-    <Reference Include="Lumina.Generated">
-      <HintPath>..\..\..\Dalamud\Dalamud\bin\Debug\Lumina.Generated.dll</HintPath>
+    <Reference Include="Lumina.Excel">
+      <HintPath>..\..\..\Dalamud\Dalamud\bin\Debug\Lumina.Excel.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

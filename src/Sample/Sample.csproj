@@ -59,11 +59,11 @@
       <HintPath Condition="Exists('..\..\..\Dalamud\Dalamud\bin\Debug')">..\..\..\Dalamud\Dalamud\bin\Debug\Lumina.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="Lumina.Generated">
-      <HintPath Condition="Exists('$(AppData)\XIVLauncher\addon\Hooks')">$(AppData)\XIVLauncher\addon\Hooks\Lumina.Generated.dll</HintPath>
-      <HintPath Condition="Exists('$(DalamudHooks)')">$(DalamudHooks)\Lumina.Generated.dll</HintPath>
-      <HintPath Condition="Exists('..\..\Dalamud\Dalamud\bin\Debug')">..\..\Dalamud\Dalamud\bin\Debug\Lumina.Generated.dll</HintPath>
-      <HintPath Condition="Exists('..\..\..\Dalamud\Dalamud\bin\Debug')">..\..\..\Dalamud\Dalamud\bin\Debug\Lumina.Generated.dll</HintPath>
+    <Reference Include="Lumina.Excel">
+      <HintPath Condition="Exists('$(AppData)\XIVLauncher\addon\Hooks')">$(AppData)\XIVLauncher\addon\Hooks\Lumina.Excel.dll</HintPath>
+      <HintPath Condition="Exists('$(DalamudHooks)')">$(DalamudHooks)\Lumina.Excel.dll</HintPath>
+      <HintPath Condition="Exists('..\..\Dalamud\Dalamud\bin\Debug')">..\..\Dalamud\Dalamud\bin\Debug\Lumina.Excel.dll</HintPath>
+      <HintPath Condition="Exists('..\..\..\Dalamud\Dalamud\bin\Debug')">..\..\..\Dalamud\Dalamud\bin\Debug\Lumina.Excel.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
