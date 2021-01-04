@@ -1,0 +1,365 @@
+{
+    "HelpMessage1": {
+        "message":
+            "This plugin is on TESTING for a reason! Please expect data loss or other bugs before it's been officially released. Let me know on discord or github if you have any feedback.",
+        "description": "PlayerTrackPlugin.PrintHelpMessage"
+    },
+    "HelpMessage2": {
+        "message":
+            "PlayerTrack helps you keep a record of who you meet and the content you played together. By default, this is instanced content only - but you can expand or restrict this in settings. You can see all the details on a player by clicking on their name in the overlay. Here you can also record notes and set a personalized icon/color.",
+        "description": "PlayerTrackPlugin.PrintHelpMessage"
+    },
+    "HelpMessage3": {
+        "message":
+            "PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). If this happens, you'll see an asterisk next to their home world and can mouse-over to see their previous residence.",
+        "description": "PlayerTrackPlugin.PrintHelpMessage"
+    },
+    "InstallThankYou": {
+        "message": "Thank you for installing PlayerTrack!",
+        "description": "PlayerTrackPlugin.HandleFreshInstall"
+    },
+    "SettingsWindow": {
+        "message": "PlayerTrack Settings",
+        "description": "SettingsWindow.DrawWindow"
+    },
+    "General": {
+        "message": "General",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "Display": {
+        "message": "Display",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "Threshold": {
+        "message": "Threshold",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "Filters": {
+        "message": "Filters",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "Icons": {
+        "message": "Icons",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "Lodestone": {
+        "message": "Lodestone",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "Data": {
+        "message": "Data",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "Backup": {
+        "message": "Backup",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "Links": {
+        "message": "Links",
+        "description": "SettingsWindow.DrawTabs"
+    },
+    "PluginEnabled": {
+        "message": "Plugin Enabled",
+        "description": "SettingsWindow.PluginEnabled"
+    },
+    "PluginEnabled_HelpMarker": {
+        "message": "toggle the plugin on/off",
+        "description": "SettingsWindow.PluginEnabled"
+    },
+    "ShowOverlay": {
+        "message": "Show Overlay",
+        "description": "SettingsWindow.ShowOverlay"
+    },
+    "ShowOverlay_HelpMarker": {
+        "message": "show overlay window",
+        "description": "SettingsWindow.ShowOverlay"
+    },
+    "Language": {
+        "message": "Language",
+        "description": "SettingsWindow.SetLanguage"
+    },
+    "Language_HelpMarker": {
+        "message": "use default or override plugin ui language",
+        "description": "SettingsWindow.SetLanguage"
+    },
+    "ShowPlayerTotal": {
+        "message": "Show Player Total",
+        "description": "SettingsWindow.PlayerTotal"
+    },
+    "ShowPlayerTotal_HelpMarker": {
+        "message": "show player totals on overlay",
+        "description": "SettingsWindow.PlayerTotal"
+    },
+    "RecentPlayerThreshold": {
+        "message": "Recent Player Threshold (minutes)",
+        "description": "SettingsWindow.RecentPlayerThreshold"
+    },
+    "RecentPlayerThreshold_HelpMarker": {
+        "message": "amount of time players will appear on recent players list since last seen date",
+        "description": "SettingsWindow.RecentPlayerThreshold"
+    },
+    "DefaultColor": {
+        "message": "Default Color",
+        "description": "SettingsWindow.DefaultColor"
+    },
+    "DefaultColor_HelpMarker": {
+        "message": "default color for players when not set specifically",
+        "description": "SettingsWindow.DefaultColor"
+    },
+    "Reset": {
+        "message": "Reset",
+        "description": "SettingsWindow.DefaultColor"
+    },
+    "SyncToLodestone": {
+        "message": "Sync to Lodestone",
+        "description": "SettingsWindow.SyncToLodestone"
+    },
+    "SyncToLodestone_HelpMarker": {
+        "message": "pull player data from lodestone to track name/world changes",
+        "description": "SettingsWindow.SyncToLodestone"
+    },
+    "LodestoneTimeout": {
+        "message": "Request Timeout (minutes)",
+        "description": "SettingsWindow.LodestoneTimeout"
+    },
+    "LodestoneTimeout_HelpMarker": {
+        "message": "timeout for lodestone requests",
+        "description": "SettingsWindow.LodestoneTimeout"
+    },
+    "LodestoneRequestDelay": {
+        "message": "Request Delay (seconds)",
+        "description": "SettingsWindow.LodestoneRequestDelay"
+    },
+    "LodestoneRequestDelay_HelpMarker": {
+        "message": "delay between lodestone requests to avoid rate limits",
+        "description": "SettingsWindow.LodestoneRequestDelay"
+    },
+    "LodestoneUpdateFrequency": {
+        "message": "Update Frequency (days)",
+        "description": "SettingsWindow.LodestoneUpdateFrequency"
+    },
+    "LodestoneUpdateFrequency_HelpMarker": {
+        "message": "frequency to retrieve latest data from lodestone for a given player",
+        "description": "SettingsWindow.LodestoneUpdateFrequency"
+    },
+    "LodestoneCooldownDuration": {
+        "message": "Cooldown Duration (hours)",
+        "description": "SettingsWindow.LodestoneCooldownDuration"
+    },
+    "LodestoneCooldownDuration_HelpMarker": {
+        "message": "duration to delay if lodestone is unavailable before trying again",
+        "description": "SettingsWindow.LodestoneCooldownDuration"
+    },
+    "LodestoneMaxRetry": {
+        "message": "Max Retries (count)",
+        "description": "SettingsWindow.LodestoneMaxRetry"
+    },
+    "LodestoneMaxRetry_HelpMarker": {
+        "message": "number of attempts to retry failed lodestone request",
+        "description": "SettingsWindow.LodestoneMaxRetry"
+    },
+    "Compressed": {
+        "message": "Compress Data",
+        "description": "SettingsWindow.Compressed"
+    },
+    "Compressed_HelpMarker": {
+        "message": "compress saved data for significantly smaller file sizes (recommended to keep on)",
+        "description": "SettingsWindow.Compressed"
+    },
+    "SaveFrequency": {
+        "message": "Save Frequency (minutes)",
+        "description": "SettingsWindow.SaveFrequency"
+    },
+    "SaveFrequency_HelpMarker": {
+        "message": "frequency to save current player data",
+        "description": "SettingsWindow.SaveFrequency"
+    },
+    "UpdateFrequency": {
+        "message": "Update Frequency (seconds)",
+        "description": "SettingsWindow.UpdateFrequency"
+    },
+    "UpdateFrequency_HelpMarker": {
+        "message": "frequency to process and update latest player data",
+        "description": "SettingsWindow.UpdateFrequency"
+    },
+    "BackupFrequency": {
+        "message": "Backup Frequency (hours)",
+        "description": "SettingsWindow.BackupFrequency"
+    },
+    "BackupFrequency_HelpMarker": {
+        "message": "frequency to backup player data in case something goes wrong",
+        "description": "SettingsWindow.BackupFrequency"
+    },
+    "BackupRetention": {
+        "message": "Backup Retention (count)",
+        "description": "SettingsWindow.BackupRetention"
+    },
+    "PlayerTrack_BackupRetention_HelpMarker": {
+        "message": "number of backups to keep before deleting the oldest",
+        "description": "SettingsWindow.BackupRetention"
+    },
+    "NewEncounterThreshold": {
+        "message": "New Encounter Threshold (hours)",
+        "description": "SettingsWindow.NewEncounterThreshold"
+    },
+    "NewEncounterThreshold_HelpMarker": {
+        "message": "threshold for creating new encounter for player in same location",
+        "description": "SettingsWindow.NewEncounterThreshold"
+    },
+    "RestrictInCombat": {
+        "message": "Don't process in combat",
+        "description": "SettingsWindow.RestrictInCombat"
+    },
+    "RestrictInCombat_HelpMarker": {
+        "message": "stop processing data while in combat",
+        "description": "SettingsWindow.RestrictInCombat"
+    },
+    "RestrictToContent": {
+        "message": "Content Only",
+        "description": "SettingsWindow.RestrictToContent"
+    },
+    "RestrictToContent_HelpMarker": {
+        "message": "restrict to instanced content and exclude overworld encounters",
+        "description": "SettingsWindow.RestrictToContent"
+    },
+    "RestrictToHighEndDuty": {
+        "message": "High-End Duty Only",
+        "description": "SettingsWindow.RestrictToHighEndDuty"
+    },
+    "RestrictToHighEndDuty_HelpMarker": {
+        "message": "restrict to high-end duties only (e.g. savage)",
+        "description": "SettingsWindow.RestrictToHighEndDuty"
+    },
+    "ShowIcons": {
+        "message": "Show Icons",
+        "description": "SettingsWindow.ShowIcons"
+    },
+    "ShowIcons_HelpMarker": {
+        "message": "turn icons on/off on overlay",
+        "description": "SettingsWindow.ShowIcons"
+    },
+    "DefaultIcon": {
+        "message": "Default Icon",
+        "description": "SettingsWindow.DefaultIcon"
+    },
+    "DefaultIcon_HelpMarker": {
+        "message": "default icon used when one is not set",
+        "description": "SettingsWindow.DefaultIcon"
+    },
+    "OpenGithub": {
+        "message": "Github",
+        "description": "SettingsWindow.DrawLinks"
+    },
+    "PrintHelp": {
+        "message": "Instructions",
+        "description": "SettingsWindow.DrawLinks"
+    },
+    "OverlayWindow": {
+        "message": "PlayerTrack",
+        "description": "OverlayWindow.DrawWindow"
+    },
+    "PluginDisabled": {
+        "message": "Plugin is disabled.",
+        "description": "OverlayWindow.SelectCurrentView"
+    },
+    "PlayerNameSearchHint": {
+        "message": "player name",
+        "description": "OverlayWindow.PlayerSearchInput"
+    },
+    "PlayerSearch": {
+        "message": "Search",
+        "description": "OverlayWindow.PlayerSearchInput"
+    },
+    "NoPlayers": {
+        "message": "No players to show...",
+        "description": "OverlayWindow.PlayerList"
+    },
+    "PlayerCount": {
+        "message": "Count",
+        "description": "OverlayWindow.PlayerCount"
+    },
+    "Back": {
+        "message": "Back",
+        "description": "OverlayWindow.Controls"
+    },
+    "Delete": {
+        "message": "Delete",
+        "description": "OverlayWindow.Controls"
+    },
+    "PlayerInfo": {
+        "message": "Player Info",
+        "description": "OverlayWindow.PlayerInfo"
+    },
+    "PlayerStats": {
+        "message": "Player Stats",
+        "description": "OverlayWindow.PlayerInfo"
+    },
+    "PlayerName": {
+        "message": "Name",
+        "description": "OverlayWindow.PlayerInfo"
+    },
+    "PlayerFirstSeen": {
+        "message": "First Seen",
+        "description": "OverlayWindow.PlayerInfo"
+    },
+    "PlayerHomeWorld": {
+        "message": "World",
+        "description": "OverlayWindow.PlayerInfo"
+    },
+    "PlayerLastSeen": {
+        "message": "Last Seen",
+        "description": "OverlayWindow.PlayerInfo"
+    },
+    "PlayerFreeCompany": {
+        "message": "Free Company",
+        "description": "OverlayWindow.PlayerInfo"
+    },
+    "PlayerSeenCount": {
+        "message": "Seen Count",
+        "description": "OverlayWindow.PlayerInfo"
+    },
+    "LodestoneInfo": {
+        "message": "Lodestone",
+        "description": "OverlayWindow.PlayerLodestone"
+    },
+    "LodestoneStatus": {
+        "message": "Status",
+        "description": "OverlayWindow.PlayerLodestone"
+    },
+    "LodestoneLastUpdated": {
+        "message": "Last Updated",
+        "description": "OverlayWindow.PlayerLodestone"
+    },
+    "PlayerNotes": {
+        "message": "Notes",
+        "description": "OverlayWindow.PlayerNotes"
+    },
+    "Default": {
+        "message": "Default",
+        "description": "OverlayWindow.PlayerNotes"
+    },
+    "Encounters": {
+        "message": "Encounters",
+        "description": "OverlayWindow.PlayerEncounters"
+    },
+    "EncounterTime": {
+        "message": "Time",
+        "description": "OverlayWindow.PlayerEncounters"
+    },
+    "EncounterDuration": {
+        "message": "Duration",
+        "description": "OverlayWindow.PlayerEncounters"
+    },
+    "EncounterJob": {
+        "message": "Job",
+        "description": "OverlayWindow.PlayerEncounters"
+    },
+    "EncounterJobLevel": {
+        "message": "Lvl",
+        "description": "OverlayWindow.PlayerEncounters"
+    },
+    "EncounterLocation": {
+        "message": "Location",
+        "description": "OverlayWindow.PlayerEncounters"
+    }
+}
