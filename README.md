@@ -1,10 +1,10 @@
 # PlayerTrack
 
-Dalamud plugin to keep track of your fellow adventurers and friends you meet in FFXIV.
+Dalamud plugin to keep track of players you meet in FFXIV.
 
 ## Preview
 
-![image](assets/preview.jpg)<br>
+![image](assets/preview.png)<br>
 
 ## Commands
 
