@@ -70,7 +70,7 @@ namespace PlayerTrack
 		{
 			ImGui.SetWindowSize(new Vector2(500 * Scale, 470 * Scale), ImGuiCond.Always);
 			SetCurrentPlayer();
-			Controls();
+			Controls(_currentPlayer);
 			PlayerInfo(_currentPlayer);
 			PlayerLodestone(_currentPlayer);
 			PlayerNotes(_currentPlayer);
@@ -171,7 +171,7 @@ namespace PlayerTrack
 			}
 		}
 
-		private void Controls()
+		private void Controls(TrackPlayer player)
 		{
 			if (ImGui.SmallButton(Loc.Localize("Back", "Back") + "###PlayerTrack_Back_Button"))
 				_currentView = View.Players;
@@ -180,6 +180,13 @@ namespace PlayerTrack
 			{
 				_playerTrackPlugin.RosterService.DeletePlayer(_currentPlayer.Key);
 				_currentView = View.Players;
+			}
+
+			ImGui.SameLine();
+			if (ImGui.SmallButton(Loc.Localize("Reset", "Reset") + "###PlayerTracker_DetailsReset_Button"))
+			{
+				player.Icon = 0;
+				player.Color = null;
 			}
 
 			ImGui.Separator();
@@ -259,16 +266,6 @@ namespace PlayerTrack
 				if (ImGui.ColorPicker4("###PlayerTracker_PlayerColor_ColorPicker", ref color)) player.Color = color;
 				Palette(player);
 				ImGui.EndPopup();
-			}
-
-			ImGui.SameLine();
-			ImGui.Spacing();
-			ImGui.SameLine();
-
-			if (ImGui.SmallButton(Loc.Localize("Reset", "Reset") + "###PlayerTracker_DetailsReset_Button"))
-			{
-				player.Icon = 0;
-				player.Color = null;
 			}
 
 			var notes = player.Notes;
