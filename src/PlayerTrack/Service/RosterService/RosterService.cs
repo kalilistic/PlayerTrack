@@ -35,9 +35,6 @@ namespace PlayerTrack
 
 		public void ProcessPlayers(List<TrackPlayer> incomingPlayers)
 		{
-			ProcessDeleteRequests();
-			ProcessVerificationRequests();
-			ProcessUpdateRequests();
 			var currentPlayers = new TrackRoster(new Dictionary<string, TrackPlayer>(), _playerTrackPlugin);
 			foreach (var player in incomingPlayers)
 			{
@@ -114,6 +111,13 @@ namespace PlayerTrack
 			{
 				_playerTrackPlugin.LogError(ex, "Failed to save player data - will try again soon.");
 			}
+		}
+
+		public void ProcessRequests()
+		{
+			ProcessDeleteRequests();
+			ProcessVerificationRequests();
+			ProcessUpdateRequests();
 		}
 
 		private void SubmitUpdateRequest(TrackPlayer player)

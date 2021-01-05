@@ -262,6 +262,9 @@ namespace PlayerTrack
 					return;
 				}
 
+				// process pending requests
+				RosterService.ProcessRequests();
+
 				// player check
 				var players = GetPlayerCharacters();
 				if (players == null || !players.Any())
