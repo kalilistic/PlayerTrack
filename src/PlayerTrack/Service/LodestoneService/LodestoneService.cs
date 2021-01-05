@@ -248,13 +248,13 @@ namespace PlayerTrack
 		private async Task<HttpResponseMessage> GetCharacterIdAsync(string characterName, string worldName)
 		{
 			var url = "https://xivapi.com/character/search?name=" + characterName +
-			          "&server=" + worldName;
+			          "&server=" + worldName + "&columns=ID";
 			return await _httpClient.GetAsync(new Uri(url));
 		}
 
 		private async Task<HttpResponseMessage> GetCharacterProfileAsync(uint lodestoneId)
 		{
-			var url = "https://xivapi.com/character/" + lodestoneId;
+			var url = "https://xivapi.com/character/" + lodestoneId + "?columns=Character.Name,Character.Server";
 			return await _httpClient.GetAsync(new Uri(url));
 		}
 	}
