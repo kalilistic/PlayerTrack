@@ -16,6 +16,7 @@ namespace PlayerTrack
 		public int LodestoneRequestDelay = 10000;
 		public int LodestoneTimeout = 30000;
 		public int LodestoneUpdateFrequency = 172800000;
+		public TrackLodestoneLocale LodestoneLocale = TrackLodestoneLocale.na;
 		public int NewEncounterThreshold = 86400000;
 		public int RecentPlayerThreshold = 300000;
 		public bool RestrictInCombat = true;

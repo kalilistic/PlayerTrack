@@ -202,6 +202,7 @@ namespace PlayerTrack
 			LodestoneTimeout();
 			LodestoneUpdateFrequency();
 			LodestoneCooldownDuration();
+			LodestoneLocale();
 		}
 
 		private void DrawData()
@@ -423,6 +424,24 @@ namespace PlayerTrack
 			if (ImGui.SliderInt("###PlayerTrack_LodestoneCooldownDuration_Slider", ref cooldownDuration, 1, 12))
 			{
 				_playerTrackPlugin.Configuration.LodestoneCooldownDuration = cooldownDuration.FromHoursToMilliseconds();
+				_playerTrackPlugin.SaveConfig();
+			}
+
+			ImGui.Spacing();
+		}
+
+		private void LodestoneLocale()
+		{
+			ImGui.Text(Loc.Localize("LodestoneLocale", "Lodestone Locale"));
+			CustomWidgets.HelpMarker(Loc.Localize("LodestoneLocale_HelpMarker",
+				"set locale for lodestone profile link"));
+			ImGui.Spacing();
+			var lodestoneLocale = (int) _playerTrackPlugin.Configuration.LodestoneLocale;
+			if (ImGui.Combo("###PlayerTrack_LodestoneLocale_Combo", ref lodestoneLocale,
+				Enum.GetNames(typeof(TrackLodestoneLocale)),
+				Enum.GetNames(typeof(TrackLodestoneLocale)).Length))
+			{
+				_playerTrackPlugin.Configuration.LodestoneLocale = (TrackLodestoneLocale) lodestoneLocale;
 				_playerTrackPlugin.SaveConfig();
 			}
 

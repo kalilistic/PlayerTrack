@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using CheapLoc;
@@ -19,6 +20,7 @@ namespace PlayerTrack
 		private readonly List<Vector4> _colorPalette = ImGuiUtil.CreatePalette();
 		private readonly IPlayerTrackPlugin _playerTrackPlugin;
 		private string _activeSearch = string.Empty;
+		private Modal _currentModal = Modal.None;
 		private TrackPlayer _currentPlayer;
 		private TrackPlayerMode _currentPlayerMode = TrackPlayerMode.CurrentPlayers;
 		private View _currentView = View.Players;
@@ -36,6 +38,12 @@ namespace PlayerTrack
 				ref IsVisible, ImGuiWindowFlags.NoResize))
 				SelectCurrentView();
 			ImGui.End();
+			OpenModals();
+		}
+
+		private void OpenModals()
+		{
+			LodestoneModal();
 		}
 
 		private void SelectCurrentView()
@@ -176,6 +184,7 @@ namespace PlayerTrack
 			if (ImGui.SmallButton(Loc.Localize("Back", "Back") + "###PlayerTrack_Back_Button"))
 				_currentView = View.Players;
 			ImGui.SameLine();
+
 			if (ImGui.SmallButton(Loc.Localize("Delete", "Delete") + "###PlayerTrack_Delete_Button"))
 			{
 				_playerTrackPlugin.RosterService.DeletePlayer(_currentPlayer.Key);
@@ -183,13 +192,38 @@ namespace PlayerTrack
 			}
 
 			ImGui.SameLine();
+
 			if (ImGui.SmallButton(Loc.Localize("Reset", "Reset") + "###PlayerTracker_DetailsReset_Button"))
 			{
 				player.Icon = 0;
 				player.Color = null;
 			}
 
+			ImGui.SameLine();
+
+			if (ImGui.SmallButton(Loc.Localize("Lodestone", "Lodestone") + "###PlayerTracker_Lodestone_Button"))
+			{
+				var url = player.Lodestone.GetProfileUrl(_playerTrackPlugin.Configuration.LodestoneLocale);
+				_playerTrackPlugin.LogInfo(url);
+				if (url != null)
+					Process.Start(url);
+				else
+					_currentModal = Modal.Lodestone;
+			}
+
 			ImGui.Separator();
+		}
+
+		private void LodestoneModal()
+		{
+			if (_currentModal != Modal.Lodestone) return;
+			ImGui.Begin(Loc.Localize("LodestoneModalTitle", "Message") + "###PlayerTracker_LodestoneModal_Window",
+				ImGuiUtil.ModalWindowFlags());
+			ImGui.Text(Loc.Localize("LodestoneModalContent", "Lodestone verification pending."));
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_LodestoneModal_Button"))
+				_currentModal = Modal.None;
+			;
+			ImGui.End();
 		}
 
 		private void PlayerInfo(TrackPlayer player)
@@ -337,6 +371,12 @@ namespace PlayerTrack
 		{
 			Players,
 			PlayerDetail
+		}
+
+		private enum Modal
+		{
+			None,
+			Lodestone
 		}
 	}
 }

@@ -13,5 +13,11 @@ namespace PlayerTrack
 		[JsonProperty] [DefaultValue(0)] public TrackLodestoneStatus Status { get; set; }
 
 		public string LastUpdatedDisplay => LastUpdated == 0 ? "Never" : LastUpdated.ToTimeSpan();
+
+		public string GetProfileUrl(TrackLodestoneLocale locale = TrackLodestoneLocale.na)
+		{
+			if (Id == 0) return null;
+			return "https://" + locale + ".finalfantasyxiv.com/lodestone/character/" + Id;
+		}
 	}
 }
