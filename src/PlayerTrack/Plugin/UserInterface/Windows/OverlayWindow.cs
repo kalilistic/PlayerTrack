@@ -3,6 +3,7 @@
 // ReSharper disable InconsistentNaming
 // ReSharper disable SuggestBaseTypeForParameter
 // ReSharper disable MemberCanBeMadeStatic.Local
+// ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 
 using System;
 using System.Collections.Generic;
@@ -43,7 +44,21 @@ namespace PlayerTrack
 
 		private void OpenModals()
 		{
-			LodestoneModal();
+			if (_playerTrackPlugin.Configuration.Enabled)
+				switch (_currentModal)
+				{
+					case Modal.None:
+						break;
+					case Modal.Lodestone:
+						LodestoneModal();
+						break;
+					case Modal.Reset:
+						ResetModal(_currentPlayer);
+						break;
+					case Modal.Delete:
+						DeleteModal(_currentPlayer);
+						break;
+				}
 		}
 
 		private void SelectCurrentView()
@@ -186,18 +201,12 @@ namespace PlayerTrack
 			ImGui.SameLine();
 
 			if (ImGui.SmallButton(Loc.Localize("Delete", "Delete") + "###PlayerTrack_Delete_Button"))
-			{
-				_playerTrackPlugin.RosterService.DeletePlayer(_currentPlayer.Key);
-				_currentView = View.Players;
-			}
+				_currentModal = Modal.Delete;
 
 			ImGui.SameLine();
 
 			if (ImGui.SmallButton(Loc.Localize("Reset", "Reset") + "###PlayerTracker_DetailsReset_Button"))
-			{
-				player.Icon = 0;
-				player.Color = null;
-			}
+				_currentModal = Modal.Reset;
 
 			ImGui.SameLine();
 
@@ -216,13 +225,56 @@ namespace PlayerTrack
 
 		private void LodestoneModal()
 		{
-			if (_currentModal != Modal.Lodestone) return;
-			ImGui.Begin(Loc.Localize("LodestoneModalTitle", "Message") + "###PlayerTracker_LodestoneModal_Window",
+			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
+				ImGuiCond.Appearing);
+			ImGui.Begin(Loc.Localize("LodestoneModalTitle", "Lodestone") + "###PlayerTracker_LodestoneModal_Window",
 				ImGuiUtil.ModalWindowFlags());
 			ImGui.Text(Loc.Localize("LodestoneModalContent", "Lodestone verification pending."));
 			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_LodestoneModal_Button"))
 				_currentModal = Modal.None;
 			;
+			ImGui.End();
+		}
+
+		private void ResetModal(TrackPlayer player)
+		{
+			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
+				ImGuiCond.Appearing);
+			ImGui.Begin(Loc.Localize("ResetModalTitle", "Reset Confirmation") + "###PlayerTracker_ResetModal_Window",
+				ImGuiUtil.ModalWindowFlags());
+			ImGui.Text(Loc.Localize("ResetModalContent", "Are you sure you want to reset?"));
+			ImGui.Spacing();
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_ResetModalOK_Button"))
+			{
+				player.Icon = 0;
+				player.Color = null;
+				_currentModal = Modal.None;
+			}
+
+			ImGui.SameLine();
+			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") + "###PlayerTracker_ResetModalCancel_Button"))
+				_currentModal = Modal.None;
+			ImGui.End();
+		}
+
+		private void DeleteModal(TrackPlayer player)
+		{
+			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
+				ImGuiCond.Appearing);
+			ImGui.Begin(Loc.Localize("DeleteModalTitle", "Delete Confirmation") + "###PlayerTracker_DeleteModal_Window",
+				ImGuiUtil.ModalWindowFlags());
+			ImGui.Text(Loc.Localize("DeleteModalContent", "Are you sure you want to delete?"));
+			ImGui.Spacing();
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_DeleteModalOK_Button"))
+			{
+				_playerTrackPlugin.RosterService.DeletePlayer(_currentPlayer.Key);
+				_currentView = View.Players;
+				_currentModal = Modal.None;
+			}
+
+			ImGui.SameLine();
+			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") + "###PlayerTracker_DeleteModalCancel_Button"))
+				_currentModal = Modal.None;
 			ImGui.End();
 		}
 
@@ -376,7 +428,9 @@ namespace PlayerTrack
 		private enum Modal
 		{
 			None,
-			Lodestone
+			Lodestone,
+			Reset,
+			Delete
 		}
 	}
 }
