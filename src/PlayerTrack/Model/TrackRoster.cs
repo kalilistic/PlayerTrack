@@ -44,7 +44,7 @@ namespace PlayerTrack
 		{
 			if (player.Lodestone.Id != 0 && Roster[player.Key].Lodestone.Id == 0)
 				Roster[player.Key].Lodestone.Id = player.Lodestone.Id;
-			Roster[player.Key].FreeCompany = player.FreeCompany;
+			if (Roster[player.Key].FreeCompany.Equals("N/A")) Roster[player.Key].FreeCompany = player.FreeCompany;
 		}
 
 		public void AddEncounter(string playerKey, TrackEncounter encounter)

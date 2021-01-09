@@ -320,7 +320,7 @@ namespace PlayerTrack
 							Name = player.HomeWorld.GameData.Name
 						}
 					},
-					FreeCompany = player.CompanyTag,
+					FreeCompany = string.IsNullOrEmpty(contentName) ? player.CompanyTag : "N/A",
 					Encounters = new List<TrackEncounter>
 					{
 						new TrackEncounter
