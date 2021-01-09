@@ -38,5 +38,10 @@ namespace PlayerTrack.Mock
 		{
 			throw new NotImplementedException();
 		}
+
+		public bool IsNewPlayer(string name, string worldName)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

@@ -122,6 +122,16 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
+		public List<string> GetWorldNames()
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool IsValidCharacterName(string name)
+		{
+			throw new NotImplementedException();
+		}
+
 		string IPlayerTrackPlugin.PluginFolder()
 		{
 			throw new NotImplementedException();

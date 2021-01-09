@@ -1,13 +1,12 @@
 ﻿// ReSharper disable InvertIf
 // ReSharper disable ConvertIfStatementToNullCoalescingExpression
+// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
 using Newtonsoft.Json;
-
-// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 
 namespace PlayerTrack
 {
@@ -31,6 +30,7 @@ namespace PlayerTrack
 		[JsonProperty] [DefaultValue("")] public string Notes { get; set; } = string.Empty;
 		[JsonProperty] public TrackLodestone Lodestone { get; set; } = new TrackLodestone();
 		[JsonProperty] [DefaultValue(0)] public int ActorId { get; set; }
+		[JsonProperty] [DefaultValue(false)] public bool IsManual { get; set; }
 
 		public long Created => Encounters.First().Created;
 
@@ -56,8 +56,7 @@ namespace PlayerTrack
 		{
 			get
 			{
-				if (_seenCount == null)
-					_seenCount = (Encounters?.Count == null ? "0" : Encounters.Count.ToString()) + "x";
+				if (_seenCount == null) _seenCount = GetEncounterCount() + "x";
 				return _seenCount;
 			}
 		}
@@ -66,7 +65,7 @@ namespace PlayerTrack
 		{
 			get
 			{
-				if (_key == null) _key = string.Concat(Name?.Replace(' ', '_').ToUpper(), "_", HomeWorlds[0]?.Id);
+				if (_key == null) _key = CreateKey(Name, HomeWorlds[0]?.Id ?? 0);
 				return _key;
 			}
 		}
@@ -109,6 +108,17 @@ namespace PlayerTrack
 			}
 		}
 
+		public int GetEncounterCount()
+		{
+			if (IsManual) return Encounters.Count - 1;
+
+			return Encounters.Count;
+		}
+
+		public static string CreateKey(string name, uint worldId)
+		{
+			return string.Concat(name.Replace(' ', '_').ToUpper(), "_", worldId);
+		}
 
 		public void Merge(TrackPlayer playerToMerge)
 		{

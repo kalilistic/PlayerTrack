@@ -10,6 +10,7 @@ namespace PlayerTrack
 {
 	public class RosterService : IRosterService
 	{
+		private readonly Queue<TrackPlayer> _addRequests = new Queue<TrackPlayer>();
 		private readonly Queue<string> _deleteRequests = new Queue<string>();
 		private readonly JsonSerializerSettings _jsonSerializerSettings;
 		private readonly IPlayerTrackPlugin _playerTrackPlugin;
@@ -69,6 +70,13 @@ namespace PlayerTrack
 			Current = currentPlayers;
 		}
 
+		public bool IsNewPlayer(string name, string worldName)
+		{
+			var worldId = _playerTrackPlugin.GetWorldId(worldName) ?? 0;
+			var key = TrackPlayer.CreateKey(name, worldId);
+			return All.IsNewPlayer(key);
+		}
+
 		public void DeletePlayer(string key)
 		{
 			_deleteRequests.Enqueue(key);
@@ -113,9 +121,50 @@ namespace PlayerTrack
 			}
 		}
 
+		public void AddPlayer(string name, string worldName)
+		{
+			var currentTime = DateUtil.CurrentTime();
+			var newPlayer = new TrackPlayer
+			{
+				IsManual = true,
+				Names = new List<string> {name},
+				HomeWorlds = new List<TrackWorld>
+				{
+					new TrackWorld
+					{
+						Id = _playerTrackPlugin.GetWorldId(worldName) ?? 0,
+						Name = worldName
+					}
+				},
+				FreeCompany = string.Empty,
+				Encounters = new List<TrackEncounter>
+				{
+					new TrackEncounter
+					{
+						Created = currentTime,
+						Updated = currentTime,
+						Location = new TrackLocation
+						{
+							TerritoryType = 1,
+							PlaceName = string.Empty,
+							ContentName = string.Empty
+						},
+						Job = new TrackJob
+						{
+							Id = 0,
+							Lvl = 0,
+							Code = "ADV"
+						}
+					}
+				}
+			};
+			_addRequests.Enqueue(newPlayer);
+		}
+
 		public void ProcessRequests()
 		{
 			ProcessDeleteRequests();
+			ProcessAddRequests();
 			ProcessVerificationRequests();
 			ProcessUpdateRequests();
 		}
@@ -213,6 +262,15 @@ namespace PlayerTrack
 			{
 				var playerKey = _deleteRequests.Dequeue();
 				All.DeletePlayer(playerKey);
+			}
+		}
+
+		private void ProcessAddRequests()
+		{
+			while (_addRequests.Count > 0)
+			{
+				var player = _addRequests.Dequeue();
+				All.AddPlayer(player);
 			}
 		}
 

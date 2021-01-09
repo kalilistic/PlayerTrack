@@ -21,11 +21,13 @@ namespace PlayerTrack
 		private readonly List<Vector4> _colorPalette = ImGuiUtil.CreatePalette();
 		private readonly IPlayerTrackPlugin _playerTrackPlugin;
 		private string _activeSearch = string.Empty;
+		private string _addPlayerInput = string.Empty;
 		private Modal _currentModal = Modal.None;
 		private TrackPlayer _currentPlayer;
 		private TrackPlayerMode _currentPlayerMode = TrackPlayerMode.CurrentPlayers;
 		private View _currentView = View.Players;
 		private string _searchInput = string.Empty;
+		private int _selectedWorld;
 
 		public OverlayWindow(IPlayerTrackPlugin playerTrackPlugin)
 		{
@@ -59,6 +61,12 @@ namespace PlayerTrack
 					case Modal.Delete:
 						DeleteModal(_currentPlayer);
 						break;
+					case Modal.InvalidCharacterName:
+						InvalidCharacterNameModal();
+						break;
+					case Modal.DuplicateCharacter:
+						DuplicateCharacterModal();
+						break;
 				}
 		}
 
@@ -87,6 +95,7 @@ namespace PlayerTrack
 			_currentPlayer = null;
 			PlayerMode(_currentPlayerMode.Index);
 			PlayerSearchInput();
+			PlayerAddInput();
 			PlayerList(GetPlayers(TrackPlayerMode.GetPlayerModeByIndex(_currentPlayerMode.Index)));
 		}
 
@@ -123,6 +132,45 @@ namespace PlayerTrack
 			}
 		}
 
+		private void PlayerAddInput()
+		{
+			if (_currentPlayerMode.Code == TrackPlayerMode.AddPlayer.Code)
+			{
+				ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale);
+				var worldNames = _playerTrackPlugin.GetWorldNames();
+				if (ImGui.Combo("###PlayerTrack_PlayerAdd_Combo", ref _selectedWorld,
+					worldNames.ToArray(),
+					worldNames.Count))
+					_playerTrackPlugin.LogInfo(worldNames[_selectedWorld]);
+
+				ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale / 1.3f);
+				ImGui.InputTextWithHint("###PlayerTrack_PlayerNameAdd_Input",
+					Loc.Localize("PlayerNameAddHint", "player name"), ref _addPlayerInput, 30);
+
+				ImGui.SameLine();
+				if (ImGui.Button(Loc.Localize("PlayerAdd", "Add") + "###PlayerTrack_PlayerAdd_Button"))
+				{
+					if (!_playerTrackPlugin.IsValidCharacterName(_addPlayerInput))
+					{
+						_currentModal = Modal.InvalidCharacterName;
+					}
+					else if (!_playerTrackPlugin.RosterService.IsNewPlayer(_addPlayerInput, worldNames[_selectedWorld]))
+					{
+						_currentModal = Modal.DuplicateCharacter;
+					}
+					else
+					{
+						_playerTrackPlugin.RosterService.AddPlayer(_addPlayerInput, worldNames[_selectedWorld]);
+						_selectedWorld = 0;
+						_searchInput = _addPlayerInput;
+						_activeSearch = _addPlayerInput;
+						_addPlayerInput = string.Empty;
+						_currentPlayerMode = TrackPlayerMode.SearchForPlayers;
+					}
+				}
+			}
+		}
+
 		private Dictionary<string, TrackPlayer> GetPlayers(TrackPlayerMode currentPlayerMode)
 		{
 			if (currentPlayerMode.Code == TrackPlayerMode.CurrentPlayers.Code)
@@ -133,11 +181,12 @@ namespace PlayerTrack
 			if (currentPlayerMode.Code == TrackPlayerMode.SearchForPlayers.Code && !string.IsNullOrEmpty(_activeSearch))
 				return _playerTrackPlugin.GetPlayersByName(_activeSearch);
 
-			return new Dictionary<string, TrackPlayer>();
+			return null;
 		}
 
 		private void PlayerList(Dictionary<string, TrackPlayer> players)
 		{
+			if (_currentPlayerMode.Code == TrackPlayerMode.AddPlayer.Code) return;
 			if (players != null && players.Count > 0)
 			{
 				PlayerCount(players.Count);
@@ -233,7 +282,35 @@ namespace PlayerTrack
 			ImGui.Text(Loc.Localize("LodestoneModalContent", "Lodestone verification pending."));
 			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_LodestoneModal_Button"))
 				_currentModal = Modal.None;
-			;
+			ImGui.End();
+		}
+
+		private void InvalidCharacterNameModal()
+		{
+			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
+				ImGuiCond.Appearing);
+			ImGui.Begin(
+				Loc.Localize("InvalidCharacterNameModalTitle", "Character Name") +
+				"###PlayerTracker_InvalidCharacterNameModal_Window",
+				ImGuiUtil.ModalWindowFlags());
+			ImGui.Text(Loc.Localize("InvalidCharacterNameModalContent", "Invalid character name...try again!"));
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_InvalidCharacterNameModal_Button"))
+				_currentModal = Modal.None;
+			ImGui.End();
+		}
+
+		private void DuplicateCharacterModal()
+		{
+			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
+				ImGuiCond.Appearing);
+			ImGui.Begin(
+				Loc.Localize("DuplicateCharacterModalTitle", "Duplicate Character") +
+				"###PlayerTracker_DuplicateCharacterModal_Window",
+				ImGuiUtil.ModalWindowFlags());
+			ImGui.Text(Loc.Localize("DuplicateCharacterModalContent",
+				"There's already a character with that name/world."));
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_DuplicateCharacterModal_Button"))
+				_currentModal = Modal.None;
 			ImGui.End();
 		}
 
@@ -388,22 +465,23 @@ namespace PlayerTrack
 				ImGuiWindowFlags.AlwaysVerticalScrollbar);
 			ImGui.TextColored(UIColor.Violet, Loc.Localize("Encounters", "Encounters"));
 
-			var col1 = 110f * Scale;
-			var col2 = 220f * Scale;
-			var col3 = 260f * Scale;
-			var col4 = 295f * Scale;
+			if (_currentPlayer.GetEncounterCount() > 0)
+			{
+				var col1 = 110f * Scale;
+				var col2 = 220f * Scale;
+				var col3 = 260f * Scale;
+				var col4 = 295f * Scale;
 
-			ImGui.Text(Loc.Localize("EncounterTime", "Time"));
-			ImGui.SameLine(col1);
-			ImGui.Text(Loc.Localize("EncounterDuration", "Duration"));
-			ImGui.SameLine(col2);
-			ImGui.Text(Loc.Localize("EncounterJob", "Job"));
-			ImGui.SameLine(col3);
-			ImGui.Text(Loc.Localize("EncounterJobLevel", "Lvl"));
-			ImGui.SameLine(col4);
-			ImGui.Text(Loc.Localize("EncounterLocation", "Location"));
+				ImGui.Text(Loc.Localize("EncounterTime", "Time"));
+				ImGui.SameLine(col1);
+				ImGui.Text(Loc.Localize("EncounterDuration", "Duration"));
+				ImGui.SameLine(col2);
+				ImGui.Text(Loc.Localize("EncounterJob", "Job"));
+				ImGui.SameLine(col3);
+				ImGui.Text(Loc.Localize("EncounterJobLevel", "Lvl"));
+				ImGui.SameLine(col4);
+				ImGui.Text(Loc.Localize("EncounterLocation", "Location"));
 
-			if (encounters != null && encounters.Count > 0)
 				foreach (var encounter in encounters.AsEnumerable().Reverse())
 				{
 					ImGui.Text(encounter.Time);
@@ -416,6 +494,12 @@ namespace PlayerTrack
 					ImGui.SameLine(col4);
 					ImGui.Text(encounter.Location.ToString());
 				}
+			}
+			else
+			{
+				ImGui.Text(Loc.Localize("NoEncounters", "No encounters to show..."));
+			}
+
 
 			ImGui.EndChild();
 		}
@@ -431,7 +515,9 @@ namespace PlayerTrack
 			None,
 			Lodestone,
 			Reset,
-			Delete
+			Delete,
+			InvalidCharacterName,
+			DuplicateCharacter
 		}
 	}
 }
