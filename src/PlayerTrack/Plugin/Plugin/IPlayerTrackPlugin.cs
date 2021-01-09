@@ -45,5 +45,6 @@ namespace PlayerTrack
 		DataManager GetDataManager();
 		LodestoneService GetLodestoneService();
 		uint? GetWorldId(string worldName);
+		bool IsLoggedIn();
 	}
 }

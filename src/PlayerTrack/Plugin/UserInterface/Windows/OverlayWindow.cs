@@ -34,6 +34,7 @@ namespace PlayerTrack
 
 		public void DrawWindow()
 		{
+			if (!_playerTrackPlugin.IsLoggedIn()) return;
 			if (!IsVisible) return;
 			if (ImGui.Begin(Loc.Localize("OverlayWindow", "PlayerTrack") + "###PlayerTrack_Overlay_Window",
 				ref IsVisible, ImGuiWindowFlags.NoResize))

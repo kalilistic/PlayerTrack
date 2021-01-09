@@ -187,6 +187,11 @@ namespace PlayerTrack
 			StartTimers();
 		}
 
+		public bool IsGameLoaded()
+		{
+			throw new NotImplementedException();
+		}
+
 		private void BackupOnStart()
 		{
 			if (!Configuration.FreshInstall) RosterService.BackupRoster(true);

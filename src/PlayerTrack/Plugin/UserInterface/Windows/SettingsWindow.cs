@@ -33,6 +33,7 @@ namespace PlayerTrack
 
 		public void DrawWindow()
 		{
+			if (!_playerTrackPlugin.IsLoggedIn()) return;
 			if (!IsVisible) return;
 			ImGui.SetNextWindowSize(new Vector2(500 * Scale, 360 * Scale), ImGuiCond.Appearing);
 			ImGui.Begin(Loc.Localize("SettingsWindow", "PlayerTrack Settings") + "###PlayerTrack_Settings_Window",

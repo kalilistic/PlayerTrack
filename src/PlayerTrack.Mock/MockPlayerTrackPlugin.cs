@@ -117,6 +117,11 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
+		bool IPluginBase.IsLoggedIn()
+		{
+			throw new NotImplementedException();
+		}
+
 		string IPlayerTrackPlugin.PluginFolder()
 		{
 			throw new NotImplementedException();
@@ -188,6 +193,11 @@ namespace PlayerTrack.Mock
 		}
 
 		public uint? GetWorldId(string worldName)
+		{
+			throw new NotImplementedException();
+		}
+
+		bool IPlayerTrackPlugin.IsLoggedIn()
 		{
 			throw new NotImplementedException();
 		}
