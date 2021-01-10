@@ -19,6 +19,7 @@ namespace PlayerTrack
 		private readonly FontAwesomeIcon[] _icons;
 		private readonly IPlayerTrackPlugin _playerTrackPlugin;
 		private Tab _currentTab = Tab.General;
+		private int _selectedContentIndex;
 		private int _selectedDefaultIconIndex;
 		private int _selectedIconIndex = 4;
 
@@ -187,6 +188,7 @@ namespace PlayerTrack
 			RestrictInCombat();
 			RestrictToContent();
 			RestrictToHighEndDuty();
+			RestrictToCustom();
 		}
 
 		private void DrawIcons()
@@ -606,6 +608,73 @@ namespace PlayerTrack
 
 			CustomWidgets.HelpMarker(Loc.Localize("RestrictToHighEndDuty_HelpMarker",
 				"restrict to high-end duties only (e.g. savage)"));
+			ImGui.Spacing();
+		}
+
+		private void RestrictToCustom()
+		{
+			var restrictToCustomList = _playerTrackPlugin.Configuration.RestrictToCustom;
+			if (ImGui.Checkbox(
+				Loc.Localize("RestrictToCustom", "Restrict to Following Content") +
+				"###PlayerTrack_RestrictToCustom_Checkbox",
+				ref restrictToCustomList))
+			{
+				_playerTrackPlugin.Configuration.RestrictToCustom = restrictToCustomList;
+				_playerTrackPlugin.SaveConfig();
+			}
+
+			CustomWidgets.HelpMarker(Loc.Localize("RestrictToCustom_HelpMarker",
+				"add content to list by using dropdown or remove by clicking on them"));
+			ImGui.Spacing();
+
+			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 2 * Scale);
+			ImGui.Combo("###PlayerTrack_Content_Combo", ref _selectedContentIndex,
+				_playerTrackPlugin.GetContentNames(),
+				_playerTrackPlugin.GetContentIds().Length);
+			ImGui.SameLine();
+
+			if (ImGui.SmallButton(Loc.Localize("Add", "Add") + "###PlayerTrack_ContentAdd_Button"))
+			{
+				if (_playerTrackPlugin.Configuration.PermittedContent.Contains(
+					_playerTrackPlugin.GetContentIds()[_selectedContentIndex]))
+				{
+					ImGui.OpenPopup("###PlayerTrack_DupeContent_Popup");
+				}
+				else
+				{
+					_playerTrackPlugin.Configuration.PermittedContent.Add(
+						_playerTrackPlugin.GetContentIds()[_selectedContentIndex]);
+					_playerTrackPlugin.SaveConfig();
+				}
+			}
+
+			ImGui.SameLine();
+			if (ImGui.SmallButton(Loc.Localize("Reset", "Reset") + "###PlayerTrack_ContentReset_Button"))
+			{
+				_selectedContentIndex = 0;
+				_playerTrackPlugin.Configuration.PermittedContent = new List<uint>();
+				_playerTrackPlugin.SaveConfig();
+			}
+
+			if (ImGui.BeginPopup("###PlayerTrack_DupeContent_Popup"))
+			{
+				ImGui.Text(Loc.Localize("DupeContent", "This content is already added!"));
+				ImGui.EndPopup();
+			}
+
+			ImGui.Spacing();
+
+			foreach (var permittedContent in _playerTrackPlugin.Configuration.PermittedContent.ToList())
+			{
+				var index = Array.IndexOf(_playerTrackPlugin.GetContentIds(), permittedContent);
+				ImGui.Text(_playerTrackPlugin.GetContentNames()[index]);
+				if (ImGui.IsItemClicked())
+				{
+					_playerTrackPlugin.Configuration.PermittedContent.Remove(permittedContent);
+					_playerTrackPlugin.SaveConfig();
+				}
+			}
+
 			ImGui.Spacing();
 		}
 

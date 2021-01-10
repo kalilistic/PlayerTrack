@@ -35,6 +35,7 @@ namespace PlayerTrack
 				_dataManager = new DataManager(this);
 				ResourceManager.UpdateResources();
 				FontAwesomeUtil.Init();
+				InitContent();
 				LoadConfig();
 				LoadServices();
 				SetupCommands();
@@ -262,6 +263,13 @@ namespace PlayerTrack
 
 				// high end duty check
 				if (Configuration.RestrictToHighEndDuty && !IsHighEndDuty(contentId))
+				{
+					_isProcessing = false;
+					return;
+				}
+
+				// custom content filter check
+				if (Configuration.RestrictToCustom && !Configuration.PermittedContent.Contains(contentId))
 				{
 					_isProcessing = false;
 					return;

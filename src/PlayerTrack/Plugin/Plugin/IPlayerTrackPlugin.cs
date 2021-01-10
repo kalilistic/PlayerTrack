@@ -48,5 +48,7 @@ namespace PlayerTrack
 		bool IsLoggedIn();
 		List<string> GetWorldNames();
 		bool IsValidCharacterName(string name);
+		string[] GetContentNames();
+		uint[] GetContentIds();
 	}
 }

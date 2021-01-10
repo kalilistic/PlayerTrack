@@ -132,6 +132,16 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
+		public string[] GetContentNames()
+		{
+			throw new NotImplementedException();
+		}
+
+		public uint[] GetContentIds()
+		{
+			throw new NotImplementedException();
+		}
+
 		string IPlayerTrackPlugin.PluginFolder()
 		{
 			throw new NotImplementedException();
