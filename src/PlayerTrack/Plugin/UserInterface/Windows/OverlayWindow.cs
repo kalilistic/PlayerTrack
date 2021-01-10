@@ -432,6 +432,19 @@ namespace PlayerTrack
 				ImGui.EndPopup();
 			}
 
+			ImGui.SameLine();
+			ImGui.Spacing();
+			ImGui.SameLine();
+
+			var alertEnabled = player.Alert.Enabled;
+			if (ImGui.Checkbox(
+				Loc.Localize("EnablePlayerAlert", "Enable Alerts") + "###PlayerTrack_EnablePlayerAlert_Checkbox",
+				ref alertEnabled))
+			{
+				player.Alert.LastSent = DateUtil.CurrentTime();
+				player.Alert.Enabled = alertEnabled;
+			}
+
 			var notes = player.Notes;
 			if (ImGui.InputTextMultiline("###PlayerTrack_PlayerNotes_InputText", ref notes, 128,
 				new Vector2(ImGui.GetWindowSize().X - 25f * Scale, 80f * Scale))) player.Notes = notes;

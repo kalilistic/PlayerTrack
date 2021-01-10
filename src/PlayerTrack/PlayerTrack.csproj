@@ -109,6 +109,7 @@
     </Compile>
     <Compile Include="Common\Model\PrimaryKey.cs" />
     <Compile Include="Common\Model\ModifierKey.cs" />
+    <Compile Include="Model\TrackAlert.cs" />
     <Compile Include="Model\TrackLodestoneRequest.cs" />
     <Compile Include="Model\TrackLodestoneResponse.cs" />
     <Compile Include="Model\TrackLodestoneLocale.cs" />

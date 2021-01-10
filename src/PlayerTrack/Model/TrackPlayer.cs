@@ -31,6 +31,8 @@ namespace PlayerTrack
 		[JsonProperty] public TrackLodestone Lodestone { get; set; } = new TrackLodestone();
 		[JsonProperty] [DefaultValue(0)] public int ActorId { get; set; }
 		[JsonProperty] [DefaultValue(false)] public bool IsManual { get; set; }
+		[JsonProperty] public TrackAlert Alert { get; set; } = new TrackAlert();
+		public string PreviouslyLastSeen { get; set; } = string.Empty;
 
 		public long Created => Encounters.First().Created;
 
@@ -97,11 +99,11 @@ namespace PlayerTrack
 				if (_abbreviatedNotes == null)
 				{
 					if (string.IsNullOrEmpty(Notes))
-						_abbreviatedNotes = "None";
+						_abbreviatedNotes = "None.";
 					else
-						_abbreviatedNotes = Notes.Length < 20
-							? Notes.Replace('\n', ' ')
-							: Notes.Replace('\n', ' ').Substring(0, 20) + "...";
+						_abbreviatedNotes = Notes.Length < 30
+							? Notes.Replace('\n', ' ').EnsureEndsWithDot()
+							: Notes.Replace('\n', ' ').Substring(0, 30) + "...";
 				}
 
 				return _abbreviatedNotes;

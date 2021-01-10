@@ -4,11 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Numerics;
 using CheapLoc;
 using Dalamud.Interface;
 using ImGuiNET;
+using Enumerable = System.Linq.Enumerable;
 
 namespace PlayerTrack
 {
@@ -36,7 +36,7 @@ namespace PlayerTrack
 		{
 			if (!_playerTrackPlugin.IsLoggedIn()) return;
 			if (!IsVisible) return;
-			ImGui.SetNextWindowSize(new Vector2(500 * Scale, 360 * Scale), ImGuiCond.Appearing);
+			ImGui.SetNextWindowSize(new Vector2(550 * Scale, 420 * Scale), ImGuiCond.Appearing);
 			ImGui.Begin(Loc.Localize("SettingsWindow", "PlayerTrack Settings") + "###PlayerTrack_Settings_Window",
 				ref IsVisible,
 				ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
@@ -88,6 +88,12 @@ namespace PlayerTrack
 				if (ImGui.BeginTabItem(Loc.Localize("Data", "Data") + "###PlayerTrack_Data_Tab"))
 				{
 					_currentTab = Tab.Data;
+					ImGui.EndTabItem();
+				}
+
+				if (ImGui.BeginTabItem(Loc.Localize("Alerts", "Alerts") + "###PlayerTrack_Alerts_Tab"))
+				{
+					_currentTab = Tab.Alerts;
 					ImGui.EndTabItem();
 				}
 
@@ -145,6 +151,11 @@ namespace PlayerTrack
 				case Tab.Data:
 				{
 					DrawData();
+					break;
+				}
+				case Tab.Alerts:
+				{
+					DrawAlerts();
 					break;
 				}
 				case Tab.Backup:
@@ -213,6 +224,14 @@ namespace PlayerTrack
 			Compressed();
 			UpdateFrequency();
 			SaveFrequency();
+		}
+
+		private void DrawAlerts()
+		{
+			EnableAlerts();
+			EnableAlertsForAllPlayers();
+			IncludeNotesInAlerts();
+			AlertFrequency();
 		}
 
 		private void DrawBackup()
@@ -664,7 +683,7 @@ namespace PlayerTrack
 
 			ImGui.Spacing();
 
-			foreach (var permittedContent in _playerTrackPlugin.Configuration.PermittedContent.ToList())
+			foreach (var permittedContent in Enumerable.ToList(_playerTrackPlugin.Configuration.PermittedContent))
 			{
 				var index = Array.IndexOf(_playerTrackPlugin.GetContentIds(), permittedContent);
 				ImGui.Text(_playerTrackPlugin.GetContentNames()[index]);
@@ -691,6 +710,71 @@ namespace PlayerTrack
 
 			CustomWidgets.HelpMarker(Loc.Localize("ShowIcons_HelpMarker",
 				"turn icons on/off on overlay"));
+			ImGui.Spacing();
+		}
+
+		private void EnableAlerts()
+		{
+			var enableAlerts = _playerTrackPlugin.Configuration.EnableAlerts;
+			if (ImGui.Checkbox(
+				Loc.Localize("EnableAlerts", "Enable Alerts") + "###PlayerTrack_EnableAlerts_Checkbox",
+				ref enableAlerts))
+			{
+				_playerTrackPlugin.Configuration.EnableAlerts = enableAlerts;
+				_playerTrackPlugin.SaveConfig();
+			}
+
+			CustomWidgets.HelpMarker(Loc.Localize("EnableAlerts_HelpMarker",
+				"globally disable alerts even if set for player"));
+			ImGui.Spacing();
+		}
+
+		private void EnableAlertsForAllPlayers()
+		{
+			var enableAlerts = _playerTrackPlugin.Configuration.EnableAlertsForAllPlayers;
+			if (ImGui.Checkbox(
+				Loc.Localize("EnableAlertsForAllPlayers", "Enable Alerts for All Players") +
+				"###PlayerTrack_EnableAlertsForAllPlayers_Checkbox",
+				ref enableAlerts))
+			{
+				_playerTrackPlugin.Configuration.EnableAlertsForAllPlayers = enableAlerts;
+				_playerTrackPlugin.SaveConfig();
+			}
+
+			CustomWidgets.HelpMarker(Loc.Localize("EnableAlertsForAllPlayers_HelpMarker",
+				"enable alerts for all players even if not enabled for a specific player"));
+			ImGui.Spacing();
+		}
+
+		private void IncludeNotesInAlerts()
+		{
+			var includeNotesInAlert = _playerTrackPlugin.Configuration.IncludeNotesInAlert;
+			if (ImGui.Checkbox(
+				Loc.Localize("IncludeNotesInAlert", "Include Notes in Alerts") +
+				"###PlayerTrack_IncludeNotesInAlert_Checkbox",
+				ref includeNotesInAlert))
+			{
+				_playerTrackPlugin.Configuration.IncludeNotesInAlert = includeNotesInAlert;
+				_playerTrackPlugin.SaveConfig();
+			}
+
+			CustomWidgets.HelpMarker(Loc.Localize("IncludeNotesInAlert_HelpMarker",
+				"include notes in alert message if available"));
+			ImGui.Spacing();
+		}
+
+		private void AlertFrequency()
+		{
+			ImGui.Text(Loc.Localize("AlertFrequency", "Alert Frequency (hours)"));
+			CustomWidgets.HelpMarker(Loc.Localize("AlertFrequency_HelpMarker",
+				"frequency to send player alert"));
+			var alertFrequency = _playerTrackPlugin.Configuration.AlertFrequency.FromMillisecondsToHours();
+			if (ImGui.SliderInt("###PlayerTrack_AlertFrequency_Slider", ref alertFrequency, 1, 24))
+			{
+				_playerTrackPlugin.Configuration.AlertFrequency = alertFrequency.FromHoursToMilliseconds();
+				_playerTrackPlugin.SaveConfig();
+			}
+
 			ImGui.Spacing();
 		}
 
@@ -728,7 +812,7 @@ namespace PlayerTrack
 			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 2 * Scale);
 			ImGui.Combo("###PlayerTrack_Icon_Combo", ref _selectedIconIndex,
 				_iconNames,
-				_icons.Count());
+				Enumerable.Count(_icons));
 			ImGui.SameLine();
 
 			ImGui.PushFont(UiBuilder.IconFont);
@@ -767,7 +851,7 @@ namespace PlayerTrack
 
 			ImGui.Spacing();
 
-			foreach (var enabledIcon in _playerTrackPlugin.Configuration.EnabledIcons.ToList())
+			foreach (var enabledIcon in Enumerable.ToList(_playerTrackPlugin.Configuration.EnabledIcons))
 			{
 				ImGui.BeginGroup();
 				ImGui.PushFont(UiBuilder.IconFont);
@@ -804,6 +888,7 @@ namespace PlayerTrack
 			Icons,
 			Lodestone,
 			Data,
+			Alerts,
 			Backup,
 			Links
 		}

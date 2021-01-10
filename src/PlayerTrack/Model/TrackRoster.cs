@@ -63,6 +63,7 @@ namespace PlayerTrack
 		public void UpdateEncounter(string playerKey, TrackEncounter encounter)
 		{
 			encounter.Created = Roster[playerKey].Encounters[Roster[playerKey].Encounters.Count - 1].Created;
+			Roster[playerKey].PreviouslyLastSeen = Roster[playerKey].LastSeen;
 			Roster[playerKey].Encounters[Roster[playerKey].Encounters.Count - 1] = encounter;
 		}
 

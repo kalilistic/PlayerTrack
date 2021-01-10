@@ -1,9 +1,12 @@
 ﻿// ReSharper disable InvertIf
 // ReSharper disable ConvertIfStatementToSwitchStatement
+// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using CheapLoc;
 using Newtonsoft.Json;
 
 namespace PlayerTrack
@@ -68,6 +71,7 @@ namespace PlayerTrack
 
 			currentPlayers.SortByName();
 			Current = currentPlayers;
+			SendAlerts();
 		}
 
 		public bool IsNewPlayer(string name, string worldName)
@@ -119,6 +123,28 @@ namespace PlayerTrack
 			{
 				_playerTrackPlugin.LogError(ex, "Failed to save player data - will try again soon.");
 			}
+		}
+
+		public void SendAlerts()
+		{
+			if (!_playerTrackPlugin.Configuration.EnableAlerts) return;
+			foreach (var player in Current.Roster)
+				if ((_playerTrackPlugin.Configuration.EnableAlertsForAllPlayers || player.Value.Alert.Enabled) &&
+				    (DateTime.UtcNow - player.Value.Alert.LastSent.ToDateTime()).TotalMilliseconds >
+				    _playerTrackPlugin.Configuration.AlertFrequency)
+				{
+					if (_playerTrackPlugin.Configuration.IncludeNotesInAlert &&
+					    !string.IsNullOrEmpty(player.Value.Notes))
+						_playerTrackPlugin.PrintMessage(string.Format(
+							Loc.Localize("PlayerAlertWithNotes", "{0} last seen {1}: {2}"), player.Value.Name,
+							player.Value.PreviouslyLastSeen, player.Value.AbbreviatedNotes));
+					else
+						_playerTrackPlugin.PrintMessage(string.Format(
+							Loc.Localize("PlayerAlert", "{0} last seen {1}."), player.Value.Name,
+							player.Value.PreviouslyLastSeen));
+					player.Value.Alert.LastSent = DateUtil.CurrentTime();
+					Thread.Sleep(1000);
+				}
 		}
 
 		public void AddPlayer(string name, string worldName)
@@ -338,6 +364,8 @@ namespace PlayerTrack
 							SubmitVerificationRequest(player.Value);
 						}
 					}
+
+					player.Value.PreviouslyLastSeen = player.Value.LastSeen;
 				}
 			}
 			catch

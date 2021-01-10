@@ -5,9 +5,11 @@ namespace PlayerTrack
 {
 	public abstract class PlayerTrackConfig
 	{
+		public int AlertFrequency = 14400000;
 		public int BackupFrequency = 14400000;
 		public int BackupRetention = 10;
 		public List<FontAwesomeIcon> EnabledIcons = new List<FontAwesomeIcon>();
+		public bool IncludeNotesInAlert = false;
 		public long LastBackup = 0;
 		public int LodestoneCooldownDuration = 3600000;
 		public int LodestoneFailureDelay = 86400000;
@@ -37,5 +39,7 @@ namespace PlayerTrack
 		public bool ShowIcons { get; set; } = true;
 		public Vector4 DefaultColor { get; set; } = new Vector4(255, 255, 255, 1);
 		public FontAwesomeIcon DefaultIcon { get; set; } = FontAwesomeIcon.User;
+		public bool EnableAlerts { get; set; } = true;
+		public bool EnableAlertsForAllPlayers { get; set; } = false;
 	}
 }
