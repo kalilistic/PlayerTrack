@@ -106,6 +106,8 @@ namespace PlayerTrack
 			Controls(_currentPlayer);
 			PlayerInfo(_currentPlayer);
 			PlayerLodestone(_currentPlayer);
+			PlayerCategory(_currentPlayer);
+			PlayerOverride(_currentPlayer);
 			PlayerNotes(_currentPlayer);
 			PlayerEncounters(_currentPlayer.Encounters);
 		}
@@ -208,8 +210,10 @@ namespace PlayerTrack
 
 		private void PlayerRow(TrackPlayer player)
 		{
-			PlayerIcon(player, player.Color ?? _playerTrackPlugin.Configuration.DefaultColor);
-			ImGui.TextColored(player.Color ?? _playerTrackPlugin.Configuration.DefaultColor, player.Name);
+			var category = _playerTrackPlugin.RosterService.GetCategory(player.Key);
+			PlayerIcon(player);
+			ImGui.SameLine();
+			ImGui.TextColored(player.Color ?? category.Color, player.Name);
 			if (ImGui.IsItemClicked())
 			{
 				_playerTrackPlugin.RosterService.ChangeSelectedPlayer(player.Key);
@@ -217,15 +221,22 @@ namespace PlayerTrack
 			}
 		}
 
-		private void PlayerIcon(TrackPlayer player, Vector4 color)
+		private void PlayerIcon(TrackPlayer player)
 		{
+			var category = _playerTrackPlugin.RosterService.GetCategory(player.Key);
 			if (!_playerTrackPlugin.Configuration.ShowIcons) return;
+			var color = player.Color ?? category.Color;
+			var iconValue = player.Icon;
+			FontAwesomeIcon icon;
+			if (iconValue != 0)
+				icon = (FontAwesomeIcon) player.Icon;
+			else if (category.Icon != 0)
+				icon = (FontAwesomeIcon) category.Icon;
+			else
+				icon = FontAwesomeIcon.User;
 			ImGui.PushFont(UiBuilder.IconFont);
-			ImGui.TextColored(color, player.Icon != 0
-				? ((FontAwesomeIcon) player.Icon).ToIconString()
-				: _playerTrackPlugin.Configuration.DefaultIcon.ToIconString());
+			ImGui.TextColored(color, icon.ToIconString());
 			ImGui.PopFont();
-			ImGui.SameLine();
 		}
 
 		private void SetCurrentPlayer()
@@ -326,6 +337,7 @@ namespace PlayerTrack
 			{
 				player.Icon = 0;
 				player.Color = null;
+				player.CategoryId = _playerTrackPlugin.GetCategoryService().GetDefaultCategory().Id;
 				_currentModal = Modal.None;
 			}
 
@@ -393,35 +405,52 @@ namespace PlayerTrack
 				player.Lodestone.LastUpdatedDisplay);
 		}
 
-		private void PlayerNotes(TrackPlayer player)
+		private void PlayerCategory(TrackPlayer player)
 		{
+			var category = _playerTrackPlugin.RosterService.GetCategory(player.Key);
 			ImGui.Spacing();
-			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerNotes", "Notes"));
-
-			if (_playerTrackPlugin.Configuration.ShowIcons)
+			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerCategory", "Player Category"));
+			var categoryNames = _playerTrackPlugin.GetCategoryService().GetCategoryNames();
+			var categoryIndex = _playerTrackPlugin.GetCategoryService().GetCategoryIndex(category.Name);
+			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 3);
+			if (ImGui.Combo("###PlayerTrack_PlayerCategory_Combo", ref categoryIndex,
+				categoryNames,
+				categoryNames.Length))
 			{
-				var namesList = new List<string> {Loc.Localize("Default", "Default")};
-				namesList.AddRange(_playerTrackPlugin.Configuration.EnabledIcons.ToList()
-					.Select(icon => icon.ToString()));
-				var names = namesList.ToArray();
-
-				var codesList = new List<int> {0};
-				codesList.AddRange(_playerTrackPlugin.Configuration.EnabledIcons.ToList().Select(icon => (int) icon));
-				var codes = codesList.ToArray();
-				var iconIndex = Array.IndexOf(codes, player.Icon);
-				ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 3);
-				if (ImGui.Combo("###PlayerTrack_SelectIcon_Combo", ref iconIndex,
-					names,
-					names.Length))
-					player.Icon = codes[iconIndex];
-				ImGui.SameLine();
-				PlayerIcon(player, _playerTrackPlugin.Configuration.DefaultColor);
-				ImGui.Spacing();
+				player.Icon = 0;
+				player.Color = null;
+				player.CategoryId = _playerTrackPlugin.GetCategoryService().Categories[categoryIndex].Id;
 			}
 
 			ImGui.SameLine();
+		}
 
-			var color = player.Color ?? _playerTrackPlugin.Configuration.DefaultColor;
+		private void PlayerOverride(TrackPlayer player)
+		{
+			var category = _playerTrackPlugin.RosterService.GetCategory(player.Key);
+			ImGui.Spacing();
+			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerOverride", "Player Override"));
+			var namesList = new List<string> {Loc.Localize("Default", "Default")};
+			namesList.AddRange(_playerTrackPlugin.Configuration.EnabledIcons.ToList()
+				.Select(icon => icon.ToString()));
+			var names = namesList.ToArray();
+			var codesList = new List<int> {0};
+			codesList.AddRange(_playerTrackPlugin.Configuration.EnabledIcons.ToList().Select(icon => (int) icon));
+			var codes = codesList.ToArray();
+			var iconIndex = Array.IndexOf(codes, player.Icon != 0 ? player.Icon : category.Icon);
+			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 3);
+			if (ImGui.Combo("###PlayerTrack_SelectIcon_Combo", ref iconIndex,
+				names,
+				names.Length))
+				player.Icon = codes[iconIndex];
+			ImGui.SameLine();
+			PlayerIcon(player);
+
+			ImGui.SameLine();
+			ImGui.Spacing();
+			ImGui.SameLine();
+
+			var color = player.Color ?? category.Color;
 			if (ImGui.ColorButton("###PlayerTracker_PlayerColor_Button", color)
 			) ImGui.OpenPopup("###PlayerTracker_PlayerColor_Popup");
 
@@ -431,20 +460,12 @@ namespace PlayerTrack
 				Palette(player);
 				ImGui.EndPopup();
 			}
+		}
 
-			ImGui.SameLine();
+		private void PlayerNotes(TrackPlayer player)
+		{
 			ImGui.Spacing();
-			ImGui.SameLine();
-
-			var alertEnabled = player.Alert.Enabled;
-			if (ImGui.Checkbox(
-				Loc.Localize("EnablePlayerAlert", "Enable Alerts") + "###PlayerTrack_EnablePlayerAlert_Checkbox",
-				ref alertEnabled))
-			{
-				player.Alert.LastSent = DateUtil.CurrentTime();
-				player.Alert.Enabled = alertEnabled;
-			}
-
+			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerNotes", " Player Notes"));
 			var notes = player.Notes;
 			if (ImGui.InputTextMultiline("###PlayerTrack_PlayerNotes_InputText", ref notes, 128,
 				new Vector2(ImGui.GetWindowSize().X - 25f * Scale, 80f * Scale))) player.Notes = notes;

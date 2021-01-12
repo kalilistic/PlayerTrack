@@ -109,6 +109,7 @@
     </Compile>
     <Compile Include="Common\Model\PrimaryKey.cs" />
     <Compile Include="Common\Model\ModifierKey.cs" />
+    <Compile Include="Model\TrackCategory.cs" />
     <Compile Include="Model\TrackAlert.cs" />
     <Compile Include="Model\TrackLodestoneRequest.cs" />
     <Compile Include="Model\TrackLodestoneResponse.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Plugin\Plugin.cs" />
     <Compile Include="Common\Localization\ILocalization.cs" />
     <Compile Include="Common\Localization\Localization.cs" />
+    <Compile Include="Service\CategoryService\CategoryService.cs" />
     <Compile Include="Service\LodestoneService\ILodestoneService.cs" />
     <Compile Include="Service\LodestoneService\LodestoneService.cs" />
     <Compile Include="Service\RosterService\IRosterService.cs" />

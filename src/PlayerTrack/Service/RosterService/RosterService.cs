@@ -31,7 +31,6 @@ namespace PlayerTrack
 		public TrackRoster All { get; set; }
 		public TrackPlayer SelectedPlayer { get; set; }
 
-
 		public void ClearPlayers()
 		{
 			Current.Roster = new Dictionary<string, TrackPlayer>();
@@ -125,11 +124,21 @@ namespace PlayerTrack
 			}
 		}
 
+		public TrackCategory GetCategory(string playerKey)
+		{
+			var player = All.GetPlayer(playerKey);
+			return player.CategoryId == 0
+				? _playerTrackPlugin.GetCategoryService().GetDefaultCategory()
+				: _playerTrackPlugin.GetCategoryService().GetCategory(player.CategoryId);
+		}
+
 		public void SendAlerts()
 		{
 			if (!_playerTrackPlugin.Configuration.EnableAlerts) return;
 			foreach (var player in Current.Roster)
-				if ((_playerTrackPlugin.Configuration.EnableAlertsForAllPlayers || player.Value.Alert.Enabled) &&
+			{
+				var category = _playerTrackPlugin.GetCategoryService().GetCategory(player.Value.CategoryId);
+				if (category.EnableAlerts &&
 				    (DateTime.UtcNow - player.Value.Alert.LastSent.ToDateTime()).TotalMilliseconds >
 				    _playerTrackPlugin.Configuration.AlertFrequency)
 				{
@@ -145,6 +154,7 @@ namespace PlayerTrack
 					player.Value.Alert.LastSent = DateUtil.CurrentTime();
 					Thread.Sleep(1000);
 				}
+			}
 		}
 
 		public void AddPlayer(string name, string worldName)

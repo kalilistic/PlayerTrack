@@ -142,6 +142,11 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
+		public CategoryService GetCategoryService()
+		{
+			throw new NotImplementedException();
+		}
+
 		string IPlayerTrackPlugin.PluginFolder()
 		{
 			throw new NotImplementedException();

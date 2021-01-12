@@ -48,6 +48,7 @@ namespace PlayerTrack
 		}
 
 		private LodestoneService LodestoneService { get; set; }
+		public CategoryService CategoryService { get; set; }
 
 		public DataManager GetDataManager()
 		{
@@ -136,6 +137,7 @@ namespace PlayerTrack
 			RemoveCommands();
 			StopTimers();
 			RosterService.SaveData();
+			CategoryService.SaveCategories();
 			LodestoneService.Dispose();
 			base.Dispose();
 			_pluginInterface.UiBuilder.OnOpenConfigUi -= (sender, args) => DrawConfigUI();
@@ -186,6 +188,11 @@ namespace PlayerTrack
 		{
 			StopTimers();
 			StartTimers();
+		}
+
+		public CategoryService GetCategoryService()
+		{
+			return CategoryService;
 		}
 
 		public bool IsGameLoaded()
@@ -361,6 +368,7 @@ namespace PlayerTrack
 		{
 			LodestoneService = new LodestoneService(this);
 			RosterService = new RosterService(this);
+			CategoryService = new CategoryService(this);
 		}
 
 		public void LoadUI()

@@ -1,14 +1,15 @@
 ﻿// ReSharper disable InconsistentNaming
 // ReSharper disable InvertIf
+// ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Numerics;
 using CheapLoc;
 using Dalamud.Interface;
 using ImGuiNET;
-using Enumerable = System.Linq.Enumerable;
 
 namespace PlayerTrack
 {
@@ -18,9 +19,10 @@ namespace PlayerTrack
 		private readonly string[] _iconNames;
 		private readonly FontAwesomeIcon[] _icons;
 		private readonly IPlayerTrackPlugin _playerTrackPlugin;
+		private Modal _currentModal = Modal.None;
 		private Tab _currentTab = Tab.General;
+		private int _selectedCategoryIndex;
 		private int _selectedContentIndex;
-		private int _selectedDefaultIconIndex;
 		private int _selectedIconIndex = 4;
 
 		public SettingsWindow(IPlayerTrackPlugin playerTrackPlugin)
@@ -43,6 +45,7 @@ namespace PlayerTrack
 			DrawTabs();
 			OpenCurrentTab();
 			ImGui.End();
+			OpenModals();
 		}
 
 		private void DrawTabs()
@@ -97,6 +100,12 @@ namespace PlayerTrack
 					ImGui.EndTabItem();
 				}
 
+				if (ImGui.BeginTabItem(Loc.Localize("Categories", "Categories") + "###PlayerTrack_Categories_Tab"))
+				{
+					_currentTab = Tab.Categories;
+					ImGui.EndTabItem();
+				}
+
 				if (ImGui.BeginTabItem(Loc.Localize("Backup", "Backup") + "###PlayerTrack_Backup_Tab"))
 				{
 					_currentTab = Tab.Backup;
@@ -112,6 +121,68 @@ namespace PlayerTrack
 				ImGui.EndTabBar();
 				ImGui.Spacing();
 			}
+		}
+
+		private void OpenModals()
+		{
+			if (_playerTrackPlugin.Configuration.Enabled)
+				switch (_currentModal)
+				{
+					case Modal.None:
+						break;
+					case Modal.Delete:
+						DeleteModal();
+						break;
+					case Modal.Reset:
+						ResetModal();
+						break;
+				}
+		}
+
+		private void DeleteModal()
+		{
+			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
+				ImGuiCond.Appearing);
+			ImGui.Begin(Loc.Localize("DeleteModalTitle", "Delete Confirmation") + "###PlayerTracker_DeleteModal_Window",
+				ImGuiUtil.ModalWindowFlags());
+			ImGui.Text(Loc.Localize("DeleteModalContent", "Are you sure you want to delete?"));
+			ImGui.Spacing();
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_DeleteModalOK_Button"))
+			{
+				_currentModal = Modal.None;
+				_playerTrackPlugin.GetCategoryService().DeleteCategory(_selectedCategoryIndex);
+				_selectedCategoryIndex = 0;
+			}
+
+			ImGui.SameLine();
+			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") + "###PlayerTracker_DeleteModalCancel_Button"))
+			{
+				_currentModal = Modal.None;
+				_selectedCategoryIndex = 0;
+			}
+
+			ImGui.End();
+		}
+
+		private void ResetModal()
+		{
+			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
+				ImGuiCond.Appearing);
+			ImGui.Begin(Loc.Localize("ResetModalTitle", "Reset Confirmation") + "###PlayerTracker_ResetModal_Window",
+				ImGuiUtil.ModalWindowFlags());
+			ImGui.Text(Loc.Localize("ResetModalContent", "Are you sure you want to reset?"));
+			ImGui.Spacing();
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_ResetModalOK_Button"))
+			{
+				_playerTrackPlugin.GetCategoryService().ResetCategories();
+				_currentModal = Modal.None;
+			}
+
+			ImGui.SameLine();
+			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") + "###PlayerTracker_ResetModalCancel_Button"))
+				_currentModal = Modal.None;
+
+			ImGui.End();
 		}
 
 		private void OpenCurrentTab()
@@ -158,6 +229,11 @@ namespace PlayerTrack
 					DrawAlerts();
 					break;
 				}
+				case Tab.Categories:
+				{
+					DrawCategories();
+					break;
+				}
 				case Tab.Backup:
 				{
 					DrawBackup();
@@ -185,7 +261,6 @@ namespace PlayerTrack
 		{
 			PlayerTotal();
 			ShowIcons();
-			DefaultColor();
 		}
 
 		private void DrawThreshold()
@@ -204,7 +279,6 @@ namespace PlayerTrack
 
 		private void DrawIcons()
 		{
-			DefaultIcon();
 			IconList();
 		}
 
@@ -229,9 +303,14 @@ namespace PlayerTrack
 		private void DrawAlerts()
 		{
 			EnableAlerts();
-			EnableAlertsForAllPlayers();
 			IncludeNotesInAlerts();
 			AlertFrequency();
+		}
+
+		private void DrawCategories()
+		{
+			CategoryControls();
+			CategoryTable();
 		}
 
 		private void DrawBackup()
@@ -322,54 +401,22 @@ namespace PlayerTrack
 			ImGui.Spacing();
 		}
 
-		private void DefaultColor()
+		private void Palette(string id)
 		{
-			ImGui.Text(Loc.Localize("DefaultColor", "Default Color"));
-			CustomWidgets.HelpMarker(Loc.Localize("DefaultColor_HelpMarker",
-				"default color for players when not set specifically"));
-			var color = _playerTrackPlugin.Configuration.DefaultColor;
-			if (ImGui.ColorButton("###PlayerTrack_DefaultColor_Button", color)
-			) ImGui.OpenPopup("###PlayerTrack_DefaultColor_Popup");
-			if (ImGui.BeginPopup("###PlayerTrack_DefaultColor_Popup"))
-			{
-				if (ImGui.ColorPicker4("###PlayerTrack_DefaultColor_ColorPicker", ref color))
-				{
-					_playerTrackPlugin.Configuration.DefaultColor = color;
-					_playerTrackPlugin.SaveConfig();
-				}
-
-				Palette();
-				ImGui.EndPopup();
-			}
-
-			ImGui.SameLine();
-			if (ImGui.SmallButton(Loc.Localize("Reset", "Reset") + "###PlayerTrack_DefaultColorReset_Button"))
-			{
-				_playerTrackPlugin.Configuration.DefaultColor = new Vector4(255, 255, 255, 1);
-				_playerTrackPlugin.SaveConfig();
-			}
-
-			ImGui.Spacing();
+			SwatchRow(id, 0, 8);
+			SwatchRow(id, 8, 16);
+			SwatchRow(id, 16, 24);
+			SwatchRow(id, 24, 32);
 		}
 
-		private void Palette()
-		{
-			SwatchRow(0, 8);
-			SwatchRow(8, 16);
-			SwatchRow(16, 24);
-			SwatchRow(24, 32);
-		}
-
-		private void SwatchRow(int min, int max)
+		private void SwatchRow(string id, int min, int max)
 		{
 			ImGui.Spacing();
 			for (var i = min; i < max; i++)
 			{
-				if (ImGui.ColorButton("###PlayerTrack_DefaultColor_Swatch" + i, _colorPalette[i]))
-				{
-					_playerTrackPlugin.Configuration.DefaultColor = _colorPalette[i];
+				if (ImGui.ColorButton("label" + i, _colorPalette[i]))
+					//_playerTrackPlugin.Configuration.DefaultColor = _colorPalette[i];
 					_playerTrackPlugin.SaveConfig();
-				}
 
 				ImGui.SameLine();
 			}
@@ -683,7 +730,7 @@ namespace PlayerTrack
 
 			ImGui.Spacing();
 
-			foreach (var permittedContent in Enumerable.ToList(_playerTrackPlugin.Configuration.PermittedContent))
+			foreach (var permittedContent in _playerTrackPlugin.Configuration.PermittedContent.ToList())
 			{
 				var index = Array.IndexOf(_playerTrackPlugin.GetContentIds(), permittedContent);
 				ImGui.Text(_playerTrackPlugin.GetContentNames()[index]);
@@ -729,23 +776,6 @@ namespace PlayerTrack
 			ImGui.Spacing();
 		}
 
-		private void EnableAlertsForAllPlayers()
-		{
-			var enableAlerts = _playerTrackPlugin.Configuration.EnableAlertsForAllPlayers;
-			if (ImGui.Checkbox(
-				Loc.Localize("EnableAlertsForAllPlayers", "Enable Alerts for All Players") +
-				"###PlayerTrack_EnableAlertsForAllPlayers_Checkbox",
-				ref enableAlerts))
-			{
-				_playerTrackPlugin.Configuration.EnableAlertsForAllPlayers = enableAlerts;
-				_playerTrackPlugin.SaveConfig();
-			}
-
-			CustomWidgets.HelpMarker(Loc.Localize("EnableAlertsForAllPlayers_HelpMarker",
-				"enable alerts for all players even if not enabled for a specific player"));
-			ImGui.Spacing();
-		}
-
 		private void IncludeNotesInAlerts()
 		{
 			var includeNotesInAlert = _playerTrackPlugin.Configuration.IncludeNotesInAlert;
@@ -778,29 +808,154 @@ namespace PlayerTrack
 			ImGui.Spacing();
 		}
 
-		private void DefaultIcon()
+		private void CategoryControls()
 		{
-			_selectedDefaultIconIndex =
-				Array.IndexOf(_iconNames, _playerTrackPlugin.Configuration.DefaultIcon.ToString());
-			ImGui.Text(Loc.Localize("DefaultIcon", "Default Icon"));
-			CustomWidgets.HelpMarker(Loc.Localize("DefaultIcon_HelpMarker",
-				"default icon used when one is not set"));
-			ImGui.Spacing();
-			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 2 * Scale);
-			if (ImGui.Combo("###PlayerTrack_DefaultIcon_Combo", ref _selectedDefaultIconIndex,
-				_iconNames,
-				_icons.Length))
+			if (ImGui.SmallButton(Loc.Localize("Reset", "Reset") + "###PlayerTracker_CategoryReset_Button"))
+				_currentModal = Modal.Reset;
+			ImGui.SameLine();
+			if (ImGui.SmallButton(Loc.Localize("Add", "Add") + "###PlayerTracker_CategoryAdd_Button"))
 			{
-				_playerTrackPlugin.Configuration.DefaultIcon = _icons[_selectedDefaultIconIndex];
-				_playerTrackPlugin.SaveConfig();
+				_playerTrackPlugin.GetCategoryService().AddCategory();
+				_playerTrackPlugin.GetCategoryService().SaveCategories();
 			}
 
-			;
-			ImGui.SameLine();
-			ImGui.PushFont(UiBuilder.IconFont);
-			ImGui.Text(_icons[_selectedDefaultIconIndex].ToIconString());
-			ImGui.PopFont();
-			ImGui.Spacing();
+			ImGui.Separator();
+		}
+
+		private void CategoryTable()
+		{
+			if (_playerTrackPlugin.GetCategoryService().Categories == null) return;
+
+			// define table
+			ImGui.Columns(5, "###PlayerTrack_CategoryTable_Columns", true);
+			ImGui.SetColumnWidth(0, ImGui.GetWindowSize().X / 4 * Scale + 20f);
+			ImGui.SetColumnWidth(1, 50f * Scale);
+			ImGui.SetColumnWidth(2, 50f * Scale);
+			ImGui.SetColumnWidth(3, ImGui.GetWindowSize().X / 4 * Scale + 40f);
+			ImGui.SetColumnWidth(4, ImGui.GetWindowSize().X / 4 * Scale + 40f);
+
+			// column headings
+			ImGui.Text(Loc.Localize("CategoryName", "Name"));
+			ImGui.NextColumn();
+			ImGui.Text(Loc.Localize("CategoryColor", "Color"));
+			ImGui.NextColumn();
+			ImGui.Text(Loc.Localize("CategoryAlerts", "Alerts"));
+			ImGui.NextColumn();
+			ImGui.Text(Loc.Localize("CategoryIcon", "Icon"));
+			ImGui.NextColumn();
+			ImGui.Text(Loc.Localize("CategoryAction", "Actions"));
+			ImGui.NextColumn();
+			ImGui.Separator();
+
+			// current categories
+			for (var i = 0; i < _playerTrackPlugin.GetCategoryService().Categories.Count; i++)
+			{
+				var categoryName = _playerTrackPlugin.GetCategoryService().Categories[i].Name;
+				ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 4 * Scale);
+				if (_playerTrackPlugin.GetCategoryService().Categories[i].Id == 1)
+				{
+					ImGui.InputText("###PlayerTrack_CategoryName_Input" + i, ref categoryName, 20,
+						ImGuiInputTextFlags.ReadOnly);
+				}
+				else
+				{
+					if (ImGui.InputText("###PlayerTrack_CategoryName_Input" + i, ref categoryName, 20))
+					{
+						_playerTrackPlugin.GetCategoryService().Categories[i].Name = categoryName;
+						_playerTrackPlugin.GetCategoryService().SaveCategories();
+					}
+				}
+
+				ImGui.NextColumn();
+
+				var categoryColor = _playerTrackPlugin.GetCategoryService().Categories[i].Color;
+				if (ImGui.ColorButton("###PlayerTrack_CategoryColor_Button" + i, categoryColor)
+				)
+					ImGui.OpenPopup("###PlayerTrack_CategoryColor_Popup" + i);
+				if (ImGui.BeginPopup("###PlayerTrack_CategoryColor_Popup" + i))
+				{
+					if (ImGui.ColorPicker4("###PlayerTrack_CategoryColor_ColorPicker" + i, ref categoryColor))
+					{
+						_playerTrackPlugin.GetCategoryService().Categories[i].Color = categoryColor;
+						_playerTrackPlugin.GetCategoryService().SaveCategories();
+					}
+
+					Palette("###PlayerTrack_CategoryColor_Swatch" + i);
+					ImGui.EndPopup();
+				}
+
+				ImGui.NextColumn();
+
+				var enableAlerts = _playerTrackPlugin.GetCategoryService().Categories[i].EnableAlerts;
+				if (ImGui.Checkbox("###PlayerTrack_EnableCategoryAlerts_Checkbox" + i,
+					ref enableAlerts))
+				{
+					_playerTrackPlugin.GetCategoryService().Categories[i].EnableAlerts = enableAlerts;
+					_playerTrackPlugin.GetCategoryService().SaveCategories();
+				}
+
+				ImGui.NextColumn();
+
+				var categoryIcon = _playerTrackPlugin.GetCategoryService().Categories[i].Icon;
+				var namesList = new List<string> {Loc.Localize("Default", "Default")};
+				namesList.AddRange(_playerTrackPlugin.Configuration.EnabledIcons.ToList()
+					.Select(icon => icon.ToString()));
+				var names = namesList.ToArray();
+				var codesList = new List<int> {0};
+				codesList.AddRange(_playerTrackPlugin.Configuration.EnabledIcons.ToList().Select(icon => (int) icon));
+				var codes = codesList.ToArray();
+				var iconIndex = Array.IndexOf(codes, categoryIcon);
+				ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 4 * Scale);
+				if (ImGui.Combo("###PlayerTrack_SelectCategoryIcon_Combo" + i, ref iconIndex,
+					names,
+					names.Length))
+				{
+					_playerTrackPlugin.GetCategoryService().Categories[i].Icon = codes[iconIndex];
+					_playerTrackPlugin.GetCategoryService().SaveCategories();
+				}
+
+				ImGui.SameLine();
+				ImGui.PushFont(UiBuilder.IconFont);
+				ImGui.Text(categoryIcon != 0
+					? ((FontAwesomeIcon) categoryIcon).ToIconString()
+					: FontAwesomeIcon.User.ToIconString());
+				ImGui.PopFont();
+				ImGui.NextColumn();
+
+				if (i != 0)
+				{
+					if (CustomWidgets.IconButton(FontAwesomeIcon.ArrowUp, "###PlayerTrack_MoveUpCategory_Button" + i))
+					{
+						_playerTrackPlugin.GetCategoryService()
+							.MoveUpList(_playerTrackPlugin.GetCategoryService().Categories[i].Id);
+						_playerTrackPlugin.GetCategoryService().SaveCategories();
+					}
+
+					ImGui.SameLine();
+				}
+
+				if (i != _playerTrackPlugin.GetCategoryService().Categories.Count - 1)
+				{
+					if (CustomWidgets.IconButton(FontAwesomeIcon.ArrowDown,
+						"###PlayerTrack_MoveDownCategory_Button" + i))
+					{
+						_playerTrackPlugin.GetCategoryService()
+							.MoveDownList(_playerTrackPlugin.GetCategoryService().Categories[i].Id);
+						_playerTrackPlugin.GetCategoryService().SaveCategories();
+					}
+
+					ImGui.SameLine();
+				}
+
+				if (!_playerTrackPlugin.GetCategoryService().Categories[i].IsDefault)
+					if (CustomWidgets.IconButton(FontAwesomeIcon.Trash, "###PlayerTrack_DeleteCategory_Button" + i))
+					{
+						_selectedCategoryIndex = i;
+						_currentModal = Modal.Delete;
+					}
+
+				ImGui.NextColumn();
+			}
 		}
 
 		private void IconList()
@@ -812,7 +967,7 @@ namespace PlayerTrack
 			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 2 * Scale);
 			ImGui.Combo("###PlayerTrack_Icon_Combo", ref _selectedIconIndex,
 				_iconNames,
-				Enumerable.Count(_icons));
+				_icons.Count());
 			ImGui.SameLine();
 
 			ImGui.PushFont(UiBuilder.IconFont);
@@ -838,7 +993,6 @@ namespace PlayerTrack
 			{
 				_selectedIconIndex = 4;
 				_playerTrackPlugin.Configuration.ShowIcons = true;
-				_playerTrackPlugin.Configuration.DefaultIcon = FontAwesomeIcon.User;
 				_playerTrackPlugin.SetDefaultIcons();
 				_playerTrackPlugin.SaveConfig();
 			}
@@ -851,7 +1005,7 @@ namespace PlayerTrack
 
 			ImGui.Spacing();
 
-			foreach (var enabledIcon in Enumerable.ToList(_playerTrackPlugin.Configuration.EnabledIcons))
+			foreach (var enabledIcon in _playerTrackPlugin.Configuration.EnabledIcons.ToList())
 			{
 				ImGui.BeginGroup();
 				ImGui.PushFont(UiBuilder.IconFont);
@@ -889,8 +1043,17 @@ namespace PlayerTrack
 			Lodestone,
 			Data,
 			Alerts,
+			Categories,
 			Backup,
 			Links
+		}
+
+
+		private enum Modal
+		{
+			None,
+			Delete,
+			Reset
 		}
 	}
 }

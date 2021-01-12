@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Numerics;
 
 namespace PlayerTrack
 {
@@ -37,9 +36,6 @@ namespace PlayerTrack
 		public bool ShowOverlay { get; set; } = true;
 		public int PluginLanguage { get; set; } = 0;
 		public bool ShowIcons { get; set; } = true;
-		public Vector4 DefaultColor { get; set; } = new Vector4(255, 255, 255, 1);
-		public FontAwesomeIcon DefaultIcon { get; set; } = FontAwesomeIcon.User;
 		public bool EnableAlerts { get; set; } = true;
-		public bool EnableAlertsForAllPlayers { get; set; } = false;
 	}
 }

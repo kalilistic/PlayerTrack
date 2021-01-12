@@ -50,5 +50,6 @@ namespace PlayerTrack
 		bool IsValidCharacterName(string name);
 		string[] GetContentNames();
 		uint[] GetContentIds();
+		CategoryService GetCategoryService();
 	}
 }
