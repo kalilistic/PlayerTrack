@@ -58,7 +58,7 @@ namespace PlayerTrack
 				}
 
 				var currentPlayer = All.GetPlayer(player.Key);
-				SubmitVerificationRequest(currentPlayer);
+				SubmitLodestoneRequest(currentPlayer);
 				currentPlayer.ClearBackingFields();
 				try
 				{
@@ -217,52 +217,7 @@ namespace PlayerTrack
 		{
 			ProcessDeleteRequests();
 			ProcessAddRequests();
-			ProcessVerificationRequests();
-			ProcessUpdateRequests();
-		}
-
-		private void SubmitUpdateRequest(TrackPlayer player)
-		{
-			if (!_playerTrackPlugin.Configuration.SyncToLodestone) return;
-			if (player.Lodestone.Status == TrackLodestoneStatus.Verified && DateUtil.CurrentTime() >
-				player.Lodestone?.LastUpdated +
-				_playerTrackPlugin.Configuration.LodestoneUpdateFrequency)
-				_playerTrackPlugin.GetLodestoneService().AddUpdateRequest(new TrackLodestoneRequest
-				{
-					PlayerKey = player.Key,
-					LodestoneId = player.Lodestone.Id
-				});
-		}
-
-		private void ProcessUpdateRequests()
-		{
-			var responses = _playerTrackPlugin.GetLodestoneService().GetUpdateResponses();
-			foreach (var response in responses)
-			{
-				var player = All.GetPlayer(response.PlayerKey);
-
-				if (player.IsNewName(response.PlayerName) ||
-				    player.IsNewHomeWorld(response.HomeWorld))
-				{
-					All.DeletePlayer(player.Key);
-					player.UpdateName(response.PlayerName);
-					player.UpdateHomeWorld(response.HomeWorld);
-					player.ClearBackingFields();
-					if (All.IsNewPlayer(player.Key))
-					{
-						All.AddPlayer(player);
-					}
-					else
-					{
-						All.MergePlayer(player);
-						player = All.GetPlayer(player.Key);
-					}
-				}
-
-				player.Lodestone.Status = response.Status;
-				player.Lodestone.LastUpdated = DateUtil.CurrentTime();
-				HandleFailure(player);
-			}
+			ProcessLodestoneRequests();
 		}
 
 		private static void HandleFailure(TrackPlayer player)
@@ -280,7 +235,7 @@ namespace PlayerTrack
 			}
 		}
 
-		private void SubmitVerificationRequest(TrackPlayer player)
+		private void SubmitLodestoneRequest(TrackPlayer player)
 		{
 			if (!_playerTrackPlugin.Configuration.SyncToLodestone) return;
 			if (player.Lodestone.Status == TrackLodestoneStatus.Unverified)
@@ -295,7 +250,7 @@ namespace PlayerTrack
 			}
 		}
 
-		private void ProcessVerificationRequests()
+		private void ProcessLodestoneRequests()
 		{
 			var responses = _playerTrackPlugin.GetLodestoneService().GetVerificationResponses();
 			foreach (var response in responses)
@@ -369,25 +324,24 @@ namespace PlayerTrack
 					var lode = player.Value.Lodestone;
 					if (lode?.Status != null)
 					{
+						// refresh lodestone status
 						if (lode.Status == TrackLodestoneStatus.Verifying)
 							lode.Status = TrackLodestoneStatus.Unverified;
-						else if (lode.Status == TrackLodestoneStatus.Updating)
+						else if (lode.Status == TrackLodestoneStatus.Updating ||
+						         lode.Status == TrackLodestoneStatus.Updated)
 							lode.Status = TrackLodestoneStatus.Verified;
 
+						// submit pending verification requests
 						if (lode.Status == TrackLodestoneStatus.Unverified)
 						{
-							SubmitVerificationRequest(player.Value);
-						}
-						else if (lode.Status == TrackLodestoneStatus.Verified)
-						{
-							SubmitUpdateRequest(player.Value);
+							SubmitLodestoneRequest(player.Value);
 						}
 						else if (lode.Status == TrackLodestoneStatus.Failed &&
 						         lode.FailureCount < _playerTrackPlugin.Configuration.LodestoneMaxFailure &&
 						         currentTime < lode.LastFailed + _playerTrackPlugin.Configuration.LodestoneFailureDelay)
 						{
 							player.Value.Lodestone.Status = TrackLodestoneStatus.Unverified;
-							SubmitVerificationRequest(player.Value);
+							SubmitLodestoneRequest(player.Value);
 						}
 					}
 

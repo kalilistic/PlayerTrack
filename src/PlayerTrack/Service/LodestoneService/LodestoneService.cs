@@ -17,12 +17,10 @@ namespace PlayerTrack
 	public class LodestoneService : ILodestoneService
 	{
 		private readonly HttpClient _httpClient;
-		private readonly Queue<TrackLodestoneRequest> _idRequests = new Queue<TrackLodestoneRequest>();
-		private readonly Queue<TrackLodestoneResponse> _idResponses = new Queue<TrackLodestoneResponse>();
 		private readonly Timer _onRequestTimer;
 		private readonly IPlayerTrackPlugin _playerTrackPlugin;
-		private readonly Queue<TrackLodestoneRequest> _updateRequests = new Queue<TrackLodestoneRequest>();
-		private readonly Queue<TrackLodestoneResponse> _updateResponses = new Queue<TrackLodestoneResponse>();
+		private readonly Queue<TrackLodestoneRequest> _requests = new Queue<TrackLodestoneRequest>();
+		private readonly Queue<TrackLodestoneResponse> _responses = new Queue<TrackLodestoneResponse>();
 		private bool _isProcessing;
 		private DateTime _lodestoneCooldown = DateTime.UtcNow;
 
@@ -42,15 +40,7 @@ namespace PlayerTrack
 		public List<TrackLodestoneResponse> GetVerificationResponses()
 		{
 			var responses = new List<TrackLodestoneResponse>();
-			while (_idResponses.Count > 0) responses.Add(_idResponses.Dequeue());
-
-			return responses;
-		}
-
-		public List<TrackLodestoneResponse> GetUpdateResponses()
-		{
-			var responses = new List<TrackLodestoneResponse>();
-			while (_updateResponses.Count > 0) responses.Add(_updateResponses.Dequeue());
+			while (_responses.Count > 0) responses.Add(_responses.Dequeue());
 
 			return responses;
 		}
@@ -59,21 +49,8 @@ namespace PlayerTrack
 		{
 			try
 			{
-				if (_idRequests.Any(existingRequest => existingRequest.PlayerKey == request.PlayerKey)) return;
-				_idRequests.Enqueue(request);
-			}
-			catch
-			{
-				// ignored
-			}
-		}
-
-		public void AddUpdateRequest(TrackLodestoneRequest request)
-		{
-			try
-			{
-				if (_updateRequests.Any(existingRequest => existingRequest.PlayerKey == request.PlayerKey)) return;
-				_updateRequests.Enqueue(request);
+				if (_requests.Any(existingRequest => existingRequest.PlayerKey == request.PlayerKey)) return;
+				_requests.Enqueue(request);
 			}
 			catch
 			{
@@ -90,15 +67,15 @@ namespace PlayerTrack
 
 		private void ProcessIdRequest()
 		{
-			var request = _idRequests.Peek();
+			var request = _requests.Peek();
 			var requestCount = 0;
 			while (requestCount < _playerTrackPlugin.Configuration.LodestoneMaxRetry)
 			{
 				var response = GetCharacterId(request);
 				if (response.Status == TrackLodestoneStatus.Verified)
 				{
-					_idRequests.Dequeue();
-					_idResponses.Enqueue(response);
+					_requests.Dequeue();
+					_responses.Enqueue(response);
 					return;
 				}
 
@@ -115,48 +92,8 @@ namespace PlayerTrack
 						PlayerKey = request.PlayerKey,
 						Status = TrackLodestoneStatus.Failed
 					};
-					_idRequests.Dequeue();
-					_idResponses.Enqueue(response);
-				}
-				else
-				{
-					_lodestoneCooldown =
-						DateTime.UtcNow.AddMilliseconds(_playerTrackPlugin.Configuration.LodestoneCooldownDuration);
-				}
-			}
-		}
-
-		private void ProcessUpdateRequest()
-		{
-			var request = _updateRequests.Peek();
-			var requestCount = 0;
-			while (requestCount < _playerTrackPlugin.Configuration.LodestoneMaxRetry)
-			{
-				var response = GetCharacterProfile(request);
-				if (response.Status == TrackLodestoneStatus.Updated)
-				{
-					response.Status = TrackLodestoneStatus.Verified;
-					_updateRequests.Dequeue();
-					_updateResponses.Enqueue(response);
-					return;
-				}
-
-				Thread.Sleep(_playerTrackPlugin.Configuration.LodestoneRequestDelay);
-				requestCount++;
-			}
-
-			if (requestCount >= _playerTrackPlugin.Configuration.LodestoneMaxRetry)
-			{
-				if (IsLodestoneAvailable())
-				{
-					var response = new TrackLodestoneResponse
-					{
-						PlayerKey = request.PlayerKey,
-						Status = TrackLodestoneStatus.Failed
-					};
-					_playerTrackPlugin.LogInfo("Setting " + request.PlayerKey + " to failed.");
-					_updateRequests.Dequeue();
-					_idResponses.Enqueue(response);
+					_requests.Dequeue();
+					_responses.Enqueue(response);
 				}
 				else
 				{
@@ -170,15 +107,9 @@ namespace PlayerTrack
 		{
 			if (_isProcessing) return;
 			_isProcessing = true;
-			while (_idRequests.Count > 0 && DateTime.UtcNow > _lodestoneCooldown)
+			while (_requests.Count > 0 && DateTime.UtcNow > _lodestoneCooldown)
 			{
 				ProcessIdRequest();
-				Thread.Sleep(_playerTrackPlugin.Configuration.LodestoneRequestDelay);
-			}
-
-			while (_updateRequests.Count > 0 && DateTime.UtcNow > _lodestoneCooldown)
-			{
-				ProcessUpdateRequest();
 				Thread.Sleep(_playerTrackPlugin.Configuration.LodestoneRequestDelay);
 			}
 
