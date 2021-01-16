@@ -20,6 +20,8 @@ namespace PlayerTrack
 		private string _lastSeen;
 		private string _name;
 		private string _seenCount;
+		private string _previousNames;
+		private string _previousWorlds;
 
 		[JsonProperty] public List<string> Names { get; set; }
 		[JsonProperty] public List<TrackWorld> HomeWorlds { get; set; }
@@ -37,6 +39,34 @@ namespace PlayerTrack
 		public int Priority { get; set; }
 
 		public long Created => Encounters.First().Created;
+
+		public string PreviousNames
+		{
+			get
+			{
+				if (_previousNames == null)
+				{
+					_previousNames = Names.Count < 2 ? string.Empty : string.Join(", ", Names.Skip(1));
+				}
+
+				return _previousNames;
+			}
+		}
+
+		public string PreviousWorlds
+		{
+			get
+			{
+				if (_previousWorlds == null)
+				{
+					var homeWorldNames = HomeWorlds.Select(world => world.Name).ToList();
+					_previousWorlds = homeWorldNames.Count < 2 ? string.Empty : string.Join(", ", homeWorldNames.Skip(1));
+				}
+
+				return _previousWorlds;
+			}
+		}
+
 
 		public string FirstSeen
 		{
@@ -158,6 +188,9 @@ namespace PlayerTrack
 			if (Encounters == null) Encounters = new List<TrackEncounter>();
 			Encounters = Encounters.Concat(originalPlayer.Encounters).ToList()
 				.OrderBy(encounter => encounter.Created).ToList();
+
+			// reset to ensure latest props
+			ClearBackingFields();
 		}
 
 		public void ClearBackingFields()
@@ -169,6 +202,8 @@ namespace PlayerTrack
 			_key = null;
 			_name = null;
 			_homeWorld = null;
+			_previousNames = null;
+			_previousWorlds = null;
 			foreach (var encounter in Encounters) encounter.ClearBackingFields();
 		}
 	}

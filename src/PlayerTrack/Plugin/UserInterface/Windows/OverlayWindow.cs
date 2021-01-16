@@ -377,7 +377,9 @@ namespace PlayerTrack
 			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerStats", "Player Stats"));
 
 			if (player.Names?.Count > 1)
-				CustomWidgets.Text(Loc.Localize("PlayerName", "Name"), player.Name, string.Join(", ", player.Names));
+				CustomWidgets.Text(Loc.Localize("PlayerName", "Name"), player.Name,
+					string.Format(Loc.Localize("PlayerPreviousNames", "Previously known as {0}"),
+						player.PreviousNames));
 			else
 				CustomWidgets.Text(Loc.Localize("PlayerName", "Name"), player.Name);
 			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
@@ -385,7 +387,7 @@ namespace PlayerTrack
 			CustomWidgets.Text(Loc.Localize("PlayerFirstSeen", "First Seen"), player.FirstSeen);
 			if (player.HomeWorlds?.Count > 1)
 				CustomWidgets.Text(Loc.Localize("PlayerHomeWorld", "World"), player.HomeWorld,
-					string.Join(", ", player.HomeWorlds.Select(world => world.Name)));
+					string.Format(Loc.Localize("PlayerPreviousWorlds", "Previously on {0}"), player.PreviousWorlds));
 			else
 				CustomWidgets.Text(Loc.Localize("PlayerHomeWorld", "World"), player.HomeWorld);
 			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
