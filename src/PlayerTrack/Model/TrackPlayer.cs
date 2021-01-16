@@ -124,73 +124,40 @@ namespace PlayerTrack
 			return string.Concat(name.Replace(' ', '_').ToUpper(), "_", worldId);
 		}
 
-		public void Merge(TrackPlayer playerToMerge)
+		public void Merge(TrackPlayer originalPlayer)
 		{
+			// simple fields just use original player
+			FreeCompany = originalPlayer.FreeCompany;
+			CategoryId = originalPlayer.CategoryId;
+			Icon = originalPlayer.Icon;
+			Color = originalPlayer.Color;
+
+			// names
 			if (Names == null) Names = new List<string>();
+			foreach (var name in originalPlayer.Names)
+				if (!Names.Contains(name))
+					Names.Add(name);
+
+			// home worlds
 			if (HomeWorlds == null) HomeWorlds = new List<TrackWorld>();
+			var newPlayerWorldIds = HomeWorlds.Select(world => world.Id).ToList();
+			var originalPlayerWorldIds = originalPlayer.HomeWorlds.Select(world => world.Id).ToList();
+			var originalPlayerWorldNames = originalPlayer.HomeWorlds.Select(world => world.Name).ToList();
+			foreach (var worldId in originalPlayer.HomeWorlds.Select(world => world.Id).ToList())
+				if (!newPlayerWorldIds.Contains(worldId))
+					HomeWorlds.Add(new TrackWorld
+					{
+						Id = worldId,
+						Name = originalPlayerWorldNames[originalPlayerWorldIds.IndexOf(worldId)]
+					});
 
-			if (Created < playerToMerge.Created)
-			{
-				playerToMerge.Names.Reverse();
-				foreach (var name in playerToMerge.Names)
-					if (!Names.Contains(name))
-						Names.Insert(0, name);
-				playerToMerge.HomeWorlds.Reverse();
-				foreach (var homeWorld in playerToMerge.HomeWorlds)
-					if (HomeWorlds.All(world => world.Id != homeWorld.Id))
-						HomeWorlds.Insert(0, new TrackWorld
-						{
-							Id = homeWorld.Id,
-							Name = homeWorld.Name
-						});
-				Notes += playerToMerge.Notes;
-			}
-			else
-			{
-				foreach (var name in playerToMerge.Names)
-					if (!Names.Contains(name))
-						Names.Add(name);
-				playerToMerge.HomeWorlds.Reverse();
-				foreach (var homeWorld in playerToMerge.HomeWorlds)
-					if (HomeWorlds.All(world => world.Id != homeWorld.Id))
-						HomeWorlds.Add(new TrackWorld
-						{
-							Id = homeWorld.Id,
-							Name = homeWorld.Name
-						});
-				Notes = playerToMerge.Notes + Notes;
-				Icon = playerToMerge.Icon;
-				Color = playerToMerge.Color;
-			}
+			// notes
+			Notes = originalPlayer.Notes + " " + Notes;
 
-			Encounters = Encounters.Concat(playerToMerge.Encounters).ToList()
+			// encounters
+			if (Encounters == null) Encounters = new List<TrackEncounter>();
+			Encounters = Encounters.Concat(originalPlayer.Encounters).ToList()
 				.OrderBy(encounter => encounter.Created).ToList();
-		}
-
-		public bool IsNewName(string newName)
-		{
-			if (string.IsNullOrEmpty(newName)) return false;
-			return string.IsNullOrEmpty(Names?[0]) || !Names[0].Equals(newName);
-		}
-
-		public void UpdateName(string newName, int index = 0)
-		{
-			if (!IsNewName(newName)) return;
-			if (Names == null) Names = new List<string>();
-			Names.Insert(index, newName);
-		}
-
-		public bool IsNewHomeWorld(TrackWorld newWorld)
-		{
-			if (newWorld?.Id == null) return false;
-			return HomeWorlds?[0].Id == null || HomeWorlds[0].Id != newWorld.Id;
-		}
-
-		public void UpdateHomeWorld(TrackWorld newWorld, int index = 0)
-		{
-			if (!IsNewHomeWorld(newWorld)) return;
-			if (HomeWorlds == null) HomeWorlds = new List<TrackWorld>();
-			HomeWorlds.Insert(index, newWorld);
 		}
 
 		public void ClearBackingFields()

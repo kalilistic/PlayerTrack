@@ -35,11 +35,6 @@ namespace PlayerTrack
 			if (Roster.ContainsKey(playerKey)) Roster.Remove(playerKey);
 		}
 
-		public void MergePlayer(TrackPlayer playerToMerge)
-		{
-			Roster[playerToMerge.Key].Merge(playerToMerge);
-		}
-
 		public void UpdatePlayer(TrackPlayer player)
 		{
 			if (player.Lodestone.Id != 0 && Roster[player.Key].Lodestone.Id == 0)

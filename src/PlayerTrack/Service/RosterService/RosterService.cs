@@ -218,6 +218,7 @@ namespace PlayerTrack
 			ProcessDeleteRequests();
 			ProcessAddRequests();
 			ProcessLodestoneRequests();
+			MergeDuplicates();
 		}
 
 		private static void HandleFailure(TrackPlayer player)
@@ -261,6 +262,28 @@ namespace PlayerTrack
 				player.Lodestone.LastUpdated = DateUtil.CurrentTime();
 				HandleFailure(player);
 			}
+		}
+
+		private void MergeDuplicates()
+		{
+			var lodestoneIds = All.Roster.Select(pair => pair.Value.Lodestone.Id).ToList();
+			var duplicateLodestoneIds = lodestoneIds.GroupBy(x => x)
+				.Where(g => g.Count() > 1)
+				.Select(y => y.Key)
+				.Distinct().ToList();
+			if (duplicateLodestoneIds.Any())
+				foreach (var lodestoneId in lodestoneIds)
+				{
+					var players = All.Roster
+						.Where(pair =>
+							pair.Value.Lodestone.Status == TrackLodestoneStatus.Verified &&
+							pair.Value.Lodestone.Id == lodestoneId).OrderBy(pair => pair.Value.Created).ToList();
+					if (players.Count < 2) continue;
+					var originalPlayer = players[0].Value;
+					var newPlayer = players[1].Value;
+					newPlayer.Merge(originalPlayer);
+					All.DeletePlayer(originalPlayer.Key);
+				}
 		}
 
 		private void ProcessDeleteRequests()
