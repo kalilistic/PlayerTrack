@@ -202,7 +202,6 @@ namespace PlayerTrack
 
 		private void PlayerCount(int count)
 		{
-			if (!_playerTrackPlugin.Configuration.ShowPlayerCount) return;
 			ImGui.Text(Loc.Localize("PlayerCount", "Count") + ": " + count);
 			ImGui.Separator();
 		}
@@ -223,7 +222,6 @@ namespace PlayerTrack
 		private void PlayerIcon(TrackPlayer player)
 		{
 			var category = _playerTrackPlugin.RosterService.GetCategory(player.Key);
-			if (!_playerTrackPlugin.Configuration.ShowIcons) return;
 			var color = player.Color ?? category.Color;
 			var iconValue = player.Icon;
 			FontAwesomeIcon icon;

@@ -25,7 +25,6 @@ namespace PlayerTrack
 		public bool RestrictToCustom = false;
 		public bool RestrictToHighEndDuty = false;
 		public int SaveFrequency = 60000;
-		public bool ShowPlayerCount = true;
 		public bool SyncToLodestone = true;
 		public int UpdateFrequency = 5000;
 		public bool FreshInstall { get; set; } = true;
@@ -34,7 +33,6 @@ namespace PlayerTrack
 		public bool Enabled { get; set; } = true;
 		public bool ShowOverlay { get; set; } = true;
 		public int PluginLanguage { get; set; } = 0;
-		public bool ShowIcons { get; set; } = true;
 		public bool EnableAlerts { get; set; } = true;
 		public int ProcessSettingsFrequency { get; set; } = 1000;
 	}

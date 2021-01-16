@@ -38,7 +38,7 @@ namespace PlayerTrack
 		{
 			if (!_playerTrackPlugin.IsLoggedIn()) return;
 			if (!IsVisible) return;
-			ImGui.SetNextWindowSize(new Vector2(620 * Scale, 280 * Scale), ImGuiCond.Appearing);
+			ImGui.SetNextWindowSize(new Vector2(570 * Scale, 280 * Scale), ImGuiCond.Appearing);
 			ImGui.Begin(Loc.Localize("SettingsWindow", "PlayerTrack Settings") + "###PlayerTrack_Settings_Window",
 				ref IsVisible,
 				ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
@@ -55,12 +55,6 @@ namespace PlayerTrack
 				if (ImGui.BeginTabItem(Loc.Localize("General", "General") + "###PlayerTrack_General_Tab"))
 				{
 					_currentTab = Tab.General;
-					ImGui.EndTabItem();
-				}
-
-				if (ImGui.BeginTabItem(Loc.Localize("Display", "Display") + "###PlayerTrack_Display_Tab"))
-				{
-					_currentTab = Tab.Display;
 					ImGui.EndTabItem();
 				}
 
@@ -194,11 +188,6 @@ namespace PlayerTrack
 					DrawGeneral();
 					break;
 				}
-				case Tab.Display:
-				{
-					DrawDisplay();
-					break;
-				}
 				case Tab.Threshold:
 				{
 					DrawThreshold();
@@ -255,12 +244,6 @@ namespace PlayerTrack
 			PluginEnabled();
 			ShowOverlay();
 			SetLanguage();
-		}
-
-		private void DrawDisplay()
-		{
-			PlayerTotal();
-			ShowIcons();
 		}
 
 		private void DrawThreshold()
@@ -361,22 +344,6 @@ namespace PlayerTrack
 				_playerTrackPlugin.SaveConfig();
 				_playerTrackPlugin.Localization.SetLanguage(pluginLanguage);
 			}
-		}
-
-		private void PlayerTotal()
-		{
-			var showPlayerTotal = _playerTrackPlugin.Configuration.ShowPlayerCount;
-			if (ImGui.Checkbox(
-				Loc.Localize("ShowPlayerTotal", "Show Player Total") + "###PlayerTrack_ShowPlayerTotal_Checkbox",
-				ref showPlayerTotal))
-			{
-				_playerTrackPlugin.Configuration.ShowPlayerCount = showPlayerTotal;
-				_playerTrackPlugin.SaveConfig();
-			}
-
-			CustomWidgets.HelpMarker(Loc.Localize("ShowPlayerTotal_HelpMarker",
-				"show player totals on overlay"));
-			ImGui.Spacing();
 		}
 
 		private void RecentPlayerThreshold()
@@ -662,22 +629,6 @@ namespace PlayerTrack
 			ImGui.Spacing();
 		}
 
-		private void ShowIcons()
-		{
-			var showIcons = _playerTrackPlugin.Configuration.ShowIcons;
-			if (ImGui.Checkbox(
-				Loc.Localize("ShowIcons", "Show Icons") + "###PlayerTrack_ShowIcons_Checkbox",
-				ref showIcons))
-			{
-				_playerTrackPlugin.Configuration.ShowIcons = showIcons;
-				_playerTrackPlugin.SaveConfig();
-			}
-
-			CustomWidgets.HelpMarker(Loc.Localize("ShowIcons_HelpMarker",
-				"turn icons on/off on overlay"));
-			ImGui.Spacing();
-		}
-
 		private void EnableAlerts()
 		{
 			var enableAlerts = _playerTrackPlugin.Configuration.EnableAlerts;
@@ -910,7 +861,6 @@ namespace PlayerTrack
 			if (ImGui.SmallButton(Loc.Localize("Reset", "Reset") + "###PlayerTrack_IconReset_Button"))
 			{
 				_selectedIconIndex = 4;
-				_playerTrackPlugin.Configuration.ShowIcons = true;
 				_playerTrackPlugin.SetDefaultIcons();
 				_playerTrackPlugin.SaveConfig();
 			}
@@ -954,7 +904,6 @@ namespace PlayerTrack
 		private enum Tab
 		{
 			General,
-			Display,
 			Threshold,
 			Filters,
 			Icons,
