@@ -101,13 +101,11 @@ namespace PlayerTrack
 
 		private void DrawPlayerDetailView()
 		{
-			ImGui.SetWindowSize(new Vector2(500 * Scale, 470 * Scale), ImGuiCond.Always);
+			ImGui.SetWindowSize(new Vector2(500 * Scale, 550 * Scale), ImGuiCond.Always);
 			SetCurrentPlayer();
 			Controls(_currentPlayer);
 			PlayerInfo(_currentPlayer);
-			PlayerLodestone(_currentPlayer);
-			PlayerCategory(_currentPlayer);
-			PlayerOverride(_currentPlayer);
+			PlayerDisplay(_currentPlayer);
 			PlayerNotes(_currentPlayer);
 			PlayerEncounters(_currentPlayer.Encounters);
 		}
@@ -396,26 +394,17 @@ namespace PlayerTrack
 			CustomWidgets.Text(Loc.Localize("PlayerFreeCompany", "Free Company"), player.FreeCompany);
 			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
 			CustomWidgets.Text(Loc.Localize("PlayerSeenCount", "Seen Count"), player.SeenCount);
+			CustomWidgets.Text(Loc.Localize("LodestoneStatus", "Lodestone Status"), player.Lodestone.Status.ToString());
 		}
 
-		private void PlayerLodestone(TrackPlayer player)
-		{
-			if (!_playerTrackPlugin.Configuration.SyncToLodestone) return;
-			ImGui.Spacing();
-			ImGui.TextColored(UIColor.Violet, Loc.Localize("LodestoneInfo", "Lodestone"));
-			CustomWidgets.Text(Loc.Localize("LodestoneStatus", "Status"), player.Lodestone.Status.ToString());
-			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
-			CustomWidgets.Text(Loc.Localize("LodestoneLastUpdated", "Last Updated"),
-				player.Lodestone.LastUpdatedDisplay);
-		}
-
-		private void PlayerCategory(TrackPlayer player)
+		private void PlayerDisplay(TrackPlayer player)
 		{
 			var category = _playerTrackPlugin.RosterService.GetCategory(player.Key);
 			ImGui.Spacing();
-			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerCategory", "Player Category"));
+			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerDisplay", "Display Options"));
 			var categoryNames = _playerTrackPlugin.GetCategoryService().GetCategoryNames();
 			var categoryIndex = _playerTrackPlugin.GetCategoryService().GetCategoryIndex(category.Name);
+			ImGui.Text(Loc.Localize("PlayerCategory", "Category"));
 			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 3);
 			if (ImGui.Combo("###PlayerTrack_PlayerCategory_Combo", ref categoryIndex,
 				categoryNames,
@@ -427,14 +416,6 @@ namespace PlayerTrack
 				_playerTrackPlugin.GetCategoryService().SetPlayerPriority();
 			}
 
-			ImGui.SameLine();
-		}
-
-		private void PlayerOverride(TrackPlayer player)
-		{
-			var category = _playerTrackPlugin.RosterService.GetCategory(player.Key);
-			ImGui.Spacing();
-			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerOverride", "Player Override"));
 			var namesList = new List<string> {Loc.Localize("Default", "Default")};
 			namesList.AddRange(_playerTrackPlugin.Configuration.EnabledIcons.ToList()
 				.Select(icon => icon.ToString()));
@@ -443,6 +424,9 @@ namespace PlayerTrack
 			codesList.AddRange(_playerTrackPlugin.Configuration.EnabledIcons.ToList().Select(icon => (int) icon));
 			var codes = codesList.ToArray();
 			var iconIndex = Array.IndexOf(codes, player.Icon != 0 ? player.Icon : category.Icon);
+			ImGui.Spacing();
+
+			ImGui.Text(Loc.Localize("PlayerOverride", "Custom"));
 			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 3);
 			if (ImGui.Combo("###PlayerTrack_SelectIcon_Combo", ref iconIndex,
 				names,
