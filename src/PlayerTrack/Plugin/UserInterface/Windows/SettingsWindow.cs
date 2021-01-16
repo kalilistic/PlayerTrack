@@ -899,6 +899,10 @@ namespace PlayerTrack
 				Process.Start("https://github.com/kalilistic/PlayerTrack");
 			if (ImGui.Button(Loc.Localize("PrintHelp", "Instructions") + "###PlayerTrack_PrintHelp_Button", buttonSize))
 				_playerTrackPlugin.PrintHelpMessage();
+			if (ImGui.Button(
+				Loc.Localize("ImproveTranslation", "Translations") + "###PlayerTrack_ImproveTranslation_Button",
+				buttonSize))
+				Process.Start("https://crowdin.com/project/playertrack");
 		}
 
 		private enum Tab
