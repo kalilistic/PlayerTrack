@@ -31,10 +31,6 @@ namespace PlayerTrack
 		void UpdateResources();
 		string PluginVersion();
 		string PluginFolder();
-		Dictionary<string, TrackPlayer> GetCurrentPlayers();
-		Dictionary<string, TrackPlayer> GetAllPlayers();
-		Dictionary<string, TrackPlayer> GetRecentPlayers();
-		Dictionary<string, TrackPlayer> GetPlayersByName(string name);
 		string GetWorldName(uint worldId);
 		string GetPlaceName(uint territoryTypeId);
 		string GetContentName(uint contentId);

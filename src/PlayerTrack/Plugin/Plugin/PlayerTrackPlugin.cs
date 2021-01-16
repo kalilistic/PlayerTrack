@@ -76,29 +76,6 @@ namespace PlayerTrack
 			};
 		}
 
-		public Dictionary<string, TrackPlayer> GetCurrentPlayers()
-		{
-			return RosterService.Current.Roster;
-		}
-
-		public Dictionary<string, TrackPlayer> GetAllPlayers()
-		{
-			RosterService.All.SortByNameAndPriority();
-			return RosterService.All.Roster;
-		}
-
-		public Dictionary<string, TrackPlayer> GetRecentPlayers()
-		{
-			RosterService.All.SortByNameAndPriority();
-			return RosterService.All.FilterByLastUpdate(Configuration.RecentPlayerThreshold);
-		}
-
-		public Dictionary<string, TrackPlayer> GetPlayersByName(string name)
-		{
-			RosterService.All.SortByNameAndPriority();
-			return RosterService.All.FilterByName(name);
-		}
-
 		public RosterService RosterService { get; set; }
 		public PlayerTrackConfig Configuration { get; set; }
 

@@ -26,20 +26,18 @@ namespace PlayerTrack
 			_jsonSerializerSettings = SerializerUtil.CamelCaseJsonSerializer();
 			InitCategories();
 			LoadCategories();
-			ClearDeletedCategories();
+			ClearDeletedCategories(Categories);
 			SetPlayerPriority();
 		}
 
-		public void ClearDeletedCategories()
+		public void ClearDeletedCategories(List<TrackCategory> categories)
 		{
 			try
 			{
-				var categoryIds = Categories.Select(category => category.Id).ToList();
+				var categoryIds = categories.Select(category => category.Id).ToList();
 				foreach (var player in _playerTrackPlugin.RosterService.All.Roster)
 					if (player.Value.CategoryId != 0 && !categoryIds.Contains(player.Value.CategoryId))
-					{
 						player.Value.CategoryId = 0;
-					}
 			}
 			catch (Exception ex)
 			{
@@ -117,7 +115,7 @@ namespace PlayerTrack
 				else if (categoryMod.Value == CategoryModification.DeleteCategory)
 				{
 					_playerTrackPlugin.GetCategoryService().Categories.RemoveAt(categoryMod.Key);
-					ClearDeletedCategories();
+					ClearDeletedCategories(Categories);
 				}
 			}
 
@@ -204,6 +202,7 @@ namespace PlayerTrack
 
 		public void ResetCategories()
 		{
+			ClearDeletedCategories(GetDefaultCategories());
 			Categories = GetDefaultCategories();
 			var defaultCategory = Categories.First(category => category.IsDefault);
 			defaultCategory.Color = new Vector4(255, 255, 255, 1);

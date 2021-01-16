@@ -176,12 +176,13 @@ namespace PlayerTrack
 		private Dictionary<string, TrackPlayer> GetPlayers(TrackPlayerMode currentPlayerMode)
 		{
 			if (currentPlayerMode.Code == TrackPlayerMode.CurrentPlayers.Code)
-				return _playerTrackPlugin.GetCurrentPlayers();
+				return _playerTrackPlugin.RosterService.Current.Roster;
 			if (currentPlayerMode.Code == TrackPlayerMode.RecentPlayers.Code)
-				return _playerTrackPlugin.GetRecentPlayers();
-			if (currentPlayerMode.Code == TrackPlayerMode.AllPlayers.Code) return _playerTrackPlugin.GetAllPlayers();
+				return _playerTrackPlugin.RosterService.Recent;
+			if (currentPlayerMode.Code == TrackPlayerMode.AllPlayers.Code)
+				return _playerTrackPlugin.RosterService.All.Roster;
 			if (currentPlayerMode.Code == TrackPlayerMode.SearchForPlayers.Code && !string.IsNullOrEmpty(_activeSearch))
-				return _playerTrackPlugin.GetPlayersByName(_activeSearch);
+				return _playerTrackPlugin.RosterService.GetPlayersByName(_activeSearch);
 
 			return null;
 		}
@@ -338,6 +339,7 @@ namespace PlayerTrack
 				player.Icon = 0;
 				player.Color = null;
 				player.CategoryId = _playerTrackPlugin.GetCategoryService().GetDefaultCategory().Id;
+				_playerTrackPlugin.GetCategoryService().SetPlayerPriority();
 				_currentModal = Modal.None;
 			}
 
@@ -420,6 +422,7 @@ namespace PlayerTrack
 				player.Icon = 0;
 				player.Color = null;
 				player.CategoryId = _playerTrackPlugin.GetCategoryService().Categories[categoryIndex].Id;
+				_playerTrackPlugin.GetCategoryService().SetPlayerPriority();
 			}
 
 			ImGui.SameLine();

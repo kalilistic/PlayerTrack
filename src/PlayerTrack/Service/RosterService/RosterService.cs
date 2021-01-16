@@ -27,6 +27,8 @@ namespace PlayerTrack
 			LoadRoster();
 		}
 
+		public Dictionary<string, TrackPlayer> Recent { get; set; }
+
 		public TrackRoster Current { get; set; }
 		public TrackRoster All { get; set; }
 		public TrackPlayer SelectedPlayer { get; set; }
@@ -68,8 +70,9 @@ namespace PlayerTrack
 				}
 			}
 
-			currentPlayers.SortByNameAndPriority();
 			Current = currentPlayers;
+			_playerTrackPlugin.GetCategoryService().SetPlayerPriority();
+			SortRosters();
 			SendAlerts();
 		}
 
@@ -124,6 +127,18 @@ namespace PlayerTrack
 			}
 		}
 
+		public Dictionary<string, TrackPlayer> GetPlayersByName(string name)
+		{
+			return All.FilterByName(name);
+		}
+
+		public void SortRosters()
+		{
+			Current.SortByNameAndPriority();
+			All.SortByNameAndPriority();
+			Recent = All.FilterByLastUpdate(_playerTrackPlugin.Configuration.RecentPlayerThreshold);
+		}
+
 		public TrackCategory GetCategory(string playerKey)
 		{
 			var player = All.GetPlayer(playerKey);
@@ -173,6 +188,7 @@ namespace PlayerTrack
 					}
 				},
 				FreeCompany = string.Empty,
+				CategoryId = _playerTrackPlugin.GetCategoryService().GetDefaultCategory().Id,
 				Encounters = new List<TrackEncounter>
 				{
 					new TrackEncounter
