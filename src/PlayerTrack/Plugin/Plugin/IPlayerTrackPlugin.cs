@@ -30,5 +30,6 @@ namespace PlayerTrack
 		string[] GetContentNames();
 		uint[] GetContentIds();
 		CategoryService GetCategoryService();
+		bool InContent();
 	}
 }

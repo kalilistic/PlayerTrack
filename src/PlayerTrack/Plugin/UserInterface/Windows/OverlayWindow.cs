@@ -387,7 +387,8 @@ namespace PlayerTrack
 			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
 
 			CustomWidgets.Text(Loc.Localize("PlayerLastSeen", "Last Seen"), player.LastSeen);
-			CustomWidgets.Text(Loc.Localize("PlayerFreeCompany", "Free Company"), player.FreeCompany);
+			CustomWidgets.Text(Loc.Localize("PlayerFreeCompany", "Free Company"),
+				player.FreeCompanyDisplay(_playerTrackPlugin.InContent()));
 			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
 			CustomWidgets.Text(Loc.Localize("PlayerSeenCount", "Seen Count"), player.SeenCount);
 			CustomWidgets.Text(Loc.Localize("LodestoneStatus", "Lodestone Status"), player.Lodestone.Status.ToString());

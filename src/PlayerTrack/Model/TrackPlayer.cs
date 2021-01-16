@@ -40,6 +40,12 @@ namespace PlayerTrack
 
 		public long Created => Encounters.First().Created;
 
+		public string FreeCompanyDisplay(bool inContent)
+		{
+			if (!string.IsNullOrEmpty(FreeCompany)) return FreeCompany;
+			return inContent ? "N/A" : "None";
+		}
+
 		public string PreviousNames
 		{
 			get

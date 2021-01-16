@@ -26,6 +26,7 @@ namespace PlayerTrack
 		private Timer _onUpdateTimer;
 		private DalamudPluginInterface _pluginInterface;
 		private PluginUI _pluginUI;
+		private bool _inContent;
 
 		public PlayerTrackPlugin(string pluginName, DalamudPluginInterface pluginInterface) : base(pluginName,
 			pluginInterface)
@@ -111,6 +112,11 @@ namespace PlayerTrack
 		public CategoryService GetCategoryService()
 		{
 			return CategoryService;
+		}
+
+		public bool InContent()
+		{
+			return _inContent;
 		}
 
 		public new void Dispose()
@@ -253,10 +259,18 @@ namespace PlayerTrack
 
 				// content check
 				var contentId = GetContentId(territoryTypeId);
-				if (Configuration.RestrictToContent && contentId == 0)
+				if (contentId == 0)
 				{
-					_isProcessing = false;
-					return;
+					_inContent = false;
+					if (Configuration.RestrictToContent)
+					{
+						_isProcessing = false;
+						return;
+					}
+				}
+				else
+				{
+					_inContent = true;
 				}
 
 				// high end duty check
@@ -326,7 +340,7 @@ namespace PlayerTrack
 							Name = player.HomeWorld.GameData.Name
 						}
 					},
-					FreeCompany = string.IsNullOrEmpty(contentName) ? player.CompanyTag : "N/A",
+					FreeCompany = player.CompanyTag,
 					Encounters = new List<TrackEncounter>
 					{
 						new TrackEncounter

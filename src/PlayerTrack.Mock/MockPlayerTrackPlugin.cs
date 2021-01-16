@@ -117,6 +117,11 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
+		public bool InContent()
+		{
+			throw new NotImplementedException();
+		}
+
 		void IPluginBase.PrintMessage(string message)
 		{
 			throw new NotImplementedException();
