@@ -26,7 +26,7 @@ namespace PlayerTrack
 		public bool RestrictToHighEndDuty = false;
 		public int SaveFrequency = 60000;
 		public bool SyncToLodestone = true;
-		public int UpdateFrequency = 5000;
+		public int UpdateFrequency = 10000;
 		public bool FreshInstall { get; set; } = true;
 		public bool Compressed { get; set; } = true;
 		public int SchemaVersion { get; set; } = 1;
