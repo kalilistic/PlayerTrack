@@ -38,7 +38,7 @@ namespace PlayerTrack
 		{
 			if (!_playerTrackPlugin.IsLoggedIn()) return;
 			if (!IsVisible) return;
-			ImGui.SetNextWindowSize(new Vector2(570 * Scale, 280 * Scale), ImGuiCond.Appearing);
+			ImGui.SetNextWindowSize(new Vector2(570 * Scale, 300 * Scale), ImGuiCond.Appearing);
 			ImGui.Begin(Loc.Localize("SettingsWindow", "PlayerTrack Settings") + "###PlayerTrack_Settings_Window",
 				ref IsVisible,
 				ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar);
