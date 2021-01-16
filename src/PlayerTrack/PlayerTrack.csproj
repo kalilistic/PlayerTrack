@@ -132,6 +132,7 @@
     <Compile Include="Common\Localization\ILocalization.cs" />
     <Compile Include="Common\Localization\Localization.cs" />
     <Compile Include="Service\CategoryService\CategoryService.cs" />
+    <Compile Include="Service\CategoryService\ICategoryService.cs" />
     <Compile Include="Service\LodestoneService\ILodestoneService.cs" />
     <Compile Include="Service\LodestoneService\LodestoneService.cs" />
     <Compile Include="Service\RosterService\IRosterService.cs" />

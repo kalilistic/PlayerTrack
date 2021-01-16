@@ -363,22 +363,22 @@ namespace PlayerTrack
 			ImGui.Spacing();
 		}
 
-		private void Palette(string id)
+		private void CategoryPalette(int id)
 		{
-			SwatchRow(id, 0, 8);
-			SwatchRow(id, 8, 16);
-			SwatchRow(id, 16, 24);
-			SwatchRow(id, 24, 32);
+			CategorySwatchRow(id, 0, 8);
+			CategorySwatchRow(id, 8, 16);
+			CategorySwatchRow(id, 16, 24);
+			CategorySwatchRow(id, 24, 32);
 		}
 
-		private void SwatchRow(string id, int min, int max)
+		private void CategorySwatchRow(int id, int min, int max)
 		{
 			ImGui.Spacing();
 			for (var i = min; i < max; i++)
 			{
-				if (ImGui.ColorButton("label" + i, _colorPalette[i]))
-					//_playerTrackPlugin.Configuration.DefaultColor = _colorPalette[i];
-					_playerTrackPlugin.SaveConfig();
+				if (ImGui.ColorButton("###PlayerTrack_CategoryColor_Swatch_" + id + i, _colorPalette[i]))
+					_playerTrackPlugin.GetCategoryService().Categories[id].Color = _colorPalette[i];
+				_playerTrackPlugin.SaveConfig();
 
 				ImGui.SameLine();
 			}
@@ -749,7 +749,7 @@ namespace PlayerTrack
 						_playerTrackPlugin.GetCategoryService().SaveCategories();
 					}
 
-					Palette("###PlayerTrack_CategoryColor_Swatch" + i);
+					CategoryPalette(i);
 					ImGui.EndPopup();
 				}
 

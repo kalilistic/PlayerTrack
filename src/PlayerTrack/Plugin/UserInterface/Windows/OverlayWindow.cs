@@ -141,9 +141,8 @@ namespace PlayerTrack
 				if (ImGui.Combo("###PlayerTrack_PlayerAdd_Combo", ref _selectedWorld,
 					worldNames.ToArray(),
 					worldNames.Count))
-					_playerTrackPlugin.LogInfo(worldNames[_selectedWorld]);
 
-				ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale / 1.3f);
+					ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale / 1.3f);
 				ImGui.InputTextWithHint("###PlayerTrack_PlayerNameAdd_Input",
 					Loc.Localize("PlayerNameAddHint", "player name"), ref _addPlayerInput, 30);
 
@@ -271,7 +270,6 @@ namespace PlayerTrack
 			if (ImGui.SmallButton(Loc.Localize("Lodestone", "Lodestone") + "###PlayerTracker_Lodestone_Button"))
 			{
 				var url = player.Lodestone.GetProfileUrl(_playerTrackPlugin.Configuration.LodestoneLocale);
-				_playerTrackPlugin.LogInfo(url);
 				if (url != null)
 					Process.Start(url);
 				else
@@ -444,7 +442,7 @@ namespace PlayerTrack
 			if (ImGui.BeginPopup("###PlayerTracker_PlayerColor_Popup"))
 			{
 				if (ImGui.ColorPicker4("###PlayerTracker_PlayerColor_ColorPicker", ref color)) player.Color = color;
-				Palette(player);
+				PlayerPalette(player);
 				ImGui.EndPopup();
 			}
 		}
@@ -458,20 +456,20 @@ namespace PlayerTrack
 				new Vector2(ImGui.GetWindowSize().X - 25f * Scale, 80f * Scale))) player.Notes = notes;
 		}
 
-		private void Palette(TrackPlayer player)
+		private void PlayerPalette(TrackPlayer player)
 		{
-			SwatchRow(player, 0, 8);
-			SwatchRow(player, 8, 16);
-			SwatchRow(player, 16, 24);
-			SwatchRow(player, 24, 32);
+			PlayerSwatchRow(player, 0, 8);
+			PlayerSwatchRow(player, 8, 16);
+			PlayerSwatchRow(player, 16, 24);
+			PlayerSwatchRow(player, 24, 32);
 		}
 
-		private void SwatchRow(TrackPlayer player, int min, int max)
+		private void PlayerSwatchRow(TrackPlayer player, int min, int max)
 		{
 			ImGui.Spacing();
 			for (var i = min; i < max; i++)
 			{
-				if (ImGui.ColorButton("###PlayerTracker_PlayerColor_Swatch" + i, _colorPalette[i]))
+				if (ImGui.ColorButton("###PlayerTracker_PlayerColor_Swatch_" + i, _colorPalette[i]))
 					player.Color = _colorPalette[i];
 				ImGui.SameLine();
 			}

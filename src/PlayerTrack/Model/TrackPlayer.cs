@@ -19,9 +19,9 @@ namespace PlayerTrack
 		private string _key;
 		private string _lastSeen;
 		private string _name;
-		private string _seenCount;
 		private string _previousNames;
 		private string _previousWorlds;
+		private string _seenCount;
 
 		[JsonProperty] public List<string> Names { get; set; }
 		[JsonProperty] public List<TrackWorld> HomeWorlds { get; set; }
@@ -45,9 +45,7 @@ namespace PlayerTrack
 			get
 			{
 				if (_previousNames == null)
-				{
 					_previousNames = Names.Count < 2 ? string.Empty : string.Join(", ", Names.Skip(1));
-				}
 
 				return _previousNames;
 			}
@@ -60,7 +58,9 @@ namespace PlayerTrack
 				if (_previousWorlds == null)
 				{
 					var homeWorldNames = HomeWorlds.Select(world => world.Name).ToList();
-					_previousWorlds = homeWorldNames.Count < 2 ? string.Empty : string.Join(", ", homeWorldNames.Skip(1));
+					_previousWorlds = homeWorldNames.Count < 2
+						? string.Empty
+						: string.Join(", ", homeWorldNames.Skip(1));
 				}
 
 				return _previousWorlds;

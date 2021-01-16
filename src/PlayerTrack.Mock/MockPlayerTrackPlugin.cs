@@ -17,37 +17,7 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
-		void IPlayerTrackPlugin.Dispose()
-		{
-			throw new NotImplementedException();
-		}
-
 		public void SaveConfig()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void SetupCommands()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void RemoveCommands()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void TogglePlayerTrack(string command, string args)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void ToggleConfig(string command, string args)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void ExportLocalizable(string command, string args)
 		{
 			throw new NotImplementedException();
 		}
@@ -57,117 +27,12 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
-		string IPlayerTrackPlugin.GetSeIcon(SeIconChar seIconChar)
-		{
-			throw new NotImplementedException();
-		}
-
-		uint? IPlayerTrackPlugin.GetLocalPlayerHomeWorld()
-		{
-			throw new NotImplementedException();
-		}
-
 		void IPlayerTrackPlugin.LogInfo(string messageTemplate)
 		{
 			throw new NotImplementedException();
 		}
 
-		void IPlayerTrackPlugin.LogInfo(string messageTemplate, params object[] values)
-		{
-			throw new NotImplementedException();
-		}
-
-		void IPlayerTrackPlugin.LogError(string messageTemplate)
-		{
-			throw new NotImplementedException();
-		}
-
-		void IPlayerTrackPlugin.LogError(string messageTemplate, params object[] values)
-		{
-			throw new NotImplementedException();
-		}
-
 		void IPlayerTrackPlugin.LogError(Exception exception, string messageTemplate, params object[] values)
-		{
-			throw new NotImplementedException();
-		}
-
-		bool IPlayerTrackPlugin.IsKeyPressed(ModifierKey.Enum key)
-		{
-			throw new NotImplementedException();
-		}
-
-		bool IPlayerTrackPlugin.IsKeyPressed(PrimaryKey.Enum key)
-		{
-			throw new NotImplementedException();
-		}
-
-		void IPlayerTrackPlugin.SaveConfig(dynamic config)
-		{
-			throw new NotImplementedException();
-		}
-
-		void IPlayerTrackPlugin.UpdateResources()
-		{
-			throw new NotImplementedException();
-		}
-
-		string IPlayerTrackPlugin.PluginVersion()
-		{
-			throw new NotImplementedException();
-		}
-
-		bool IPluginBase.IsLoggedIn()
-		{
-			throw new NotImplementedException();
-		}
-
-		public List<string> GetWorldNames()
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool IsValidCharacterName(string name)
-		{
-			throw new NotImplementedException();
-		}
-
-		public string[] GetContentNames()
-		{
-			throw new NotImplementedException();
-		}
-
-		public uint[] GetContentIds()
-		{
-			throw new NotImplementedException();
-		}
-
-		public CategoryService GetCategoryService()
-		{
-			throw new NotImplementedException();
-		}
-
-		string IPlayerTrackPlugin.PluginFolder()
-		{
-			throw new NotImplementedException();
-		}
-
-		public Dictionary<string, TrackPlayer> GetCurrentPlayers()
-		{
-			throw new NotImplementedException();
-		}
-
-		public Dictionary<string, TrackPlayer> GetAllPlayers()
-		{
-			throw new NotImplementedException();
-		}
-
-		public Dictionary<string, TrackPlayer> GetRecentPlayers()
-		{
-			throw new NotImplementedException();
-		}
-
-		public Dictionary<string, TrackPlayer> GetPlayersByName(string name)
 		{
 			throw new NotImplementedException();
 		}
@@ -227,37 +92,42 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
-		public dynamic LoadConfig()
+		public List<string> GetWorldNames()
 		{
 			throw new NotImplementedException();
 		}
 
-		void IPluginBase.Dispose()
+		public bool IsValidCharacterName(string name)
 		{
 			throw new NotImplementedException();
 		}
 
-		string IPluginBase.PluginFolder()
+		public string[] GetContentNames()
 		{
 			throw new NotImplementedException();
 		}
 
-		void IPluginBase.UpdateResources()
+		public uint[] GetContentIds()
 		{
 			throw new NotImplementedException();
 		}
 
-		string IPluginBase.PluginVersion()
+		public CategoryService GetCategoryService()
 		{
 			throw new NotImplementedException();
 		}
 
-		string IPluginBase.GetSeIcon(SeIconChar seIconChar)
+		void IPluginBase.PrintMessage(string message)
 		{
 			throw new NotImplementedException();
 		}
 
-		uint? IPluginBase.GetLocalPlayerHomeWorld()
+		public string GetSeIcon(SeIconChar seIconChar)
+		{
+			throw new NotImplementedException();
+		}
+
+		public uint? GetLocalPlayerHomeWorld()
 		{
 			throw new NotImplementedException();
 		}
@@ -267,17 +137,17 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
-		void IPluginBase.LogInfo(string messageTemplate, params object[] values)
+		public void LogInfo(string messageTemplate, params object[] values)
 		{
 			throw new NotImplementedException();
 		}
 
-		void IPluginBase.LogError(string messageTemplate)
+		public void LogError(string messageTemplate)
 		{
 			throw new NotImplementedException();
 		}
 
-		void IPluginBase.LogError(string messageTemplate, params object[] values)
+		public void LogError(string messageTemplate, params object[] values)
 		{
 			throw new NotImplementedException();
 		}
@@ -287,22 +157,47 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
-		bool IPluginBase.IsKeyPressed(ModifierKey.Enum key)
+		public bool IsKeyPressed(ModifierKey.Enum key)
 		{
 			throw new NotImplementedException();
 		}
 
-		bool IPluginBase.IsKeyPressed(PrimaryKey.Enum key)
+		public bool IsKeyPressed(PrimaryKey.Enum key)
 		{
 			throw new NotImplementedException();
 		}
 
-		void IPluginBase.SaveConfig(dynamic config)
+		public void SaveConfig(dynamic config)
 		{
 			throw new NotImplementedException();
 		}
 
-		void IPluginBase.PrintMessage(string message)
+		public dynamic LoadConfig()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Dispose()
+		{
+			throw new NotImplementedException();
+		}
+
+		public string PluginFolder()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void UpdateResources()
+		{
+			throw new NotImplementedException();
+		}
+
+		public string PluginVersion()
+		{
+			throw new NotImplementedException();
+		}
+
+		bool IPluginBase.IsLoggedIn()
 		{
 			throw new NotImplementedException();
 		}

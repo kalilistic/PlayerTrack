@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace PlayerTrack
 {
-	public class CategoryService
+	public class CategoryService : ICategoryService
 	{
 		private readonly Queue<KeyValuePair<int, CategoryModification>> _categoryModification =
 			new Queue<KeyValuePair<int, CategoryModification>>();
@@ -159,6 +159,29 @@ namespace PlayerTrack
 				new KeyValuePair<int, CategoryModification>(index, CategoryModification.DeleteCategory));
 		}
 
+		public void SaveCategories()
+		{
+			try
+			{
+				var data = JsonConvert.SerializeObject(Categories, _jsonSerializerSettings);
+				_playerTrackPlugin.GetDataManager().SaveData("categories.dat", data);
+			}
+			catch (Exception ex)
+			{
+				_playerTrackPlugin.LogError(ex, "Failed to save player data - will try again soon.");
+			}
+		}
+
+		public void ResetCategories()
+		{
+			ClearDeletedCategories(GetDefaultCategories());
+			Categories = GetDefaultCategories();
+			var defaultCategory = Categories.First(category => category.IsDefault);
+			defaultCategory.Color = new Vector4(255, 255, 255, 1);
+			SaveCategories();
+			_playerTrackPlugin.SaveConfig();
+		}
+
 		private void InitCategories()
 		{
 			try
@@ -185,29 +208,6 @@ namespace PlayerTrack
 				_playerTrackPlugin.LogInfo("Can't load category data so starting fresh.");
 				Categories = GetDefaultCategories();
 			}
-		}
-
-		public void SaveCategories()
-		{
-			try
-			{
-				var data = JsonConvert.SerializeObject(Categories, _jsonSerializerSettings);
-				_playerTrackPlugin.GetDataManager().SaveData("categories.dat", data);
-			}
-			catch (Exception ex)
-			{
-				_playerTrackPlugin.LogError(ex, "Failed to save player data - will try again soon.");
-			}
-		}
-
-		public void ResetCategories()
-		{
-			ClearDeletedCategories(GetDefaultCategories());
-			Categories = GetDefaultCategories();
-			var defaultCategory = Categories.First(category => category.IsDefault);
-			defaultCategory.Color = new Vector4(255, 255, 255, 1);
-			SaveCategories();
-			_playerTrackPlugin.SaveConfig();
 		}
 
 		private static List<TrackCategory> GetDefaultCategories()
