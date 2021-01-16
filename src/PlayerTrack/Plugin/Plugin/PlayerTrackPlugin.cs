@@ -22,6 +22,7 @@ namespace PlayerTrack
 		private DataManager _dataManager;
 		private bool _isProcessing = true;
 		private Timer _onSaveTimer;
+		private Timer _onSettingsTimer;
 		private Timer _onUpdateTimer;
 		private DalamudPluginInterface _pluginInterface;
 		private PluginUI _pluginUI;
@@ -82,19 +83,19 @@ namespace PlayerTrack
 
 		public Dictionary<string, TrackPlayer> GetAllPlayers()
 		{
-			RosterService.All.SortByName();
+			RosterService.All.SortByNameAndPriority();
 			return RosterService.All.Roster;
 		}
 
 		public Dictionary<string, TrackPlayer> GetRecentPlayers()
 		{
-			RosterService.All.SortByName();
+			RosterService.All.SortByNameAndPriority();
 			return RosterService.All.FilterByLastUpdate(Configuration.RecentPlayerThreshold);
 		}
 
 		public Dictionary<string, TrackPlayer> GetPlayersByName(string name)
 		{
-			RosterService.All.SortByName();
+			RosterService.All.SortByNameAndPriority();
 			return RosterService.All.FilterByName(name);
 		}
 
@@ -182,6 +183,7 @@ namespace PlayerTrack
 		{
 			LogInfo("Running command {0} with args {1}", command, args);
 			_pluginUI.SettingsWindow.IsVisible = !_pluginUI.SettingsWindow.IsVisible;
+			_onSettingsTimer.Enabled = _pluginUI.SettingsWindow.IsVisible;
 		}
 
 		public void RestartTimers()
@@ -211,14 +213,31 @@ namespace PlayerTrack
 			_onUpdateTimer.Elapsed += OnActorUpdate;
 			_onSaveTimer = new Timer {Interval = Configuration.SaveFrequency, Enabled = true};
 			_onSaveTimer.Elapsed += OnRosterSave;
+			_onSettingsTimer = new Timer
+				{Interval = Configuration.ProcessSettingsFrequency, Enabled = _pluginUI.SettingsWindow.IsVisible};
+			_onSettingsTimer.Elapsed += OnSettings;
+		}
+
+		private void OnSettings(object sender, ElapsedEventArgs e)
+		{
+			// processing check
+			if (_isProcessing) return;
+			_isProcessing = true;
+
+			// update categories
+			CategoryService.ProcessCategoryModifications();
+
+			_isProcessing = false;
 		}
 
 		private void StopTimers()
 		{
 			_onUpdateTimer.Elapsed -= OnActorUpdate;
 			_onSaveTimer.Elapsed -= OnRosterSave;
+			_onSettingsTimer.Elapsed -= OnSettings;
 			_onUpdateTimer.Stop();
 			_onSaveTimer.Stop();
+			_onSettingsTimer.Stop();
 		}
 
 		private void OnRosterSave(object sender, ElapsedEventArgs e)
@@ -387,7 +406,6 @@ namespace PlayerTrack
 			Configuration.FreshInstall = false;
 			SetDefaultIcons();
 			SaveConfig();
-			_pluginUI.SettingsWindow.IsVisible = true;
 		}
 
 		private void DrawUI()

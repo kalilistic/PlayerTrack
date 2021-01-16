@@ -67,9 +67,9 @@ namespace PlayerTrack
 			Roster[playerKey].Encounters[Roster[playerKey].Encounters.Count - 1] = encounter;
 		}
 
-		public void SortByName()
+		public void SortByNameAndPriority()
 		{
-			Roster = Roster.OrderBy(entry => entry.Value.Name)
+			Roster = Roster.OrderBy(entry => entry.Value.Priority).ThenBy(entry => entry.Value.Name)
 				.ToDictionary(entry => entry.Key, entry => entry.Value);
 		}
 

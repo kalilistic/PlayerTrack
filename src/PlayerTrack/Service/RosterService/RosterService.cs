@@ -13,8 +13,8 @@ namespace PlayerTrack
 {
 	public class RosterService : IRosterService
 	{
-		private readonly Queue<TrackPlayer> _addRequests = new Queue<TrackPlayer>();
-		private readonly Queue<string> _deleteRequests = new Queue<string>();
+		private readonly Queue<TrackPlayer> _addPlayerRequests = new Queue<TrackPlayer>();
+		private readonly Queue<string> _deletePlayerRequests = new Queue<string>();
 		private readonly JsonSerializerSettings _jsonSerializerSettings;
 		private readonly IPlayerTrackPlugin _playerTrackPlugin;
 
@@ -68,7 +68,7 @@ namespace PlayerTrack
 				}
 			}
 
-			currentPlayers.SortByName();
+			currentPlayers.SortByNameAndPriority();
 			Current = currentPlayers;
 			SendAlerts();
 		}
@@ -82,7 +82,7 @@ namespace PlayerTrack
 
 		public void DeletePlayer(string key)
 		{
-			_deleteRequests.Enqueue(key);
+			_deletePlayerRequests.Enqueue(key);
 		}
 
 		public void ChangeSelectedPlayer(string key)
@@ -194,7 +194,7 @@ namespace PlayerTrack
 					}
 				}
 			};
-			_addRequests.Enqueue(newPlayer);
+			_addPlayerRequests.Enqueue(newPlayer);
 		}
 
 		public void ProcessRequests()
@@ -294,18 +294,18 @@ namespace PlayerTrack
 
 		private void ProcessDeleteRequests()
 		{
-			while (_deleteRequests.Count > 0)
+			while (_deletePlayerRequests.Count > 0)
 			{
-				var playerKey = _deleteRequests.Dequeue();
+				var playerKey = _deletePlayerRequests.Dequeue();
 				All.DeletePlayer(playerKey);
 			}
 		}
 
 		private void ProcessAddRequests()
 		{
-			while (_addRequests.Count > 0)
+			while (_addPlayerRequests.Count > 0)
 			{
-				var player = _addRequests.Dequeue();
+				var player = _addPlayerRequests.Dequeue();
 				All.AddPlayer(player);
 			}
 		}

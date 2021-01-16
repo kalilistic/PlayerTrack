@@ -32,8 +32,9 @@ namespace PlayerTrack
 		[JsonProperty] [DefaultValue(0)] public int ActorId { get; set; }
 		[JsonProperty] [DefaultValue(false)] public bool IsManual { get; set; }
 		[JsonProperty] public TrackAlert Alert { get; set; } = new TrackAlert();
-		[JsonProperty] public int CategoryId { get; set; }
+		[JsonProperty] [DefaultValue(0)] public int CategoryId { get; set; }
 		public string PreviouslyLastSeen { get; set; } = string.Empty;
+		public int Priority { get; set; }
 
 		public long Created => Encounters.First().Created;
 

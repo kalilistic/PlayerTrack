@@ -12,6 +12,9 @@ namespace PlayerTrack
 {
 	public class CategoryService
 	{
+		private readonly Queue<KeyValuePair<int, CategoryModification>> _categoryModification =
+			new Queue<KeyValuePair<int, CategoryModification>>();
+
 		private readonly JsonSerializerSettings _jsonSerializerSettings;
 		private readonly IPlayerTrackPlugin _playerTrackPlugin;
 
@@ -23,6 +26,25 @@ namespace PlayerTrack
 			_jsonSerializerSettings = SerializerUtil.CamelCaseJsonSerializer();
 			InitCategories();
 			LoadCategories();
+			ClearDeletedCategories();
+			SetPlayerPriority();
+		}
+
+		public void ClearDeletedCategories()
+		{
+			try
+			{
+				var categoryIds = Categories.Select(category => category.Id).ToList();
+				foreach (var player in _playerTrackPlugin.RosterService.All.Roster)
+					if (player.Value.CategoryId != 0 && !categoryIds.Contains(player.Value.CategoryId))
+					{
+						player.Value.CategoryId = 0;
+					}
+			}
+			catch (Exception ex)
+			{
+				_playerTrackPlugin.LogError(ex, "Failed to clear deleted categories.");
+			}
 		}
 
 		public TrackCategory GetCategory(int categoryId)
@@ -52,66 +74,91 @@ namespace PlayerTrack
 
 		public void MoveUpList(int id)
 		{
+			_categoryModification.Enqueue(
+				new KeyValuePair<int, CategoryModification>(id, CategoryModification.MoveUpCategory));
+		}
+
+		public void ProcessCategoryModifications()
+		{
+			var modifiedCategory = false;
+			while (_categoryModification.Count > 0)
+			{
+				modifiedCategory = true;
+				var categoryMod = _categoryModification.Dequeue();
+				if (categoryMod.Value == CategoryModification.MoveUpCategory)
+				{
+					var category = Categories.FirstOrDefault(trackCategory => trackCategory.Id == categoryMod.Key);
+					if (category == null) return;
+					var categoryIndex = Categories.IndexOf(category);
+					var tradeCategoryIndex = categoryIndex - 1;
+					var tradeCategory = Categories[tradeCategoryIndex];
+					Categories[tradeCategoryIndex] = category;
+					Categories[categoryIndex] = tradeCategory;
+				}
+				else if (categoryMod.Value == CategoryModification.MoveDownCategory)
+				{
+					var category = Categories.FirstOrDefault(trackCategory => trackCategory.Id == categoryMod.Key);
+					if (category == null) return;
+					var categoryIndex = Categories.IndexOf(category);
+					var tradeCategoryIndex = categoryIndex + 1;
+					var tradeCategory = Categories[tradeCategoryIndex];
+					Categories[tradeCategoryIndex] = category;
+					Categories[categoryIndex] = tradeCategory;
+				}
+				else if (categoryMod.Value == CategoryModification.AddCategory)
+				{
+					Categories.Insert(0, new TrackCategory
+					{
+						Id = Categories.Max(category => category.Id) + 1,
+						Name = "New Category",
+						Color = UIColor.White
+					});
+				}
+				else if (categoryMod.Value == CategoryModification.DeleteCategory)
+				{
+					_playerTrackPlugin.GetCategoryService().Categories.RemoveAt(categoryMod.Key);
+					ClearDeletedCategories();
+				}
+			}
+
+			if (modifiedCategory)
+			{
+				SetPlayerPriority();
+				SaveCategories();
+			}
+		}
+
+		public void SetPlayerPriority()
+		{
 			try
 			{
-				var category = Categories.FirstOrDefault(trackCategory => trackCategory.Id == id);
-				if (category == null) return;
-				var categoryIndex = Categories.IndexOf(category);
-				var tradeCategoryIndex = categoryIndex - 1;
-				var tradeCategory = Categories[tradeCategoryIndex];
-				Categories[tradeCategoryIndex] = category;
-				Categories[categoryIndex] = tradeCategory;
+				var categoryPriorities = Categories.Select((t, i) => new KeyValuePair<int, int>(t.Id, i + 1)).ToList();
+				foreach (var player in _playerTrackPlugin.RosterService.All.Roster.ToList())
+					player.Value.Priority = categoryPriorities
+						.FirstOrDefault(pair => pair.Key == player.Value.CategoryId).Value;
 			}
-			catch
+			catch (Exception ex)
 			{
-				// ignored
+				_playerTrackPlugin.LogError(ex, "Failed to set priority");
 			}
 		}
 
 		public void MoveDownList(int id)
 		{
-			try
-			{
-				var category = Categories.FirstOrDefault(trackCategory => trackCategory.Id == id);
-				if (category == null) return;
-				var categoryIndex = Categories.IndexOf(category);
-				var tradeCategoryIndex = categoryIndex + 1;
-				var tradeCategory = Categories[tradeCategoryIndex];
-				Categories[tradeCategoryIndex] = category;
-				Categories[categoryIndex] = tradeCategory;
-			}
-			catch
-			{
-				// ignored
-			}
+			_categoryModification.Enqueue(
+				new KeyValuePair<int, CategoryModification>(id, CategoryModification.MoveDownCategory));
 		}
 
 		public void AddCategory()
 		{
-			Categories.Insert(0, new TrackCategory
-			{
-				Id = Categories.Max(category => category.Id) + 1,
-				Name = "New Category",
-				Color = UIColor.White
-			});
+			_categoryModification.Enqueue(
+				new KeyValuePair<int, CategoryModification>(0, CategoryModification.AddCategory));
 		}
 
 		public void DeleteCategory(int index)
 		{
-			_playerTrackPlugin.GetCategoryService().Categories.RemoveAt(index);
-			SaveCategories();
-			try
-			{
-				var categoryIds = _playerTrackPlugin.GetCategoryService().Categories.Select(category => category.Id)
-					.ToList();
-				foreach (var player in _playerTrackPlugin.RosterService.All.Roster.ToList())
-					if (!categoryIds.Contains(player.Value.CategoryId))
-						player.Value.CategoryId = 0;
-			}
-			catch
-			{
-				// ignored
-			}
+			_categoryModification.Enqueue(
+				new KeyValuePair<int, CategoryModification>(index, CategoryModification.DeleteCategory));
 		}
 
 		private void InitCategories()
@@ -170,19 +217,27 @@ namespace PlayerTrack
 			{
 				new TrackCategory
 				{
-					Id = 2,
+					Id = 1,
 					Name = "Favorites",
 					Color = UIColor.Violet,
 					Icon = (int) FontAwesomeIcon.GrinBeam
 				},
 				new TrackCategory
 				{
-					Id = 1,
+					Id = 0,
 					Name = "Default",
 					IsDefault = true,
 					Color = new Vector4(255, 255, 255, 1)
 				}
 			};
+		}
+
+		private enum CategoryModification
+		{
+			AddCategory,
+			DeleteCategory,
+			MoveUpCategory,
+			MoveDownCategory
 		}
 	}
 }
