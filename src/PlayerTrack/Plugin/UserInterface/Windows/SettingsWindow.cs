@@ -285,11 +285,6 @@ namespace PlayerTrack
 		private void DrawLodestone()
 		{
 			SyncToLodestone();
-			LodestoneMaxRetry();
-			LodestoneRequestDelay();
-			LodestoneTimeout();
-			LodestoneUpdateFrequency();
-			LodestoneCooldownDuration();
 			LodestoneLocale();
 		}
 
@@ -437,68 +432,6 @@ namespace PlayerTrack
 			ImGui.Spacing();
 		}
 
-		private void LodestoneTimeout()
-		{
-			ImGui.Text(Loc.Localize("LodestoneTimeout", "Request Timeout (minutes)"));
-			CustomWidgets.HelpMarker(Loc.Localize("LodestoneTimeout_HelpMarker",
-				"timeout for lodestone requests"));
-			var lodestoneTimeout = _playerTrackPlugin.Configuration.LodestoneTimeout.FromMillisecondsToSeconds();
-			if (ImGui.SliderInt("###PlayerTrack_LodestoneTimeout_Slider", ref lodestoneTimeout, 10, 300))
-			{
-				_playerTrackPlugin.Configuration.LodestoneTimeout = lodestoneTimeout.FromSecondsToMilliseconds();
-				_playerTrackPlugin.SaveConfig();
-			}
-
-			ImGui.Spacing();
-		}
-
-		private void LodestoneRequestDelay()
-		{
-			ImGui.Text(Loc.Localize("LodestoneRequestDelay", "Request Delay (seconds)"));
-			CustomWidgets.HelpMarker(Loc.Localize("LodestoneRequestDelay_HelpMarker",
-				"delay between lodestone requests to avoid rate limits"));
-			var lodestoneRequestDelay =
-				_playerTrackPlugin.Configuration.LodestoneRequestDelay.FromMillisecondsToSeconds();
-			if (ImGui.SliderInt("###PlayerTrack_LodestoneRequestDelay_Slider", ref lodestoneRequestDelay, 10, 300))
-			{
-				_playerTrackPlugin.Configuration.LodestoneRequestDelay =
-					lodestoneRequestDelay.FromSecondsToMilliseconds();
-				_playerTrackPlugin.SaveConfig();
-			}
-
-			ImGui.Spacing();
-		}
-
-		private void LodestoneUpdateFrequency()
-		{
-			ImGui.Text(Loc.Localize("LodestoneUpdateFrequency", "Update Frequency (days)"));
-			CustomWidgets.HelpMarker(Loc.Localize("LodestoneUpdateFrequency_HelpMarker",
-				"frequency to retrieve latest data from lodestone for a given player"));
-			var updateFrequency = _playerTrackPlugin.Configuration.LodestoneUpdateFrequency.FromMillisecondsToDays();
-			if (ImGui.SliderInt("###PlayerTrack_LodestoneUpdateFrequency_Slider", ref updateFrequency, 1, 7))
-			{
-				_playerTrackPlugin.Configuration.LodestoneUpdateFrequency = updateFrequency.FromDaysToMilliseconds();
-				_playerTrackPlugin.SaveConfig();
-			}
-
-			ImGui.Spacing();
-		}
-
-		private void LodestoneCooldownDuration()
-		{
-			ImGui.Text(Loc.Localize("LodestoneCooldownDuration", "Cooldown Duration (hours)"));
-			CustomWidgets.HelpMarker(Loc.Localize("LodestoneCooldownDuration_HelpMarker",
-				"duration to delay if lodestone is unavailable before trying again"));
-			var cooldownDuration = _playerTrackPlugin.Configuration.LodestoneCooldownDuration.FromMillisecondsToHours();
-			if (ImGui.SliderInt("###PlayerTrack_LodestoneCooldownDuration_Slider", ref cooldownDuration, 1, 12))
-			{
-				_playerTrackPlugin.Configuration.LodestoneCooldownDuration = cooldownDuration.FromHoursToMilliseconds();
-				_playerTrackPlugin.SaveConfig();
-			}
-
-			ImGui.Spacing();
-		}
-
 		private void LodestoneLocale()
 		{
 			ImGui.Text(Loc.Localize("LodestoneLocale", "Lodestone Locale"));
@@ -511,21 +444,6 @@ namespace PlayerTrack
 				Enum.GetNames(typeof(TrackLodestoneLocale)).Length))
 			{
 				_playerTrackPlugin.Configuration.LodestoneLocale = (TrackLodestoneLocale) lodestoneLocale;
-				_playerTrackPlugin.SaveConfig();
-			}
-
-			ImGui.Spacing();
-		}
-
-		private void LodestoneMaxRetry()
-		{
-			ImGui.Text(Loc.Localize("LodestoneMaxRetry", "Max Retries (count)"));
-			CustomWidgets.HelpMarker(Loc.Localize("LodestoneMaxRetry_HelpMarker",
-				"number of attempts to retry failed lodestone request"));
-			var backupRetention = _playerTrackPlugin.Configuration.LodestoneMaxRetry;
-			if (ImGui.SliderInt("###PlayerTrack_LodestoneMaxRetry_Slider", ref backupRetention, 3, 10))
-			{
-				_playerTrackPlugin.Configuration.LodestoneMaxRetry = backupRetention;
 				_playerTrackPlugin.SaveConfig();
 			}
 

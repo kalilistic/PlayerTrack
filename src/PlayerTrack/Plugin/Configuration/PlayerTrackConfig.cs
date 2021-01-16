@@ -14,9 +14,9 @@ namespace PlayerTrack
 		public int LodestoneFailureDelay = 86400000;
 		public TrackLodestoneLocale LodestoneLocale = TrackLodestoneLocale.na;
 		public int LodestoneMaxFailure = 3;
-		public int LodestoneMaxRetry = 3;
-		public int LodestoneRequestDelay = 10000;
-		public int LodestoneTimeout = 30000;
+		public int LodestoneMaxRetry = 5;
+		public int LodestoneRequestDelay = 30000;
+		public int LodestoneTimeout = 60000;
 		public int LodestoneUpdateFrequency = 172800000;
 		public int NewEncounterThreshold = 86400000;
 		public List<uint> PermittedContent = new List<uint>();
