@@ -22,9 +22,11 @@ namespace PlayerTrack
 		private DataManager _dataManager;
 		private bool _isProcessing = true;
 		private Timer _onSaveTimer;
+		private Timer _onSettingsTimer;
 		private Timer _onUpdateTimer;
 		private DalamudPluginInterface _pluginInterface;
 		private PluginUI _pluginUI;
+		private bool _inContent;
 
 		public PlayerTrackPlugin(string pluginName, DalamudPluginInterface pluginInterface) : base(pluginName,
 			pluginInterface)
@@ -35,6 +37,7 @@ namespace PlayerTrack
 				_dataManager = new DataManager(this);
 				ResourceManager.UpdateResources();
 				FontAwesomeUtil.Init();
+				InitContent();
 				LoadConfig();
 				LoadServices();
 				SetupCommands();
@@ -47,6 +50,7 @@ namespace PlayerTrack
 		}
 
 		private LodestoneService LodestoneService { get; set; }
+		public CategoryService CategoryService { get; set; }
 
 		public DataManager GetDataManager()
 		{
@@ -73,48 +77,46 @@ namespace PlayerTrack
 			};
 		}
 
-		public Dictionary<string, TrackPlayer> GetCurrentPlayers()
-		{
-			return RosterService.Current.Roster;
-		}
-
-		public Dictionary<string, TrackPlayer> GetAllPlayers()
-		{
-			RosterService.All.SortByName();
-			return RosterService.All.Roster;
-		}
-
-		public Dictionary<string, TrackPlayer> GetRecentPlayers()
-		{
-			RosterService.All.SortByName();
-			return RosterService.All.FilterByLastUpdate(Configuration.RecentPlayerThreshold);
-		}
-
-		public Dictionary<string, TrackPlayer> GetPlayersByName(string name)
-		{
-			RosterService.All.SortByName();
-			return RosterService.All.FilterByName(name);
-		}
-
 		public RosterService RosterService { get; set; }
 		public PlayerTrackConfig Configuration { get; set; }
 
 		public void PrintHelpMessage()
 		{
 			PrintMessage(Loc.Localize("HelpMessage1",
-				"This plugin is on TESTING for a reason! Please expect data loss or other bugs before it's been officially released. " +
-				"Let me know on discord or github if you have any feedback."));
-			Thread.Sleep(250);
-			PrintMessage(Loc.Localize("HelpMessage2",
 				"PlayerTrack helps you keep a record of who you meet and the content you played together. " +
 				"By default, this is instanced content only - but you can expand or restrict this in settings. " +
 				"You can see all the details on a player by clicking on their name in the overlay. " +
 				"Here you can also record notes and set a personalized icon/color."));
-			Thread.Sleep(250);
-			PrintMessage(Loc.Localize("HelpMessage3",
+			Thread.Sleep(500);
+			PrintMessage(Loc.Localize("HelpMessage2",
 				"PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). " +
 				"If this happens, you'll see an asterisk next to their home world and " +
 				"can mouse-over to see their previous residence."));
+			Thread.Sleep(500);
+			PrintMessage(Loc.Localize("HelpMessage3",
+				"If you need help, reach out on discord or open an issue on GitHub. If you want to " +
+				"help add translations, you can submit updates on Crowdin. Links to both GitHub and Crowdin are available in settings."));
+		}
+
+		public void SaveConfig()
+		{
+			SaveConfig(Configuration);
+		}
+
+		public void RestartTimers()
+		{
+			StopTimers();
+			StartTimers();
+		}
+
+		public CategoryService GetCategoryService()
+		{
+			return CategoryService;
+		}
+
+		public bool InContent()
+		{
+			return _inContent;
 		}
 
 		public new void Dispose()
@@ -135,17 +137,13 @@ namespace PlayerTrack
 			RemoveCommands();
 			StopTimers();
 			RosterService.SaveData();
+			CategoryService.SaveCategories();
 			LodestoneService.Dispose();
 			base.Dispose();
 			_pluginInterface.UiBuilder.OnOpenConfigUi -= (sender, args) => DrawConfigUI();
 			_pluginInterface.UiBuilder.OnBuildUi -= DrawUI;
 			_pluginInterface.Dispose();
 			_isProcessing = false;
-		}
-
-		public void SaveConfig()
-		{
-			SaveConfig(Configuration);
 		}
 
 		public new void SetupCommands()
@@ -179,12 +177,7 @@ namespace PlayerTrack
 		{
 			LogInfo("Running command {0} with args {1}", command, args);
 			_pluginUI.SettingsWindow.IsVisible = !_pluginUI.SettingsWindow.IsVisible;
-		}
-
-		public void RestartTimers()
-		{
-			StopTimers();
-			StartTimers();
+			_onSettingsTimer.Enabled = _pluginUI.SettingsWindow.IsVisible;
 		}
 
 		private void BackupOnStart()
@@ -198,14 +191,31 @@ namespace PlayerTrack
 			_onUpdateTimer.Elapsed += OnActorUpdate;
 			_onSaveTimer = new Timer {Interval = Configuration.SaveFrequency, Enabled = true};
 			_onSaveTimer.Elapsed += OnRosterSave;
+			_onSettingsTimer = new Timer
+				{Interval = Configuration.ProcessSettingsFrequency, Enabled = _pluginUI.SettingsWindow.IsVisible};
+			_onSettingsTimer.Elapsed += OnSettings;
+		}
+
+		private void OnSettings(object sender, ElapsedEventArgs e)
+		{
+			// processing check
+			if (_isProcessing) return;
+			_isProcessing = true;
+
+			// update categories
+			CategoryService.ProcessCategoryModifications();
+
+			_isProcessing = false;
 		}
 
 		private void StopTimers()
 		{
 			_onUpdateTimer.Elapsed -= OnActorUpdate;
 			_onSaveTimer.Elapsed -= OnRosterSave;
+			_onSettingsTimer.Elapsed -= OnSettings;
 			_onUpdateTimer.Stop();
 			_onSaveTimer.Stop();
+			_onSettingsTimer.Stop();
 		}
 
 		private void OnRosterSave(object sender, ElapsedEventArgs e)
@@ -249,10 +259,18 @@ namespace PlayerTrack
 
 				// content check
 				var contentId = GetContentId(territoryTypeId);
-				if (Configuration.RestrictToContent && contentId == 0)
+				if (contentId == 0)
 				{
-					_isProcessing = false;
-					return;
+					_inContent = false;
+					if (Configuration.RestrictToContent)
+					{
+						_isProcessing = false;
+						return;
+					}
+				}
+				else
+				{
+					_inContent = true;
 				}
 
 				// high end duty check
@@ -261,6 +279,16 @@ namespace PlayerTrack
 					_isProcessing = false;
 					return;
 				}
+
+				// custom content filter check
+				if (Configuration.RestrictToCustom && !Configuration.PermittedContent.Contains(contentId))
+				{
+					_isProcessing = false;
+					return;
+				}
+
+				// process pending requests
+				RosterService.ProcessRequests();
 
 				// player check
 				var players = GetPlayerCharacters();
@@ -345,6 +373,7 @@ namespace PlayerTrack
 		{
 			LodestoneService = new LodestoneService(this);
 			RosterService = new RosterService(this);
+			CategoryService = new CategoryService(this);
 		}
 
 		public void LoadUI()
@@ -363,7 +392,6 @@ namespace PlayerTrack
 			Configuration.FreshInstall = false;
 			SetDefaultIcons();
 			SaveConfig();
-			_pluginUI.SettingsWindow.IsVisible = true;
 		}
 
 		private void DrawUI()

@@ -4,10 +4,8 @@ namespace PlayerTrack
 {
 	public interface ILodestoneService
 	{
-		List<TrackLodestoneResponse> GetVerificationResponses();
-		List<TrackLodestoneResponse> GetUpdateResponses();
-		void AddIdRequest(TrackLodestoneRequest request);
-		void AddUpdateRequest(TrackLodestoneRequest request);
+		List<TrackLodestoneResponse> GetResponses();
+		void AddRequest(TrackLodestoneRequest request);
 		void Dispose();
 	}
 }

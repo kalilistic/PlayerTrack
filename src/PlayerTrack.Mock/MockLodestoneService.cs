@@ -5,7 +5,7 @@ namespace PlayerTrack.Mock
 {
 	public class MockLodestoneService : ILodestoneService
 	{
-		public List<TrackLodestoneResponse> GetVerificationResponses()
+		public List<TrackLodestoneResponse> GetResponses()
 		{
 			throw new NotImplementedException();
 		}
@@ -15,7 +15,7 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
-		public void AddIdRequest(TrackLodestoneRequest request)
+		public void AddRequest(TrackLodestoneRequest request)
 		{
 			throw new NotImplementedException();
 		}

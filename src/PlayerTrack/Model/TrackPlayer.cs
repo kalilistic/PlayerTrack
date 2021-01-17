@@ -1,13 +1,12 @@
 ﻿// ReSharper disable InvertIf
 // ReSharper disable ConvertIfStatementToNullCoalescingExpression
+// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
 using Newtonsoft.Json;
-
-// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 
 namespace PlayerTrack
 {
@@ -20,6 +19,8 @@ namespace PlayerTrack
 		private string _key;
 		private string _lastSeen;
 		private string _name;
+		private string _previousNames;
+		private string _previousWorlds;
 		private string _seenCount;
 
 		[JsonProperty] public List<string> Names { get; set; }
@@ -31,8 +32,47 @@ namespace PlayerTrack
 		[JsonProperty] [DefaultValue("")] public string Notes { get; set; } = string.Empty;
 		[JsonProperty] public TrackLodestone Lodestone { get; set; } = new TrackLodestone();
 		[JsonProperty] [DefaultValue(0)] public int ActorId { get; set; }
+		[JsonProperty] [DefaultValue(false)] public bool IsManual { get; set; }
+		[JsonProperty] public TrackAlert Alert { get; set; } = new TrackAlert();
+		[JsonProperty] [DefaultValue(0)] public int CategoryId { get; set; }
+		public string PreviouslyLastSeen { get; set; } = string.Empty;
+		public int Priority { get; set; }
 
 		public long Created => Encounters.First().Created;
+
+		public string FreeCompanyDisplay(bool inContent)
+		{
+			if (!string.IsNullOrEmpty(FreeCompany)) return FreeCompany;
+			return inContent ? "N/A" : "None";
+		}
+
+		public string PreviousNames
+		{
+			get
+			{
+				if (_previousNames == null)
+					_previousNames = Names.Count < 2 ? string.Empty : string.Join(", ", Names.Skip(1));
+
+				return _previousNames;
+			}
+		}
+
+		public string PreviousWorlds
+		{
+			get
+			{
+				if (_previousWorlds == null)
+				{
+					var homeWorldNames = HomeWorlds.Select(world => world.Name).ToList();
+					_previousWorlds = homeWorldNames.Count < 2
+						? string.Empty
+						: string.Join(", ", homeWorldNames.Skip(1));
+				}
+
+				return _previousWorlds;
+			}
+		}
+
 
 		public string FirstSeen
 		{
@@ -56,8 +96,7 @@ namespace PlayerTrack
 		{
 			get
 			{
-				if (_seenCount == null)
-					_seenCount = (Encounters?.Count == null ? "0" : Encounters.Count.ToString()) + "x";
+				if (_seenCount == null) _seenCount = GetEncounterCount() + "x";
 				return _seenCount;
 			}
 		}
@@ -66,7 +105,7 @@ namespace PlayerTrack
 		{
 			get
 			{
-				if (_key == null) _key = string.Concat(Name?.Replace(' ', '_').ToUpper(), "_", HomeWorlds[0]?.Id);
+				if (_key == null) _key = CreateKey(Name, HomeWorlds[0]?.Id ?? 0);
 				return _key;
 			}
 		}
@@ -98,85 +137,66 @@ namespace PlayerTrack
 				if (_abbreviatedNotes == null)
 				{
 					if (string.IsNullOrEmpty(Notes))
-						_abbreviatedNotes = "None";
+						_abbreviatedNotes = "None.";
 					else
-						_abbreviatedNotes = Notes.Length < 20
-							? Notes.Replace('\n', ' ')
-							: Notes.Replace('\n', ' ').Substring(0, 20) + "...";
+						_abbreviatedNotes = Notes.Length < 30
+							? Notes.Replace('\n', ' ').EnsureEndsWithDot()
+							: Notes.Replace('\n', ' ').Substring(0, 30) + "...";
 				}
 
 				return _abbreviatedNotes;
 			}
 		}
 
-
-		public void Merge(TrackPlayer playerToMerge)
+		public int GetEncounterCount()
 		{
+			if (IsManual) return Encounters.Count - 1;
+
+			return Encounters.Count;
+		}
+
+		public static string CreateKey(string name, uint worldId)
+		{
+			return string.Concat(name.Replace(' ', '_').ToUpper(), "_", worldId);
+		}
+
+		public void Merge(TrackPlayer originalPlayer)
+		{
+			// simple fields just use original player
+			FreeCompany = originalPlayer.FreeCompany;
+			CategoryId = originalPlayer.CategoryId;
+			Icon = originalPlayer.Icon;
+			Color = originalPlayer.Color;
+
+			// names
 			if (Names == null) Names = new List<string>();
+			foreach (var name in originalPlayer.Names)
+				if (!Names.Contains(name))
+					Names.Add(name);
+
+			// home worlds
 			if (HomeWorlds == null) HomeWorlds = new List<TrackWorld>();
+			var newPlayerWorldIds = HomeWorlds.Select(world => world.Id).ToList();
+			var originalPlayerWorldIds = originalPlayer.HomeWorlds.Select(world => world.Id).ToList();
+			var originalPlayerWorldNames = originalPlayer.HomeWorlds.Select(world => world.Name).ToList();
+			foreach (var worldId in originalPlayer.HomeWorlds.Select(world => world.Id).ToList())
+				if (!newPlayerWorldIds.Contains(worldId))
+					HomeWorlds.Add(new TrackWorld
+					{
+						Id = worldId,
+						Name = originalPlayerWorldNames[originalPlayerWorldIds.IndexOf(worldId)]
+					});
 
-			if (Created < playerToMerge.Created)
-			{
-				playerToMerge.Names.Reverse();
-				foreach (var name in playerToMerge.Names)
-					if (!Names.Contains(name))
-						Names.Insert(0, name);
-				playerToMerge.HomeWorlds.Reverse();
-				foreach (var homeWorld in playerToMerge.HomeWorlds)
-					if (HomeWorlds.All(world => world.Id != homeWorld.Id))
-						HomeWorlds.Insert(0, new TrackWorld
-						{
-							Id = homeWorld.Id,
-							Name = homeWorld.Name
-						});
-				Notes += playerToMerge.Notes;
-			}
-			else
-			{
-				foreach (var name in playerToMerge.Names)
-					if (!Names.Contains(name))
-						Names.Add(name);
-				playerToMerge.HomeWorlds.Reverse();
-				foreach (var homeWorld in playerToMerge.HomeWorlds)
-					if (HomeWorlds.All(world => world.Id != homeWorld.Id))
-						HomeWorlds.Add(new TrackWorld
-						{
-							Id = homeWorld.Id,
-							Name = homeWorld.Name
-						});
-				Notes = playerToMerge.Notes + Notes;
-				Icon = playerToMerge.Icon;
-				Color = playerToMerge.Color;
-			}
+			// notes
+			Notes = originalPlayer.Notes + " " + Notes;
 
-			Encounters = Encounters.Concat(playerToMerge.Encounters).ToList()
+			// encounters
+			if (Encounters == null) Encounters = new List<TrackEncounter>();
+			Encounters = Encounters.Concat(originalPlayer.Encounters).ToList()
 				.OrderBy(encounter => encounter.Created).ToList();
-		}
 
-		public bool IsNewName(string newName)
-		{
-			if (string.IsNullOrEmpty(newName)) return false;
-			return string.IsNullOrEmpty(Names?[0]) || !Names[0].Equals(newName);
-		}
-
-		public void UpdateName(string newName, int index = 0)
-		{
-			if (!IsNewName(newName)) return;
-			if (Names == null) Names = new List<string>();
-			Names.Insert(index, newName);
-		}
-
-		public bool IsNewHomeWorld(TrackWorld newWorld)
-		{
-			if (newWorld?.Id == null) return false;
-			return HomeWorlds?[0].Id == null || HomeWorlds[0].Id != newWorld.Id;
-		}
-
-		public void UpdateHomeWorld(TrackWorld newWorld, int index = 0)
-		{
-			if (!IsNewHomeWorld(newWorld)) return;
-			if (HomeWorlds == null) HomeWorlds = new List<TrackWorld>();
-			HomeWorlds.Insert(index, newWorld);
+			// reset to ensure latest props
+			ClearBackingFields();
 		}
 
 		public void ClearBackingFields()
@@ -188,6 +208,8 @@ namespace PlayerTrack
 			_key = null;
 			_name = null;
 			_homeWorld = null;
+			_previousNames = null;
+			_previousWorlds = null;
 			foreach (var encounter in Encounters) encounter.ClearBackingFields();
 		}
 	}

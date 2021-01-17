@@ -35,16 +35,11 @@ namespace PlayerTrack
 			if (Roster.ContainsKey(playerKey)) Roster.Remove(playerKey);
 		}
 
-		public void MergePlayer(TrackPlayer playerToMerge)
-		{
-			Roster[playerToMerge.Key].Merge(playerToMerge);
-		}
-
 		public void UpdatePlayer(TrackPlayer player)
 		{
 			if (player.Lodestone.Id != 0 && Roster[player.Key].Lodestone.Id == 0)
 				Roster[player.Key].Lodestone.Id = player.Lodestone.Id;
-			Roster[player.Key].FreeCompany = player.FreeCompany;
+			if (!string.IsNullOrEmpty(player.FreeCompany)) Roster[player.Key].FreeCompany = player.FreeCompany;
 		}
 
 		public void AddEncounter(string playerKey, TrackEncounter encounter)
@@ -63,12 +58,13 @@ namespace PlayerTrack
 		public void UpdateEncounter(string playerKey, TrackEncounter encounter)
 		{
 			encounter.Created = Roster[playerKey].Encounters[Roster[playerKey].Encounters.Count - 1].Created;
+			Roster[playerKey].PreviouslyLastSeen = Roster[playerKey].LastSeen;
 			Roster[playerKey].Encounters[Roster[playerKey].Encounters.Count - 1] = encounter;
 		}
 
-		public void SortByName()
+		public void SortByNameAndPriority()
 		{
-			Roster = Roster.OrderBy(entry => entry.Value.Name)
+			Roster = Roster.OrderBy(entry => entry.Value.Priority).ThenBy(entry => entry.Value.Name)
 				.ToDictionary(entry => entry.Key, entry => entry.Value);
 		}
 

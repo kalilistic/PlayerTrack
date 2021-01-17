@@ -13,5 +13,6 @@ namespace PlayerTrack
 		void ChangeSelectedPlayer(string key);
 		void BackupRoster(bool forceBackup = false);
 		void SaveData();
+		bool IsNewPlayer(string name, string worldName);
 	}
 }

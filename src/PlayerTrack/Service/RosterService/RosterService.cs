@@ -1,16 +1,20 @@
 ﻿// ReSharper disable InvertIf
 // ReSharper disable ConvertIfStatementToSwitchStatement
+// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using CheapLoc;
 using Newtonsoft.Json;
 
 namespace PlayerTrack
 {
 	public class RosterService : IRosterService
 	{
-		private readonly Queue<string> _deleteRequests = new Queue<string>();
+		private readonly Queue<TrackPlayer> _addPlayerRequests = new Queue<TrackPlayer>();
+		private readonly Queue<string> _deletePlayerRequests = new Queue<string>();
 		private readonly JsonSerializerSettings _jsonSerializerSettings;
 		private readonly IPlayerTrackPlugin _playerTrackPlugin;
 
@@ -23,10 +27,11 @@ namespace PlayerTrack
 			LoadRoster();
 		}
 
+		public Dictionary<string, TrackPlayer> Recent { get; set; }
+
 		public TrackRoster Current { get; set; }
 		public TrackRoster All { get; set; }
 		public TrackPlayer SelectedPlayer { get; set; }
-
 
 		public void ClearPlayers()
 		{
@@ -35,9 +40,6 @@ namespace PlayerTrack
 
 		public void ProcessPlayers(List<TrackPlayer> incomingPlayers)
 		{
-			ProcessDeleteRequests();
-			ProcessVerificationRequests();
-			ProcessUpdateRequests();
 			var currentPlayers = new TrackRoster(new Dictionary<string, TrackPlayer>(), _playerTrackPlugin);
 			foreach (var player in incomingPlayers)
 			{
@@ -45,6 +47,7 @@ namespace PlayerTrack
 				if (All.IsNewPlayer(player.Key))
 				{
 					All.AddPlayer(player);
+					SubmitLodestoneRequest(player);
 				}
 				else
 				{
@@ -56,7 +59,6 @@ namespace PlayerTrack
 				}
 
 				var currentPlayer = All.GetPlayer(player.Key);
-				SubmitVerificationRequest(currentPlayer);
 				currentPlayer.ClearBackingFields();
 				try
 				{
@@ -68,13 +70,22 @@ namespace PlayerTrack
 				}
 			}
 
-			currentPlayers.SortByName();
 			Current = currentPlayers;
+			_playerTrackPlugin.GetCategoryService().SetPlayerPriority();
+			SortRosters();
+			SendAlerts();
+		}
+
+		public bool IsNewPlayer(string name, string worldName)
+		{
+			var worldId = _playerTrackPlugin.GetWorldId(worldName) ?? 0;
+			var key = TrackPlayer.CreateKey(name, worldId);
+			return All.IsNewPlayer(key);
 		}
 
 		public void DeletePlayer(string key)
 		{
-			_deleteRequests.Enqueue(key);
+			_deletePlayerRequests.Enqueue(key);
 		}
 
 		public void ChangeSelectedPlayer(string key)
@@ -116,48 +127,102 @@ namespace PlayerTrack
 			}
 		}
 
-		private void SubmitUpdateRequest(TrackPlayer player)
+		public Dictionary<string, TrackPlayer> GetPlayersByName(string name)
 		{
-			if (!_playerTrackPlugin.Configuration.SyncToLodestone) return;
-			if (player.Lodestone.Status == TrackLodestoneStatus.Verified && DateUtil.CurrentTime() >
-				player.Lodestone?.LastUpdated +
-				_playerTrackPlugin.Configuration.LodestoneUpdateFrequency)
-				_playerTrackPlugin.GetLodestoneService().AddUpdateRequest(new TrackLodestoneRequest
-				{
-					PlayerKey = player.Key,
-					LodestoneId = player.Lodestone.Id
-				});
+			return All.FilterByName(name);
 		}
 
-		private void ProcessUpdateRequests()
+		public void SortRosters()
 		{
-			var responses = _playerTrackPlugin.GetLodestoneService().GetUpdateResponses();
-			foreach (var response in responses)
-			{
-				var player = All.GetPlayer(response.PlayerKey);
+			Current.SortByNameAndPriority();
+			All.SortByNameAndPriority();
+			Recent = All.FilterByLastUpdate(_playerTrackPlugin.Configuration.RecentPlayerThreshold);
+		}
 
-				if (player.IsNewName(response.PlayerName) ||
-				    player.IsNewHomeWorld(response.HomeWorld))
+		public TrackCategory GetCategory(string playerKey)
+		{
+			var player = All.GetPlayer(playerKey);
+			return player.CategoryId == 0
+				? _playerTrackPlugin.GetCategoryService().GetDefaultCategory()
+				: _playerTrackPlugin.GetCategoryService().GetCategory(player.CategoryId);
+		}
+
+		public void SendAlerts()
+		{
+			if (!_playerTrackPlugin.Configuration.EnableAlerts) return;
+			foreach (var player in Current.Roster)
+			{
+				var category = _playerTrackPlugin.GetCategoryService().GetCategory(player.Value.CategoryId);
+				if (category.EnableAlerts && player.Value.Alert.LastSent != 0 &&
+				    (DateTime.UtcNow - player.Value.Alert.LastSent.ToDateTime()).TotalMilliseconds >
+				    _playerTrackPlugin.Configuration.AlertFrequency)
 				{
-					All.DeletePlayer(player.Key);
-					player.UpdateName(response.PlayerName);
-					player.UpdateHomeWorld(response.HomeWorld);
-					player.ClearBackingFields();
-					if (All.IsNewPlayer(player.Key))
-					{
-						All.AddPlayer(player);
-					}
+					if (_playerTrackPlugin.Configuration.IncludeNotesInAlert &&
+					    !string.IsNullOrEmpty(player.Value.Notes))
+						_playerTrackPlugin.PrintMessage(string.Format(
+							Loc.Localize("PlayerAlertWithNotes", "{0} last seen {1}: {2}"), player.Value.Name,
+							player.Value.PreviouslyLastSeen, player.Value.AbbreviatedNotes));
 					else
+						_playerTrackPlugin.PrintMessage(string.Format(
+							Loc.Localize("PlayerAlert", "{0} last seen {1}."), player.Value.Name,
+							player.Value.PreviouslyLastSeen));
+					player.Value.Alert.LastSent = DateUtil.CurrentTime();
+					Thread.Sleep(1000);
+				}
+				else if (category.EnableAlerts && player.Value.Alert.LastSent == 0)
+				{
+					player.Value.Alert.LastSent = DateUtil.CurrentTime();
+				}
+			}
+		}
+
+		public void AddPlayer(string name, string worldName)
+		{
+			var currentTime = DateUtil.CurrentTime();
+			var newPlayer = new TrackPlayer
+			{
+				IsManual = true,
+				Names = new List<string> {name},
+				HomeWorlds = new List<TrackWorld>
+				{
+					new TrackWorld
 					{
-						All.MergePlayer(player);
-						player = All.GetPlayer(player.Key);
+						Id = _playerTrackPlugin.GetWorldId(worldName) ?? 0,
+						Name = worldName
+					}
+				},
+				FreeCompany = string.Empty,
+				CategoryId = _playerTrackPlugin.GetCategoryService().GetDefaultCategory().Id,
+				Encounters = new List<TrackEncounter>
+				{
+					new TrackEncounter
+					{
+						Created = currentTime,
+						Updated = currentTime,
+						Location = new TrackLocation
+						{
+							TerritoryType = 1,
+							PlaceName = string.Empty,
+							ContentName = string.Empty
+						},
+						Job = new TrackJob
+						{
+							Id = 0,
+							Lvl = 0,
+							Code = "ADV"
+						}
 					}
 				}
+			};
+			_addPlayerRequests.Enqueue(newPlayer);
+		}
 
-				player.Lodestone.Status = response.Status;
-				player.Lodestone.LastUpdated = DateUtil.CurrentTime();
-				HandleFailure(player);
-			}
+		public void ProcessRequests()
+		{
+			ProcessDeleteRequests();
+			ProcessAddRequests();
+			ProcessLodestoneRequests();
+			MergeDuplicates();
 		}
 
 		private static void HandleFailure(TrackPlayer player)
@@ -175,12 +240,12 @@ namespace PlayerTrack
 			}
 		}
 
-		private void SubmitVerificationRequest(TrackPlayer player)
+		private void SubmitLodestoneRequest(TrackPlayer player)
 		{
 			if (!_playerTrackPlugin.Configuration.SyncToLodestone) return;
 			if (player.Lodestone.Status == TrackLodestoneStatus.Unverified)
 			{
-				_playerTrackPlugin.GetLodestoneService().AddIdRequest(new TrackLodestoneRequest
+				_playerTrackPlugin.GetLodestoneService().AddRequest(new TrackLodestoneRequest
 				{
 					PlayerKey = player.Key,
 					PlayerName = player.Name,
@@ -190,9 +255,9 @@ namespace PlayerTrack
 			}
 		}
 
-		private void ProcessVerificationRequests()
+		private void ProcessLodestoneRequests()
 		{
-			var responses = _playerTrackPlugin.GetLodestoneService().GetVerificationResponses();
+			var responses = _playerTrackPlugin.GetLodestoneService().GetResponses();
 			foreach (var response in responses)
 			{
 				var player = All.GetPlayer(response.PlayerKey);
@@ -203,12 +268,44 @@ namespace PlayerTrack
 			}
 		}
 
+		private void MergeDuplicates()
+		{
+			var lodestoneIds = All.Roster.Select(pair => pair.Value.Lodestone.Id).ToList();
+			var duplicateLodestoneIds = lodestoneIds.GroupBy(x => x)
+				.Where(g => g.Count() > 1)
+				.Select(y => y.Key)
+				.Distinct().ToList();
+			if (duplicateLodestoneIds.Any())
+				foreach (var lodestoneId in lodestoneIds)
+				{
+					var players = All.Roster
+						.Where(pair =>
+							pair.Value.Lodestone.Status == TrackLodestoneStatus.Verified &&
+							pair.Value.Lodestone.Id == lodestoneId).OrderBy(pair => pair.Value.Created).ToList();
+					if (players.Count < 2) continue;
+					var originalPlayer = players[0].Value;
+					var newPlayer = players[1].Value;
+					newPlayer.Merge(originalPlayer);
+					All.DeletePlayer(originalPlayer.Key);
+				}
+		}
+
 		private void ProcessDeleteRequests()
 		{
-			while (_deleteRequests.Count > 0)
+			while (_deletePlayerRequests.Count > 0)
 			{
-				var playerKey = _deleteRequests.Dequeue();
+				var playerKey = _deletePlayerRequests.Dequeue();
 				All.DeletePlayer(playerKey);
+			}
+		}
+
+		private void ProcessAddRequests()
+		{
+			while (_addPlayerRequests.Count > 0)
+			{
+				var player = _addPlayerRequests.Dequeue();
+				All.AddPlayer(player);
+				SubmitLodestoneRequest(player);
 			}
 		}
 
@@ -255,27 +352,28 @@ namespace PlayerTrack
 					var lode = player.Value.Lodestone;
 					if (lode?.Status != null)
 					{
+						// refresh lodestone status
 						if (lode.Status == TrackLodestoneStatus.Verifying)
 							lode.Status = TrackLodestoneStatus.Unverified;
-						else if (lode.Status == TrackLodestoneStatus.Updating)
+						else if (lode.Status == TrackLodestoneStatus.Updating ||
+						         lode.Status == TrackLodestoneStatus.Updated)
 							lode.Status = TrackLodestoneStatus.Verified;
 
+						// submit pending verification requests
 						if (lode.Status == TrackLodestoneStatus.Unverified)
 						{
-							SubmitVerificationRequest(player.Value);
-						}
-						else if (lode.Status == TrackLodestoneStatus.Verified)
-						{
-							SubmitUpdateRequest(player.Value);
+							SubmitLodestoneRequest(player.Value);
 						}
 						else if (lode.Status == TrackLodestoneStatus.Failed &&
 						         lode.FailureCount < _playerTrackPlugin.Configuration.LodestoneMaxFailure &&
 						         currentTime < lode.LastFailed + _playerTrackPlugin.Configuration.LodestoneFailureDelay)
 						{
 							player.Value.Lodestone.Status = TrackLodestoneStatus.Unverified;
-							SubmitVerificationRequest(player.Value);
+							SubmitLodestoneRequest(player.Value);
 						}
 					}
+
+					player.Value.PreviouslyLastSeen = player.Value.LastSeen;
 				}
 			}
 			catch

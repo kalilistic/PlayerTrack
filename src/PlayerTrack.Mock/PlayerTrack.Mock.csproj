@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MockCategoryService.cs" />
     <Compile Include="MockLodestoneService.cs" />
     <Compile Include="MockConfig.cs" />
     <Compile Include="MockRosterService.cs" />
