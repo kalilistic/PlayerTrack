@@ -64,6 +64,9 @@ namespace PlayerTrack
 					case Modal.DeleteComplete:
 						DeleteCompleteModal();
 						break;
+					case Modal.AddComplete:
+						AddCompleteModal();
+						break;
 					case Modal.InvalidCharacterName:
 						InvalidCharacterNameModal();
 						break;
@@ -168,6 +171,7 @@ namespace PlayerTrack
 						_activeSearch = _addPlayerInput;
 						_addPlayerInput = string.Empty;
 						_currentPlayerMode = TrackPlayerMode.SearchForPlayers;
+						_currentModal = Modal.AddComplete;
 					}
 				}
 			}
@@ -365,6 +369,23 @@ namespace PlayerTrack
 			ImGui.Text(Loc.Localize("DeleteCompleteContent2",
 				"The next time you encounter this character they'll be added back."));
 			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_DeleteCompleteModal_Button"))
+				_currentModal = Modal.None;
+			ImGui.End();
+		}
+
+		private void AddCompleteModal()
+		{
+			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
+				ImGuiCond.Appearing);
+			ImGui.Begin(
+				Loc.Localize("AddCompleteModalTitle", "Player Added") +
+				"###PlayerTracker_AddCompleteModal_Window",
+				ImGuiUtil.ModalWindowFlags());
+			ImGui.Text(Loc.Localize("AddCompleteContent1",
+				"Character has been added and will be appear in search shortly."));
+			ImGui.Text(Loc.Localize("AddCompleteContent2",
+				"Please wait just a moment."));
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_AddCompleteModal_Button"))
 				_currentModal = Modal.None;
 			ImGui.End();
 		}
@@ -583,6 +604,7 @@ namespace PlayerTrack
 			ResetConfirmation,
 			DeleteConfirmation,
 			DeleteComplete,
+			AddComplete,
 			InvalidCharacterName,
 			DuplicateCharacter
 		}
