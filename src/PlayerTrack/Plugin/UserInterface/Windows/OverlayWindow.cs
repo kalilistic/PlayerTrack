@@ -211,6 +211,7 @@ namespace PlayerTrack
 		private void PlayerRow(TrackPlayer player)
 		{
 			var category = _playerTrackPlugin.RosterService.GetCategory(player.Key);
+			if (category == null) return;
 			PlayerIcon(player);
 			ImGui.SameLine();
 			ImGui.TextColored(player.Color ?? category.Color, player.Name);
@@ -224,6 +225,7 @@ namespace PlayerTrack
 		private void PlayerIcon(TrackPlayer player)
 		{
 			var category = _playerTrackPlugin.RosterService.GetCategory(player.Key);
+			if (category == null) return;
 			var color = player.Color ?? category.Color;
 			var iconValue = player.Icon;
 			FontAwesomeIcon icon;

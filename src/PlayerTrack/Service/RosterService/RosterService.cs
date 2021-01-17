@@ -72,6 +72,7 @@ namespace PlayerTrack
 
 			Current = currentPlayers;
 			_playerTrackPlugin.GetCategoryService().SetPlayerPriority();
+			MergeDuplicates();
 			SortRosters();
 			SendAlerts();
 		}
@@ -237,7 +238,6 @@ namespace PlayerTrack
 			ProcessDeleteRequests();
 			ProcessAddRequests();
 			ProcessLodestoneRequests();
-			MergeDuplicates();
 		}
 
 		private static void HandleFailure(TrackPlayer player)

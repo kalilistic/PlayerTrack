@@ -22,9 +22,10 @@ namespace PlayerTrack
 		private DataManager _dataManager;
 		private bool _inContent;
 		private bool _isProcessing = true;
+		private Timer _onNewActorTimer;
+		private Timer _onPlayerChangeTimer;
 		private Timer _onSaveTimer;
 		private Timer _onSettingsTimer;
-		private Timer _onUpdateTimer;
 		private DalamudPluginInterface _pluginInterface;
 		private PluginUI _pluginUI;
 
@@ -192,8 +193,10 @@ namespace PlayerTrack
 
 		private void StartTimers()
 		{
-			_onUpdateTimer = new Timer {Interval = Configuration.UpdateFrequency, Enabled = true};
-			_onUpdateTimer.Elapsed += OnActorUpdate;
+			_onNewActorTimer = new Timer {Interval = Configuration.UpdateFrequency, Enabled = true};
+			_onNewActorTimer.Elapsed += OnNewActor;
+			_onPlayerChangeTimer = new Timer {Interval = Configuration.ProcessPlayerChangeFrequency, Enabled = true};
+			_onPlayerChangeTimer.Elapsed += OnPlayerChange;
 			_onSaveTimer = new Timer {Interval = Configuration.SaveFrequency, Enabled = true};
 			_onSaveTimer.Elapsed += OnRosterSave;
 			_onSettingsTimer = new Timer
@@ -215,10 +218,11 @@ namespace PlayerTrack
 
 		private void StopTimers()
 		{
-			_onUpdateTimer.Elapsed -= OnActorUpdate;
+			_onNewActorTimer.Elapsed -= OnNewActor;
+			_onPlayerChangeTimer.Elapsed -= OnPlayerChange;
 			_onSaveTimer.Elapsed -= OnRosterSave;
 			_onSettingsTimer.Elapsed -= OnSettings;
-			_onUpdateTimer.Stop();
+			_onNewActorTimer.Stop();
 			_onSaveTimer.Stop();
 			_onSettingsTimer.Stop();
 		}
@@ -239,7 +243,23 @@ namespace PlayerTrack
 			}
 		}
 
-		private void OnActorUpdate(object sender, ElapsedEventArgs e)
+		private void OnPlayerChange(object sender, ElapsedEventArgs e)
+		{
+			try
+			{
+				if (_isProcessing) return;
+				_isProcessing = true;
+				RosterService.ProcessRequests();
+				_isProcessing = false;
+			}
+			catch (Exception ex)
+			{
+				LogError(ex, "Failed process player updates - will try again shortly.");
+				_isProcessing = false;
+			}
+		}
+
+		private void OnNewActor(object sender, ElapsedEventArgs e)
 		{
 			try
 			{
@@ -291,9 +311,6 @@ namespace PlayerTrack
 					_isProcessing = false;
 					return;
 				}
-
-				// process pending requests
-				RosterService.ProcessRequests();
 
 				// player check
 				var players = GetPlayerCharacters();
