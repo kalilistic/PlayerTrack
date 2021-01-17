@@ -137,11 +137,11 @@ namespace PlayerTrack
 		{
 			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
 				ImGuiCond.Appearing);
-			ImGui.Begin(Loc.Localize("DeleteModalTitle", "Delete Confirmation") + "###PlayerTracker_DeleteModal_Window",
+			ImGui.Begin(Loc.Localize("DeleteModalTitle", "Delete Confirmation") + "###PlayerTrack_DeleteModal_Window",
 				ImGuiUtil.ModalWindowFlags());
 			ImGui.Text(Loc.Localize("DeleteModalContent", "Are you sure you want to delete?"));
 			ImGui.Spacing();
-			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_DeleteModalOK_Button"))
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTrack_DeleteModalOK_Button"))
 			{
 				_currentModal = Modal.None;
 				_playerTrackPlugin.GetCategoryService().DeleteCategory(_selectedCategoryIndex);
@@ -149,7 +149,7 @@ namespace PlayerTrack
 			}
 
 			ImGui.SameLine();
-			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") + "###PlayerTracker_DeleteModalCancel_Button"))
+			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") + "###PlayerTrack_DeleteModalCancel_Button"))
 			{
 				_currentModal = Modal.None;
 				_selectedCategoryIndex = 0;
@@ -162,18 +162,18 @@ namespace PlayerTrack
 		{
 			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
 				ImGuiCond.Appearing);
-			ImGui.Begin(Loc.Localize("ResetModalTitle", "Reset Confirmation") + "###PlayerTracker_ResetModal_Window",
+			ImGui.Begin(Loc.Localize("ResetModalTitle", "Reset Confirmation") + "###PlayerTrack_ResetModal_Window",
 				ImGuiUtil.ModalWindowFlags());
 			ImGui.Text(Loc.Localize("ResetModalContent", "Are you sure you want to reset?"));
 			ImGui.Spacing();
-			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_ResetModalOK_Button"))
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTrack_ResetModalOK_Button"))
 			{
 				_playerTrackPlugin.GetCategoryService().ResetCategories();
 				_currentModal = Modal.None;
 			}
 
 			ImGui.SameLine();
-			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") + "###PlayerTracker_ResetModalCancel_Button"))
+			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") + "###PlayerTrack_ResetModalCancel_Button"))
 				_currentModal = Modal.None;
 
 			ImGui.End();
@@ -679,10 +679,10 @@ namespace PlayerTrack
 
 		private void CategoryControls()
 		{
-			if (ImGui.SmallButton(Loc.Localize("Reset", "Reset") + "###PlayerTracker_CategoryReset_Button"))
+			if (ImGui.SmallButton(Loc.Localize("Reset", "Reset") + "###PlayerTrack_CategoryReset_Button"))
 				_currentModal = Modal.Reset;
 			ImGui.SameLine();
-			if (ImGui.SmallButton(Loc.Localize("Add", "Add") + "###PlayerTracker_CategoryAdd_Button"))
+			if (ImGui.SmallButton(Loc.Localize("Add", "Add") + "###PlayerTrack_CategoryAdd_Button"))
 			{
 				_playerTrackPlugin.GetCategoryService().AddCategory();
 				_playerTrackPlugin.GetCategoryService().SaveCategories();

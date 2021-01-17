@@ -271,12 +271,12 @@ namespace PlayerTrack
 
 			ImGui.SameLine();
 
-			if (ImGui.SmallButton(Loc.Localize("ResetConfirmation", "Reset") + "###PlayerTracker_DetailsReset_Button"))
+			if (ImGui.SmallButton(Loc.Localize("ResetConfirmation", "Reset") + "###PlayerTrack_DetailsReset_Button"))
 				_currentModal = Modal.ResetConfirmation;
 
 			ImGui.SameLine();
 
-			if (ImGui.SmallButton(Loc.Localize("Lodestone", "Lodestone") + "###PlayerTracker_Lodestone_Button"))
+			if (ImGui.SmallButton(Loc.Localize("Lodestone", "Lodestone") + "###PlayerTrack_Lodestone_Button"))
 			{
 				var url = player.Lodestone.GetProfileUrl(_playerTrackPlugin.Configuration.LodestoneLocale);
 				if (url != null)
@@ -292,10 +292,10 @@ namespace PlayerTrack
 		{
 			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
 				ImGuiCond.Appearing);
-			ImGui.Begin(Loc.Localize("LodestoneModalTitle", "Lodestone") + "###PlayerTracker_LodestoneModal_Window",
+			ImGui.Begin(Loc.Localize("LodestoneModalTitle", "Lodestone") + "###PlayerTrack_LodestoneModal_Window",
 				ImGuiUtil.ModalWindowFlags());
 			ImGui.Text(Loc.Localize("LodestoneModalContent", "Lodestone verification pending."));
-			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_LodestoneModal_Button"))
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTrack_LodestoneModal_Button"))
 				_currentModal = Modal.None;
 			ImGui.End();
 		}
@@ -306,10 +306,10 @@ namespace PlayerTrack
 				ImGuiCond.Appearing);
 			ImGui.Begin(
 				Loc.Localize("InvalidCharacterNameModalTitle", "Character Name") +
-				"###PlayerTracker_InvalidCharacterNameModal_Window",
+				"###PlayerTrack_InvalidCharacterNameModal_Window",
 				ImGuiUtil.ModalWindowFlags());
 			ImGui.Text(Loc.Localize("InvalidCharacterNameModalContent", "Invalid character name...try again!"));
-			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_InvalidCharacterNameModal_Button"))
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTrack_InvalidCharacterNameModal_Button"))
 				_currentModal = Modal.None;
 			ImGui.End();
 		}
@@ -320,11 +320,11 @@ namespace PlayerTrack
 				ImGuiCond.Appearing);
 			ImGui.Begin(
 				Loc.Localize("DuplicateCharacterModalTitle", "Duplicate Character") +
-				"###PlayerTracker_DuplicateCharacterModal_Window",
+				"###PlayerTrack_DuplicateCharacterModal_Window",
 				ImGuiUtil.ModalWindowFlags());
 			ImGui.Text(Loc.Localize("DuplicateCharacterModalContent",
 				"There's already a character with that name/world."));
-			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_DuplicateCharacterModal_Button"))
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTrack_DuplicateCharacterModal_Button"))
 				_currentModal = Modal.None;
 			ImGui.End();
 		}
@@ -335,11 +335,11 @@ namespace PlayerTrack
 				ImGuiCond.Appearing);
 			ImGui.Begin(
 				Loc.Localize("ResetConfirmationModalTitle", "ResetConfirmation Confirmation") +
-				"###PlayerTracker_ResetConfirmationModal_Window",
+				"###PlayerTrack_ResetConfirmationModal_Window",
 				ImGuiUtil.ModalWindowFlags());
 			ImGui.Text(Loc.Localize("ResetConfirmationModalContent", "Are you sure you want to reset?"));
 			ImGui.Spacing();
-			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_ResetConfirmationModalOK_Button"))
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTrack_ResetConfirmationModalOK_Button"))
 			{
 				_currentPlayer.Icon = 0;
 				_currentPlayer.Color = null;
@@ -351,7 +351,7 @@ namespace PlayerTrack
 			}
 
 			ImGui.SameLine();
-			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") + "###PlayerTracker_ResetConfirmationModalCancel_Button"))
+			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") + "###PlayerTrack_ResetConfirmationModalCancel_Button"))
 				_currentModal = Modal.None;
 			ImGui.End();
 		}
@@ -362,13 +362,13 @@ namespace PlayerTrack
 				ImGuiCond.Appearing);
 			ImGui.Begin(
 				Loc.Localize("DeleteCompleteModalTitle", "Delete Complete") +
-				"###PlayerTracker_DeleteCompleteModal_Window",
+				"###PlayerTrack_DeleteCompleteModal_Window",
 				ImGuiUtil.ModalWindowFlags());
 			ImGui.Text(Loc.Localize("DeleteCompleteContent1",
 				"Character has been deleted and will be removed from your list shortly."));
 			ImGui.Text(Loc.Localize("DeleteCompleteContent2",
 				"The next time you encounter this character they'll be added back."));
-			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_DeleteCompleteModal_Button"))
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTrack_DeleteCompleteModal_Button"))
 				_currentModal = Modal.None;
 			ImGui.End();
 		}
@@ -379,13 +379,13 @@ namespace PlayerTrack
 				ImGuiCond.Appearing);
 			ImGui.Begin(
 				Loc.Localize("AddCompleteModalTitle", "Player Added") +
-				"###PlayerTracker_AddCompleteModal_Window",
+				"###PlayerTrack_AddCompleteModal_Window",
 				ImGuiUtil.ModalWindowFlags());
 			ImGui.Text(Loc.Localize("AddCompleteContent1",
 				"Character has been added and will be appear in search shortly."));
 			ImGui.Text(Loc.Localize("AddCompleteContent2",
 				"Please wait just a moment."));
-			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_AddCompleteModal_Button"))
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTrack_AddCompleteModal_Button"))
 				_currentModal = Modal.None;
 			ImGui.End();
 		}
@@ -396,11 +396,11 @@ namespace PlayerTrack
 				ImGuiCond.Appearing);
 			ImGui.Begin(
 				Loc.Localize("DeleteConfirmationModalTitle", "Delete Confirmation") +
-				"###PlayerTracker_DeleteConfirmationModal_Window",
+				"###PlayerTrack_DeleteConfirmationModal_Window",
 				ImGuiUtil.ModalWindowFlags());
 			ImGui.Text(Loc.Localize("DeleteConfirmationModalContent", "Are you sure you want to delete?"));
 			ImGui.Spacing();
-			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_DeleteConfirmationModalOK_Button"))
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTrack_DeleteConfirmationModalOK_Button"))
 			{
 				_playerTrackPlugin.RosterService.DeletePlayer(_currentPlayer.Key);
 				_currentView = View.Players;
@@ -409,7 +409,7 @@ namespace PlayerTrack
 
 			ImGui.SameLine();
 			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") +
-			                 "###PlayerTracker_DeleteConfirmationModalCancel_Button"))
+			                 "###PlayerTrack_DeleteConfirmationModalCancel_Button"))
 				_currentModal = Modal.None;
 			ImGui.End();
 		}
@@ -490,12 +490,12 @@ namespace PlayerTrack
 			ImGui.SameLine();
 
 			var color = player.Color ?? category.Color;
-			if (ImGui.ColorButton("###PlayerTracker_PlayerColor_Button", color)
-			) ImGui.OpenPopup("###PlayerTracker_PlayerColor_Popup");
+			if (ImGui.ColorButton("###PlayerTrack_PlayerColor_Button", color)
+			) ImGui.OpenPopup("###PlayerTrack_PlayerColor_Popup");
 
-			if (ImGui.BeginPopup("###PlayerTracker_PlayerColor_Popup"))
+			if (ImGui.BeginPopup("###PlayerTrack_PlayerColor_Popup"))
 			{
-				if (ImGui.ColorPicker4("###PlayerTracker_PlayerColor_ColorPicker", ref color)) player.Color = color;
+				if (ImGui.ColorPicker4("###PlayerTrack_PlayerColor_ColorPicker", ref color)) player.Color = color;
 				PlayerPalette(player);
 				ImGui.EndPopup();
 			}
@@ -538,7 +538,7 @@ namespace PlayerTrack
 			ImGui.Spacing();
 			for (var i = min; i < max; i++)
 			{
-				if (ImGui.ColorButton("###PlayerTracker_PlayerColor_Swatch_" + i, _colorPalette[i]))
+				if (ImGui.ColorButton("###PlayerTrack_PlayerColor_Swatch_" + i, _colorPalette[i]))
 					player.Color = _colorPalette[i];
 				ImGui.SameLine();
 			}
