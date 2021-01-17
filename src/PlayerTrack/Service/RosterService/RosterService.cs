@@ -153,7 +153,7 @@ namespace PlayerTrack
 			foreach (var player in Current.Roster)
 			{
 				var category = _playerTrackPlugin.GetCategoryService().GetCategory(player.Value.CategoryId);
-				if (category.EnableAlerts &&
+				if (category.EnableAlerts && player.Value.Alert.LastSent != 0 &&
 				    (DateTime.UtcNow - player.Value.Alert.LastSent.ToDateTime()).TotalMilliseconds >
 				    _playerTrackPlugin.Configuration.AlertFrequency)
 				{
@@ -168,6 +168,10 @@ namespace PlayerTrack
 							player.Value.PreviouslyLastSeen));
 					player.Value.Alert.LastSent = DateUtil.CurrentTime();
 					Thread.Sleep(1000);
+				}
+				else if (category.EnableAlerts && player.Value.Alert.LastSent == 0)
+				{
+					player.Value.Alert.LastSent = DateUtil.CurrentTime();
 				}
 			}
 		}
