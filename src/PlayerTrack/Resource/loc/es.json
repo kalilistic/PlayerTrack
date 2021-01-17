@@ -330,8 +330,12 @@
         "message": "Back",
         "description": "OverlayWindow.Controls"
     },
-    "Delete": {
+    "DeleteConfirmation": {
         "message": "Delete",
+        "description": "OverlayWindow.Controls"
+    },
+    "ResetConfirmation": {
+        "message": "Reset",
         "description": "OverlayWindow.Controls"
     },
     "LodestoneModalTitle": {
@@ -357,6 +361,46 @@
     "DuplicateCharacterModalContent": {
         "message": "There's already a character with that name/world.",
         "description": "OverlayWindow.DuplicateCharacterModal"
+    },
+    "ResetConfirmationModalTitle": {
+        "message": "ResetConfirmation Confirmation",
+        "description": "OverlayWindow.ResetConfirmationModal"
+    },
+    "ResetConfirmationModalContent": {
+        "message": "Are you sure you want to reset?",
+        "description": "OverlayWindow.ResetConfirmationModal"
+    },
+    "DeleteCompleteModalTitle": {
+        "message": "Delete Complete",
+        "description": "OverlayWindow.DeleteCompleteModal"
+    },
+    "DeleteCompleteContent1": {
+        "message": "Character has been deleted and will be removed from your list shortly.",
+        "description": "OverlayWindow.DeleteCompleteModal"
+    },
+    "DeleteCompleteContent2": {
+        "message": "The next time you encounter this character they'll be added back.",
+        "description": "OverlayWindow.DeleteCompleteModal"
+    },
+    "AddCompleteModalTitle": {
+        "message": "Player Added",
+        "description": "OverlayWindow.AddCompleteModal"
+    },
+    "AddCompleteContent1": {
+        "message": "Character has been added and will be appear in search shortly.",
+        "description": "OverlayWindow.AddCompleteModal"
+    },
+    "AddCompleteContent2": {
+        "message": "Please wait just a moment.",
+        "description": "OverlayWindow.AddCompleteModal"
+    },
+    "DeleteConfirmationModalTitle": {
+        "message": "Delete Confirmation",
+        "description": "OverlayWindow.DeleteConfirmationModal"
+    },
+    "DeleteConfirmationModalContent": {
+        "message": "Are you sure you want to delete?",
+        "description": "OverlayWindow.DeleteConfirmationModal"
     },
     "PlayerInfo": {
         "message": "Player Info",
@@ -412,6 +456,14 @@
     },
     "PlayerOverride": {
         "message": "Custom",
+        "description": "OverlayWindow.PlayerDisplay"
+    },
+    "PlayerAlerts": {
+        "message": "Alerts",
+        "description": "OverlayWindow.PlayerDisplay"
+    },
+    "EnablePlayerAlerts": {
+        "message": "Enabled",
         "description": "OverlayWindow.PlayerDisplay"
     },
     "PlayerNotes": {
