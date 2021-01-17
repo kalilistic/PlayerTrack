@@ -206,5 +206,10 @@ namespace PlayerTrack.Mock
 		{
 			throw new NotImplementedException();
 		}
+
+		string[] IPlayerTrackPlugin.GetWorldNames()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

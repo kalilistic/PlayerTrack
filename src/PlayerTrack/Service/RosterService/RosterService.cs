@@ -154,31 +154,39 @@ namespace PlayerTrack
 			}
 		}
 
+		private bool IsTimeForAlert(TrackPlayer player)
+		{
+			return player.Alert.LastSent != 0 &&
+			       (DateTime.UtcNow - player.Alert.LastSent.ToDateTime()).TotalMilliseconds >
+			       _playerTrackPlugin.Configuration.AlertFrequency;
+		}
+
 		public void SendAlerts()
 		{
 			if (!_playerTrackPlugin.Configuration.EnableAlerts) return;
 			foreach (var player in Current.Roster)
 			{
 				var category = _playerTrackPlugin.GetCategoryService().GetCategory(player.Value.CategoryId);
-				if (category.EnableAlerts && player.Value.Alert.LastSent != 0 &&
-				    (DateTime.UtcNow - player.Value.Alert.LastSent.ToDateTime()).TotalMilliseconds >
-				    _playerTrackPlugin.Configuration.AlertFrequency)
+				if (player.Value.Alert.State == TrackAlertState.Enabled || category.EnableAlerts)
 				{
-					if (_playerTrackPlugin.Configuration.IncludeNotesInAlert &&
-					    !string.IsNullOrEmpty(player.Value.Notes))
-						_playerTrackPlugin.PrintMessage(string.Format(
-							Loc.Localize("PlayerAlertWithNotes", "{0} last seen {1}: {2}"), player.Value.Name,
-							player.Value.PreviouslyLastSeen, player.Value.AbbreviatedNotes));
-					else
-						_playerTrackPlugin.PrintMessage(string.Format(
-							Loc.Localize("PlayerAlert", "{0} last seen {1}."), player.Value.Name,
-							player.Value.PreviouslyLastSeen));
-					player.Value.Alert.LastSent = DateUtil.CurrentTime();
-					Thread.Sleep(1000);
-				}
-				else if (category.EnableAlerts && player.Value.Alert.LastSent == 0)
-				{
-					player.Value.Alert.LastSent = DateUtil.CurrentTime();
+					if (IsTimeForAlert(player.Value))
+					{
+						if (_playerTrackPlugin.Configuration.IncludeNotesInAlert &&
+						    !string.IsNullOrEmpty(player.Value.Notes))
+							_playerTrackPlugin.PrintMessage(string.Format(
+								Loc.Localize("PlayerAlertWithNotes", "{0} last seen {1}: {2}"), player.Value.Name,
+								player.Value.PreviouslyLastSeen, player.Value.AbbreviatedNotes));
+						else
+							_playerTrackPlugin.PrintMessage(string.Format(
+								Loc.Localize("PlayerAlert", "{0} last seen {1}."), player.Value.Name,
+								player.Value.PreviouslyLastSeen));
+						player.Value.Alert.LastSent = DateUtil.CurrentTime();
+						Thread.Sleep(_playerTrackPlugin.Configuration.AlertDelay);
+					}
+					else if (player.Value.Alert.LastSent == 0)
+					{
+						player.Value.Alert.LastSent = DateUtil.CurrentTime();
+					}
 				}
 			}
 		}

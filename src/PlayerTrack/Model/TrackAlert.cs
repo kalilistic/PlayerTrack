@@ -6,7 +6,10 @@ namespace PlayerTrack
 	[JsonObject(MemberSerialization.OptIn)]
 	public class TrackAlert
 	{
-		[JsonProperty] [DefaultValue(false)] public bool Enabled { get; set; }
+		[JsonProperty]
+		[DefaultValue(TrackAlertState.NotSet)]
+		public TrackAlertState State { get; set; }
+
 		[JsonProperty] [DefaultValue(0)] public long LastSent { get; set; }
 	}
 }

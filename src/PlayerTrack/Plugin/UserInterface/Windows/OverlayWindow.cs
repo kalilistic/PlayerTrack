@@ -104,7 +104,7 @@ namespace PlayerTrack
 
 		private void DrawPlayerDetailView()
 		{
-			ImGui.SetWindowSize(new Vector2(500 * Scale, 550 * Scale), ImGuiCond.Always);
+			ImGui.SetWindowSize(new Vector2(500 * Scale, 590 * Scale), ImGuiCond.Always);
 			SetCurrentPlayer();
 			Controls(_currentPlayer);
 			PlayerInfo(_currentPlayer);
@@ -338,6 +338,7 @@ namespace PlayerTrack
 				_currentPlayer.Icon = 0;
 				_currentPlayer.Color = null;
 				_currentPlayer.Notes = string.Empty;
+				_currentPlayer.Alert.State = TrackAlertState.NotSet;
 				_currentPlayer.CategoryId = _playerTrackPlugin.GetCategoryService().GetDefaultCategory().Id;
 				_playerTrackPlugin.GetCategoryService().SetPlayerPriority();
 				_currentModal = Modal.None;
@@ -474,6 +475,21 @@ namespace PlayerTrack
 				if (ImGui.ColorPicker4("###PlayerTracker_PlayerColor_ColorPicker", ref color)) player.Color = color;
 				PlayerPalette(player);
 				ImGui.EndPopup();
+			}
+
+			ImGui.Spacing();
+			ImGui.Text(Loc.Localize("PlayerAlerts", "Alerts"));
+			bool enableAlerts;
+			if (player.Alert.State == TrackAlertState.NotSet)
+				enableAlerts = category.EnableAlerts;
+			else
+				enableAlerts = player.Alert.State == TrackAlertState.Enabled;
+			if (ImGui.Checkbox(
+				Loc.Localize("EnablePlayerAlerts", "Enabled") + "###PlayerTrack_PlayerAlerts_Checkbox",
+				ref enableAlerts))
+			{
+				player.Alert.State = enableAlerts ? TrackAlertState.Enabled : TrackAlertState.Disabled;
+				_playerTrackPlugin.SaveConfig();
 			}
 		}
 

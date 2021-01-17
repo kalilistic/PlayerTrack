@@ -114,6 +114,7 @@
     <Compile Include="Model\TrackLodestoneRequest.cs" />
     <Compile Include="Model\TrackLodestoneResponse.cs" />
     <Compile Include="Model\TrackLodestoneLocale.cs" />
+    <Compile Include="Model\TrackAlertState.cs" />
     <Compile Include="Model\TrackLodestoneStatus.cs" />
     <Compile Include="Model\TrackPlayerMode.cs" />
     <Compile Include="Model\TrackMetaData.cs" />
