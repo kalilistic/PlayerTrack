@@ -337,6 +337,7 @@ namespace PlayerTrack
 			{
 				_currentPlayer.Icon = 0;
 				_currentPlayer.Color = null;
+				_currentPlayer.Notes = string.Empty;
 				_currentPlayer.CategoryId = _playerTrackPlugin.GetCategoryService().GetDefaultCategory().Id;
 				_playerTrackPlugin.GetCategoryService().SetPlayerPriority();
 				_currentModal = Modal.None;
