@@ -510,8 +510,7 @@ namespace PlayerTrack
 			ImGui.Spacing();
 			ImGui.BeginChild("###PlayerTrack_Encounters_Widget",
 				new Vector2(ImGui.GetWindowSize().X - 10f * Scale, 130f * Scale),
-				false,
-				ImGuiWindowFlags.AlwaysVerticalScrollbar);
+				false);
 			ImGui.TextColored(UIColor.Violet, Loc.Localize("Encounters", "Encounters"));
 
 			if (_currentPlayer.GetEncounterCount() > 0)
