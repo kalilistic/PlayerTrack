@@ -20,13 +20,13 @@ namespace PlayerTrack
 	public sealed class PlayerTrackPlugin : PluginBase, IPlayerTrackPlugin
 	{
 		private DataManager _dataManager;
+		private bool _inContent;
 		private bool _isProcessing = true;
 		private Timer _onSaveTimer;
 		private Timer _onSettingsTimer;
 		private Timer _onUpdateTimer;
 		private DalamudPluginInterface _pluginInterface;
 		private PluginUI _pluginUI;
-		private bool _inContent;
 
 		public PlayerTrackPlugin(string pluginName, DalamudPluginInterface pluginInterface) : base(pluginName,
 			pluginInterface)
@@ -117,6 +117,11 @@ namespace PlayerTrack
 		public bool InContent()
 		{
 			return _inContent;
+		}
+
+		public string[] GetWorldNames()
+		{
+			return GetWorldNames(GetDataCenterId()).ToArray();
 		}
 
 		public new void Dispose()

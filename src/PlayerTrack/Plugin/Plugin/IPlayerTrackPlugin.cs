@@ -25,11 +25,11 @@ namespace PlayerTrack
 		LodestoneService GetLodestoneService();
 		uint? GetWorldId(string worldName);
 		bool IsLoggedIn();
-		List<string> GetWorldNames();
 		bool IsValidCharacterName(string name);
 		string[] GetContentNames();
 		uint[] GetContentIds();
 		CategoryService GetCategoryService();
 		bool InContent();
+		string[] GetWorldNames();
 	}
 }

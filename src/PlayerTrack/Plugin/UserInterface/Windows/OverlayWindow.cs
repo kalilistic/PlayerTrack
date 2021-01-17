@@ -142,8 +142,8 @@ namespace PlayerTrack
 				ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale);
 				var worldNames = _playerTrackPlugin.GetWorldNames();
 				if (ImGui.Combo("###PlayerTrack_PlayerAdd_Combo", ref _selectedWorld,
-					worldNames.ToArray(),
-					worldNames.Count))
+					worldNames,
+					worldNames.Length))
 
 					ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale / 1.3f);
 				ImGui.InputTextWithHint("###PlayerTrack_PlayerNameAdd_Input",
