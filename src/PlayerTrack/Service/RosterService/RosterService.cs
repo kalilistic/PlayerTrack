@@ -86,7 +86,9 @@ namespace PlayerTrack
 
 		public void DeletePlayer(string key)
 		{
+			_playerTrackPlugin.LogInfo("Attempting to delete player: " + key);
 			_deletePlayerRequests.Enqueue(key);
+			_playerTrackPlugin.LogInfo("Player put in delete queue: " + key);
 		}
 
 		public void ChangeSelectedPlayer(string key)
@@ -194,6 +196,7 @@ namespace PlayerTrack
 
 		public void AddPlayer(string name, string worldName)
 		{
+			_playerTrackPlugin.LogInfo("Attempting to add player: " + name + " / " + worldName);
 			var currentTime = DateUtil.CurrentTime();
 			var newPlayer = new TrackPlayer
 			{
@@ -231,6 +234,7 @@ namespace PlayerTrack
 				}
 			};
 			_addPlayerRequests.Enqueue(newPlayer);
+			_playerTrackPlugin.LogInfo("Player put in add queue: " + name + " / " + worldName);
 		}
 
 		public void ProcessRequests()
@@ -308,20 +312,34 @@ namespace PlayerTrack
 		private void ProcessDeleteRequests()
 		{
 			while (_deletePlayerRequests.Count > 0)
-			{
-				var playerKey = _deletePlayerRequests.Dequeue();
-				All.DeletePlayer(playerKey);
-			}
+				try
+				{
+					var playerKey = _deletePlayerRequests.Dequeue();
+					_playerTrackPlugin.LogInfo("Trying to delete: " + playerKey);
+					All.DeletePlayer(playerKey);
+					_playerTrackPlugin.LogInfo("Player successfully deleted: " + playerKey);
+				}
+				catch (Exception ex)
+				{
+					_playerTrackPlugin.LogError(ex, "Failed to delete player!");
+				}
 		}
 
 		private void ProcessAddRequests()
 		{
 			while (_addPlayerRequests.Count > 0)
-			{
-				var player = _addPlayerRequests.Dequeue();
-				All.AddPlayer(player);
-				SubmitLodestoneRequest(player);
-			}
+				try
+				{
+					var player = _addPlayerRequests.Dequeue();
+					_playerTrackPlugin.LogInfo("Trying to create: " + player.Name);
+					All.AddPlayer(player);
+					_playerTrackPlugin.LogInfo("Player successfully created: " + player.Name);
+					SubmitLodestoneRequest(player);
+				}
+				catch (Exception ex)
+				{
+					_playerTrackPlugin.LogError(ex, "Failed to add player!");
+				}
 		}
 
 		private void InitRoster()
