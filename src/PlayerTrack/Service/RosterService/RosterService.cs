@@ -141,10 +141,17 @@ namespace PlayerTrack
 
 		public TrackCategory GetCategory(string playerKey)
 		{
-			var player = All.GetPlayer(playerKey);
-			return player.CategoryId == 0
-				? _playerTrackPlugin.GetCategoryService().GetDefaultCategory()
-				: _playerTrackPlugin.GetCategoryService().GetCategory(player.CategoryId);
+			try
+			{
+				var player = All.GetPlayer(playerKey);
+				return player.CategoryId == 0
+					? _playerTrackPlugin.GetCategoryService().GetDefaultCategory()
+					: _playerTrackPlugin.GetCategoryService().GetCategory(player.CategoryId);
+			}
+			catch
+			{
+				return null;
+			}
 		}
 
 		public void SendAlerts()

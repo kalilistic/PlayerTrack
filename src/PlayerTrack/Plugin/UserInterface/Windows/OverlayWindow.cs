@@ -55,11 +55,14 @@ namespace PlayerTrack
 					case Modal.Lodestone:
 						LodestoneModal();
 						break;
-					case Modal.Reset:
-						ResetModal();
+					case Modal.ResetConfirmation:
+						ResetConfirmationModal();
 						break;
-					case Modal.Delete:
-						DeleteModal();
+					case Modal.DeleteConfirmation:
+						DeleteConfirmationModal();
+						break;
+					case Modal.DeleteComplete:
+						DeleteCompleteModal();
 						break;
 					case Modal.InvalidCharacterName:
 						InvalidCharacterNameModal();
@@ -257,13 +260,13 @@ namespace PlayerTrack
 				_currentView = View.Players;
 			ImGui.SameLine();
 
-			if (ImGui.SmallButton(Loc.Localize("Delete", "Delete") + "###PlayerTrack_Delete_Button"))
-				_currentModal = Modal.Delete;
+			if (ImGui.SmallButton(Loc.Localize("DeleteConfirmation", "Delete") + "###PlayerTrack_Delete_Button"))
+				_currentModal = Modal.DeleteConfirmation;
 
 			ImGui.SameLine();
 
-			if (ImGui.SmallButton(Loc.Localize("Reset", "Reset") + "###PlayerTracker_DetailsReset_Button"))
-				_currentModal = Modal.Reset;
+			if (ImGui.SmallButton(Loc.Localize("ResetConfirmation", "Reset") + "###PlayerTracker_DetailsReset_Button"))
+				_currentModal = Modal.ResetConfirmation;
 
 			ImGui.SameLine();
 
@@ -320,15 +323,17 @@ namespace PlayerTrack
 			ImGui.End();
 		}
 
-		private void ResetModal()
+		private void ResetConfirmationModal()
 		{
 			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
 				ImGuiCond.Appearing);
-			ImGui.Begin(Loc.Localize("ResetModalTitle", "Reset Confirmation") + "###PlayerTracker_ResetModal_Window",
+			ImGui.Begin(
+				Loc.Localize("ResetConfirmationModalTitle", "ResetConfirmation Confirmation") +
+				"###PlayerTracker_ResetConfirmationModal_Window",
 				ImGuiUtil.ModalWindowFlags());
-			ImGui.Text(Loc.Localize("ResetModalContent", "Are you sure you want to reset?"));
+			ImGui.Text(Loc.Localize("ResetConfirmationModalContent", "Are you sure you want to reset?"));
 			ImGui.Spacing();
-			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_ResetModalOK_Button"))
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_ResetConfirmationModalOK_Button"))
 			{
 				_currentPlayer.Icon = 0;
 				_currentPlayer.Color = null;
@@ -338,28 +343,48 @@ namespace PlayerTrack
 			}
 
 			ImGui.SameLine();
-			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") + "###PlayerTracker_ResetModalCancel_Button"))
+			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") + "###PlayerTracker_ResetConfirmationModalCancel_Button"))
 				_currentModal = Modal.None;
 			ImGui.End();
 		}
 
-		private void DeleteModal()
+		private void DeleteCompleteModal()
 		{
 			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
 				ImGuiCond.Appearing);
-			ImGui.Begin(Loc.Localize("DeleteModalTitle", "Delete Confirmation") + "###PlayerTracker_DeleteModal_Window",
+			ImGui.Begin(
+				Loc.Localize("DeleteCompleteModalTitle", "Delete Complete") +
+				"###PlayerTracker_DeleteCompleteModal_Window",
 				ImGuiUtil.ModalWindowFlags());
-			ImGui.Text(Loc.Localize("DeleteModalContent", "Are you sure you want to delete?"));
+			ImGui.Text(Loc.Localize("DeleteCompleteContent1",
+				"Character has been deleted and will be removed from your list shortly."));
+			ImGui.Text(Loc.Localize("DeleteCompleteContent2",
+				"The next time you encounter this character they'll be added back."));
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_DeleteCompleteModal_Button"))
+				_currentModal = Modal.None;
+			ImGui.End();
+		}
+
+		private void DeleteConfirmationModal()
+		{
+			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
+				ImGuiCond.Appearing);
+			ImGui.Begin(
+				Loc.Localize("DeleteConfirmationModalTitle", "Delete Confirmation") +
+				"###PlayerTracker_DeleteConfirmationModal_Window",
+				ImGuiUtil.ModalWindowFlags());
+			ImGui.Text(Loc.Localize("DeleteConfirmationModalContent", "Are you sure you want to delete?"));
 			ImGui.Spacing();
-			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_DeleteModalOK_Button"))
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_DeleteConfirmationModalOK_Button"))
 			{
 				_playerTrackPlugin.RosterService.DeletePlayer(_currentPlayer.Key);
 				_currentView = View.Players;
-				_currentModal = Modal.None;
+				_currentModal = Modal.DeleteComplete;
 			}
 
 			ImGui.SameLine();
-			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") + "###PlayerTracker_DeleteModalCancel_Button"))
+			if (ImGui.Button(Loc.Localize("Cancel", "Cancel") +
+			                 "###PlayerTracker_DeleteConfirmationModalCancel_Button"))
 				_currentModal = Modal.None;
 			ImGui.End();
 		}
@@ -400,7 +425,9 @@ namespace PlayerTrack
 			ImGui.Spacing();
 			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerDisplay", "Display Options"));
 			var categoryNames = _playerTrackPlugin.GetCategoryService().GetCategoryNames();
-			var categoryIndex = _playerTrackPlugin.GetCategoryService().GetCategoryIndex(category.Name);
+			var categoryIndexLookup = _playerTrackPlugin.GetCategoryService()?.GetCategoryIndex(category?.Name);
+			if (categoryIndexLookup == null) return;
+			var categoryIndex = (int) categoryIndexLookup;
 			ImGui.Text(Loc.Localize("PlayerCategory", "Category"));
 			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 3);
 			if (ImGui.Combo("###PlayerTrack_PlayerCategory_Combo", ref categoryIndex,
@@ -420,6 +447,7 @@ namespace PlayerTrack
 			var codesList = new List<int> {0};
 			codesList.AddRange(_playerTrackPlugin.Configuration.EnabledIcons.ToList().Select(icon => (int) icon));
 			var codes = codesList.ToArray();
+			if (category?.Icon == null) return;
 			var iconIndex = Array.IndexOf(codes, player.Icon != 0 ? player.Icon : category.Icon);
 			ImGui.Spacing();
 
@@ -534,8 +562,9 @@ namespace PlayerTrack
 		{
 			None,
 			Lodestone,
-			Reset,
-			Delete,
+			ResetConfirmation,
+			DeleteConfirmation,
+			DeleteComplete,
 			InvalidCharacterName,
 			DuplicateCharacter
 		}
