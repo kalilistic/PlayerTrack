@@ -392,6 +392,7 @@ namespace PlayerTrack
 			Configuration.FreshInstall = false;
 			SetDefaultIcons();
 			SaveConfig();
+			_pluginUI.SettingsWindow.IsVisible = true;
 		}
 
 		private void DrawUI()

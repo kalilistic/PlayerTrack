@@ -30,7 +30,7 @@ namespace PlayerTrack
 		private void SetWindowVisibility()
 		{
 			OverlayWindow.IsVisible = PlayerTrackPlugin.Configuration.ShowOverlay;
-			SettingsWindow.IsVisible = true;
+			SettingsWindow.IsVisible = false;
 		}
 
 		private void AddEventHandlers()
