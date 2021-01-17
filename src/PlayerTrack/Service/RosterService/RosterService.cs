@@ -47,6 +47,7 @@ namespace PlayerTrack
 				if (All.IsNewPlayer(player.Key))
 				{
 					All.AddPlayer(player);
+					SubmitLodestoneRequest(player);
 				}
 				else
 				{
@@ -58,7 +59,6 @@ namespace PlayerTrack
 				}
 
 				var currentPlayer = All.GetPlayer(player.Key);
-				SubmitLodestoneRequest(currentPlayer);
 				currentPlayer.ClearBackingFields();
 				try
 				{
@@ -241,7 +241,7 @@ namespace PlayerTrack
 			if (!_playerTrackPlugin.Configuration.SyncToLodestone) return;
 			if (player.Lodestone.Status == TrackLodestoneStatus.Unverified)
 			{
-				_playerTrackPlugin.GetLodestoneService().AddIdRequest(new TrackLodestoneRequest
+				_playerTrackPlugin.GetLodestoneService().AddRequest(new TrackLodestoneRequest
 				{
 					PlayerKey = player.Key,
 					PlayerName = player.Name,
@@ -253,7 +253,7 @@ namespace PlayerTrack
 
 		private void ProcessLodestoneRequests()
 		{
-			var responses = _playerTrackPlugin.GetLodestoneService().GetVerificationResponses();
+			var responses = _playerTrackPlugin.GetLodestoneService().GetResponses();
 			foreach (var response in responses)
 			{
 				var player = All.GetPlayer(response.PlayerKey);
@@ -301,6 +301,7 @@ namespace PlayerTrack
 			{
 				var player = _addPlayerRequests.Dequeue();
 				All.AddPlayer(player);
+				SubmitLodestoneRequest(player);
 			}
 		}
 

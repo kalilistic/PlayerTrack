@@ -56,10 +56,10 @@ namespace PlayerTrack
 						LodestoneModal();
 						break;
 					case Modal.Reset:
-						ResetModal(_currentPlayer);
+						ResetModal();
 						break;
 					case Modal.Delete:
-						DeleteModal(_currentPlayer);
+						DeleteModal();
 						break;
 					case Modal.InvalidCharacterName:
 						InvalidCharacterNameModal();
@@ -320,7 +320,7 @@ namespace PlayerTrack
 			ImGui.End();
 		}
 
-		private void ResetModal(TrackPlayer player)
+		private void ResetModal()
 		{
 			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
 				ImGuiCond.Appearing);
@@ -330,9 +330,9 @@ namespace PlayerTrack
 			ImGui.Spacing();
 			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTracker_ResetModalOK_Button"))
 			{
-				player.Icon = 0;
-				player.Color = null;
-				player.CategoryId = _playerTrackPlugin.GetCategoryService().GetDefaultCategory().Id;
+				_currentPlayer.Icon = 0;
+				_currentPlayer.Color = null;
+				_currentPlayer.CategoryId = _playerTrackPlugin.GetCategoryService().GetDefaultCategory().Id;
 				_playerTrackPlugin.GetCategoryService().SetPlayerPriority();
 				_currentModal = Modal.None;
 			}
@@ -343,7 +343,7 @@ namespace PlayerTrack
 			ImGui.End();
 		}
 
-		private void DeleteModal(TrackPlayer player)
+		private void DeleteModal()
 		{
 			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
 				ImGuiCond.Appearing);

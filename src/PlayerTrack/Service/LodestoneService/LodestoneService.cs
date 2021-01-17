@@ -34,18 +34,17 @@ namespace PlayerTrack
 			};
 			_onRequestTimer = new Timer
 				{Interval = 15000, Enabled = true};
-			_onRequestTimer.Elapsed += ProcessRequest;
+			_onRequestTimer.Elapsed += ProcessRequests;
 		}
 
-		public List<TrackLodestoneResponse> GetVerificationResponses()
+		public List<TrackLodestoneResponse> GetResponses()
 		{
 			var responses = new List<TrackLodestoneResponse>();
 			while (_responses.Count > 0) responses.Add(_responses.Dequeue());
-
 			return responses;
 		}
 
-		public void AddIdRequest(TrackLodestoneRequest request)
+		public void AddRequest(TrackLodestoneRequest request)
 		{
 			try
 			{
@@ -60,12 +59,12 @@ namespace PlayerTrack
 
 		public void Dispose()
 		{
-			_onRequestTimer.Elapsed -= ProcessRequest;
+			_onRequestTimer.Elapsed -= ProcessRequests;
 			_onRequestTimer.Stop();
 			_httpClient.Dispose();
 		}
 
-		private void ProcessIdRequest()
+		private void ProcessRequest()
 		{
 			var request = _requests.Peek();
 			var requestCount = 0;
@@ -103,13 +102,13 @@ namespace PlayerTrack
 			}
 		}
 
-		private void ProcessRequest(object source, ElapsedEventArgs e)
+		private void ProcessRequests(object source, ElapsedEventArgs e)
 		{
 			if (_isProcessing) return;
 			_isProcessing = true;
 			while (_requests.Count > 0 && DateTime.UtcNow > _lodestoneCooldown)
 			{
-				ProcessIdRequest();
+				ProcessRequest();
 				Thread.Sleep(_playerTrackPlugin.Configuration.LodestoneRequestDelay);
 			}
 
