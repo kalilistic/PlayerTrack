@@ -10,17 +10,7 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
-		public List<TrackLodestoneResponse> GetUpdateResponses()
-		{
-			throw new NotImplementedException();
-		}
-
 		public void AddRequest(TrackLodestoneRequest request)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddUpdateRequest(TrackLodestoneRequest request)
 		{
 			throw new NotImplementedException();
 		}

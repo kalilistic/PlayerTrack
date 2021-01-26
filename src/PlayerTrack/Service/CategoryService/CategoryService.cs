@@ -12,185 +12,268 @@ namespace PlayerTrack
 {
 	public class CategoryService : ICategoryService
 	{
-		private readonly Queue<KeyValuePair<int, CategoryModification>> _categoryModification =
-			new Queue<KeyValuePair<int, CategoryModification>>();
-
+		private readonly object _categoryLock = new object();
 		private readonly JsonSerializerSettings _jsonSerializerSettings;
-		private readonly IPlayerTrackPlugin _playerTrackPlugin;
+		private readonly IPlayerTrackPlugin _plugin;
 
-		public List<TrackCategory> Categories;
+		private List<TrackCategory> _categories;
+		public List<int> CategoryIds;
 
-		public CategoryService(IPlayerTrackPlugin playerTrackPlugin)
+		public List<KeyValuePair<int, int>> CategoryPriorities;
+
+		public CategoryService(IPlayerTrackPlugin plugin)
 		{
-			_playerTrackPlugin = playerTrackPlugin;
+			_plugin = plugin;
 			_jsonSerializerSettings = SerializerUtil.CamelCaseJsonSerializer();
 			InitCategories();
 			LoadCategories();
-			ClearDeletedCategories(Categories);
-			SetPlayerPriority();
-		}
-
-		public void ClearDeletedCategories(List<TrackCategory> categories)
-		{
-			try
-			{
-				var categoryIds = categories.Select(category => category.Id).ToList();
-				foreach (var player in _playerTrackPlugin.RosterService.All.Roster)
-					if (player.Value.CategoryId != 0 && !categoryIds.Contains(player.Value.CategoryId))
-						player.Value.CategoryId = 0;
-			}
-			catch (Exception ex)
-			{
-				_playerTrackPlugin.LogError(ex, "Failed to clear deleted categories.");
-			}
+			BuildCategoryLists();
 		}
 
 		public TrackCategory GetCategory(int categoryId)
 		{
-			return Categories.FirstOrDefault(category => category.Id == categoryId);
-		}
-
-		public int GetCategoryIndex(string categoryName)
-		{
-			var categoryIndex = Array.IndexOf(GetCategoryNames(), categoryName);
-			if (categoryIndex == -1)
-				for (var i = 0; i < Categories.Count; i++)
-					if (Categories[i].IsDefault)
-						return i;
-			return categoryIndex;
+			try
+			{
+				var categories = GetCategoriesCopy();
+				return categories.FirstOrDefault(category => category.Id == categoryId);
+			}
+			catch (Exception ex)
+			{
+				_plugin.LogError(ex, "Failed to get category: " + categoryId);
+				return null;
+			}
 		}
 
 		public TrackCategory GetDefaultCategory()
 		{
-			return Categories.First(category => category.IsDefault);
+			try
+			{
+				var categories = GetCategoriesCopy();
+				return categories.First(category => category.IsDefault);
+			}
+			catch (Exception ex)
+			{
+				_plugin.LogError(ex, "Failed to get default category");
+				return null;
+			}
 		}
 
 		public string[] GetCategoryNames()
 		{
-			return Categories.Select(category => category.Name).ToArray();
-		}
-
-		public void MoveUpList(int id)
-		{
-			_categoryModification.Enqueue(
-				new KeyValuePair<int, CategoryModification>(id, CategoryModification.MoveUpCategory));
-		}
-
-		public void ProcessCategoryModifications()
-		{
-			var modifiedCategory = false;
-			while (_categoryModification.Count > 0)
-			{
-				modifiedCategory = true;
-				var categoryMod = _categoryModification.Dequeue();
-				if (categoryMod.Value == CategoryModification.MoveUpCategory)
-				{
-					var category = Categories.FirstOrDefault(trackCategory => trackCategory.Id == categoryMod.Key);
-					if (category == null) return;
-					var categoryIndex = Categories.IndexOf(category);
-					var tradeCategoryIndex = categoryIndex - 1;
-					var tradeCategory = Categories[tradeCategoryIndex];
-					Categories[tradeCategoryIndex] = category;
-					Categories[categoryIndex] = tradeCategory;
-				}
-				else if (categoryMod.Value == CategoryModification.MoveDownCategory)
-				{
-					var category = Categories.FirstOrDefault(trackCategory => trackCategory.Id == categoryMod.Key);
-					if (category == null) return;
-					var categoryIndex = Categories.IndexOf(category);
-					var tradeCategoryIndex = categoryIndex + 1;
-					var tradeCategory = Categories[tradeCategoryIndex];
-					Categories[tradeCategoryIndex] = category;
-					Categories[categoryIndex] = tradeCategory;
-				}
-				else if (categoryMod.Value == CategoryModification.AddCategory)
-				{
-					Categories.Insert(0, new TrackCategory
-					{
-						Id = Categories.Max(category => category.Id) + 1,
-						Name = "New Category",
-						Color = UIColor.White
-					});
-				}
-				else if (categoryMod.Value == CategoryModification.DeleteCategory)
-				{
-					_playerTrackPlugin.GetCategoryService().Categories.RemoveAt(categoryMod.Key);
-					ClearDeletedCategories(Categories);
-				}
-			}
-
-			if (modifiedCategory)
-			{
-				SetPlayerPriority();
-				SaveCategories();
-			}
-		}
-
-		public void SetPlayerPriority()
-		{
 			try
 			{
-				var categoryPriorities = Categories.Select((t, i) => new KeyValuePair<int, int>(t.Id, i + 1)).ToList();
-				foreach (var player in _playerTrackPlugin.RosterService.All.Roster.ToList())
-					player.Value.Priority = categoryPriorities
-						.FirstOrDefault(pair => pair.Key == player.Value.CategoryId).Value;
+				var categories = GetCategoriesCopy();
+				return categories.Select(category => category.Name).ToArray();
 			}
 			catch (Exception ex)
 			{
-				_playerTrackPlugin.LogError(ex, "Failed to set priority");
+				_plugin.LogError(ex, "Failed to get category names");
+				return null;
 			}
 		}
 
 		public void MoveDownList(int id)
 		{
-			_categoryModification.Enqueue(
-				new KeyValuePair<int, CategoryModification>(id, CategoryModification.MoveDownCategory));
+			try
+			{
+				var categories = GetCategoriesCopy();
+				var category = categories.FirstOrDefault(trackCategory => trackCategory.Id == id);
+				if (category == null) return;
+				var categoryIndex = categories.IndexOf(category);
+				if (categoryIndex == -1) return;
+				var tradeCategoryIndex = categoryIndex + 1;
+				if (tradeCategoryIndex >= categories.Count || tradeCategoryIndex == -1) return;
+				var tradeCategory = categories[tradeCategoryIndex];
+				categories[tradeCategoryIndex] = category;
+				categories[categoryIndex] = tradeCategory;
+				UpdateCategories(categories);
+			}
+			catch (Exception ex)
+			{
+				_plugin.LogError(ex, "Failed move category down list for categoryId " + id);
+			}
+		}
+
+		public void MoveUpList(int id)
+		{
+			try
+			{
+				var categories = GetCategoriesCopy();
+				var category = categories.FirstOrDefault(trackCategory => trackCategory.Id == id);
+				if (category == null) return;
+				var categoryIndex = categories.IndexOf(category);
+				if (categoryIndex == -1) return;
+				var tradeCategoryIndex = categoryIndex - 1;
+				if (tradeCategoryIndex >= categories.Count || tradeCategoryIndex == -1) return;
+				var tradeCategory = categories[tradeCategoryIndex];
+				categories[tradeCategoryIndex] = category;
+				categories[categoryIndex] = tradeCategory;
+				UpdateCategories(categories);
+			}
+			catch (Exception ex)
+			{
+				_plugin.LogError(ex, "Failed move category up list for categoryId " + id);
+			}
 		}
 
 		public void AddCategory()
 		{
-			_categoryModification.Enqueue(
-				new KeyValuePair<int, CategoryModification>(0, CategoryModification.AddCategory));
+			var categories = GetCategoriesCopy();
+			categories.Insert(0, new TrackCategory
+			{
+				Id = categories.Max(category => category.Id) + 1,
+				Name = "New Category",
+				Color = UIColor.White
+			});
+			UpdateCategories(categories);
 		}
 
-		public void DeleteCategory(int index)
-		{
-			_categoryModification.Enqueue(
-				new KeyValuePair<int, CategoryModification>(index, CategoryModification.DeleteCategory));
-		}
-
-		public void SaveCategories()
+		public void DeleteCategory(int id)
 		{
 			try
 			{
-				var data = JsonConvert.SerializeObject(Categories, _jsonSerializerSettings);
-				_playerTrackPlugin.GetDataManager().SaveData("categories.dat", data);
+				var categories = GetCategoriesCopy();
+				var category = categories.FirstOrDefault(trackCategory => trackCategory.Id == id);
+				if (category == null) return;
+				if (category.IsDefault) return;
+				var categoryIndex = categories.IndexOf(category);
+				if (categoryIndex == -1) return;
+				categories.RemoveAt(categoryIndex);
+				UpdateCategories(categories);
 			}
 			catch (Exception ex)
 			{
-				_playerTrackPlugin.LogError(ex, "Failed to save player data - will try again soon.");
+				_plugin.LogError(ex, "Failed to delete categoryId " + id);
 			}
 		}
 
 		public void ResetCategories()
 		{
-			ClearDeletedCategories(GetDefaultCategories());
-			Categories = GetDefaultCategories();
-			var defaultCategory = Categories.First(category => category.IsDefault);
-			defaultCategory.Color = new Vector4(255, 255, 255, 1);
+			var defaultCategories = GetDefaultCategories();
+			UpdateCategories(defaultCategories);
+			_plugin.SaveConfig();
+		}
+
+		public List<TrackCategory> GetCategoriesCopy()
+		{
+			lock (_categoryLock)
+			{
+				return _categories.Select(category => category.Copy()).ToList();
+			}
+		}
+
+		public int GetCategoryId(int categoryIndex)
+		{
+			try
+			{
+				return _categories[categoryIndex].Id;
+			}
+			catch
+			{
+				return 0;
+			}
+		}
+
+		public int GetCategoryIndex(int categoryId)
+		{
+			try
+			{
+				var categoryName = _categories.FirstOrDefault(category => category.Id == categoryId)?.Name;
+				return categoryName == null ? 0 : GetCategoryIndex(categoryName);
+			}
+			catch
+			{
+				return 0;
+			}
+		}
+
+		public int GetCategoryIndex(string categoryName)
+		{
+			try
+			{
+				var categoryIndex = Array.IndexOf(GetCategoryNames(), categoryName);
+				if (categoryIndex == -1)
+					for (var i = 0; i < _categories.Count; i++)
+						if (_categories[i].IsDefault)
+							return i;
+				return categoryIndex;
+			}
+			catch
+			{
+				return 0;
+			}
+		}
+
+		public void BuildCategoryLists()
+		{
+			var categories = GetCategoriesCopy();
+			CategoryPriorities = categories.Select((t, i) => new KeyValuePair<int, int>(t.Id, i + 1)).ToList();
+			CategoryIds = categories.Select(category => category.Id).ToList();
+		}
+
+		private void UpdateCategories(List<TrackCategory> categories)
+		{
+			lock (_categoryLock)
+			{
+				_categories = categories;
+			}
+
 			SaveCategories();
-			_playerTrackPlugin.SaveConfig();
+			BuildCategoryLists();
+			CategoriesUpdated?.Invoke(this, true);
+		}
+
+		public int GetDefaultIcon()
+		{
+			var defaultIcon = GetDefaultCategory().Icon;
+			return defaultIcon == 0 ? FontAwesomeIcon.User.ToIconChar() : defaultIcon;
+		}
+
+		public event EventHandler<bool> CategoriesUpdated;
+
+		public void Dispose()
+		{
+			SaveCategories();
+		}
+
+		public void UpdateCategory(TrackCategory category)
+		{
+			if (category == null) return;
+			var categories = GetCategoriesCopy();
+			var currentCategory = categories.FirstOrDefault(trackCategory => category.Id == trackCategory.Id);
+			if (currentCategory == null) return;
+			currentCategory.Name = category.Name;
+			currentCategory.IsDefault = category.IsDefault;
+			currentCategory.Icon = category.Icon;
+			currentCategory.Color = category.Color;
+			currentCategory.EnableAlerts = category.EnableAlerts;
+			_categories = categories;
+			UpdateCategories(categories);
+		}
+
+		private void SaveCategories()
+		{
+			try
+			{
+				var categories = GetCategoriesCopy();
+				var data = JsonConvert.SerializeObject(categories, _jsonSerializerSettings);
+				_plugin.DataManager.SaveData("categories.dat", data);
+			}
+			catch (Exception ex)
+			{
+				_plugin.LogError(ex, "Failed to save player data - will try again soon.");
+			}
 		}
 
 		private void InitCategories()
 		{
 			try
 			{
-				_playerTrackPlugin.GetDataManager().InitDataFiles(new[] {"categories.dat"});
+				_plugin.DataManager.InitDataFiles(new[] {"categories.dat"});
 			}
 			catch
 			{
-				_playerTrackPlugin.LogInfo("Failed to properly initialize but probably will be fine.");
+				_plugin.LogInfo("Failed to properly initialize but probably will be fine.");
 			}
 		}
 
@@ -198,15 +281,15 @@ namespace PlayerTrack
 		{
 			try
 			{
-				var data = _playerTrackPlugin.GetDataManager().ReadData("categories.dat");
-				Categories =
-					JsonConvert.DeserializeObject<List<TrackCategory>>(data, _jsonSerializerSettings);
-				if (Categories == null || Categories.Count == 0) Categories = GetDefaultCategories();
+				var data = _plugin.DataManager.ReadData("categories.dat");
+				var categories = JsonConvert.DeserializeObject<List<TrackCategory>>(data, _jsonSerializerSettings);
+				if (categories == null || categories.Count == 0) categories = GetDefaultCategories();
+				_categories = categories;
 			}
 			catch
 			{
-				_playerTrackPlugin.LogInfo("Can't load category data so starting fresh.");
-				Categories = GetDefaultCategories();
+				_plugin.LogInfo("Can't load category data so starting fresh.");
+				_categories = GetDefaultCategories();
 			}
 		}
 
@@ -229,14 +312,6 @@ namespace PlayerTrack
 					Color = new Vector4(255, 255, 255, 1)
 				}
 			};
-		}
-
-		private enum CategoryModification
-		{
-			AddCategory,
-			DeleteCategory,
-			MoveUpCategory,
-			MoveDownCategory
 		}
 	}
 }

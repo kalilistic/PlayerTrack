@@ -8,13 +8,13 @@ namespace PlayerTrack
 {
 	public class Plugin : IDalamudPlugin
 	{
-		private PlayerTrackPlugin _playerTrackPlugin;
+		private PlayerTrackPlugin _plugin;
 
 		public string Name => "PlayerTrack";
 
 		public void Initialize(DalamudPluginInterface pluginInterface)
 		{
-			_playerTrackPlugin = new PlayerTrackPlugin(Name, pluginInterface);
+			_plugin = new PlayerTrackPlugin(Name, pluginInterface);
 		}
 
 		public void Dispose()
@@ -26,7 +26,7 @@ namespace PlayerTrack
 		protected virtual void Dispose(bool disposing)
 		{
 			if (!disposing) return;
-			_playerTrackPlugin.Dispose();
+			_plugin.Dispose();
 		}
 	}
 }

@@ -13,5 +13,18 @@ namespace PlayerTrack
 		[JsonProperty] public Vector4 Color { get; set; }
 		[JsonProperty] [DefaultValue(false)] public bool EnableAlerts { get; set; }
 		[JsonProperty] [DefaultValue(false)] public bool IsDefault { get; set; }
+
+		public TrackCategory Copy()
+		{
+			return new TrackCategory
+			{
+				Id = Id,
+				Name = Name,
+				Icon = Icon,
+				Color = Color,
+				EnableAlerts = EnableAlerts,
+				IsDefault = IsDefault
+			};
+		}
 	}
 }

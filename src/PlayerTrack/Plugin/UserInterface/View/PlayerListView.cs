@@ -1,0 +1,198 @@
+﻿// ReSharper disable InvertIf
+// ReSharper disable ConvertIfStatementToReturnStatement
+// ReSharper disable InconsistentNaming
+// ReSharper disable SuggestBaseTypeForParameter
+// ReSharper disable MemberCanBeMadeStatic.Local
+// ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
+
+using System.Collections.Generic;
+using System.Numerics;
+using CheapLoc;
+using Dalamud.Interface;
+using ImGuiNET;
+
+namespace PlayerTrack
+{
+	public class PlayerListView : WindowBase
+	{
+		public delegate void AddPlayerEventHandler(string playerName, string worldName);
+
+		public delegate void SearchEventHandler(string input);
+
+		public delegate void SelectPlayerEventHandler(string playerKey);
+
+		public delegate void ViewModeEventHandler(TrackViewMode trackViewMode);
+
+		public enum PlayerListModal
+		{
+			None,
+			InvalidCharacterName,
+			DuplicateCharacter,
+			AddCharacterSuccess
+		}
+
+		private string _addPlayerInput = string.Empty;
+		private string _searchInput = string.Empty;
+		private int _selectedWorld;
+		public PlayerListModal CurrentModal = PlayerListModal.None;
+		public List<TrackViewPlayer> Players;
+		public TrackViewMode TrackViewMode = TrackViewMode.CurrentPlayers;
+		public string[] WorldNames;
+		public event ViewModeEventHandler ViewModeChanged;
+		public event SearchEventHandler NewSearch;
+		public event AddPlayerEventHandler AddPlayer;
+		public event SelectPlayerEventHandler SelectPlayer;
+
+		public override void DrawView()
+		{
+			if (!IsVisible) return;
+			var isVisible = IsVisible;
+			ImGui.SetNextWindowSize(new Vector2(200 * Scale, 250 * Scale), ImGuiCond.Always);
+			if (ImGui.Begin(Loc.Localize("PlayerListView", "PlayerTrack") + "###PlayerTrack_PlayerList_View",
+				ref isVisible, ImGuiWindowFlags.NoResize))
+			{
+				IsVisible = isVisible;
+				SelectView();
+				PlayerSearchInput();
+				PlayerList();
+				PlayerAddInput();
+				OpenModals();
+			}
+
+			ImGui.End();
+		}
+
+		private void OpenModals()
+		{
+			switch (CurrentModal)
+			{
+				case PlayerListModal.None:
+					break;
+				case PlayerListModal.InvalidCharacterName:
+					InvalidCharacterNameModal();
+					break;
+				case PlayerListModal.DuplicateCharacter:
+					DuplicateCharacterModal();
+					break;
+				case PlayerListModal.AddCharacterSuccess:
+					AddCharacterSuccessModal();
+					break;
+			}
+		}
+
+		private void InvalidCharacterNameModal()
+		{
+			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
+				ImGuiCond.Appearing);
+			ImGui.Begin(
+				Loc.Localize("InvalidCharacterNameTitle", "Invalid Name") + "###PlayerTrack_InvalidCharacterName_Modal",
+				ImGuiUtil.ModalWindowFlags());
+			ImGui.Text(Loc.Localize("InvalidCharacterNameModalContent", "Invalid character name."));
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTrack_InvalidCharacterNameModal_Button"))
+				CurrentModal = PlayerListModal.None;
+			ImGui.End();
+		}
+
+		private void DuplicateCharacterModal()
+		{
+			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
+				ImGuiCond.Appearing);
+			ImGui.Begin(
+				Loc.Localize("DuplicateCharacterTitle", "Duplicate Player") + "###PlayerTrack_DuplicateCharacter_Modal",
+				ImGuiUtil.ModalWindowFlags());
+			ImGui.Text(Loc.Localize("DuplicateCharacterModalContent",
+				"There's already a player with that name/world."));
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTrack_DuplicateCharacterModal_Button"))
+				CurrentModal = PlayerListModal.None;
+			ImGui.End();
+		}
+
+		private void AddCharacterSuccessModal()
+		{
+			ImGui.SetNextWindowPos(new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f),
+				ImGuiCond.Appearing);
+			ImGui.Begin(
+				Loc.Localize("AddCharacterSuccessTitle", "Success") + "###PlayerTrack_AddCharacterSuccess_Modal",
+				ImGuiUtil.ModalWindowFlags());
+			ImGui.Text(Loc.Localize("AddCharacterSuccessModalContent", "Character added successfully."));
+			if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTrack_AddCharacterSuccessModal_Button"))
+			{
+				ViewModeChanged?.Invoke(TrackViewMode);
+				CurrentModal = PlayerListModal.None;
+				_selectedWorld = 0;
+				_addPlayerInput = string.Empty;
+			}
+
+			ImGui.End();
+		}
+
+		private void PlayerAddInput()
+		{
+			if (TrackViewMode.Code == TrackPlayerMode.AddPlayer.Code)
+			{
+				ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale);
+				if (ImGui.Combo("###PlayerTrack_PlayerAdd_Combo", ref _selectedWorld,
+					WorldNames,
+					WorldNames.Length))
+
+					ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale / 1.3f);
+				ImGui.InputTextWithHint("###PlayerTrack_PlayerNameAdd_Input",
+					Loc.Localize("PlayerNameAddHint", "player name"), ref _addPlayerInput, 30);
+
+				ImGui.SameLine();
+				if (ImGui.Button(Loc.Localize("PlayerAdd", "Add") + "###PlayerTrack_PlayerAdd_Button"))
+					AddPlayer?.Invoke(_addPlayerInput, WorldNames[_selectedWorld]);
+			}
+		}
+
+		private void PlayerSearchInput()
+		{
+			if (TrackViewMode.Code == TrackPlayerMode.SearchForPlayers.Code)
+			{
+				ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale / 1.5f);
+				ImGui.InputTextWithHint("###PlayerTrack_PlayerNameSearch_Input",
+					Loc.Localize("PlayerNameSearchHint", "player name"), ref _searchInput, 30);
+				ImGui.SameLine();
+				if (ImGui.Button(Loc.Localize("PlayerSearch", "Search") + "###PlayerTrack_PlayerSearch_Button"))
+					NewSearch?.Invoke(_searchInput);
+			}
+		}
+
+		private void SelectView()
+		{
+			var viewIndex = TrackViewMode.Index;
+			ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale);
+			if (ImGui.Combo("###PlayerTrack_ViewMode_Combo", ref viewIndex,
+				TrackPlayerMode.ViewNames.ToArray(),
+				TrackPlayerMode.ViewNames.Count))
+			{
+				TrackViewMode = TrackViewMode.GetViewModeByIndex(viewIndex);
+				ViewModeChanged?.Invoke(TrackViewMode);
+			}
+		}
+
+		private void PlayerList()
+		{
+			if (TrackViewMode == TrackViewMode.AddPlayer) return;
+			if (Players != null && Players.Count > 0)
+			{
+				ImGui.Spacing();
+				foreach (var player in Players)
+				{
+					ImGui.BeginGroup();
+					ImGui.PushFont(UiBuilder.IconFont);
+					ImGui.TextColored(player.Color, player.Icon);
+					ImGui.PopFont();
+					ImGui.SameLine();
+					ImGui.TextColored(player.Color, player.Name);
+					ImGui.EndGroup();
+					if (ImGui.IsItemClicked()) SelectPlayer?.Invoke(player.Key);
+				}
+			}
+			else
+			{
+				ImGui.Text(Loc.Localize("NoPlayers", "No players to show..."));
+			}
+		}
+	}
+}

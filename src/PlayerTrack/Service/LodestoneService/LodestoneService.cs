@@ -18,19 +18,19 @@ namespace PlayerTrack
 	{
 		private readonly HttpClient _httpClient;
 		private readonly Timer _onRequestTimer;
-		private readonly IPlayerTrackPlugin _playerTrackPlugin;
+		private readonly IPlayerTrackPlugin _plugin;
 		private readonly Queue<TrackLodestoneRequest> _requests = new Queue<TrackLodestoneRequest>();
 		private readonly Queue<TrackLodestoneResponse> _responses = new Queue<TrackLodestoneResponse>();
 		private bool _isProcessing;
 		private DateTime _lodestoneCooldown = DateTime.UtcNow;
 
-		public LodestoneService(IPlayerTrackPlugin playerTrackPlugin)
+		public LodestoneService(IPlayerTrackPlugin plugin)
 		{
 			var httpClientHandler = new HttpClientHandler();
-			_playerTrackPlugin = playerTrackPlugin;
+			_plugin = plugin;
 			_httpClient = new HttpClient(httpClientHandler, true)
 			{
-				Timeout = TimeSpan.FromMilliseconds(_playerTrackPlugin.Configuration.LodestoneTimeout)
+				Timeout = TimeSpan.FromMilliseconds(_plugin.Configuration.LodestoneTimeout)
 			};
 			_onRequestTimer = new Timer
 				{Interval = 15000, Enabled = true};
@@ -68,7 +68,7 @@ namespace PlayerTrack
 		{
 			var request = _requests.Peek();
 			var requestCount = 0;
-			while (requestCount < _playerTrackPlugin.Configuration.LodestoneMaxRetry)
+			while (requestCount < _plugin.Configuration.LodestoneMaxRetry)
 			{
 				var response = GetCharacterId(request);
 				if (response.Status == TrackLodestoneStatus.Verified)
@@ -78,11 +78,11 @@ namespace PlayerTrack
 					return;
 				}
 
-				Thread.Sleep(_playerTrackPlugin.Configuration.LodestoneRequestDelay);
+				Thread.Sleep(_plugin.Configuration.LodestoneRequestDelay);
 				requestCount++;
 			}
 
-			if (requestCount >= _playerTrackPlugin.Configuration.LodestoneMaxRetry)
+			if (requestCount >= _plugin.Configuration.LodestoneMaxRetry)
 			{
 				if (IsLodestoneAvailable())
 				{
@@ -97,7 +97,7 @@ namespace PlayerTrack
 				else
 				{
 					_lodestoneCooldown =
-						DateTime.UtcNow.AddMilliseconds(_playerTrackPlugin.Configuration.LodestoneCooldownDuration);
+						DateTime.UtcNow.AddMilliseconds(_plugin.Configuration.LodestoneCooldownDuration);
 				}
 			}
 		}
@@ -109,7 +109,7 @@ namespace PlayerTrack
 			while (_requests.Count > 0 && DateTime.UtcNow > _lodestoneCooldown)
 			{
 				ProcessRequest();
-				Thread.Sleep(_playerTrackPlugin.Configuration.LodestoneRequestDelay);
+				Thread.Sleep(_plugin.Configuration.LodestoneRequestDelay);
 			}
 
 			_isProcessing = false;
@@ -160,7 +160,7 @@ namespace PlayerTrack
 				if (json.Character == null) return response;
 				if (json.Character?.Name == null) return response;
 				if (json.Character?.Server == null) return response;
-				var worldId = _playerTrackPlugin.GetWorldId(json.Character.Server.ToString());
+				var worldId = _plugin.GetWorldId(json.Character.Server.ToString());
 				if (worldId == null) return response;
 				var homeWorld = new TrackWorld {Id = worldId, Name = json.Character.Server};
 				response.Status = TrackLodestoneStatus.Updated;

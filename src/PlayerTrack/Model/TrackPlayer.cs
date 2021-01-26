@@ -14,6 +14,7 @@ namespace PlayerTrack
 	public class TrackPlayer
 	{
 		private string _abbreviatedNotes;
+		private int? _displayIcon;
 		private string _firstSeen;
 		private string _homeWorld;
 		private string _key;
@@ -35,15 +36,42 @@ namespace PlayerTrack
 		[JsonProperty] [DefaultValue(false)] public bool IsManual { get; set; }
 		[JsonProperty] public TrackAlert Alert { get; set; } = new TrackAlert();
 		[JsonProperty] [DefaultValue(0)] public int CategoryId { get; set; }
+		public int CategoryIndex { get; set; }
 		public string PreviouslyLastSeen { get; set; } = string.Empty;
 		public int Priority { get; set; }
+		public TrackCategory Category { get; set; }
+		public int IconIndex { get; set; }
 
 		public long Created => Encounters.First().Created;
 
-		public string FreeCompanyDisplay(bool inContent)
+		public bool AlertEnabled
 		{
-			if (!string.IsNullOrEmpty(FreeCompany)) return FreeCompany;
-			return inContent ? "N/A" : "None";
+			get
+			{
+				if (Alert.State == TrackAlertState.NotSet)
+					return Category.EnableAlerts;
+				return Alert.State == TrackAlertState.Enabled;
+			}
+		}
+
+		public Vector4 DisplayColor => Color ?? Category.Color;
+
+		public int DisplayIcon
+		{
+			get
+			{
+				if (_displayIcon == null)
+				{
+					if (Icon != 0)
+						_displayIcon = Icon;
+					else if (Category.Icon != 0)
+						_displayIcon = Category.Icon;
+					else
+						_displayIcon = FontAwesomeIcon.User.ToIconChar();
+				}
+
+				return (int) _displayIcon;
+			}
 		}
 
 		public string PreviousNames
@@ -96,7 +124,7 @@ namespace PlayerTrack
 		{
 			get
 			{
-				if (_seenCount == null) _seenCount = GetEncounterCount() + "x";
+				if (_seenCount == null) _seenCount = Encounters.Count + "x";
 				return _seenCount;
 			}
 		}
@@ -148,11 +176,10 @@ namespace PlayerTrack
 			}
 		}
 
-		public int GetEncounterCount()
+		public string FreeCompanyDisplay(bool inContent)
 		{
-			if (IsManual) return Encounters.Count - 1;
-
-			return Encounters.Count;
+			if (!string.IsNullOrEmpty(FreeCompany)) return FreeCompany;
+			return inContent ? "N/A" : "None";
 		}
 
 		public static string CreateKey(string name, uint worldId)
@@ -167,6 +194,8 @@ namespace PlayerTrack
 			CategoryId = originalPlayer.CategoryId;
 			Icon = originalPlayer.Icon;
 			Color = originalPlayer.Color;
+			Alert = originalPlayer.Alert;
+			CategoryId = originalPlayer.CategoryId;
 
 			// names
 			if (Names == null) Names = new List<string>();
@@ -210,6 +239,7 @@ namespace PlayerTrack
 			_homeWorld = null;
 			_previousNames = null;
 			_previousWorlds = null;
+			_displayIcon = null;
 			foreach (var encounter in Encounters) encounter.ClearBackingFields();
 		}
 	}

@@ -100,6 +100,8 @@
     <Compile Include="Common\Plugin\PluginBase.cs" />
     <Compile Include="Common\UserInterface\CustomWidgets.cs" />
     <Compile Include="Common\Model\UIColor.cs" />
+    <Compile Include="Common\UserInterface\Windows\IWindowBase.cs" />
+    <Compile Include="Common\UserInterface\Windows\WindowBase.cs" />
     <Compile Include="Common\Util\ImGuiUtil.cs" />
     <Compile Include="Common\Util\FontAwesomeUtil.cs" />
     <Compile Include="Common\Util\SerializerUtil.cs" />
@@ -109,6 +111,11 @@
     </Compile>
     <Compile Include="Common\Model\PrimaryKey.cs" />
     <Compile Include="Common\Model\ModifierKey.cs" />
+    <Compile Include="Plugin\UserInterface\Presenter\PlayerDetailPresenter.cs" />
+    <Compile Include="Plugin\UserInterface\ViewModel\TrackViewMode.cs" />
+    <Compile Include="Plugin\UserInterface\ViewModel\TrackViewEncounter.cs" />
+    <Compile Include="Plugin\UserInterface\ViewModel\TrackViewPlayerDetail.cs" />
+    <Compile Include="Plugin\UserInterface\ViewModel\TrackViewPlayer.cs" />
     <Compile Include="Model\TrackCategory.cs" />
     <Compile Include="Model\TrackAlert.cs" />
     <Compile Include="Model\TrackLodestoneRequest.cs" />
@@ -121,7 +128,6 @@
     <Compile Include="Model\TrackJob.cs" />
     <Compile Include="Model\TrackLocation.cs" />
     <Compile Include="Model\TrackEncounter.cs" />
-    <Compile Include="Model\TrackRoster.cs" />
     <Compile Include="Model\TrackLodestone.cs" />
     <Compile Include="Model\TrackWorld.cs" />
     <Compile Include="Model\TrackPlayer.cs" />
@@ -132,17 +138,24 @@
     <Compile Include="Plugin\Plugin.cs" />
     <Compile Include="Common\Localization\ILocalization.cs" />
     <Compile Include="Common\Localization\Localization.cs" />
+    <Compile Include="Plugin\UserInterface\Presenter\PlayerListPresenter.cs" />
+    <Compile Include="Plugin\UserInterface\Presenter\PresenterBase.cs" />
+    <Compile Include="Plugin\UserInterface\Presenter\SettingsPresenter.cs" />
+    <Compile Include="Plugin\UserInterface\View\PlayerDetailView.cs" />
+    <Compile Include="Plugin\UserInterface\View\PlayerListView.cs" />
     <Compile Include="Service\CategoryService\CategoryService.cs" />
     <Compile Include="Service\CategoryService\ICategoryService.cs" />
     <Compile Include="Service\LodestoneService\ILodestoneService.cs" />
     <Compile Include="Service\LodestoneService\LodestoneService.cs" />
-    <Compile Include="Service\RosterService\IRosterService.cs" />
-    <Compile Include="Service\RosterService\RosterService.cs" />
-    <Compile Include="Plugin\UserInterface\PluginUIBase.cs" />
-    <Compile Include="Common\UserInterface\Windows\WindowBase.cs" />
-    <Compile Include="Plugin\UserInterface\Windows\SettingsWindow.cs" />
-    <Compile Include="Plugin\UserInterface\Windows\OverlayWindow.cs" />
-    <Compile Include="Plugin\UserInterface\PluginUI.cs" />
+    <Compile Include="Service\PlayerService\IPlayerService.cs" />
+    <Compile Include="Service\PlayerService\PlayerService.Notification.cs" />
+    <Compile Include="Service\PlayerService\PlayerService.Process.cs" />
+    <Compile Include="Service\PlayerService\PlayerService.Search.cs" />
+    <Compile Include="Service\PlayerService\PlayerService.Data.cs" />
+    <Compile Include="Service\PlayerService\PlayerService.Enrich.cs" />
+    <Compile Include="Service\PlayerService\PlayerService.Lodestone.cs" />
+    <Compile Include="Service\PlayerService\PlayerService.cs" />
+    <Compile Include="Plugin\UserInterface\View\SettingsView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

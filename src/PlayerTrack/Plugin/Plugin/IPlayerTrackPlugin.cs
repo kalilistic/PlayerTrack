@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace PlayerTrack
 {
 	public interface IPlayerTrackPlugin
 	{
-		RosterService RosterService { get; }
+		PlayerService PlayerService { get; }
 		PlayerTrackConfig Configuration { get; set; }
 		Localization Localization { get; }
 		string PluginName { get; }
+		TrackViewMode TrackViewMode { get; set; }
 		void PrintHelpMessage();
 		void SaveConfig();
 		void PrintMessage(string message);
@@ -21,15 +22,21 @@ namespace PlayerTrack
 		string GetJobCode(uint classJobId);
 		void SetDefaultIcons();
 		void RestartTimers();
-		DataManager GetDataManager();
-		LodestoneService GetLodestoneService();
+		DataManager DataManager { get; set; }
+		LodestoneService LodestoneService { get; set; }
 		uint? GetWorldId(string worldName);
 		bool IsLoggedIn();
 		bool IsValidCharacterName(string name);
 		string[] GetContentNames();
 		uint[] GetContentIds();
-		CategoryService GetCategoryService();
-		bool InContent();
+		CategoryService CategoryService { get; set; }
+		bool InContent { get; set; }
 		string[] GetWorldNames();
+		JsonSerializerSettings JsonSerializerSettings { get; set; }
+		void ShowOverlay(string command, string args);
+		void SelectPlayer(string playerKey);
+		void ReloadList();
+		string[] GetIconNames();
+		int[] GetIconCodes();
 	}
 }

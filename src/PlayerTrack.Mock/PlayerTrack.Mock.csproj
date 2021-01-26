@@ -37,6 +37,9 @@
     <Reference Include="Lumina.Excel">
       <HintPath>..\..\..\Dalamud\Dalamud\bin\Debug\Lumina.Excel.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\Dalamud\Dalamud\bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,7 +53,7 @@
     <Compile Include="MockCategoryService.cs" />
     <Compile Include="MockLodestoneService.cs" />
     <Compile Include="MockConfig.cs" />
-    <Compile Include="MockRosterService.cs" />
+    <Compile Include="MockPlayerService.cs" />
     <Compile Include="MockPlayerTrackPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

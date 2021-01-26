@@ -19,23 +19,21 @@ namespace PlayerTrack
 		public int LodestoneTimeout = 60000;
 		public int NewEncounterThreshold = 86400000;
 		public List<uint> PermittedContent = new List<uint>();
-		public int RecentPlayerThreshold = 300000;
+		public int RecentPlayerThreshold = 900000;
 		public bool RestrictInCombat = true;
 		public bool RestrictToContent = true;
 		public bool RestrictToCustom = false;
 		public bool RestrictToHighEndDuty = false;
-		public int SaveFrequency = 60000;
+		public int SaveFrequency = 15000;
 		public bool SyncToLodestone = true;
-		public int UpdateFrequency = 10000;
+		public int UpdateFrequency = 5000;
 		public bool FreshInstall { get; set; } = true;
 		public bool Compressed { get; set; } = true;
 		public int SchemaVersion { get; set; } = 1;
 		public bool Enabled { get; set; } = true;
-		public bool ShowOverlay { get; set; } = true;
 		public int PluginLanguage { get; set; } = 0;
 		public bool EnableAlerts { get; set; } = true;
-		public int ProcessSettingsFrequency { get; set; } = 1000;
 		public int AlertDelay { get; set; } = 1000;
-		public int ProcessPlayerChangeFrequency { get; set; } = 1500;
+		public int ConfigVersion { get; set; } = 2;
 	}
 }

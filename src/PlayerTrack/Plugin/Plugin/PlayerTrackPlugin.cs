@@ -13,21 +13,23 @@ using CheapLoc;
 using Dalamud.Game.ClientState.Actors.Types;
 using Dalamud.Game.Command;
 using Dalamud.Plugin;
+using Newtonsoft.Json;
 using Timer = System.Timers.Timer;
 
 namespace PlayerTrack
 {
 	public sealed class PlayerTrackPlugin : PluginBase, IPlayerTrackPlugin
 	{
-		private DataManager _dataManager;
-		private bool _inContent;
+		public DataManager DataManager { get; set; }
+		public bool InContent { get; set; }
 		private bool _isProcessing = true;
+		public JsonSerializerSettings JsonSerializerSettings { get; set; }
 		private Timer _onNewActorTimer;
-		private Timer _onPlayerChangeTimer;
 		private Timer _onSaveTimer;
-		private Timer _onSettingsTimer;
+		private PlayerDetailPresenter _playerDetailPresenter;
+		private PlayerListPresenter _playerListPresenter;
 		private DalamudPluginInterface _pluginInterface;
-		private PluginUI _pluginUI;
+		private SettingsPresenter _settingsPresenter;
 
 		public PlayerTrackPlugin(string pluginName, DalamudPluginInterface pluginInterface) : base(pluginName,
 			pluginInterface)
@@ -35,14 +37,15 @@ namespace PlayerTrack
 			Task.Run(() =>
 			{
 				_pluginInterface = pluginInterface;
-				_dataManager = new DataManager(this);
+				DataManager = new DataManager(this);
+				JsonSerializerSettings = SerializerUtil.CamelCaseIncludeJsonSerializer();
 				ResourceManager.UpdateResources();
 				FontAwesomeUtil.Init();
 				InitContent();
 				LoadConfig();
 				LoadServices();
-				SetupCommands();
 				LoadUI();
+				SetupCommands();
 				BackupOnStart();
 				HandleFreshInstall();
 				StartTimers();
@@ -50,18 +53,30 @@ namespace PlayerTrack
 			});
 		}
 
-		private LodestoneService LodestoneService { get; set; }
+		public LodestoneService LodestoneService { get; set; }
 		public CategoryService CategoryService { get; set; }
+		public TrackViewMode TrackViewMode { get; set; } = TrackViewMode.CurrentPlayers;
 
-		public DataManager GetDataManager()
+		public void ShowOverlay(string command, string args)
 		{
-			return _dataManager;
+			_playerListPresenter.ShowView();
 		}
 
-		public LodestoneService GetLodestoneService()
+		public string[] GetIconNames()
 		{
-			return LodestoneService;
+			var namesList = new List<string> {Loc.Localize("Default", "Default")};
+			namesList.AddRange(Configuration.EnabledIcons.ToList()
+				.Select(icon => icon.ToString()));
+			return namesList.ToArray();
 		}
+
+		public int[] GetIconCodes()
+		{
+			var codesList = new List<int> {CategoryService.GetDefaultIcon()};
+			codesList.AddRange(Configuration.EnabledIcons.ToList().Select(icon => (int) icon));
+			return codesList.ToArray();
+		}
+
 
 		public void SetDefaultIcons()
 		{
@@ -78,7 +93,7 @@ namespace PlayerTrack
 			};
 		}
 
-		public RosterService RosterService { get; set; }
+		public PlayerService PlayerService { get; set; }
 		public PlayerTrackConfig Configuration { get; set; }
 
 		public void PrintHelpMessage()
@@ -110,19 +125,27 @@ namespace PlayerTrack
 			StartTimers();
 		}
 
-		public CategoryService GetCategoryService()
-		{
-			return CategoryService;
-		}
-
-		public bool InContent()
-		{
-			return _inContent;
-		}
-
 		public string[] GetWorldNames()
 		{
-			return GetWorldNames(GetDataCenterId()).ToArray();
+			try
+			{
+				return GetWorldNames(GetDataCenterId()).ToArray();
+			}
+			catch (Exception ex)
+			{
+				LogError(ex, "Failed to load world names");
+				return new string[] { };
+			}
+		}
+
+		public void SelectPlayer(string playerKey)
+		{
+			_playerDetailPresenter.SelectPlayer(playerKey);
+		}
+
+		public void ReloadList()
+		{
+			_playerListPresenter.PlayerServiceOnPlayersProcessed();
 		}
 
 		public new void Dispose()
@@ -142,9 +165,12 @@ namespace PlayerTrack
 			_isProcessing = true;
 			RemoveCommands();
 			StopTimers();
-			RosterService.SaveData();
-			CategoryService.SaveCategories();
+			PlayerService.SaveData();
+			CategoryService.Dispose();
 			LodestoneService.Dispose();
+			_settingsPresenter.Dispose();
+			_playerListPresenter.Dispose();
+			_playerDetailPresenter.Dispose();
 			base.Dispose();
 			_pluginInterface.UiBuilder.OnOpenConfigUi -= (sender, args) => DrawConfigUI();
 			_pluginInterface.UiBuilder.OnBuildUi -= DrawUI;
@@ -154,7 +180,7 @@ namespace PlayerTrack
 
 		public new void SetupCommands()
 		{
-			_pluginInterface.CommandManager.AddHandler("/ptrack", new CommandInfo(TogglePlayerTrack)
+			_pluginInterface.CommandManager.AddHandler("/ptrack", new CommandInfo(ShowOverlay)
 			{
 				HelpMessage = "Show PlayerTrack plugin.",
 				ShowInHelp = true
@@ -172,89 +198,45 @@ namespace PlayerTrack
 			_pluginInterface.CommandManager.RemoveHandler("/ptrackconfig");
 		}
 
-		public void TogglePlayerTrack(string command, string args)
-		{
-			LogInfo("Running command {0} with args {1}", command, args);
-			Configuration.ShowOverlay = !Configuration.ShowOverlay;
-			_pluginUI.OverlayWindow.IsVisible = !_pluginUI.OverlayWindow.IsVisible;
-		}
-
 		public void ToggleConfig(string command, string args)
 		{
 			LogInfo("Running command {0} with args {1}", command, args);
-			_pluginUI.SettingsWindow.IsVisible = !_pluginUI.SettingsWindow.IsVisible;
-			_onSettingsTimer.Enabled = _pluginUI.SettingsWindow.IsVisible;
+			_settingsPresenter.ToggleView();
 		}
 
 		private void BackupOnStart()
 		{
-			if (!Configuration.FreshInstall) RosterService.BackupRoster(true);
+			if (!Configuration.FreshInstall) PlayerService.BackupPlayers(true);
 		}
 
 		private void StartTimers()
 		{
 			_onNewActorTimer = new Timer {Interval = Configuration.UpdateFrequency, Enabled = true};
 			_onNewActorTimer.Elapsed += OnNewActor;
-			_onPlayerChangeTimer = new Timer {Interval = Configuration.ProcessPlayerChangeFrequency, Enabled = true};
-			_onPlayerChangeTimer.Elapsed += OnPlayerChange;
 			_onSaveTimer = new Timer {Interval = Configuration.SaveFrequency, Enabled = true};
-			_onSaveTimer.Elapsed += OnRosterSave;
-			_onSettingsTimer = new Timer
-				{Interval = Configuration.ProcessSettingsFrequency, Enabled = _pluginUI.SettingsWindow.IsVisible};
-			_onSettingsTimer.Elapsed += OnSettings;
-		}
-
-		private void OnSettings(object sender, ElapsedEventArgs e)
-		{
-			// processing check
-			if (_isProcessing) return;
-			_isProcessing = true;
-
-			// update categories
-			CategoryService.ProcessCategoryModifications();
-
-			_isProcessing = false;
+			_onSaveTimer.Elapsed += OnPlayersSave;
 		}
 
 		private void StopTimers()
 		{
 			_onNewActorTimer.Elapsed -= OnNewActor;
-			_onPlayerChangeTimer.Elapsed -= OnPlayerChange;
-			_onSaveTimer.Elapsed -= OnRosterSave;
-			_onSettingsTimer.Elapsed -= OnSettings;
+			_onSaveTimer.Elapsed -= OnPlayersSave;
 			_onNewActorTimer.Stop();
 			_onSaveTimer.Stop();
-			_onSettingsTimer.Stop();
 		}
 
-		private void OnRosterSave(object sender, ElapsedEventArgs e)
+		private void OnPlayersSave(object sender, ElapsedEventArgs e)
 		{
 			try
 			{
 				if (_isProcessing) return;
 				_isProcessing = true;
-				RosterService.SaveData();
+				PlayerService.SaveData();
 				_isProcessing = false;
 			}
 			catch (Exception ex)
 			{
 				LogError(ex, "Failed to save players - will try again shortly.");
-				_isProcessing = false;
-			}
-		}
-
-		private void OnPlayerChange(object sender, ElapsedEventArgs e)
-		{
-			try
-			{
-				if (_isProcessing) return;
-				_isProcessing = true;
-				RosterService.ProcessRequests();
-				_isProcessing = false;
-			}
-			catch (Exception ex)
-			{
-				LogError(ex, "Failed process player updates - will try again shortly.");
 				_isProcessing = false;
 			}
 		}
@@ -286,7 +268,7 @@ namespace PlayerTrack
 				var contentId = GetContentId(territoryTypeId);
 				if (contentId == 0)
 				{
-					_inContent = false;
+					InContent = false;
 					if (Configuration.RestrictToContent)
 					{
 						_isProcessing = false;
@@ -295,7 +277,7 @@ namespace PlayerTrack
 				}
 				else
 				{
-					_inContent = true;
+					InContent = true;
 				}
 
 				// high end duty check
@@ -314,26 +296,14 @@ namespace PlayerTrack
 
 				// player check
 				var players = GetPlayerCharacters();
-				if (players == null || !players.Any())
-				{
-					_isProcessing = false;
-					return;
-				}
 
 				// build new roster of track players
 				var placeName = GetPlaceName(territoryTypeId);
 				var contentName = GetContentName(contentId);
-				var newRoster = BuildNewRoster(territoryTypeId, placeName, contentName, players);
+				var newPlayers = BuildNewPlayerList(territoryTypeId, placeName, contentName, players);
 
-				// check roster built successfully
-				if (newRoster == null)
-				{
-					_isProcessing = false;
-					return;
-				}
-
-				// pass to roster service for processing against existing
-				RosterService.ProcessPlayers(newRoster);
+				// pass to player service for processing against existing
+				PlayerService.ProcessPlayers(newPlayers);
 
 				// finish processing
 				_isProcessing = false;
@@ -344,7 +314,7 @@ namespace PlayerTrack
 			}
 		}
 
-		private List<TrackPlayer> BuildNewRoster(uint territoryType, string placeName, string contentName,
+		private List<TrackPlayer> BuildNewPlayerList(uint territoryType, string placeName, string contentName,
 			IEnumerable<PlayerCharacter> players)
 		{
 			try
@@ -394,14 +364,16 @@ namespace PlayerTrack
 		public void LoadServices()
 		{
 			LodestoneService = new LodestoneService(this);
-			RosterService = new RosterService(this);
 			CategoryService = new CategoryService(this);
+			PlayerService = new PlayerService(this);
 		}
 
 		public void LoadUI()
 		{
 			Localization.SetLanguage(Configuration.PluginLanguage);
-			_pluginUI = new PluginUI(this);
+			_playerListPresenter = new PlayerListPresenter(this);
+			_playerDetailPresenter = new PlayerDetailPresenter(this);
+			_settingsPresenter = new SettingsPresenter(this);
 			_pluginInterface.UiBuilder.OnBuildUi += DrawUI;
 			_pluginInterface.UiBuilder.OnOpenConfigUi += (sender, args) => DrawConfigUI();
 		}
@@ -414,17 +386,19 @@ namespace PlayerTrack
 			Configuration.FreshInstall = false;
 			SetDefaultIcons();
 			SaveConfig();
-			_pluginUI.SettingsWindow.IsVisible = true;
+			_settingsPresenter.ShowView();
 		}
 
 		private void DrawUI()
 		{
-			_pluginUI.Draw();
+			_playerListPresenter.DrawView();
+			_playerDetailPresenter.DrawView();
+			_settingsPresenter.DrawView();
 		}
 
 		private void DrawConfigUI()
 		{
-			_pluginUI.SettingsWindow.IsVisible = false;
+			_settingsPresenter.ToggleView();
 		}
 
 		public new void LoadConfig()
@@ -432,6 +406,8 @@ namespace PlayerTrack
 			try
 			{
 				Configuration = base.LoadConfig() as PluginConfig ?? new PluginConfig();
+				EnforceSettings();
+				SaveConfig();
 			}
 			catch
 			{
@@ -439,6 +415,13 @@ namespace PlayerTrack
 				Configuration = new PluginConfig();
 				SaveConfig();
 			}
+		}
+
+		private void EnforceSettings()
+		{
+			Configuration.UpdateFrequency = 1000;
+			Configuration.SaveFrequency = 15000;
+			Configuration.LodestoneRequestDelay = 30000;
 		}
 	}
 }

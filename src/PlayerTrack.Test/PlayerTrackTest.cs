@@ -19,8 +19,8 @@ namespace PlayerTrack.Test
 		}
 
 		public LodestoneService LodestoneService;
-		public RosterService RosterService;
-		private MockPlayerTrackPlugin _playerTrackPlugin;
+		public PlayerService PlayerService;
+		private MockPlayerTrackPlugin _plugin;
 
 		[Test]
 		public void PlayerTrackTest1()
