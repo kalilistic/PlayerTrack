@@ -33,7 +33,7 @@ namespace PlayerTrack
 		bool InContent { get; set; }
 		string[] GetWorldNames();
 		JsonSerializerSettings JsonSerializerSettings { get; set; }
-		void ShowOverlay(string command, string args);
+		void ToggleOverlay(string command, string args);
 		void SelectPlayer(string playerKey);
 		void ReloadList();
 		string[] GetIconNames();

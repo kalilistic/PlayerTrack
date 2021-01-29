@@ -34,6 +34,6 @@ namespace PlayerTrack
 		public int PluginLanguage { get; set; } = 0;
 		public bool EnableAlerts { get; set; } = true;
 		public int AlertDelay { get; set; } = 1000;
-		public int ConfigVersion { get; set; } = 2;
+		public bool ShowOverlay { get; set; } = true;
 	}
 }

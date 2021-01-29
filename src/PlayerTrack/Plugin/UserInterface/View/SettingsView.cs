@@ -55,6 +55,7 @@ namespace PlayerTrack
 			if (ImGui.Begin(Loc.Localize("SettingsView", "PlayerTrack Settings") + "###PlayerTrack_Settings_View",
 				ref isVisible, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar))
 				IsVisible = isVisible;
+
 			DrawTabs();
 			OpenCurrentTab();
 			OpenModals();
@@ -243,6 +244,7 @@ namespace PlayerTrack
 		private void DrawGeneral()
 		{
 			PluginEnabled();
+			ShowOverlay();
 			Compressed();
 			SetLanguage();
 		}
@@ -304,6 +306,20 @@ namespace PlayerTrack
 
 			CustomWidgets.HelpMarker(Loc.Localize("PluginEnabled_HelpMarker",
 				"toggle the plugin on/off"));
+			ImGui.Spacing();
+		}
+
+		private void ShowOverlay()
+		{
+			var showOverlay = Configuration.ShowOverlay;
+			if (ImGui.Checkbox(Loc.Localize("ShowOverlay", "Show Overlay") + "###PlayerTrack_ShowOverlay_Checkbox",
+				ref showOverlay))
+			{
+				RequestToggleOverlay?.Invoke(this, true);
+			}
+
+			CustomWidgets.HelpMarker(Loc.Localize("ShowOverlay_HelpMarker",
+				"show overlay window"));
 			ImGui.Spacing();
 		}
 

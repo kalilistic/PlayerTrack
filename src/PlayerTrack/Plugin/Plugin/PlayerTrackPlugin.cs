@@ -24,7 +24,7 @@ namespace PlayerTrack
 		public bool InContent { get; set; }
 		private bool _isProcessing = true;
 		public JsonSerializerSettings JsonSerializerSettings { get; set; }
-		private Timer _onNewActorTimer;
+		private Timer _onUpdateTimer;
 		private Timer _onSaveTimer;
 		private PlayerDetailPresenter _playerDetailPresenter;
 		private PlayerListPresenter _playerListPresenter;
@@ -57,9 +57,11 @@ namespace PlayerTrack
 		public CategoryService CategoryService { get; set; }
 		public TrackViewMode TrackViewMode { get; set; } = TrackViewMode.CurrentPlayers;
 
-		public void ShowOverlay(string command, string args)
+		public void ToggleOverlay(string command, string args)
 		{
-			_playerListPresenter.ShowView();
+			_playerListPresenter.ToggleView();
+			Configuration.ShowOverlay = !Configuration.ShowOverlay;
+			SaveConfig();
 		}
 
 		public string[] GetIconNames()
@@ -180,7 +182,7 @@ namespace PlayerTrack
 
 		public new void SetupCommands()
 		{
-			_pluginInterface.CommandManager.AddHandler("/ptrack", new CommandInfo(ShowOverlay)
+			_pluginInterface.CommandManager.AddHandler("/ptrack", new CommandInfo(ToggleOverlay)
 			{
 				HelpMessage = "Show PlayerTrack plugin.",
 				ShowInHelp = true
@@ -211,17 +213,17 @@ namespace PlayerTrack
 
 		private void StartTimers()
 		{
-			_onNewActorTimer = new Timer {Interval = Configuration.UpdateFrequency, Enabled = true};
-			_onNewActorTimer.Elapsed += OnNewActor;
+			_onUpdateTimer = new Timer {Interval = Configuration.UpdateFrequency, Enabled = true};
+			_onUpdateTimer.Elapsed += OnUpdate;
 			_onSaveTimer = new Timer {Interval = Configuration.SaveFrequency, Enabled = true};
 			_onSaveTimer.Elapsed += OnPlayersSave;
 		}
 
 		private void StopTimers()
 		{
-			_onNewActorTimer.Elapsed -= OnNewActor;
+			_onUpdateTimer.Elapsed -= OnUpdate;
 			_onSaveTimer.Elapsed -= OnPlayersSave;
-			_onNewActorTimer.Stop();
+			_onUpdateTimer.Stop();
 			_onSaveTimer.Stop();
 		}
 
@@ -241,7 +243,7 @@ namespace PlayerTrack
 			}
 		}
 
-		private void OnNewActor(object sender, ElapsedEventArgs e)
+		private void OnUpdate(object sender, ElapsedEventArgs e)
 		{
 			try
 			{
@@ -260,6 +262,7 @@ namespace PlayerTrack
 				var territoryTypeId = GetTerritoryType();
 				if (territoryTypeId == 0)
 				{
+					PlayerService.ProcessExistingOnly();
 					_isProcessing = false;
 					return;
 				}
@@ -271,6 +274,7 @@ namespace PlayerTrack
 					InContent = false;
 					if (Configuration.RestrictToContent)
 					{
+						PlayerService.ProcessExistingOnly();
 						_isProcessing = false;
 						return;
 					}
@@ -283,6 +287,7 @@ namespace PlayerTrack
 				// high end duty check
 				if (Configuration.RestrictToHighEndDuty && !IsHighEndDuty(contentId))
 				{
+					PlayerService.ProcessExistingOnly();
 					_isProcessing = false;
 					return;
 				}
@@ -290,6 +295,7 @@ namespace PlayerTrack
 				// custom content filter check
 				if (Configuration.RestrictToCustom && !Configuration.PermittedContent.Contains(contentId))
 				{
+					PlayerService.ProcessExistingOnly();
 					_isProcessing = false;
 					return;
 				}

@@ -6,8 +6,7 @@
 
 		public PlayerListPresenter(IPlayerTrackPlugin plugin) : base(plugin)
 		{
-			_view = new PlayerListView();
-			_view.ShowView();
+			_view = new PlayerListView{IsVisible = plugin.Configuration.ShowOverlay};
 			_playerListView = (PlayerListView) _view;
 			_playerListView.WorldNames = new[] {string.Empty};
 			_plugin.PlayerService.PlayersProcessed += PlayerServiceOnPlayersProcessed;

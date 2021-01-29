@@ -8,11 +8,10 @@ namespace PlayerTrack
 
 		public SettingsPresenter(IPlayerTrackPlugin plugin) : base(plugin)
 		{
-			_view = new SettingsView();
+			_view = new SettingsView {IsVisible = plugin.Configuration.FreshInstall};
 			_settingsView = (SettingsView) _view;
 			InitSettings();
 			AddListeners();
-			_view.ShowView();
 		}
 
 		public void InitSettings()
@@ -37,7 +36,13 @@ namespace PlayerTrack
 			_settingsView.RequestCategoryMoveDown += SettingsViewOnRequestCategoryMoveDown;
 			_settingsView.RequestResetIcons += SettingsViewOnRequestResetIcons;
 			_settingsView.RequestPrintHelp += SettingsViewOnRequestPrintHelp;
+			_settingsView.RequestToggleOverlay += SettingsViewOnRequestToggleOverlay;
 			_plugin.CategoryService.CategoriesUpdated += OnCategoriesUpdated;
+		}
+
+		private void SettingsViewOnRequestToggleOverlay(object sender, bool e)
+		{
+			_plugin.ToggleOverlay(string.Empty, string.Empty);
 		}
 
 		private void SettingsViewOnRequestPrintHelp(object sender, bool e)
@@ -93,6 +98,7 @@ namespace PlayerTrack
 			_settingsView.RequestCategoryMoveDown -= SettingsViewOnRequestCategoryMoveDown;
 			_settingsView.RequestResetIcons -= SettingsViewOnRequestResetIcons;
 			_settingsView.RequestPrintHelp -= SettingsViewOnRequestPrintHelp;
+			_settingsView.RequestToggleOverlay -= SettingsViewOnRequestToggleOverlay;
 			_plugin.CategoryService.CategoriesUpdated -= OnCategoriesUpdated;
 		}
 

@@ -193,7 +193,7 @@ namespace PlayerTrack.Mock
 		}
 
 		public JsonSerializerSettings JsonSerializerSettings { get; set; }
-		public void ShowOverlay(string command, string args)
+		public void ToggleOverlay(string command, string args)
 		{
 			throw new NotImplementedException();
 		}
