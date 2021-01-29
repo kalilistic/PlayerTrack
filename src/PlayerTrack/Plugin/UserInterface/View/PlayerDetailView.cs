@@ -47,14 +47,15 @@ namespace PlayerTrack
 			if (!IsVisible) return;
 			if (Player == null) return;
 			var isVisible = IsVisible;
-			ImGui.SetNextWindowSize(new Vector2(500 * Scale, 590 * Scale), ImGuiCond.Always);
+			ImGui.SetNextWindowSize(new Vector2(500 * Scale, 570 * Scale), ImGuiCond.Always);
 			if (ImGui.Begin(Loc.Localize("PlayerDetailView", "PlayerTrack") + "###PlayerTrack_PlayerDetail_View",
 				ref isVisible, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoTitleBar))
 			{
 				IsVisible = isVisible;
 				Controls();
 				PlayerInfo();
-				PlayerDisplay();
+				PlayerCategory();
+				PlayerOverride();
 				PlayerNotes();
 				PlayerEncounters();
 				OpenModals();
@@ -155,6 +156,13 @@ namespace PlayerTrack
 
 			// row 4
 			CustomWidgets.Text(Loc.Localize("LodestoneStatus", "Lodestone Status"), Player.LodestoneStatus);
+			ImGui.Spacing();
+
+			// headings 2
+			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerCustomize", "Player Character"));
+
+			// row 5
+			CustomWidgets.Text(Loc.Localize("PlayerRace", "Race"), Player.Race);
 			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
 			if (Player.Gender.Equals("N/A"))
 			{
@@ -169,25 +177,25 @@ namespace PlayerTrack
 				ImGui.PopFont();
 			}
 
-			// row 5
-			CustomWidgets.Text(Loc.Localize("PlayerRace", "Race"), Player.Race);
-			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
+			// row 6
 			CustomWidgets.Text(Loc.Localize("PlayerTribe", "Tribe"), Player.Tribe);
 		}
 
-		private void PlayerDisplay()
+		private void PlayerCategory()
 		{
 			ImGui.Spacing();
-			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerDisplay", "Display Options"));
-			ImGui.Text(Loc.Localize("PlayerCategory", "Category"));
+			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerCategory", "Player Category"));
 			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 3);
 			if (ImGui.Combo("###PlayerTrack_PlayerCategory_Combo", ref SelectedCategory,
 				Player.CategoryNames,
 				Player.CategoryNames.Length))
 				Player.CategoryIndex = SelectedCategory;
+		}
 
+		private void PlayerOverride()
+		{
 			ImGui.Spacing();
-			ImGui.Text(Loc.Localize("PlayerOverride", "Custom"));
+			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerOverride", "Player Override"));
 			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 3);
 			if (ImGui.Combo("###PlayerTrack_SelectIcon_Combo", ref SelectedIcon,
 				Player.IconNames,
@@ -219,10 +227,10 @@ namespace PlayerTrack
 				ImGui.EndPopup();
 			}
 
-			ImGui.Text(Loc.Localize("PlayerAlerts", "Alerts"));
+			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
 			var enableAlerts = Player.AlertEnabled;
 			if (ImGui.Checkbox(
-				Loc.Localize("EnablePlayerAlerts", "Enabled") + "###PlayerTrack_PlayerAlerts_Checkbox",
+				Loc.Localize("EnablePlayerAlerts", "Enable Alerts") + "###PlayerTrack_PlayerAlerts_Checkbox",
 				ref enableAlerts))
 				Player.AlertEnabled = enableAlerts;
 		}
