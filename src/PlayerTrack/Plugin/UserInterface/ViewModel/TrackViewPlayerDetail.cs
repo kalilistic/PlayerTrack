@@ -27,6 +27,9 @@ namespace PlayerTrack
 		public string PreviousHomeWorlds;
 		public string PreviousNames;
 		public string SeenCount;
+		public string Gender;
+		public string Race;
+		public string Tribe;
 
 		public static TrackPlayer Map(TrackViewPlayerDetail player, IPlayerTrackPlugin plugin)
 		{
@@ -66,6 +69,9 @@ namespace PlayerTrack
 				LastSeen = player.LastSeen,
 				FreeCompany = player.FreeCompanyDisplay(plugin.InContent),
 				SeenCount = player.SeenCount,
+				Gender = player.GenderDisplay,
+				Race = player.RaceDisplay,
+				Tribe = player.TribeDisplay,
 				LodestoneStatus = player.Lodestone.Status.ToString(),
 				CategoryIndex = player.CategoryIndex,
 				IconIndex = player.IconIndex,

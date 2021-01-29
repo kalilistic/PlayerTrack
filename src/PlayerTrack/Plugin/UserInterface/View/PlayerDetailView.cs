@@ -122,9 +122,12 @@ namespace PlayerTrack
 
 		private void PlayerInfo()
 		{
+			// headings
 			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerInfo", "Player Info"));
 			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
 			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerStats", "Player Stats"));
+
+			// row 1
 			if (!string.IsNullOrEmpty(Player.PreviousNames))
 				CustomWidgets.Text(Loc.Localize("PlayerName", "Name"), Player.Name,
 					string.Format(Loc.Localize("PlayerPreviousNames", "Previously known as {0}"),
@@ -133,6 +136,8 @@ namespace PlayerTrack
 				CustomWidgets.Text(Loc.Localize("PlayerName", "Name"), Player.Name);
 			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
 			CustomWidgets.Text(Loc.Localize("PlayerFirstSeen", "First Seen"), Player.FirstSeen);
+
+			// row 2
 			if (!string.IsNullOrEmpty(Player.PreviousHomeWorlds))
 				CustomWidgets.Text(Loc.Localize("PlayerHomeWorld", "World"), Player.HomeWorld,
 					string.Format(Loc.Localize("PlayerPreviousWorlds", "Previously on {0}"),
@@ -141,11 +146,33 @@ namespace PlayerTrack
 				CustomWidgets.Text(Loc.Localize("PlayerHomeWorld", "World"), Player.HomeWorld);
 			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
 			CustomWidgets.Text(Loc.Localize("PlayerLastSeen", "Last Seen"), Player.LastSeen);
+
+			// row 3
 			CustomWidgets.Text(Loc.Localize("PlayerFreeCompany", "Free Company"),
 				Player.FreeCompany);
 			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
 			CustomWidgets.Text(Loc.Localize("PlayerSeenCount", "Seen Count"), Player.SeenCount);
+
+			// row 4
 			CustomWidgets.Text(Loc.Localize("LodestoneStatus", "Lodestone Status"), Player.LodestoneStatus);
+			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
+			if (Player.Gender.Equals("N/A"))
+			{
+				CustomWidgets.Text(Loc.Localize("PlayerGender", "Gender"), Player.Gender);
+			}
+			else
+			{
+				CustomWidgets.Text(Loc.Localize("PlayerGender", "Gender"), string.Empty);
+				ImGui.SameLine(Scale * 300f);
+				ImGui.PushFont(UiBuilder.IconFont);
+				CustomWidgets.Text(Loc.Localize("PlayerGender", "Gender"), Player.Gender);
+				ImGui.PopFont();
+			}
+
+			// row 5
+			CustomWidgets.Text(Loc.Localize("PlayerRace", "Race"), Player.Race);
+			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
+			CustomWidgets.Text(Loc.Localize("PlayerTribe", "Tribe"), Player.Tribe);
 		}
 
 		private void PlayerDisplay()

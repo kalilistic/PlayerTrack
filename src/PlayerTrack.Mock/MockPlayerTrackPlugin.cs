@@ -217,5 +217,20 @@ namespace PlayerTrack.Mock
 		{
 			throw new NotImplementedException();
 		}
+
+		public string GetGender(int? genderId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public string GetRace(int id, int genderId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public string GetTribe(int id, int genderId)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

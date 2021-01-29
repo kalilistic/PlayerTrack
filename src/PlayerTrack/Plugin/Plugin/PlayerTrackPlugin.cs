@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using CheapLoc;
+using Dalamud.Game.ClientState.Actors;
 using Dalamud.Game.ClientState.Actors.Types;
 using Dalamud.Game.Command;
 using Dalamud.Plugin;
@@ -324,7 +325,7 @@ namespace PlayerTrack
 			IEnumerable<PlayerCharacter> players)
 		{
 			try
-			{
+			{	
 				var currentDateTime = DateUtil.CurrentTime();
 				return players.ToList().Select(player => new TrackPlayer
 				{
@@ -339,6 +340,9 @@ namespace PlayerTrack
 						}
 					},
 					FreeCompany = player.CompanyTag,
+					Gender = player.Customize[(int)CustomizeIndex.Gender],
+					Race = player.Customize[(int)CustomizeIndex.Race],
+					Tribe = player.Customize[(int)CustomizeIndex.Tribe],
 					Encounters = new List<TrackEncounter>
 					{
 						new TrackEncounter

@@ -38,5 +38,8 @@ namespace PlayerTrack
 		void ReloadList();
 		string[] GetIconNames();
 		int[] GetIconCodes();
+		string GetGender(int? genderId);
+		string GetRace(int id, int genderId);
+		string GetTribe(int id, int genderId);
 	}
 }

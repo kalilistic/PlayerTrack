@@ -8,6 +8,7 @@ namespace PlayerTrack
 		public void EnrichPlayerData(TrackPlayer player)
 		{
 			AddWorldData(player);
+			AddCustomizeData(player);
 			AddLocationData(player);
 			AddCategoryData(player);
 			AddIconData(player);
@@ -18,6 +19,15 @@ namespace PlayerTrack
 		{
 			foreach (var world in player.HomeWorlds)
 				world.Name = _plugin.GetWorldName(world.Id);
+		}
+
+		private void AddCustomizeData(TrackPlayer player)
+		{
+			if (player.Gender == null) return;
+			var gender = (int)player.Gender;
+			player.GenderDisplay = _plugin.GetGender(gender);
+			player.RaceDisplay = _plugin.GetRace(player.Race, gender);
+			player.TribeDisplay = _plugin.GetTribe(player.Tribe, gender);
 		}
 
 		private void AddLocationData(TrackPlayer player)

@@ -36,11 +36,17 @@ namespace PlayerTrack
 		[JsonProperty] [DefaultValue(false)] public bool IsManual { get; set; }
 		[JsonProperty] public TrackAlert Alert { get; set; } = new TrackAlert();
 		[JsonProperty] [DefaultValue(0)] public int CategoryId { get; set; }
+		[JsonProperty] [DefaultValue(null)] public int? Gender { get; set; }
+		[JsonProperty] [DefaultValue(0)] public int Race { get; set; }
+		[JsonProperty] [DefaultValue(0)] public int Tribe { get; set; }
 		public int CategoryIndex { get; set; }
 		public string PreviouslyLastSeen { get; set; } = string.Empty;
 		public int Priority { get; set; }
 		public TrackCategory Category { get; set; }
 		public int IconIndex { get; set; }
+		public string GenderDisplay { get; set; } = "N/A";
+		public string RaceDisplay { get; set; } = "N/A";
+		public string TribeDisplay { get; set; } = "N/A";
 
 		public long Created => Encounters.First().Created;
 
