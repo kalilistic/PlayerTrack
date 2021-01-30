@@ -31,9 +31,10 @@ namespace PlayerTrack
 
 		public void BackupPlayers(bool forceBackup = false)
 		{
-			if (forceBackup || (DateTime.UtcNow - _plugin.Configuration.LastBackup.ToDateTime())
-				.TotalMilliseconds >
-				_plugin.Configuration.BackupFrequency)
+			if (forceBackup || _plugin.Configuration.LastBackup == 0 ||
+			    (DateTime.UtcNow - _plugin.Configuration.LastBackup.ToDateTime())
+			    .TotalMilliseconds >
+			    _plugin.Configuration.BackupFrequency)
 			{
 				_plugin.DataManager.CreateBackup();
 				_plugin.DataManager.DeleteBackups(_plugin.Configuration.BackupRetention);

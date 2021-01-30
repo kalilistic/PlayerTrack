@@ -44,7 +44,6 @@ namespace PlayerTrack
 				LoadServices();
 				LoadUI();
 				SetupCommands();
-				BackupOnStart();
 				HandleFreshInstall();
 				StartTimers();
 				_isProcessing = false;
@@ -152,7 +151,7 @@ namespace PlayerTrack
 			_playerListPresenter.PlayerServiceOnPlayersProcessed();
 		}
 
-		public new void Dispose()
+		public void Dispose()
 		{
 			var delayCount = 0;
 			while (_isProcessing)
@@ -182,7 +181,7 @@ namespace PlayerTrack
 			_isProcessing = false;
 		}
 
-		public new void SetupCommands()
+		public void SetupCommands()
 		{
 			_pluginInterface.CommandManager.AddHandler("/ptrack", new CommandInfo(ToggleOverlay)
 			{
@@ -196,7 +195,7 @@ namespace PlayerTrack
 			});
 		}
 
-		public new void RemoveCommands()
+		public void RemoveCommands()
 		{
 			_pluginInterface.CommandManager.RemoveHandler("/ptrack");
 			_pluginInterface.CommandManager.RemoveHandler("/ptrackconfig");
@@ -206,11 +205,6 @@ namespace PlayerTrack
 		{
 			LogInfo("Running command {0} with args {1}", command, args);
 			_settingsPresenter.ToggleView();
-		}
-
-		private void BackupOnStart()
-		{
-			if (!Configuration.FreshInstall) PlayerService.BackupPlayers(true);
 		}
 
 		private void StartTimers()
@@ -413,7 +407,7 @@ namespace PlayerTrack
 			_settingsPresenter.ToggleView();
 		}
 
-		public new void LoadConfig()
+		public void LoadConfig()
 		{
 			try
 			{
