@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 
 namespace PlayerTrack
@@ -28,19 +29,31 @@ namespace PlayerTrack
 			player.GenderDisplay = _plugin.GetGender(gender);
 			player.RaceDisplay = _plugin.GetRace(player.Race, gender);
 			player.TribeDisplay = _plugin.GetTribe(player.Tribe, gender);
+			player.HeightDisplay =
+				_plugin.ConvertHeightToInches(player.Race, player.Tribe, gender, player.Height).ToString(CultureInfo.CurrentCulture);
 		}
 
 		private void AddLocationData(TrackPlayer player)
 		{
-			foreach (var encounter in player.Encounters)
+			var encounters = player.Encounters.ToList();
+			try
 			{
-				encounter.Location.PlaceName =
-					_plugin.GetPlaceName(encounter.Location.TerritoryType);
-				encounter.Location.ContentName =
-					_plugin.GetContentName(
-						_plugin.GetContentId(encounter.Location.TerritoryType));
-				encounter.Job.Code = _plugin.GetJobCode(encounter.Job.Id);
+				foreach (var encounter in player.Encounters)
+				{
+					encounter.Location.PlaceName =
+						_plugin.GetPlaceName(encounter.Location.TerritoryType);
+					encounter.Location.ContentName =
+						_plugin.GetContentName(
+							_plugin.GetContentId(encounter.Location.TerritoryType));
+					encounter.Job.Code = _plugin.GetJobCode(encounter.Job.Id);
+				}
 			}
+			catch(Exception ex)
+			{
+				_plugin.LogError(ex, "Failed to update encounters properly so reverting");
+				player.Encounters = encounters;
+			}
+
 		}
 
 		private void AddCategoryData(TrackPlayer player)

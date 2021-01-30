@@ -343,6 +343,7 @@ namespace PlayerTrack
 					Gender = player.Customize[(int)CustomizeIndex.Gender],
 					Race = player.Customize[(int)CustomizeIndex.Race],
 					Tribe = player.Customize[(int)CustomizeIndex.Tribe],
+					Height = player.Customize[(int)CustomizeIndex.Height],
 					Encounters = new List<TrackEncounter>
 					{
 						new TrackEncounter

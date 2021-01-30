@@ -179,6 +179,17 @@ namespace PlayerTrack
 
 			// row 6
 			CustomWidgets.Text(Loc.Localize("PlayerTribe", "Tribe"), Player.Tribe);
+			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
+			if (Player.Height.Equals("N/A"))
+			{
+				CustomWidgets.Text(Loc.Localize("PlayerHeight", "Height"), Player.Height);
+			}
+			else
+			{
+				CustomWidgets.Text(Loc.Localize("PlayerHeight", "Height"),  string.Format(Loc.Localize("PlayerHeightValue", "{0} in"),
+					Player.Height));
+			}
+
 		}
 
 		private void PlayerCategory()
@@ -226,7 +237,6 @@ namespace PlayerTrack
 				PlayerSwatchRow(24, 32);
 				ImGui.EndPopup();
 			}
-
 			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
 			var enableAlerts = Player.AlertEnabled;
 			if (ImGui.Checkbox(

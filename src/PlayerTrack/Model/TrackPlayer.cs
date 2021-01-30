@@ -39,6 +39,7 @@ namespace PlayerTrack
 		[JsonProperty] [DefaultValue(null)] public int? Gender { get; set; }
 		[JsonProperty] [DefaultValue(0)] public int Race { get; set; }
 		[JsonProperty] [DefaultValue(0)] public int Tribe { get; set; }
+		[JsonProperty] [DefaultValue(0)] public int Height { get; set; }
 		public int CategoryIndex { get; set; }
 		public string PreviouslyLastSeen { get; set; } = string.Empty;
 		public int Priority { get; set; }
@@ -47,6 +48,7 @@ namespace PlayerTrack
 		public string GenderDisplay { get; set; } = "N/A";
 		public string RaceDisplay { get; set; } = "N/A";
 		public string TribeDisplay { get; set; } = "N/A";
+		public string HeightDisplay { get; set; } = "N/A";
 
 		public long Created => Encounters.First().Created;
 

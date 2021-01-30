@@ -63,6 +63,7 @@ namespace PlayerTrack
 						existingPlayer.Race = player.Race;
 						existingPlayer.Tribe = player.Tribe;
 						existingPlayer.Gender = player.Gender;
+						existingPlayer.Height = player.Height;
 						existingPlayer.ClearBackingFields();
 						playerCheck = existingPlayer;
 					}

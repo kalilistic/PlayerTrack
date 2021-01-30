@@ -30,6 +30,7 @@ namespace PlayerTrack
 		public string Gender;
 		public string Race;
 		public string Tribe;
+		public string Height;
 
 		public static TrackPlayer Map(TrackViewPlayerDetail player, IPlayerTrackPlugin plugin)
 		{
@@ -72,6 +73,7 @@ namespace PlayerTrack
 				Gender = player.GenderDisplay,
 				Race = player.RaceDisplay,
 				Tribe = player.TribeDisplay,
+				Height = player.HeightDisplay,
 				LodestoneStatus = player.Lodestone.Status.ToString(),
 				CategoryIndex = player.CategoryIndex,
 				IconIndex = player.IconIndex,

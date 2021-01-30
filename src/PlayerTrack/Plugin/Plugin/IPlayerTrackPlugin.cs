@@ -41,5 +41,6 @@ namespace PlayerTrack
 		string GetGender(int? genderId);
 		string GetRace(int id, int genderId);
 		string GetTribe(int id, int genderId);
+		double ConvertHeightToInches(int raceId, int tribeId, int genderId, int sliderHeight);
 	}
 }

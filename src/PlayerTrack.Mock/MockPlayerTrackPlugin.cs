@@ -97,6 +97,11 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
+		public double ConvertHeightToInches(int raceId, int tribeId, int genderId, int sliderHeight)
+		{
+			throw new NotImplementedException();
+		}
+
 		public TrackViewMode TrackViewMode { get; set; }
 		public void PrintHelpMessage()
 		{
