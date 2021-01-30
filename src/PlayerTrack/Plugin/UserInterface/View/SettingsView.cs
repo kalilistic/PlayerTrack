@@ -5,11 +5,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Numerics;
 using CheapLoc;
 using Dalamud.Interface;
 using ImGuiNET;
-using Enumerable = System.Linq.Enumerable;
 
 namespace PlayerTrack
 {
@@ -591,7 +591,7 @@ namespace PlayerTrack
 
 			ImGui.Spacing();
 
-			foreach (var permittedContent in Enumerable.ToList(Configuration.PermittedContent))
+			foreach (var permittedContent in Configuration.PermittedContent.ToList())
 			{
 				var index = Array.IndexOf(ContentIds, permittedContent);
 				ImGui.Text(ContentNames[index]);
@@ -740,12 +740,11 @@ namespace PlayerTrack
 
 				var categoryIcon = Categories[i].Icon;
 				var namesList = new List<string> {Loc.Localize("Default", "Default")};
-				namesList.AddRange(Enumerable.ToList(Configuration.EnabledIcons)
+				namesList.AddRange(Configuration.EnabledIcons.ToList()
 					.Select(icon => icon.ToString()));
 				var names = namesList.ToArray();
 				var codesList = new List<int> {0};
-				codesList.AddRange(Enumerable.Select(Enumerable.ToList(Configuration.EnabledIcons),
-					icon => (int) icon));
+				codesList.AddRange(Configuration.EnabledIcons.ToList().Select(icon => (int) icon));
 				var codes = codesList.ToArray();
 				var iconIndex = Array.IndexOf(codes, categoryIcon);
 				ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 4 * Scale);
@@ -802,7 +801,7 @@ namespace PlayerTrack
 			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 2 * Scale);
 			ImGui.Combo("###PlayerTrack_Icon_Combo", ref _selectedIconIndex,
 				IconNames,
-				Enumerable.Count(Icons));
+				Icons.Count());
 			ImGui.SameLine();
 
 			ImGui.PushFont(UiBuilder.IconFont);
@@ -839,7 +838,7 @@ namespace PlayerTrack
 
 			ImGui.Spacing();
 
-			foreach (var enabledIcon in Enumerable.ToList(Configuration.EnabledIcons))
+			foreach (var enabledIcon in Configuration.EnabledIcons.ToList())
 			{
 				ImGui.BeginGroup();
 				ImGui.PushFont(UiBuilder.IconFont);
