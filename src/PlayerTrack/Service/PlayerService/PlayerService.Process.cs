@@ -16,6 +16,7 @@ namespace PlayerTrack
 		{
 			ProcessLodestoneRequests();
 			MergeDuplicates();
+			RemoveBadRecords();
 			CurrentPlayers.Clear();
 			var currentTime = DateUtil.CurrentTime();
 			foreach (var player in incomingPlayers)
@@ -97,6 +98,7 @@ namespace PlayerTrack
 		{
 			ProcessLodestoneRequests();
 			MergeDuplicates();
+			RemoveBadRecords();
 			CurrentPlayers.Clear();
 			PlayersProcessed?.Invoke();
 		}

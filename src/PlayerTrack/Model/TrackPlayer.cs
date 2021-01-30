@@ -195,6 +195,15 @@ namespace PlayerTrack
 			return string.Concat(name.Replace(' ', '_').ToUpper(), "_", worldId);
 		}
 
+		public void NonDestructiveMerge(TrackPlayer originalPlayer)
+		{
+			if (Color == null) Color = originalPlayer.Color;
+			if (Icon == 0) Icon = originalPlayer.Icon;
+			if (CategoryId == 0) CategoryId = originalPlayer.CategoryId;
+			Notes = originalPlayer.Notes + " " + Notes;
+			ClearBackingFields();
+		}
+
 		public void Merge(TrackPlayer originalPlayer)
 		{
 			// simple fields just use original player

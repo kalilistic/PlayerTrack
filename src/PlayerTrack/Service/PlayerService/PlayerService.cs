@@ -125,6 +125,36 @@ namespace PlayerTrack
 			return !retrievedPlayer ? null : existingPlayer;
 		}
 
+		private void RemoveBadRecords()
+		{
+			var actorIds = AllPlayers.Select(pair => pair.Value.ActorId).ToList();
+			var duplicateActorIds = actorIds.GroupBy(x => x)
+				.Where(g => g.Count() > 1)
+				.Select(y => y.Key)
+				.Distinct().ToList();
+			if (duplicateActorIds.Any())
+				foreach (var actorId in duplicateActorIds)
+				{
+					if (actorId == 0) continue;
+					var players = AllPlayers
+						.Where(pair => pair.Value.ActorId == actorId).OrderBy(pair => pair.Value.Created).ToList();
+					if (players.Count < 2) continue;
+					var originalPlayer = players[0].Value;
+					var newPlayer = players[1].Value;
+					if (!originalPlayer.Name.Equals(newPlayer.Name)) continue;
+					if (newPlayer.Lodestone.Status == TrackLodestoneStatus.Verified)
+					{
+						newPlayer.NonDestructiveMerge(originalPlayer);
+						DeletePlayer(originalPlayer.Key);
+					}
+					else
+					{
+						originalPlayer.NonDestructiveMerge(newPlayer);
+						DeletePlayer(newPlayer.Key);
+					}
+				}
+		}
+
 		private void MergeDuplicates()
 		{
 			var lodestoneIds = AllPlayers.Select(pair => pair.Value.Lodestone.Id).ToList();
@@ -133,7 +163,7 @@ namespace PlayerTrack
 				.Select(y => y.Key)
 				.Distinct().ToList();
 			if (duplicateLodestoneIds.Any())
-				foreach (var lodestoneId in lodestoneIds)
+				foreach (var lodestoneId in duplicateLodestoneIds)
 				{
 					var players = AllPlayers
 						.Where(pair =>
