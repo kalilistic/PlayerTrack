@@ -6,17 +6,29 @@
 
 		public PlayerListPresenter(IPlayerTrackPlugin plugin) : base(plugin)
 		{
-			_view = new PlayerListView{IsVisible = plugin.Configuration.ShowOverlay};
+			_view = new PlayerListView {IsVisible = plugin.Configuration.ShowOverlay};
 			_playerListView = (PlayerListView) _view;
 			_playerListView.WorldNames = new[] {string.Empty};
 			_plugin.PlayerService.PlayersProcessed += PlayerServiceOnPlayersProcessed;
 			_playerListView.ViewModeChanged += PlayerListViewOnViewModeChanged;
 			_playerListView.NewSearch += PlayerListViewOnNewSearch;
 			_playerListView.AddPlayer += PlayerListViewOnAddPlayer;
-			_playerListView.SelectPlayer += PlayerListViewOnSelectPlayer;
+			_playerListView.OpenPlayer += PlayerListViewOnOpenPlayer;
+			_playerListView.TargetPlayer += PlayerListViewOnTargetPlayer;
+			_playerListView.HoverPlayer += PlayerListViewOnHoverPlayer;
 		}
 
-		private void PlayerListViewOnSelectPlayer(string playerKey)
+		private void PlayerListViewOnHoverPlayer(int actorId)
+		{
+			if (_plugin.Configuration.SetFocusTargetOnHover) _plugin.SetFocusTarget(actorId);
+		}
+
+		private void PlayerListViewOnTargetPlayer(int actorId)
+		{
+			if (_plugin.Configuration.SetCurrentTargetOnRightClick) _plugin.SetCurrentTarget(actorId);
+		}
+
+		private void PlayerListViewOnOpenPlayer(string playerKey)
 		{
 			_plugin.SelectPlayer(playerKey);
 		}
@@ -64,6 +76,9 @@
 			_playerListView.ViewModeChanged -= PlayerListViewOnViewModeChanged;
 			_playerListView.NewSearch -= PlayerListViewOnNewSearch;
 			_playerListView.AddPlayer -= PlayerListViewOnAddPlayer;
+			_playerListView.OpenPlayer -= PlayerListViewOnOpenPlayer;
+			_playerListView.TargetPlayer -= PlayerListViewOnTargetPlayer;
+			_playerListView.HoverPlayer -= PlayerListViewOnHoverPlayer;
 		}
 	}
 }

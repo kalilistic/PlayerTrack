@@ -102,6 +102,16 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
+		public void SetCurrentTarget(int actorId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SetFocusTarget(int actorId)
+		{
+			throw new NotImplementedException();
+		}
+
 		public TrackViewMode TrackViewMode { get; set; }
 		public void PrintHelpMessage()
 		{

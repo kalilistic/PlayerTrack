@@ -12,14 +12,6 @@ namespace PlayerTrack
 
 		public event ProcessPlayersEventHandler PlayersProcessed;
 
-		public void ProcessExistingOnly()
-		{
-			ProcessLodestoneRequests();
-			MergeDuplicates();
-			CurrentPlayers.Clear();
-			PlayersProcessed?.Invoke();
-		}
-
 		public void ProcessPlayers(List<TrackPlayer> incomingPlayers)
 		{
 			ProcessLodestoneRequests();
@@ -99,6 +91,14 @@ namespace PlayerTrack
 
 			PlayersProcessed?.Invoke();
 			SendAlerts();
+		}
+
+		public void ProcessExistingOnly()
+		{
+			ProcessLodestoneRequests();
+			MergeDuplicates();
+			CurrentPlayers.Clear();
+			PlayersProcessed?.Invoke();
 		}
 	}
 }

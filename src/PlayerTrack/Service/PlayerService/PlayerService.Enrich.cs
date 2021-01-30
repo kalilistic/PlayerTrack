@@ -25,12 +25,13 @@ namespace PlayerTrack
 		private void AddCustomizeData(TrackPlayer player)
 		{
 			if (player.Gender == null) return;
-			var gender = (int)player.Gender;
+			var gender = (int) player.Gender;
 			player.GenderDisplay = _plugin.GetGender(gender);
 			player.RaceDisplay = _plugin.GetRace(player.Race, gender);
 			player.TribeDisplay = _plugin.GetTribe(player.Tribe, gender);
 			player.HeightDisplay =
-				_plugin.ConvertHeightToInches(player.Race, player.Tribe, gender, player.Height).ToString(CultureInfo.CurrentCulture);
+				_plugin.ConvertHeightToInches(player.Race, player.Tribe, gender, player.Height)
+					.ToString(CultureInfo.CurrentCulture);
 		}
 
 		private void AddLocationData(TrackPlayer player)
@@ -48,12 +49,11 @@ namespace PlayerTrack
 					encounter.Job.Code = _plugin.GetJobCode(encounter.Job.Id);
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				_plugin.LogError(ex, "Failed to update encounters properly so reverting");
 				player.Encounters = encounters;
 			}
-
 		}
 
 		private void AddCategoryData(TrackPlayer player)

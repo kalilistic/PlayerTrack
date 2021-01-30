@@ -17,9 +17,13 @@ namespace PlayerTrack
 	{
 		public delegate void AddPlayerEventHandler(string playerName, string worldName);
 
+		public delegate void HoverPlayerEventHandler(int actorId);
+
+		public delegate void OpenPlayerEventHandler(string playerKey);
+
 		public delegate void SearchEventHandler(string input);
 
-		public delegate void SelectPlayerEventHandler(string playerKey);
+		public delegate void TargetPlayerEventHandler(int actorId);
 
 		public delegate void ViewModeEventHandler(TrackViewMode trackViewMode);
 
@@ -32,6 +36,7 @@ namespace PlayerTrack
 		}
 
 		private string _addPlayerInput = string.Empty;
+		private int _currentHoverPlayer;
 		private string _searchInput = string.Empty;
 		private int _selectedWorld;
 		public PlayerListModal CurrentModal = PlayerListModal.None;
@@ -41,7 +46,9 @@ namespace PlayerTrack
 		public event ViewModeEventHandler ViewModeChanged;
 		public event SearchEventHandler NewSearch;
 		public event AddPlayerEventHandler AddPlayer;
-		public event SelectPlayerEventHandler SelectPlayer;
+		public event OpenPlayerEventHandler OpenPlayer;
+		public event TargetPlayerEventHandler TargetPlayer;
+		public event HoverPlayerEventHandler HoverPlayer;
 
 		public override void DrawView()
 		{
@@ -186,7 +193,13 @@ namespace PlayerTrack
 					ImGui.SameLine();
 					ImGui.TextColored(player.Color, player.Name);
 					ImGui.EndGroup();
-					if (ImGui.IsItemClicked()) SelectPlayer?.Invoke(player.Key);
+					if (ImGui.IsItemClicked(0)) OpenPlayer?.Invoke(player.Key);
+					if (ImGui.IsItemClicked(1)) TargetPlayer?.Invoke(player.ActorId);
+					if (ImGui.IsItemHovered() && player.ActorId != _currentHoverPlayer)
+					{
+						_currentHoverPlayer = player.ActorId;
+						HoverPlayer?.Invoke(player.ActorId);
+					}
 				}
 			}
 			else

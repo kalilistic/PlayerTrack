@@ -51,7 +51,7 @@ namespace PlayerTrack
 				IsCategoryDataUpdated = false;
 			}
 
-			ImGui.SetNextWindowSize(new Vector2(530 * Scale, 300 * Scale), ImGuiCond.Appearing);
+			ImGui.SetNextWindowSize(new Vector2(580 * Scale, 300 * Scale), ImGuiCond.Appearing);
 			if (ImGui.Begin(Loc.Localize("SettingsView", "PlayerTrack Settings") + "###PlayerTrack_Settings_View",
 				ref isVisible, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar))
 				IsVisible = isVisible;
@@ -169,6 +169,12 @@ namespace PlayerTrack
 					ImGui.EndTabItem();
 				}
 
+				if (ImGui.BeginTabItem(Loc.Localize("Targets", "Targets") + "###PlayerTrack_Targets_Tab"))
+				{
+					_currentTab = Tab.Targets;
+					ImGui.EndTabItem();
+				}
+
 				if (ImGui.BeginTabItem(Loc.Localize("Backup", "Backup") + "###PlayerTrack_Backup_Tab"))
 				{
 					_currentTab = Tab.Backup;
@@ -223,6 +229,11 @@ namespace PlayerTrack
 				case Tab.Categories:
 				{
 					DrawCategories();
+					break;
+				}
+				case Tab.Targets:
+				{
+					DrawTargets();
 					break;
 				}
 				case Tab.Backup:
@@ -287,6 +298,12 @@ namespace PlayerTrack
 			CategoryTable();
 		}
 
+		private void DrawTargets()
+		{
+			EnableCurrentTarget();
+			EnableFocusTarget();
+		}
+
 		private void DrawBackup()
 		{
 			BackupFrequency();
@@ -314,9 +331,7 @@ namespace PlayerTrack
 			var showOverlay = Configuration.ShowOverlay;
 			if (ImGui.Checkbox(Loc.Localize("ShowOverlay", "Show Overlay") + "###PlayerTrack_ShowOverlay_Checkbox",
 				ref showOverlay))
-			{
 				RequestToggleOverlay?.Invoke(this, true);
-			}
 
 			CustomWidgets.HelpMarker(Loc.Localize("ShowOverlay_HelpMarker",
 				"show overlay window"));
@@ -842,6 +857,40 @@ namespace PlayerTrack
 			ImGui.Spacing();
 		}
 
+		private void EnableCurrentTarget()
+		{
+			var enableCurrentTarget = Configuration.SetCurrentTargetOnRightClick;
+			if (ImGui.Checkbox(
+				Loc.Localize("EnableCurrentTarget", "Set Current Target on Right Click") +
+				"###PlayerTrack_EnableCurrentTarget_Checkbox",
+				ref enableCurrentTarget))
+			{
+				Configuration.SetCurrentTargetOnRightClick = enableCurrentTarget;
+				ConfigUpdated?.Invoke(this, true);
+			}
+
+			CustomWidgets.HelpMarker(Loc.Localize("EnableCurrentTarget_HelpMarker",
+				"right click on a player name to target them"));
+			ImGui.Spacing();
+		}
+
+		private void EnableFocusTarget()
+		{
+			var enableFocusTarget = Configuration.SetFocusTargetOnHover;
+			if (ImGui.Checkbox(
+				Loc.Localize("EnableFocusTarget", "Set Focus Target on Hover") +
+				"###PlayerTrack_EnableFocusTarget_Checkbox",
+				ref enableFocusTarget))
+			{
+				Configuration.SetFocusTargetOnHover = enableFocusTarget;
+				ConfigUpdated?.Invoke(this, true);
+			}
+
+			CustomWidgets.HelpMarker(Loc.Localize("EnableFocusTarget_HelpMarker",
+				"hover on a player name to focus target them"));
+			ImGui.Spacing();
+		}
+
 		public void DrawLinks()
 		{
 			var buttonSize = new Vector2(120f * Scale, 25f * Scale);
@@ -864,6 +913,7 @@ namespace PlayerTrack
 			Lodestone,
 			Alerts,
 			Categories,
+			Targets,
 			Backup,
 			Links
 		}

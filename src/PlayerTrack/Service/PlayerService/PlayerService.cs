@@ -29,11 +29,6 @@ namespace PlayerTrack
 		public ConcurrentDictionary<string, TrackPlayer> CurrentPlayers { get; set; }
 		public ConcurrentDictionary<string, TrackPlayer> AllPlayers { get; set; }
 
-		private void OnCategoriesUpdated(object sender, bool e)
-		{
-			foreach (var player in AllPlayers) AddCategoryData(player.Value);
-		}
-
 		public TrackPlayer GetPlayer(string playerKey)
 		{
 			if (string.IsNullOrEmpty(playerKey)) return null;
@@ -116,6 +111,18 @@ namespace PlayerTrack
 			};
 			EnrichPlayerData(newPlayer);
 			return AllPlayers.TryAdd(newPlayer.Key, newPlayer);
+		}
+
+		private void OnCategoriesUpdated(object sender, bool e)
+		{
+			foreach (var player in AllPlayers) AddCategoryData(player.Value);
+		}
+
+		public TrackPlayer GetCurrentPlayer(string playerKey)
+		{
+			if (string.IsNullOrEmpty(playerKey)) return null;
+			var retrievedPlayer = CurrentPlayers.TryGetValue(playerKey, out var existingPlayer);
+			return !retrievedPlayer ? null : existingPlayer;
 		}
 
 		private void MergeDuplicates()

@@ -1,6 +1,4 @@
-﻿
-
-// ReSharper disable InconsistentNaming
+﻿// ReSharper disable InconsistentNaming
 
 namespace PlayerTrack
 {

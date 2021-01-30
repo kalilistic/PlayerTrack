@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Threading;
 using CheapLoc;
-using Newtonsoft.Json;
+
 // ReSharper disable InvertIf
 
 namespace PlayerTrack

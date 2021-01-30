@@ -10,6 +10,11 @@ namespace PlayerTrack
 		Localization Localization { get; }
 		string PluginName { get; }
 		TrackViewMode TrackViewMode { get; set; }
+		DataManager DataManager { get; set; }
+		LodestoneService LodestoneService { get; set; }
+		CategoryService CategoryService { get; set; }
+		bool InContent { get; set; }
+		JsonSerializerSettings JsonSerializerSettings { get; set; }
 		void PrintHelpMessage();
 		void SaveConfig();
 		void PrintMessage(string message);
@@ -22,17 +27,12 @@ namespace PlayerTrack
 		string GetJobCode(uint classJobId);
 		void SetDefaultIcons();
 		void RestartTimers();
-		DataManager DataManager { get; set; }
-		LodestoneService LodestoneService { get; set; }
 		uint? GetWorldId(string worldName);
 		bool IsLoggedIn();
 		bool IsValidCharacterName(string name);
 		string[] GetContentNames();
 		uint[] GetContentIds();
-		CategoryService CategoryService { get; set; }
-		bool InContent { get; set; }
 		string[] GetWorldNames();
-		JsonSerializerSettings JsonSerializerSettings { get; set; }
 		void ToggleOverlay(string command, string args);
 		void SelectPlayer(string playerKey);
 		void ReloadList();
@@ -42,5 +42,7 @@ namespace PlayerTrack
 		string GetRace(int id, int genderId);
 		string GetTribe(int id, int genderId);
 		double ConvertHeightToInches(int raceId, int tribeId, int genderId, int sliderHeight);
+		void SetCurrentTarget(int actorId);
+		void SetFocusTarget(int actorId);
 	}
 }

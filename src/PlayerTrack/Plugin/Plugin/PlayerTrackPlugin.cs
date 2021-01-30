@@ -21,12 +21,9 @@ namespace PlayerTrack
 {
 	public sealed class PlayerTrackPlugin : PluginBase, IPlayerTrackPlugin
 	{
-		public DataManager DataManager { get; set; }
-		public bool InContent { get; set; }
 		private bool _isProcessing = true;
-		public JsonSerializerSettings JsonSerializerSettings { get; set; }
-		private Timer _onUpdateTimer;
 		private Timer _onSaveTimer;
+		private Timer _onUpdateTimer;
 		private PlayerDetailPresenter _playerDetailPresenter;
 		private PlayerListPresenter _playerListPresenter;
 		private DalamudPluginInterface _pluginInterface;
@@ -53,6 +50,10 @@ namespace PlayerTrack
 				_isProcessing = false;
 			});
 		}
+
+		public DataManager DataManager { get; set; }
+		public bool InContent { get; set; }
+		public JsonSerializerSettings JsonSerializerSettings { get; set; }
 
 		public LodestoneService LodestoneService { get; set; }
 		public CategoryService CategoryService { get; set; }
@@ -325,7 +326,7 @@ namespace PlayerTrack
 			IEnumerable<PlayerCharacter> players)
 		{
 			try
-			{	
+			{
 				var currentDateTime = DateUtil.CurrentTime();
 				return players.ToList().Select(player => new TrackPlayer
 				{
@@ -340,10 +341,10 @@ namespace PlayerTrack
 						}
 					},
 					FreeCompany = player.CompanyTag,
-					Gender = player.Customize[(int)CustomizeIndex.Gender],
-					Race = player.Customize[(int)CustomizeIndex.Race],
-					Tribe = player.Customize[(int)CustomizeIndex.Tribe],
-					Height = player.Customize[(int)CustomizeIndex.Height],
+					Gender = player.Customize[(int) CustomizeIndex.Gender],
+					Race = player.Customize[(int) CustomizeIndex.Race],
+					Tribe = player.Customize[(int) CustomizeIndex.Tribe],
+					Height = player.Customize[(int) CustomizeIndex.Height],
 					Encounters = new List<TrackEncounter>
 					{
 						new TrackEncounter

@@ -7,6 +7,7 @@ namespace PlayerTrack
 {
 	public class TrackViewPlayer
 	{
+		public int ActorId;
 		public Vector4 Color;
 		public string Icon;
 		public string Key;
@@ -27,7 +28,8 @@ namespace PlayerTrack
 						Name = player.Value.Name,
 						Color = player.Value.DisplayColor,
 						Icon = ((FontAwesomeIcon) player.Value.DisplayIcon).ToIconString(),
-						Priority = player.Value.Priority
+						Priority = player.Value.Priority,
+						ActorId = player.Value.ActorId
 					}));
 				listItems = new List<TrackViewPlayer>(listItems.OrderBy(player => player.Priority)
 					.ThenBy(player => player.Name));

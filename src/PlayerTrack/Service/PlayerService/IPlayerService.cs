@@ -5,12 +5,12 @@ namespace PlayerTrack
 {
 	public interface IPlayerService
 	{
-		void ProcessLodestoneRequests();
-		void SaveData();
-		void BackupPlayers(bool forceBackup = false);
 		ConcurrentDictionary<string, TrackPlayer> RecentPlayers { get; set; }
 		ConcurrentDictionary<string, TrackPlayer> CurrentPlayers { get; set; }
 		ConcurrentDictionary<string, TrackPlayer> AllPlayers { get; set; }
+		void ProcessLodestoneRequests();
+		void SaveData();
+		void BackupPlayers(bool forceBackup = false);
 		TrackPlayer GetPlayer(string playerKey);
 		void UpdatePlayer(TrackPlayer player);
 		bool DeletePlayer(string playerKey);

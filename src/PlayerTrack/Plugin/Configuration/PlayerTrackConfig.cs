@@ -35,5 +35,7 @@ namespace PlayerTrack
 		public bool EnableAlerts { get; set; } = true;
 		public int AlertDelay { get; set; } = 1000;
 		public bool ShowOverlay { get; set; } = true;
+		public bool SetCurrentTargetOnRightClick { get; set; } = true;
+		public bool SetFocusTargetOnHover { get; set; } = false;
 	}
 }

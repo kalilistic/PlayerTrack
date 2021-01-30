@@ -12,6 +12,8 @@ namespace PlayerTrack
 		public List<TrackViewEncounter> Encounters;
 		public string FirstSeen;
 		public string FreeCompany;
+		public string Gender;
+		public string Height;
 		public string HomeWorld;
 		public string Icon;
 		public int[] IconCodes;
@@ -26,11 +28,9 @@ namespace PlayerTrack
 		public string Notes;
 		public string PreviousHomeWorlds;
 		public string PreviousNames;
-		public string SeenCount;
-		public string Gender;
 		public string Race;
+		public string SeenCount;
 		public string Tribe;
-		public string Height;
 
 		public static TrackPlayer Map(TrackViewPlayerDetail player, IPlayerTrackPlugin plugin)
 		{
