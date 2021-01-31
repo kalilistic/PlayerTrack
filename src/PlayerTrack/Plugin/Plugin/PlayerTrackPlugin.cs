@@ -122,12 +122,6 @@ namespace PlayerTrack
 			SaveConfig(Configuration);
 		}
 
-		public void RestartTimers()
-		{
-			StopTimers();
-			StartTimers();
-		}
-
 		public string[] GetWorldNames()
 		{
 			try
@@ -151,7 +145,7 @@ namespace PlayerTrack
 			_playerListPresenter.PlayerServiceOnPlayersProcessed();
 		}
 
-		public void Dispose()
+		public new void Dispose()
 		{
 			var delayCount = 0;
 			while (_isProcessing)
@@ -181,7 +175,7 @@ namespace PlayerTrack
 			_isProcessing = false;
 		}
 
-		public void SetupCommands()
+		public new void SetupCommands()
 		{
 			_pluginInterface.CommandManager.AddHandler("/ptrack", new CommandInfo(ToggleOverlay)
 			{
@@ -195,7 +189,7 @@ namespace PlayerTrack
 			});
 		}
 
-		public void RemoveCommands()
+		public new void RemoveCommands()
 		{
 			_pluginInterface.CommandManager.RemoveHandler("/ptrack");
 			_pluginInterface.CommandManager.RemoveHandler("/ptrackconfig");
@@ -407,7 +401,7 @@ namespace PlayerTrack
 			_settingsPresenter.ToggleView();
 		}
 
-		public void LoadConfig()
+		public new void LoadConfig()
 		{
 			try
 			{

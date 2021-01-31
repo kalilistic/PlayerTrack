@@ -26,7 +26,6 @@ namespace PlayerTrack
 		uint GetContentId(uint territoryTypeId);
 		string GetJobCode(uint classJobId);
 		void SetDefaultIcons();
-		void RestartTimers();
 		uint? GetWorldId(string worldName);
 		bool IsLoggedIn();
 		bool IsValidCharacterName(string name);
