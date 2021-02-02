@@ -43,5 +43,6 @@ namespace PlayerTrack
 		double ConvertHeightToInches(int raceId, int tribeId, int genderId, int sliderHeight);
 		void SetCurrentTarget(int actorId);
 		void SetFocusTarget(int actorId);
+		void RevertFocusTarget();
 	}
 }

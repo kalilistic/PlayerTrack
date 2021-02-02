@@ -19,6 +19,8 @@ namespace PlayerTrack
 
 		public delegate void HoverPlayerEventHandler(int actorId);
 
+		public delegate void StopHoverPlayerEventHandler();
+
 		public delegate void OpenPlayerEventHandler(string playerKey);
 
 		public delegate void SearchEventHandler(string input);
@@ -37,6 +39,7 @@ namespace PlayerTrack
 
 		private string _addPlayerInput = string.Empty;
 		private int _currentHoverPlayer;
+		private bool _usedHover;
 		private string _searchInput = string.Empty;
 		private int _selectedWorld;
 		public PlayerListModal CurrentModal = PlayerListModal.None;
@@ -49,6 +52,7 @@ namespace PlayerTrack
 		public event OpenPlayerEventHandler OpenPlayer;
 		public event TargetPlayerEventHandler TargetPlayer;
 		public event HoverPlayerEventHandler HoverPlayer;
+		public event StopHoverPlayerEventHandler StopHoverPlayer;
 
 		public override void DrawView()
 		{
@@ -184,6 +188,7 @@ namespace PlayerTrack
 			if (Players != null && Players.Count > 0)
 			{
 				ImGui.Spacing();
+				var noHover = true;
 				foreach (var player in Players)
 				{
 					ImGui.BeginGroup();
@@ -195,11 +200,22 @@ namespace PlayerTrack
 					ImGui.EndGroup();
 					if (ImGui.IsItemClicked(0)) OpenPlayer?.Invoke(player.Key);
 					if (ImGui.IsItemClicked(1)) TargetPlayer?.Invoke(player.ActorId);
-					if (ImGui.IsItemHovered() && player.ActorId != _currentHoverPlayer)
+					if (ImGui.IsItemHovered())
 					{
-						_currentHoverPlayer = player.ActorId;
-						HoverPlayer?.Invoke(player.ActorId);
+						noHover = false;
+						_usedHover = true;
+						if (player.ActorId != _currentHoverPlayer)
+						{
+							_currentHoverPlayer = player.ActorId;
+							HoverPlayer?.Invoke(player.ActorId);
+						}
 					}
+				}
+				if (noHover && _usedHover)
+				{
+					_usedHover = false;
+					_currentHoverPlayer = 0;
+					StopHoverPlayer?.Invoke();
 				}
 			}
 			else

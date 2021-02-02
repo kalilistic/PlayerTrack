@@ -16,6 +16,12 @@
 			_playerListView.OpenPlayer += PlayerListViewOnOpenPlayer;
 			_playerListView.TargetPlayer += PlayerListViewOnTargetPlayer;
 			_playerListView.HoverPlayer += PlayerListViewOnHoverPlayer;
+			_playerListView.StopHoverPlayer += PlayerListViewOnStopHoverPlayer;
+		}
+
+		private void PlayerListViewOnStopHoverPlayer()
+		{
+			if (_plugin.Configuration.SetFocusTargetOnHover) _plugin.RevertFocusTarget();
 		}
 
 		private void PlayerListViewOnHoverPlayer(int actorId)
@@ -79,6 +85,7 @@
 			_playerListView.OpenPlayer -= PlayerListViewOnOpenPlayer;
 			_playerListView.TargetPlayer -= PlayerListViewOnTargetPlayer;
 			_playerListView.HoverPlayer -= PlayerListViewOnHoverPlayer;
+			_playerListView.StopHoverPlayer -= PlayerListViewOnStopHoverPlayer;
 		}
 	}
 }

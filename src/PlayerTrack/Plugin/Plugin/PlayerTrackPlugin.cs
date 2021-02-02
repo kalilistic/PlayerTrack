@@ -376,6 +376,10 @@ namespace PlayerTrack
 			_settingsPresenter = new SettingsPresenter(this);
 			_pluginInterface.UiBuilder.OnBuildUi += DrawUI;
 			_pluginInterface.UiBuilder.OnOpenConfigUi += (sender, args) => DrawConfigUI();
+			if (Configuration.ShowOverlay)
+			{
+				_playerListPresenter.ShowView();
+			}
 		}
 
 		private void HandleFreshInstall()
@@ -387,6 +391,7 @@ namespace PlayerTrack
 			SetDefaultIcons();
 			SaveConfig();
 			_settingsPresenter.ShowView();
+			_playerListPresenter.ShowView();
 		}
 
 		private void DrawUI()

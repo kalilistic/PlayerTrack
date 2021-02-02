@@ -112,6 +112,11 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
+		public void RevertFocusTarget()
+		{
+			throw new NotImplementedException();
+		}
+
 		public TrackViewMode TrackViewMode { get; set; }
 		public void PrintHelpMessage()
 		{

@@ -53,6 +53,7 @@ namespace PlayerTrack
 						if (player.Lodestone.Id != 0 && existingPlayer.Lodestone.Id == 0)
 							existingPlayer.Lodestone.Id = player.Lodestone.Id;
 						if (!string.IsNullOrEmpty(player.FreeCompany)) existingPlayer.FreeCompany = player.FreeCompany;
+						existingPlayer.ActorId = player.ActorId;
 						existingPlayer.Race = player.Race;
 						existingPlayer.Tribe = player.Tribe;
 						existingPlayer.Gender = player.Gender;
