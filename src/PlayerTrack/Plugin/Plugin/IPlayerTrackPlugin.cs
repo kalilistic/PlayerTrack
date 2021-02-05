@@ -44,5 +44,6 @@ namespace PlayerTrack
 		void SetCurrentTarget(int actorId);
 		void SetFocusTarget(int actorId);
 		void RevertFocusTarget();
+		long LocationLastChanged { get; set; }
 	}
 }

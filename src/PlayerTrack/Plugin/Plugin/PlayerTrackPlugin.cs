@@ -28,6 +28,8 @@ namespace PlayerTrack
 		private PlayerListPresenter _playerListPresenter;
 		private DalamudPluginInterface _pluginInterface;
 		private SettingsPresenter _settingsPresenter;
+		private uint _currentTerritoryTypeId;
+		public long LocationLastChanged { get; set; }
 
 		public PlayerTrackPlugin(string pluginName, DalamudPluginInterface pluginInterface) : base(pluginName,
 			pluginInterface)
@@ -46,6 +48,8 @@ namespace PlayerTrack
 				SetupCommands();
 				HandleFreshInstall();
 				StartTimers();
+				_currentTerritoryTypeId = GetTerritoryType();
+				LocationLastChanged = DateUtil.CurrentTime();
 				_isProcessing = false;
 			});
 		}
@@ -255,6 +259,13 @@ namespace PlayerTrack
 					PlayerService.ProcessExistingOnly();
 					_isProcessing = false;
 					return;
+				}
+
+				// update territory if needed
+				if (territoryTypeId != _currentTerritoryTypeId)
+				{
+					_currentTerritoryTypeId = territoryTypeId;
+					LocationLastChanged = DateUtil.CurrentTime();
 				}
 
 				// content check

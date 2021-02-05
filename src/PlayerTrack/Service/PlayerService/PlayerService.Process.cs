@@ -37,8 +37,11 @@ namespace PlayerTrack
 						if (!retrievedPlayer) throw new KeyNotFoundException();
 						var isNewEncounter = existingPlayer.Encounters.Last().Location.TerritoryType !=
 						                     encounter.Location.TerritoryType ||
-						                     DateUtil.CurrentTime() - existingPlayer.Encounters.Last().Updated >=
-						                     _plugin.Configuration.NewEncounterThreshold;
+						                     existingPlayer.Encounters.Last().Location.TerritoryType ==
+						                     encounter.Location.TerritoryType &&
+						                     (_plugin.LocationLastChanged >= existingPlayer.Encounters.Last().Updated ||
+						                      DateUtil.CurrentTime() - existingPlayer.Encounters.Last().Updated >=
+						                      _plugin.Configuration.NewEncounterThreshold);
 						if (isNewEncounter)
 						{
 							existingPlayer.Encounters.Add(encounter);
