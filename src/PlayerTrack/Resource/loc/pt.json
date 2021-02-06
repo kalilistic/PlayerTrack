@@ -10,7 +10,7 @@
     },
     "HelpMessage2": {
         "message":
-            "PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). If this happens, you'll see an asterisk next to their home world and can mouse-over to see their previous residence.",
+            "PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). If this happens, you'll see an indicator next to their home world and can mouse-over to see their previous residence.",
         "description": "PlayerTrackPlugin.PrintHelpMessage"
     },
     "HelpMessage3": {
@@ -90,28 +90,40 @@
         "message": "Lodestone Status",
         "description": "PlayerDetailView.PlayerInfo"
     },
-    "PlayerDisplay": {
+    "PlayerCustomize": {
+        "message": "Player Character",
+        "description": "PlayerDetailView.PlayerCharacterDetails"
+    },
+    "PlayerRace": {
+        "message": "Race",
+        "description": "PlayerDetailView.PlayerCharacterDetails"
+    },
+    "PlayerGender": {
+        "message": "Gender",
+        "description": "PlayerDetailView.PlayerCharacterDetails"
+    },
+    "PlayerTribe": {
+        "message": "Tribe",
+        "description": "PlayerDetailView.PlayerCharacterDetails"
+    },
+    "PlayerHeight": {
+        "message": "Height",
+        "description": "PlayerDetailView.PlayerCharacterDetails"
+    },
+    "PlayerHeightValue": {
+        "message": "{0} in",
+        "description": "PlayerDetailView.PlayerCharacterDetails"
+    },
+    "DisplayOptions": {
         "message": "Display Options",
-        "description": "PlayerDetailView.PlayerDisplay"
-    },
-    "PlayerCategory": {
-        "message": "Category",
-        "description": "PlayerDetailView.PlayerDisplay"
-    },
-    "PlayerOverride": {
-        "message": "Custom",
-        "description": "PlayerDetailView.PlayerDisplay"
-    },
-    "PlayerAlerts": {
-        "message": "Alerts",
-        "description": "PlayerDetailView.PlayerDisplay"
+        "description": "PlayerDetailView.DisplaySettings"
     },
     "EnablePlayerAlerts": {
-        "message": "Enabled",
-        "description": "PlayerDetailView.PlayerDisplay"
+        "message": "Enable Alerts",
+        "description": "PlayerDetailView.PlayerOverride"
     },
     "PlayerNotes": {
-        "message": " Player Notes",
+        "message": "Notes",
         "description": "PlayerDetailView.PlayerNotes"
     },
     "Encounters": {
@@ -270,6 +282,10 @@
         "message": "Categories",
         "description": "SettingsView.DrawTabs"
     },
+    "Targets": {
+        "message": "Targets",
+        "description": "SettingsView.DrawTabs"
+    },
     "Backup": {
         "message": "Backup",
         "description": "SettingsView.DrawTabs"
@@ -285,6 +301,30 @@
     "PluginEnabled_HelpMarker": {
         "message": "toggle the plugin on/off",
         "description": "SettingsView.PluginEnabled"
+    },
+    "ShowOverlay": {
+        "message": "Show Overlay",
+        "description": "SettingsView.ShowOverlay"
+    },
+    "ShowOverlay_HelpMarker": {
+        "message": "show overlay window",
+        "description": "SettingsView.ShowOverlay"
+    },
+    "ShowPlayerCharacterDetails": {
+        "message": "Show Player Character Details",
+        "description": "SettingsView.ShowPlayerCharacterDetails"
+    },
+    "ShowPlayerCharacterDetails_HelpMarker": {
+        "message": "show details about character such as tribe and gender",
+        "description": "SettingsView.ShowPlayerCharacterDetails"
+    },
+    "ShowPlayerOverride": {
+        "message": "Show Player Display Options",
+        "description": "SettingsView.ShowPlayerOverride"
+    },
+    "ShowPlayerOverride_HelpMarker": {
+        "message": "show options to override display settings such as color and icon",
+        "description": "SettingsView.ShowPlayerOverride"
     },
     "Language": {
         "message": "Language",
@@ -437,6 +477,22 @@
     "CategoryAction": {
         "message": "Actions",
         "description": "SettingsView.CategoryTable"
+    },
+    "EnableCurrentTarget": {
+        "message": "Set Current Target on Right Click",
+        "description": "SettingsView.EnableCurrentTarget"
+    },
+    "EnableCurrentTarget_HelpMarker": {
+        "message": "right click on a player name to target them",
+        "description": "SettingsView.EnableCurrentTarget"
+    },
+    "EnableFocusTarget": {
+        "message": "Set Focus Target on Hover",
+        "description": "SettingsView.EnableFocusTarget"
+    },
+    "EnableFocusTarget_HelpMarker": {
+        "message": "hover on a player name to focus target them",
+        "description": "SettingsView.EnableFocusTarget"
     },
     "OpenGithub": {
         "message": "Github",
