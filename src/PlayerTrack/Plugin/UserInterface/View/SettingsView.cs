@@ -256,6 +256,8 @@ namespace PlayerTrack
 		{
 			PluginEnabled();
 			ShowOverlay();
+			ShowPlayerCharacterDetails();
+			ShowPlayerOverride();
 			Compressed();
 			SetLanguage();
 		}
@@ -335,6 +337,40 @@ namespace PlayerTrack
 
 			CustomWidgets.HelpMarker(Loc.Localize("ShowOverlay_HelpMarker",
 				"show overlay window"));
+			ImGui.Spacing();
+		}
+
+		private void ShowPlayerCharacterDetails()
+		{
+			var showPlayerCharacterDetails = Configuration.ShowPlayerCharacterDetails;
+			if (ImGui.Checkbox(
+				Loc.Localize("ShowPlayerCharacterDetails", "Show Player Character Details") +
+				"###PlayerTrack_ShowPlayerCharacterDetails_Checkbox",
+				ref showPlayerCharacterDetails))
+			{
+				Configuration.ShowPlayerCharacterDetails = showPlayerCharacterDetails;
+				ConfigUpdated?.Invoke(this, true);
+			}
+
+			CustomWidgets.HelpMarker(Loc.Localize("ShowPlayerCharacterDetails_HelpMarker",
+				"show details about character such as tribe and gender"));
+			ImGui.Spacing();
+		}
+
+		private void ShowPlayerOverride()
+		{
+			var showPlayerOverride = Configuration.ShowPlayerOverride;
+			if (ImGui.Checkbox(
+				Loc.Localize("ShowPlayerOverride", "Show Player Display Options") +
+				"###PlayerTrack_ShowPlayerOverride_Checkbox",
+				ref showPlayerOverride))
+			{
+				Configuration.ShowPlayerOverride = showPlayerOverride;
+				ConfigUpdated?.Invoke(this, true);
+			}
+
+			CustomWidgets.HelpMarker(Loc.Localize("ShowPlayerOverride_HelpMarker",
+				"show options to override display settings such as color and icon"));
 			ImGui.Spacing();
 		}
 

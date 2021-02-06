@@ -10,6 +10,7 @@ namespace PlayerTrack
 		{
 			_view = new PlayerDetailView();
 			_playerDetailView = (PlayerDetailView) _view;
+			_playerDetailView.Configuration = _plugin.Configuration;
 			_playerDetailView.ResetPlayer += PlayerDetailViewOnResetPlayer;
 			_playerDetailView.DeletePlayer += PlayerDetailViewOnDeletePlayer;
 			_playerDetailView.SavePlayer += PlayerDetailViewOnSavePlayer;
@@ -21,7 +22,6 @@ namespace PlayerTrack
 			_plugin.PlayerService.UpdatePlayer(updatedPlayer);
 			_plugin.ReloadList();
 		}
-
 
 		private void PlayerDetailViewOnDeletePlayer(string playerKey)
 		{

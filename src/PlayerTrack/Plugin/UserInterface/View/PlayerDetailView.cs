@@ -33,9 +33,9 @@ namespace PlayerTrack
 		}
 
 		private readonly List<Vector4> _colorPalette = ImGuiUtil.CreatePalette();
+		public PlayerTrackConfig Configuration;
 		public PlayerDetailModal CurrentModal = PlayerDetailModal.None;
 		public TrackViewPlayerDetail Player;
-
 		public int SelectedCategory;
 		public int SelectedIcon;
 		public event ResetPlayerEventHandler ResetPlayer;
@@ -47,21 +47,29 @@ namespace PlayerTrack
 			if (!IsVisible) return;
 			if (Player == null) return;
 			var isVisible = IsVisible;
-			ImGui.SetNextWindowSize(new Vector2(500 * Scale, 570 * Scale), ImGuiCond.Always);
+			ImGui.SetNextWindowSize(new Vector2(460 * Scale, CalcHeight()), ImGuiCond.Always);
 			if (ImGui.Begin(Loc.Localize("PlayerDetailView", "PlayerTrack") + "###PlayerTrack_PlayerDetail_View",
 				ref isVisible, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoTitleBar))
 			{
 				IsVisible = isVisible;
 				Controls();
 				PlayerInfo();
-				PlayerCategory();
-				PlayerOverride();
+				PlayerCharacterDetails();
+				DisplaySettings();
 				PlayerNotes();
 				PlayerEncounters();
 				OpenModals();
 			}
 
 			ImGui.End();
+		}
+
+		private float CalcHeight()
+		{
+			var baseHeight = 450;
+			if (Configuration.ShowPlayerOverride) baseHeight += 30;
+			if (Configuration.ShowPlayerCharacterDetails) baseHeight += 70;
+			return baseHeight * Scale;
 		}
 
 		private void OpenModals()
@@ -156,7 +164,13 @@ namespace PlayerTrack
 
 			// row 4
 			CustomWidgets.Text(Loc.Localize("LodestoneStatus", "Lodestone Status"), Player.LodestoneStatus);
+
 			ImGui.Spacing();
+		}
+
+		private void PlayerCharacterDetails()
+		{
+			if (!Configuration.ShowPlayerCharacterDetails) return;
 
 			// headings 2
 			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerCustomize", "Player Character"));
@@ -186,23 +200,24 @@ namespace PlayerTrack
 				CustomWidgets.Text(Loc.Localize("PlayerHeight", "Height"), string.Format(
 					Loc.Localize("PlayerHeightValue", "{0} in"),
 					Player.Height));
+
+			ImGui.Spacing();
 		}
 
-		private void PlayerCategory()
+		private void DisplaySettings()
 		{
-			ImGui.Spacing();
-			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerCategory", "Player Category"));
+			ImGui.TextColored(UIColor.Violet, Loc.Localize("DisplayOptions", "Display Options"));
 			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 3);
-			if (ImGui.Combo("###PlayerTrack_PlayerCategory_Combo", ref SelectedCategory,
+			if (ImGui.Combo("###PlayerTrack_DisplaySettings_Combo", ref SelectedCategory,
 				Player.CategoryNames,
 				Player.CategoryNames.Length))
 				Player.CategoryIndex = SelectedCategory;
+			if (Configuration.ShowPlayerOverride) PlayerOverride();
+			ImGui.Spacing();
 		}
 
 		private void PlayerOverride()
 		{
-			ImGui.Spacing();
-			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerOverride", "Player Override"));
 			ImGui.SetNextItemWidth(ImGui.GetWindowSize().X / 3);
 			if (ImGui.Combo("###PlayerTrack_SelectIcon_Combo", ref SelectedIcon,
 				Player.IconNames,
@@ -255,17 +270,17 @@ namespace PlayerTrack
 
 		private void PlayerNotes()
 		{
-			ImGui.Spacing();
-			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerNotes", " Player Notes"));
+			ImGui.TextColored(UIColor.Violet, Loc.Localize("PlayerNotes", "Notes"));
 			var notes = Player.Notes;
 			if (ImGui.InputTextMultiline("###PlayerTrack_PlayerNotes_InputText", ref notes, 128,
 				new Vector2(ImGui.GetWindowSize().X - 25f * Scale, 80f * Scale)))
 				Player.Notes = notes;
+
+			ImGui.Spacing();
 		}
 
 		private void PlayerEncounters()
 		{
-			ImGui.Spacing();
 			ImGui.BeginChild("###PlayerTrack_Encounters_Widget",
 				new Vector2(ImGui.GetWindowSize().X - 10f * Scale, 130f * Scale),
 				false);
