@@ -113,7 +113,7 @@ namespace PlayerTrack
 			Thread.Sleep(500);
 			PrintMessage(Loc.Localize("HelpMessage2",
 				"PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). " +
-				"If this happens, you'll see an asterisk next to their home world and " +
+				"If this happens, you'll see an indicator next to their home world and " +
 				"can mouse-over to see their previous residence."));
 			Thread.Sleep(500);
 			PrintMessage(Loc.Localize("HelpMessage3",

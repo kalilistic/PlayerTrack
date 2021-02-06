@@ -138,21 +138,49 @@ namespace PlayerTrack
 
 			// row 1
 			if (!string.IsNullOrEmpty(Player.PreviousNames))
-				CustomWidgets.Text(Loc.Localize("PlayerName", "Name"), Player.Name,
-					string.Format(Loc.Localize("PlayerPreviousNames", "Previously known as {0}"),
+			{
+				ImGui.Text(Loc.Localize("PlayerName", "Name") + ": ");
+				ImGui.SameLine();
+				ImGui.BeginGroup();
+				ImGui.Text(Player.Name);
+				ImGui.SameLine();
+				ImGui.PushFont(UiBuilder.IconFont);
+				ImGui.TextColored(UIColor.Yellow, FontAwesomeIcon.InfoCircle.ToIconString());
+				ImGui.PopFont();
+				ImGui.EndGroup();
+				if (ImGui.IsItemHovered())
+					ImGui.SetTooltip(string.Format(Loc.Localize("PlayerPreviousNames", "Previously known as {0}"),
 						Player.PreviousNames));
+			}
 			else
+			{
 				CustomWidgets.Text(Loc.Localize("PlayerName", "Name"), Player.Name);
+			}
+
 			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
 			CustomWidgets.Text(Loc.Localize("PlayerFirstSeen", "First Seen"), Player.FirstSeen);
 
 			// row 2
 			if (!string.IsNullOrEmpty(Player.PreviousHomeWorlds))
-				CustomWidgets.Text(Loc.Localize("PlayerHomeWorld", "World"), Player.HomeWorld,
-					string.Format(Loc.Localize("PlayerPreviousWorlds", "Previously on {0}"),
+			{
+				ImGui.Text(Loc.Localize("PlayerHomeWorld", "World") + ": ");
+				ImGui.SameLine();
+				ImGui.BeginGroup();
+				ImGui.Text(Player.HomeWorld);
+				ImGui.SameLine();
+				ImGui.PushFont(UiBuilder.IconFont);
+				ImGui.TextColored(UIColor.Yellow, FontAwesomeIcon.InfoCircle.ToIconString());
+				ImGui.PopFont();
+				ImGui.EndGroup();
+				if (ImGui.IsItemHovered())
+					ImGui.SetTooltip(string.Format(Loc.Localize("PlayerPreviousWorlds", "Previously on {0}"),
 						Player.PreviousHomeWorlds));
+			}
 			else
+			{
 				CustomWidgets.Text(Loc.Localize("PlayerHomeWorld", "World"), Player.HomeWorld);
+			}
+
 			ImGui.SameLine(ImGui.GetWindowSize().X / 2);
 			CustomWidgets.Text(Loc.Localize("PlayerLastSeen", "Last Seen"), Player.LastSeen);
 
