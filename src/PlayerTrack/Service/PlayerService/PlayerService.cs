@@ -110,7 +110,9 @@ namespace PlayerTrack
 				}
 			};
 			EnrichPlayerData(newPlayer);
-			return AllPlayers.TryAdd(newPlayer.Key, newPlayer);
+			var playerAdded = AllPlayers.TryAdd(newPlayer.Key, newPlayer);
+			SubmitLodestoneRequest(newPlayer, currentTime);
+			return playerAdded;
 		}
 
 		private void OnCategoriesUpdated(object sender, bool e)
