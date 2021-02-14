@@ -8,6 +8,7 @@
 		{
 			_view = new PlayerListView {IsVisible = plugin.Configuration.ShowOverlay};
 			_playerListView = (PlayerListView) _view;
+			_playerListView.Configuration = _plugin.Configuration;
 			_playerListView.WorldNames = new[] {string.Empty};
 			_plugin.PlayerService.PlayersProcessed += PlayerServiceOnPlayersProcessed;
 			_playerListView.ViewModeChanged += PlayerListViewOnViewModeChanged;

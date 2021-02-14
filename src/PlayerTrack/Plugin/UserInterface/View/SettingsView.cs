@@ -51,7 +51,7 @@ namespace PlayerTrack
 				IsCategoryDataUpdated = false;
 			}
 
-			ImGui.SetNextWindowSize(new Vector2(580 * Scale, 300 * Scale), ImGuiCond.Appearing);
+			ImGui.SetNextWindowSize(new Vector2(580 * Scale, 320 * Scale), ImGuiCond.Appearing);
 			if (ImGui.Begin(Loc.Localize("SettingsView", "PlayerTrack Settings") + "###PlayerTrack_Settings_View",
 				ref isVisible, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar))
 				IsVisible = isVisible;
@@ -256,6 +256,7 @@ namespace PlayerTrack
 		{
 			PluginEnabled();
 			ShowOverlay();
+			LockOverlay();
 			ShowPlayerCharacterDetails();
 			ShowPlayerOverride();
 			Compressed();
@@ -337,6 +338,22 @@ namespace PlayerTrack
 
 			CustomWidgets.HelpMarker(Loc.Localize("ShowOverlay_HelpMarker",
 				"show overlay window"));
+			ImGui.Spacing();
+		}
+
+		private void LockOverlay()
+		{
+			var lockOverlay = Configuration.LockOverlay;
+			if (ImGui.Checkbox(
+				Loc.Localize("LockOverlay", "Lock Overlay") + "###PlayerTrack_LockOverlay_Checkbox",
+				ref lockOverlay))
+			{
+				Configuration.LockOverlay = lockOverlay;
+				ConfigUpdated?.Invoke(this, true);
+			}
+
+			CustomWidgets.HelpMarker(Loc.Localize("LockOverlay_HelpMarker",
+				"keep the overlay windows in-place"));
 			ImGui.Spacing();
 		}
 

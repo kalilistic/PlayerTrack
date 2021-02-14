@@ -19,11 +19,11 @@ namespace PlayerTrack
 
 		public delegate void HoverPlayerEventHandler(int actorId);
 
-		public delegate void StopHoverPlayerEventHandler();
-
 		public delegate void OpenPlayerEventHandler(string playerKey);
 
 		public delegate void SearchEventHandler(string input);
+
+		public delegate void StopHoverPlayerEventHandler();
 
 		public delegate void TargetPlayerEventHandler(int actorId);
 
@@ -39,9 +39,10 @@ namespace PlayerTrack
 
 		private string _addPlayerInput = string.Empty;
 		private int _currentHoverPlayer;
-		private bool _usedHover;
 		private string _searchInput = string.Empty;
 		private int _selectedWorld;
+		private bool _usedHover;
+		public PlayerTrackConfig Configuration;
 		public PlayerListModal CurrentModal = PlayerListModal.None;
 		public List<TrackViewPlayer> Players;
 		public TrackViewMode TrackViewMode = TrackViewMode.CurrentPlayers;
@@ -60,7 +61,7 @@ namespace PlayerTrack
 			var isVisible = IsVisible;
 			ImGui.SetNextWindowSize(new Vector2(200 * Scale, 250 * Scale), ImGuiCond.Always);
 			if (ImGui.Begin(Loc.Localize("PlayerListView", "PlayerTrack") + "###PlayerTrack_PlayerList_View",
-				ref isVisible, ImGuiWindowFlags.NoResize))
+				ref isVisible, CalcWindowFlags()))
 			{
 				IsVisible = isVisible;
 				SelectView();
@@ -71,6 +72,17 @@ namespace PlayerTrack
 			}
 
 			ImGui.End();
+		}
+
+		private ImGuiWindowFlags CalcWindowFlags()
+		{
+			var flags = ImGuiWindowFlags.None | ImGuiWindowFlags.NoResize;
+			if (Configuration.LockOverlay)
+			{
+				flags |= ImGuiWindowFlags.NoMove;
+			}
+
+			return flags;
 		}
 
 		private void OpenModals()
@@ -211,6 +223,7 @@ namespace PlayerTrack
 						}
 					}
 				}
+
 				if (noHover && _usedHover)
 				{
 					_usedHover = false;

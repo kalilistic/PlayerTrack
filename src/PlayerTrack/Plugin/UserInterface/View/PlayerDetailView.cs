@@ -49,7 +49,7 @@ namespace PlayerTrack
 			var isVisible = IsVisible;
 			ImGui.SetNextWindowSize(new Vector2(460 * Scale, CalcHeight()), ImGuiCond.Always);
 			if (ImGui.Begin(Loc.Localize("PlayerDetailView", "PlayerTrack") + "###PlayerTrack_PlayerDetail_View",
-				ref isVisible, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoTitleBar))
+				ref isVisible, CalcWindowFlags()))
 			{
 				IsVisible = isVisible;
 				Controls();
@@ -62,6 +62,17 @@ namespace PlayerTrack
 			}
 
 			ImGui.End();
+		}
+
+		private ImGuiWindowFlags CalcWindowFlags()
+		{
+			var flags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoTitleBar;
+			if (Configuration.LockOverlay)
+			{
+				flags |= ImGuiWindowFlags.NoMove;
+			}
+
+			return flags;
 		}
 
 		private float CalcHeight()

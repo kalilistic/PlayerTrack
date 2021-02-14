@@ -39,5 +39,6 @@ namespace PlayerTrack
 		public bool SetFocusTargetOnHover { get; set; } = false;
 		public bool ShowPlayerCharacterDetails { get; set; } = false;
 		public bool ShowPlayerOverride { get; set; } = false;
+		public bool LockOverlay { get; set; } = false;
 	}
 }
