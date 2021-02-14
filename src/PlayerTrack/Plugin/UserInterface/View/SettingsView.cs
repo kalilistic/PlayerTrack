@@ -439,8 +439,11 @@ namespace PlayerTrack
 			for (var i = min; i < max; i++)
 			{
 				if (ImGui.ColorButton("###PlayerTrack_CategoryColor_Swatch_" + id + i, _colorPalette[i]))
+				{
 					Categories[id].Color = _colorPalette[i];
-				ConfigUpdated?.Invoke(this, true);
+					RequestCategoryUpdate?.Invoke(this, Categories[id]);
+					ConfigUpdated?.Invoke(this, true);
+				}
 
 				ImGui.SameLine();
 			}
