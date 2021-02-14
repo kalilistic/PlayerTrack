@@ -2,7 +2,7 @@
 {
 	public class TrackMetaData
 	{
-		public bool Compressed;
-		public int SchemaVersion;
+		public bool Compressed = true;
+		public int SchemaVersion = 2;
 	}
 }

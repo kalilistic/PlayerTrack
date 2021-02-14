@@ -257,7 +257,7 @@ namespace PlayerTrack
 			{
 				var categories = GetCategoriesCopy();
 				var data = JsonConvert.SerializeObject(categories, _jsonSerializerSettings);
-				_plugin.DataManager.SaveData("categories.dat", data);
+				_plugin.DataManager.SaveDataStr("categories.dat", data);
 			}
 			catch (Exception ex)
 			{
@@ -281,7 +281,7 @@ namespace PlayerTrack
 		{
 			try
 			{
-				var data = _plugin.DataManager.ReadData("categories.dat");
+				var data = _plugin.DataManager.ReadDataStr("categories.dat");
 				var categories = JsonConvert.DeserializeObject<List<TrackCategory>>(data, _jsonSerializerSettings);
 				if (categories == null || categories.Count == 0) categories = GetDefaultCategories();
 				_categories = categories;
