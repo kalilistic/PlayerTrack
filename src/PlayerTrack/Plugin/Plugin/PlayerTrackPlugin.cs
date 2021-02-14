@@ -21,6 +21,7 @@ namespace PlayerTrack
 {
 	public sealed class PlayerTrackPlugin : PluginBase, IPlayerTrackPlugin
 	{
+		private uint _currentTerritoryTypeId;
 		private bool _isProcessing = true;
 		private Timer _onSaveTimer;
 		private Timer _onUpdateTimer;
@@ -28,8 +29,6 @@ namespace PlayerTrack
 		private PlayerListPresenter _playerListPresenter;
 		private DalamudPluginInterface _pluginInterface;
 		private SettingsPresenter _settingsPresenter;
-		private uint _currentTerritoryTypeId;
-		public long LocationLastChanged { get; set; }
 
 		public PlayerTrackPlugin(string pluginName, DalamudPluginInterface pluginInterface) : base(pluginName,
 			pluginInterface)
@@ -53,6 +52,8 @@ namespace PlayerTrack
 				_isProcessing = false;
 			});
 		}
+
+		public long LocationLastChanged { get; set; }
 
 		public DataManager DataManager { get; set; }
 		public bool InContent { get; set; }
@@ -151,32 +152,39 @@ namespace PlayerTrack
 
 		public new void Dispose()
 		{
-			var delayCount = 0;
-			while (_isProcessing)
-				if (delayCount == 3)
-				{
-					_isProcessing = false;
-				}
-				else
-				{
-					Thread.Sleep(1000);
-					delayCount++;
-				}
+			try
+			{
+				var delayCount = 0;
+				while (_isProcessing)
+					if (delayCount == 3)
+					{
+						_isProcessing = false;
+					}
+					else
+					{
+						Thread.Sleep(1000);
+						delayCount++;
+					}
 
-			_isProcessing = true;
-			RemoveCommands();
-			StopTimers();
-			PlayerService.SaveData();
-			CategoryService.Dispose();
-			LodestoneService.Dispose();
-			_settingsPresenter.Dispose();
-			_playerListPresenter.Dispose();
-			_playerDetailPresenter.Dispose();
-			base.Dispose();
-			_pluginInterface.UiBuilder.OnOpenConfigUi -= (sender, args) => DrawConfigUI();
-			_pluginInterface.UiBuilder.OnBuildUi -= DrawUI;
-			_pluginInterface.Dispose();
-			_isProcessing = false;
+				_isProcessing = true;
+				RemoveCommands();
+				StopTimers();
+				PlayerService.SaveData();
+				CategoryService.Dispose();
+				LodestoneService.Dispose();
+				_settingsPresenter.Dispose();
+				_playerListPresenter.Dispose();
+				_playerDetailPresenter.Dispose();
+				base.Dispose();
+				_pluginInterface.UiBuilder.OnOpenConfigUi -= (sender, args) => DrawConfigUI();
+				_pluginInterface.UiBuilder.OnBuildUi -= DrawUI;
+				_pluginInterface.Dispose();
+				_isProcessing = false;
+			}
+			catch (Exception ex)
+			{
+				LogError(ex, "Failed to dispose properly.");
+			}
 		}
 
 		public new void SetupCommands()
@@ -387,10 +395,7 @@ namespace PlayerTrack
 			_settingsPresenter = new SettingsPresenter(this);
 			_pluginInterface.UiBuilder.OnBuildUi += DrawUI;
 			_pluginInterface.UiBuilder.OnOpenConfigUi += (sender, args) => DrawConfigUI();
-			if (Configuration.ShowOverlay)
-			{
-				_playerListPresenter.ShowView();
-			}
+			if (Configuration.ShowOverlay) _playerListPresenter.ShowView();
 		}
 
 		private void HandleFreshInstall()
