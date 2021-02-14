@@ -389,6 +389,7 @@ namespace PlayerTrack
 				CurrentModal = PlayerDetailModal.None;
 				SelectedIcon = 0;
 				SelectedCategory = 0;
+				HideView();
 			}
 
 			ImGui.SameLine();
