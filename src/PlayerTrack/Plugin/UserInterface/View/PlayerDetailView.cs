@@ -46,12 +46,9 @@ namespace PlayerTrack
 		{
 			if (!IsVisible) return;
 			if (Player == null) return;
-			var isVisible = IsVisible;
 			ImGui.SetNextWindowSize(new Vector2(460 * Scale, CalcHeight()), ImGuiCond.Always);
-			if (ImGui.Begin(Loc.Localize("PlayerDetailView", "PlayerTrack") + "###PlayerTrack_PlayerDetail_View",
-				ref isVisible, CalcWindowFlags()))
+			if (ImGui.Begin(Loc.Localize("PlayerDetailView", "PlayerTrack") + "###PlayerTrack_PlayerDetail_View", CalcWindowFlags()))
 			{
-				IsVisible = isVisible;
 				Controls();
 				PlayerInfo();
 				PlayerCharacterDetails();

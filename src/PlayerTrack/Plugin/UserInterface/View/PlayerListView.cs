@@ -58,12 +58,9 @@ namespace PlayerTrack
 		public override void DrawView()
 		{
 			if (!IsVisible) return;
-			var isVisible = IsVisible;
 			ImGui.SetNextWindowSize(new Vector2(200 * Scale, 250 * Scale), ImGuiCond.Always);
-			if (ImGui.Begin(Loc.Localize("PlayerListView", "PlayerTrack") + "###PlayerTrack_PlayerList_View",
-				ref isVisible, CalcWindowFlags()))
+			if (ImGui.Begin(Loc.Localize("PlayerListView", "PlayerTrack") + "###PlayerTrack_PlayerList_View", CalcWindowFlags()))
 			{
-				IsVisible = isVisible;
 				SelectView();
 				PlayerSearchInput();
 				PlayerList();
