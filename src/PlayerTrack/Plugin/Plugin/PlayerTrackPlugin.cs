@@ -42,6 +42,7 @@ namespace PlayerTrack
 				FontAwesomeUtil.Init();
 				InitContent();
 				LoadConfig();
+				UpgradeBackup();
 				LoadServices();
 				LoadUI();
 				SetupCommands();
@@ -387,6 +388,16 @@ namespace PlayerTrack
 			PlayerService = new PlayerService(this);
 		}
 
+		public void UpgradeBackup()
+		{
+			if (Configuration.FreshInstall) return;
+			var pluginVersion = PluginVersionNumber();
+			if (PluginVersionNumber() <= Configuration.PluginVersion) return;
+			DataManager.CreateBackup("upgrade/v" + Configuration.PluginVersion + "_");
+			Configuration.PluginVersion = pluginVersion;
+			SaveConfig();
+		}
+
 		public void LoadUI()
 		{
 			Localization.SetLanguage(Configuration.PluginLanguage);
@@ -404,6 +415,7 @@ namespace PlayerTrack
 			PrintMessage(Loc.Localize("InstallThankYou", "Thank you for installing PlayerTrack!"));
 			PrintHelpMessage();
 			Configuration.FreshInstall = false;
+			Configuration.PluginVersion = PluginVersionNumber();
 			SetDefaultIcons();
 			SaveConfig();
 			_settingsPresenter.ShowView();

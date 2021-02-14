@@ -15,6 +15,7 @@ namespace PlayerTrack
 		CategoryService CategoryService { get; set; }
 		bool InContent { get; set; }
 		JsonSerializerSettings JsonSerializerSettings { get; set; }
+		long LocationLastChanged { get; set; }
 		void PrintHelpMessage();
 		void SaveConfig();
 		void PrintMessage(string message);
@@ -44,6 +45,6 @@ namespace PlayerTrack
 		void SetCurrentTarget(int actorId);
 		void SetFocusTarget(int actorId);
 		void RevertFocusTarget();
-		long LocationLastChanged { get; set; }
+		int PluginVersionNumber();
 	}
 }
