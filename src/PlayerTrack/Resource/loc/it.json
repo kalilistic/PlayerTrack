@@ -1,6 +1,6 @@
 {
     "Default": {
-        "message": "Default",
+        "message": "Predefinito",
         "description": "PlayerTrackPlugin.GetIconNames"
     },
     "HelpMessage1": {
@@ -19,7 +19,7 @@
         "description": "PlayerTrackPlugin.PrintHelpMessage"
     },
     "InstallThankYou": {
-        "message": "Thank you for installing PlayerTrack!",
+        "message": "Grazie per aver installato PlayerTrack!",
         "description": "PlayerTrackPlugin.HandleFreshInstall"
     },
     "PlayerDetailView": {
@@ -27,19 +27,19 @@
         "description": "PlayerDetailView.DrawView"
     },
     "Save": {
-        "message": "Save",
+        "message": "Salva",
         "description": "PlayerDetailView.Controls"
     },
     "Cancel": {
-        "message": "Cancel",
+        "message": "Annulla",
         "description": "PlayerDetailView.Controls"
     },
     "DeleteConfirmation": {
-        "message": "Delete",
+        "message": "Elimina",
         "description": "PlayerDetailView.Controls"
     },
     "ResetConfirmation": {
-        "message": "Reset",
+        "message": "Resetta",
         "description": "PlayerDetailView.Controls"
     },
     "Lodestone": {
@@ -47,35 +47,35 @@
         "description": "PlayerDetailView.Controls"
     },
     "PlayerInfo": {
-        "message": "Player Info",
+        "message": "Info Giocatore",
         "description": "PlayerDetailView.PlayerInfo"
     },
     "PlayerStats": {
-        "message": "Player Stats",
+        "message": "Statistiche Giocatore",
         "description": "PlayerDetailView.PlayerInfo"
     },
     "PlayerName": {
-        "message": "Name",
+        "message": "Nome",
         "description": "PlayerDetailView.PlayerInfo"
     },
     "PlayerPreviousNames": {
-        "message": "Previously known as {0}",
+        "message": "Precedentemente conosciuto come {0}",
         "description": "PlayerDetailView.PlayerInfo"
     },
     "PlayerFirstSeen": {
-        "message": "First Seen",
+        "message": "Visto la prima volta",
         "description": "PlayerDetailView.PlayerInfo"
     },
     "PlayerHomeWorld": {
-        "message": "World",
+        "message": "Mondo",
         "description": "PlayerDetailView.PlayerInfo"
     },
     "PlayerPreviousWorlds": {
-        "message": "Previously on {0}",
+        "message": "Precedentemente su {0}",
         "description": "PlayerDetailView.PlayerInfo"
     },
     "PlayerLastSeen": {
-        "message": "Last Seen",
+        "message": "Visto per l'ultima volta",
         "description": "PlayerDetailView.PlayerInfo"
     },
     "PlayerFreeCompany": {
@@ -83,11 +83,11 @@
         "description": "PlayerDetailView.PlayerInfo"
     },
     "PlayerSeenCount": {
-        "message": "Seen Count",
+        "message": "Conteggio Visto",
         "description": "PlayerDetailView.PlayerInfo"
     },
     "LodestoneStatus": {
-        "message": "Lodestone Status",
+        "message": "Stato sul Lodestone",
         "description": "PlayerDetailView.PlayerInfo"
     },
     "PlayerCustomize": {
@@ -95,19 +95,19 @@
         "description": "PlayerDetailView.PlayerCharacterDetails"
     },
     "PlayerRace": {
-        "message": "Race",
+        "message": "Razza",
         "description": "PlayerDetailView.PlayerCharacterDetails"
     },
     "PlayerGender": {
-        "message": "Gender",
+        "message": "Genere",
         "description": "PlayerDetailView.PlayerCharacterDetails"
     },
     "PlayerTribe": {
-        "message": "Tribe",
+        "message": "Tribù",
         "description": "PlayerDetailView.PlayerCharacterDetails"
     },
     "PlayerHeight": {
-        "message": "Height",
+        "message": "Altezza",
         "description": "PlayerDetailView.PlayerCharacterDetails"
     },
     "PlayerHeightValue": {
@@ -115,7 +115,7 @@
         "description": "PlayerDetailView.PlayerCharacterDetails"
     },
     "DisplayOptions": {
-        "message": "Display Options",
+        "message": "Opzioni Visualizzazione",
         "description": "PlayerDetailView.DisplaySettings"
     },
     "EnablePlayerAlerts": {
@@ -123,27 +123,27 @@
         "description": "PlayerDetailView.PlayerOverride"
     },
     "PlayerNotes": {
-        "message": "Notes",
+        "message": "Note",
         "description": "PlayerDetailView.PlayerNotes"
     },
     "Encounters": {
-        "message": "Encounters",
+        "message": "Incontri",
         "description": "PlayerDetailView.PlayerEncounters"
     },
     "EncounterTime": {
-        "message": "Time",
+        "message": "Orario",
         "description": "PlayerDetailView.PlayerEncounters"
     },
     "EncounterDuration": {
-        "message": "Duration",
+        "message": "Durata",
         "description": "PlayerDetailView.PlayerEncounters"
     },
     "EncounterJob": {
-        "message": "Job",
+        "message": "Lavoro",
         "description": "PlayerDetailView.PlayerEncounters"
     },
     "EncounterJobLevel": {
-        "message": "Lvl",
+        "message": "Livello",
         "description": "PlayerDetailView.PlayerEncounters"
     },
     "EncounterLocation": {
@@ -159,7 +159,7 @@
         "description": "PlayerDetailView.LodestoneModal"
     },
     "LodestoneModalContent": {
-        "message": "Lodestone verification pending.",
+        "message": "Verifica Lodestone in sospeso.",
         "description": "PlayerDetailView.LodestoneModal"
     },
     "OK": {
@@ -171,11 +171,11 @@
         "description": "PlayerDetailView.ResetConfirmationModal"
     },
     "ResetConfirmationModalContent": {
-        "message": "Are you sure you want to reset?",
+        "message": "Sei sicuro di voler ripristinare?",
         "description": "PlayerDetailView.ResetConfirmationModal"
     },
     "DeleteConfirmationModalTitle": {
-        "message": "Delete Confirmation",
+        "message": "Conferma Eliminazione",
         "description": "PlayerDetailView.DeleteConfirmationModal"
     },
     "DeleteConfirmationModalContent": {
@@ -187,19 +187,19 @@
         "description": "PlayerListView.DrawView"
     },
     "InvalidCharacterNameTitle": {
-        "message": "Invalid Name",
+        "message": "Nome non valido",
         "description": "PlayerListView.InvalidCharacterNameModal"
     },
     "InvalidCharacterNameModalContent": {
-        "message": "Invalid character name.",
+        "message": "Nome personaggio non valido.",
         "description": "PlayerListView.InvalidCharacterNameModal"
     },
     "DuplicateCharacterTitle": {
-        "message": "Duplicate Player",
+        "message": "Giocatore Duplicato",
         "description": "PlayerListView.DuplicateCharacterModal"
     },
     "DuplicateCharacterModalContent": {
-        "message": "There's already a player with that name/world.",
+        "message": "C'è già un giocatore con quel nome/mondo.",
         "description": "PlayerListView.DuplicateCharacterModal"
     },
     "AddCharacterSuccessTitle": {
@@ -262,6 +262,10 @@
         "message": "General",
         "description": "SettingsView.DrawTabs"
     },
+    "Display": {
+        "message": "Display",
+        "description": "SettingsView.DrawTabs"
+    },
     "Threshold": {
         "message": "Threshold",
         "description": "SettingsView.DrawTabs"
@@ -309,6 +313,22 @@
     "ShowOverlay_HelpMarker": {
         "message": "show overlay window",
         "description": "SettingsView.ShowOverlay"
+    },
+    "LockOverlay": {
+        "message": "Lock Overlay",
+        "description": "SettingsView.LockOverlay"
+    },
+    "LockOverlay_HelpMarker": {
+        "message": "keep the overlay windows in-place",
+        "description": "SettingsView.LockOverlay"
+    },
+    "DefaultView": {
+        "message": "Default View",
+        "description": "SettingsView.DefaultView"
+    },
+    "DefaultView_HelpMarker": {
+        "message": "set the default view to show on start up",
+        "description": "SettingsView.DefaultView"
     },
     "ShowPlayerCharacterDetails": {
         "message": "Show Player Character Details",
@@ -367,7 +387,7 @@
         "description": "SettingsView.Compressed"
     },
     "BackupFrequency": {
-        "message": "Backup Frequency (hours)",
+        "message": "Frequenza di Backup (Ore)",
         "description": "SettingsView.BackupFrequency"
     },
     "BackupFrequency_HelpMarker": {
@@ -391,7 +411,7 @@
         "description": "SettingsView.NewEncounterThreshold"
     },
     "RestrictInCombat": {
-        "message": "Don't process in combat",
+        "message": "Non processare in combattimento",
         "description": "SettingsView.RestrictInCombat"
     },
     "RestrictInCombat_HelpMarker": {
@@ -415,7 +435,7 @@
         "description": "SettingsView.RestrictToHighEndDuty"
     },
     "RestrictToCustom": {
-        "message": "Restrict to Following Content",
+        "message": "Limita ai Seguenti Contenuti",
         "description": "SettingsView.RestrictToCustom"
     },
     "RestrictToCustom_HelpMarker": {
@@ -423,59 +443,59 @@
         "description": "SettingsView.RestrictToCustom"
     },
     "Add": {
-        "message": "Add",
+        "message": "Aggiungi",
         "description": "SettingsView.RestrictToCustom"
     },
     "Reset": {
-        "message": "Reset",
+        "message": "Resetta",
         "description": "SettingsView.RestrictToCustom"
     },
     "DupeContent": {
-        "message": "This content is already added!",
+        "message": "Questo contenuto è già stato aggiunto!",
         "description": "SettingsView.RestrictToCustom"
     },
     "EnableAlerts": {
-        "message": "Enable Alerts",
+        "message": "Attiva Notifiche",
         "description": "SettingsView.EnableAlerts"
     },
     "EnableAlerts_HelpMarker": {
-        "message": "globally disable alerts even if set for player",
+        "message": "Disabilita globalmente gli avvisi anche se impostato per il giocatore",
         "description": "SettingsView.EnableAlerts"
     },
     "IncludeNotesInAlert": {
-        "message": "Include Notes in Alerts",
+        "message": "Includi Note negli Avvisi",
         "description": "SettingsView.IncludeNotesInAlerts"
     },
     "IncludeNotesInAlert_HelpMarker": {
-        "message": "include notes in alert message if available",
+        "message": "Includere le note nel messaggio di allerta se disponibile",
         "description": "SettingsView.IncludeNotesInAlerts"
     },
     "AlertFrequency": {
-        "message": "Alert Frequency (hours)",
+        "message": "Frequenza Di Avviso (ore)",
         "description": "SettingsView.AlertFrequency"
     },
     "AlertFrequency_HelpMarker": {
-        "message": "frequency to send player alert",
+        "message": "Frequenza di Invio Avvisi al Giocatore",
         "description": "SettingsView.AlertFrequency"
     },
     "CategoryName": {
-        "message": "Name",
+        "message": "Nome",
         "description": "SettingsView.CategoryTable"
     },
     "CategoryColor": {
-        "message": "Color",
+        "message": "Colore",
         "description": "SettingsView.CategoryTable"
     },
     "CategoryAlerts": {
-        "message": "Alerts",
+        "message": "Avvisi",
         "description": "SettingsView.CategoryTable"
     },
     "CategoryIcon": {
-        "message": "Icon",
+        "message": "Icona",
         "description": "SettingsView.CategoryTable"
     },
     "CategoryAction": {
-        "message": "Actions",
+        "message": "Azioni",
         "description": "SettingsView.CategoryTable"
     },
     "EnableCurrentTarget": {
@@ -499,11 +519,11 @@
         "description": "SettingsView.DrawLinks"
     },
     "PrintHelp": {
-        "message": "Instructions",
+        "message": "Istruzioni",
         "description": "SettingsView.DrawLinks"
     },
     "ImproveTranslation": {
-        "message": "Translations",
+        "message": "Traduzioni",
         "description": "SettingsView.DrawLinks"
     }
 }

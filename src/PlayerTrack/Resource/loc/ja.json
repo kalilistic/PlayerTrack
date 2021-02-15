@@ -262,6 +262,10 @@
         "message": "General",
         "description": "SettingsView.DrawTabs"
     },
+    "Display": {
+        "message": "Display",
+        "description": "SettingsView.DrawTabs"
+    },
     "Threshold": {
         "message": "Threshold",
         "description": "SettingsView.DrawTabs"
@@ -309,6 +313,22 @@
     "ShowOverlay_HelpMarker": {
         "message": "show overlay window",
         "description": "SettingsView.ShowOverlay"
+    },
+    "LockOverlay": {
+        "message": "Lock Overlay",
+        "description": "SettingsView.LockOverlay"
+    },
+    "LockOverlay_HelpMarker": {
+        "message": "keep the overlay windows in-place",
+        "description": "SettingsView.LockOverlay"
+    },
+    "DefaultView": {
+        "message": "Default View",
+        "description": "SettingsView.DefaultView"
+    },
+    "DefaultView_HelpMarker": {
+        "message": "set the default view to show on start up",
+        "description": "SettingsView.DefaultView"
     },
     "ShowPlayerCharacterDetails": {
         "message": "Show Player Character Details",
