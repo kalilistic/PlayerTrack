@@ -41,5 +41,6 @@ namespace PlayerTrack
 		public bool LockOverlay { get; set; } = false;
 		public int PluginVersion { get; set; } = 0;
 		public int SelectedCategory { get; set; } = 0;
+		public int DefaultViewMode { get; set; } = 0;
 	}
 }

@@ -257,6 +257,7 @@ namespace PlayerTrack
 			PluginEnabled();
 			ShowOverlay();
 			LockOverlay();
+			DefaultView();
 			ShowPlayerCharacterDetails();
 			ShowPlayerOverride();
 			Compressed();
@@ -355,6 +356,22 @@ namespace PlayerTrack
 			CustomWidgets.HelpMarker(Loc.Localize("LockOverlay_HelpMarker",
 				"keep the overlay windows in-place"));
 			ImGui.Spacing();
+		}
+
+		private void DefaultView()
+		{
+			ImGui.Text(Loc.Localize("DefaultView", "Default View"));
+			CustomWidgets.HelpMarker(Loc.Localize("DefaultView_HelpMarker",
+				"set the default view to show on start up"));
+			ImGui.Spacing();
+			var defaultViewMode = Configuration.DefaultViewMode;
+			if (ImGui.Combo("###PlayerTrack_DefaultView_Combo", ref defaultViewMode,
+				TrackViewMode.ViewNames.ToArray(),
+				TrackViewMode.ViewNames.Count))
+			{
+				Configuration.DefaultViewMode = defaultViewMode;
+				ConfigUpdated?.Invoke(this, true);
+			}
 		}
 
 		private void ShowPlayerCharacterDetails()

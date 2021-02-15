@@ -24,6 +24,19 @@ namespace PlayerTrack
 			_playerListView.StopHoverPlayer += PlayerListViewOnStopHoverPlayer;
 			_playerListView.NewCategoryFilter += PlayerListViewOnNewCategoryFilter;
 			_playerListView.ConfigUpdated += PlayerListViewOnConfigUpdated;
+			InitializeList();
+		}
+
+		private void InitializeList()
+		{
+			var trackViewMode = TrackViewMode.GetViewModeByIndex(_plugin.Configuration.DefaultViewMode);
+			if (trackViewMode == TrackViewMode.PlayersByCategory)
+				PlayerListViewOnNewCategoryFilter(_plugin.Configuration.SelectedCategory);
+			else if (trackViewMode == TrackViewMode.SearchForPlayers)
+				PlayerListViewOnNewSearch(string.Empty);
+			else if (trackViewMode == TrackViewMode.AddPlayer) _playerListView.WorldNames = _plugin.GetWorldNames();
+			_plugin.TrackViewMode = trackViewMode;
+			_playerListView.TrackViewMode = trackViewMode;
 		}
 
 		private void PlayerListViewOnConfigUpdated(object sender, bool e)
@@ -97,7 +110,9 @@ namespace PlayerTrack
 				PlayerListViewOnNewCategoryFilter(_plugin.Configuration.SelectedCategory);
 			if (trackViewMode == TrackViewMode.AddPlayer) _playerListView.WorldNames = _plugin.GetWorldNames();
 			if (trackViewMode == TrackViewMode.SearchForPlayers ||
-			    trackViewMode == TrackViewMode.AddPlayer) _playerListView.Players.Clear();
+			    trackViewMode == TrackViewMode.AddPlayer)
+				if (_playerListView.Players != null && _playerListView.Players.Count > 0)
+					_playerListView.Players.Clear();
 			_plugin.TrackViewMode = trackViewMode;
 		}
 
