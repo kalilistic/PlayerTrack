@@ -49,5 +49,10 @@ namespace PlayerTrack.Mock
 		{
 			throw new NotImplementedException();
 		}
+
+		public TrackCategory GetCategoryByIndex(int categoryIndex)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

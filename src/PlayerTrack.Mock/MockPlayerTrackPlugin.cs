@@ -117,6 +117,11 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
+		public int PluginVersionNumber()
+		{
+			throw new NotImplementedException();
+		}
+
 		public long LocationLastChanged { get; set; }
 
 		public TrackViewMode TrackViewMode { get; set; }
