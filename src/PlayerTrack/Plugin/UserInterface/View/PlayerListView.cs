@@ -5,6 +5,7 @@
 // ReSharper disable MemberCanBeMadeStatic.Local
 // ReSharper disable SwitchStatementHandlesSomeKnownEnumValuesWithDefault
 
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using CheapLoc;
@@ -16,6 +17,8 @@ namespace PlayerTrack
 	public class PlayerListView : WindowBase
 	{
 		public delegate void AddPlayerEventHandler(string playerName, string worldName);
+
+		public delegate void CategoryFilterEventHandler(int categoryIndex);
 
 		public delegate void HoverPlayerEventHandler(int actorId);
 
@@ -42,6 +45,7 @@ namespace PlayerTrack
 		private string _searchInput = string.Empty;
 		private int _selectedWorld;
 		private bool _usedHover;
+		public string[] CategoryNames;
 		public PlayerTrackConfig Configuration;
 		public PlayerListModal CurrentModal = PlayerListModal.None;
 		public List<TrackViewPlayer> Players;
@@ -54,15 +58,19 @@ namespace PlayerTrack
 		public event TargetPlayerEventHandler TargetPlayer;
 		public event HoverPlayerEventHandler HoverPlayer;
 		public event StopHoverPlayerEventHandler StopHoverPlayer;
+		public event CategoryFilterEventHandler NewCategoryFilter;
+		public event EventHandler<bool> ConfigUpdated;
 
 		public override void DrawView()
 		{
 			if (!IsVisible) return;
 			ImGui.SetNextWindowSize(new Vector2(200 * Scale, 250 * Scale), ImGuiCond.Always);
-			if (ImGui.Begin(Loc.Localize("PlayerListView", "PlayerTrack") + "###PlayerTrack_PlayerList_View", CalcWindowFlags()))
+			if (ImGui.Begin(Loc.Localize("PlayerListView", "PlayerTrack") + "###PlayerTrack_PlayerList_View",
+				CalcWindowFlags()))
 			{
 				SelectView();
 				PlayerSearchInput();
+				PlayersByCategory();
 				PlayerList();
 				PlayerAddInput();
 				OpenModals();
@@ -74,10 +82,7 @@ namespace PlayerTrack
 		private ImGuiWindowFlags CalcWindowFlags()
 		{
 			var flags = ImGuiWindowFlags.None | ImGuiWindowFlags.NoResize;
-			if (Configuration.LockOverlay)
-			{
-				flags |= ImGuiWindowFlags.NoMove;
-			}
+			if (Configuration.LockOverlay) flags |= ImGuiWindowFlags.NoMove;
 
 			return flags;
 		}
@@ -175,6 +180,23 @@ namespace PlayerTrack
 				ImGui.SameLine();
 				if (ImGui.Button(Loc.Localize("PlayerSearch", "Search") + "###PlayerTrack_PlayerSearch_Button"))
 					NewSearch?.Invoke(_searchInput);
+			}
+		}
+
+		private void PlayersByCategory()
+		{
+			if (TrackViewMode.Code == TrackPlayerMode.PlayersByCategory.Code)
+			{
+				var selectedCategory = Configuration.SelectedCategory;
+				ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale);
+				if (ImGui.Combo("###PlayerTrack_PlayersByCategory_Combo", ref selectedCategory,
+					CategoryNames,
+					CategoryNames.Length))
+				{
+					Configuration.SelectedCategory = selectedCategory;
+					ConfigUpdated?.Invoke(this, true);
+					NewCategoryFilter?.Invoke(selectedCategory);
+				}
 			}
 		}
 

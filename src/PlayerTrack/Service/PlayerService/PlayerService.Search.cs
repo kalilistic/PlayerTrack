@@ -22,5 +22,20 @@ namespace PlayerTrack
 				return new ConcurrentDictionary<string, TrackPlayer>();
 			}
 		}
+
+		public ConcurrentDictionary<string, TrackPlayer> SearchByCategory(int categoryId)
+		{
+			try
+			{
+				return new ConcurrentDictionary<string, TrackPlayer>(AllPlayers
+					.Where(entry => entry.Value.CategoryId == categoryId)
+					.ToDictionary(entry => entry.Key, entry => entry.Value));
+			}
+			catch (Exception ex)
+			{
+				_plugin.LogError(ex, "Failed to filter players by category: " + categoryId);
+				return new ConcurrentDictionary<string, TrackPlayer>();
+			}
+		}
 	}
 }

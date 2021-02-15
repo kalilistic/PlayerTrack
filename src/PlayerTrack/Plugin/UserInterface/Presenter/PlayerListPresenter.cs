@@ -1,4 +1,6 @@
-﻿namespace PlayerTrack
+﻿using System;
+
+namespace PlayerTrack
 {
 	public class PlayerListPresenter : PresenterBase
 	{
@@ -10,7 +12,9 @@
 			_playerListView = (PlayerListView) _view;
 			_playerListView.Configuration = _plugin.Configuration;
 			_playerListView.WorldNames = new[] {string.Empty};
+			_playerListView.CategoryNames = _plugin.CategoryService.GetCategoryNames();
 			_plugin.PlayerService.PlayersProcessed += PlayerServiceOnPlayersProcessed;
+			_plugin.CategoryService.CategoriesUpdated += CategoryServiceOnCategoriesUpdated;
 			_playerListView.ViewModeChanged += PlayerListViewOnViewModeChanged;
 			_playerListView.NewSearch += PlayerListViewOnNewSearch;
 			_playerListView.AddPlayer += PlayerListViewOnAddPlayer;
@@ -18,6 +22,34 @@
 			_playerListView.TargetPlayer += PlayerListViewOnTargetPlayer;
 			_playerListView.HoverPlayer += PlayerListViewOnHoverPlayer;
 			_playerListView.StopHoverPlayer += PlayerListViewOnStopHoverPlayer;
+			_playerListView.NewCategoryFilter += PlayerListViewOnNewCategoryFilter;
+			_playerListView.ConfigUpdated += PlayerListViewOnConfigUpdated;
+		}
+
+		private void PlayerListViewOnConfigUpdated(object sender, bool e)
+		{
+			_plugin.SaveConfig();
+		}
+
+		private void CategoryServiceOnCategoriesUpdated(object sender, bool e)
+		{
+			_plugin.Configuration.SelectedCategory = 0;
+			_plugin.SaveConfig();
+			_playerListView.CategoryNames = _plugin.CategoryService.GetCategoryNames();
+			PlayerListViewOnNewCategoryFilter(_plugin.Configuration.SelectedCategory);
+		}
+
+		private void PlayerListViewOnNewCategoryFilter(int categoryIndex)
+		{
+			try
+			{
+				var category = _plugin.CategoryService.GetCategoryByIndex(categoryIndex);
+				_playerListView.Players = TrackViewPlayer.Map(_plugin.PlayerService.SearchByCategory(category.Id));
+			}
+			catch (Exception ex)
+			{
+				_plugin.LogError(ex, "Failed to filter by category.");
+			}
 		}
 
 		private void PlayerListViewOnStopHoverPlayer()
@@ -61,6 +93,8 @@
 
 		private void PlayerListViewOnViewModeChanged(TrackViewMode trackViewMode)
 		{
+			if (trackViewMode == TrackViewMode.PlayersByCategory)
+				PlayerListViewOnNewCategoryFilter(_plugin.Configuration.SelectedCategory);
 			if (trackViewMode == TrackViewMode.AddPlayer) _playerListView.WorldNames = _plugin.GetWorldNames();
 			if (trackViewMode == TrackViewMode.SearchForPlayers ||
 			    trackViewMode == TrackViewMode.AddPlayer) _playerListView.Players.Clear();
@@ -87,6 +121,8 @@
 			_playerListView.TargetPlayer -= PlayerListViewOnTargetPlayer;
 			_playerListView.HoverPlayer -= PlayerListViewOnHoverPlayer;
 			_playerListView.StopHoverPlayer -= PlayerListViewOnStopHoverPlayer;
+			_playerListView.NewCategoryFilter -= PlayerListViewOnNewCategoryFilter;
+			_playerListView.ConfigUpdated -= PlayerListViewOnConfigUpdated;
 		}
 	}
 }

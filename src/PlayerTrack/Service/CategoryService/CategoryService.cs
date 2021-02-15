@@ -44,6 +44,20 @@ namespace PlayerTrack
 			}
 		}
 
+		public TrackCategory GetCategoryByIndex(int categoryIndex)
+		{
+			try
+			{
+				var categories = GetCategoriesCopy();
+				return categories[categoryIndex];
+			}
+			catch (Exception ex)
+			{
+				_plugin.LogError(ex, "Failed to get category by index: " + categoryIndex);
+				return null;
+			}
+		}
+
 		public TrackCategory GetDefaultCategory()
 		{
 			try

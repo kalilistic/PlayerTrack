@@ -13,5 +13,6 @@ namespace PlayerTrack
 		void DeleteCategory(int index);
 		void ResetCategories();
 		List<TrackCategory> GetCategoriesCopy();
+		TrackCategory GetCategoryByIndex(int categoryIndex);
 	}
 }

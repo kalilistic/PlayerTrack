@@ -13,6 +13,7 @@ namespace PlayerTrack
 		public static readonly TrackViewMode AllPlayers = new TrackViewMode(2, 2, "All Players");
 		public static readonly TrackViewMode SearchForPlayers = new TrackViewMode(3, 3, "Search for Players");
 		public static readonly TrackViewMode AddPlayer = new TrackViewMode(4, 4, "Add Player");
+		public static readonly TrackViewMode PlayersByCategory = new TrackViewMode(5, 5, "Players By Category");
 
 		private TrackViewMode(int index, int code, string name)
 		{
