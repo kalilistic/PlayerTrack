@@ -29,7 +29,6 @@ namespace PlayerTrack
 		public int UpdateFrequency = 5000;
 		public bool FreshInstall { get; set; } = true;
 		public bool Compressed { get; set; } = true;
-		public int SchemaVersion { get; set; } = 1;
 		public bool Enabled { get; set; } = true;
 		public int PluginLanguage { get; set; } = 0;
 		public bool EnableAlerts { get; set; } = true;
