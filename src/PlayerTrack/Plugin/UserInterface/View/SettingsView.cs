@@ -51,7 +51,7 @@ namespace PlayerTrack
 				IsCategoryDataUpdated = false;
 			}
 
-			ImGui.SetNextWindowSize(new Vector2(580 * Scale, 320 * Scale), ImGuiCond.Appearing);
+			ImGui.SetNextWindowSize(new Vector2(640 * Scale, 320 * Scale), ImGuiCond.Appearing);
 			if (ImGui.Begin(Loc.Localize("SettingsView", "PlayerTrack Settings") + "###PlayerTrack_Settings_View",
 				ref isVisible, ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoScrollbar))
 				IsVisible = isVisible;
@@ -133,6 +133,12 @@ namespace PlayerTrack
 					ImGui.EndTabItem();
 				}
 
+				if (ImGui.BeginTabItem(Loc.Localize("Display", "Display") + "###PlayerTrack_Display_Tab"))
+				{
+					_currentTab = Tab.Display;
+					ImGui.EndTabItem();
+				}
+
 				if (ImGui.BeginTabItem(Loc.Localize("Threshold", "Threshold") + "###PlayerTrack_Threshold_Tab"))
 				{
 					_currentTab = Tab.Threshold;
@@ -201,6 +207,11 @@ namespace PlayerTrack
 					DrawGeneral();
 					break;
 				}
+				case Tab.Display:
+				{
+					DrawDisplay();
+					break;
+				}
 				case Tab.Threshold:
 				{
 					DrawThreshold();
@@ -255,13 +266,17 @@ namespace PlayerTrack
 		private void DrawGeneral()
 		{
 			PluginEnabled();
-			ShowOverlay();
-			LockOverlay();
-			DefaultView();
-			ShowPlayerCharacterDetails();
-			ShowPlayerOverride();
 			Compressed();
 			SetLanguage();
+		}
+
+		private void DrawDisplay()
+		{
+			ShowOverlay();
+			LockOverlay();
+			ShowPlayerCharacterDetails();
+			ShowPlayerOverride();
+			DefaultView();
 		}
 
 		private void DrawThreshold()
@@ -980,6 +995,7 @@ namespace PlayerTrack
 		private enum Tab
 		{
 			General,
+			Display,
 			Threshold,
 			Filters,
 			Icons,
