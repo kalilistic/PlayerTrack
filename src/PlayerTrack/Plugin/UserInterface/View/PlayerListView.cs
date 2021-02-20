@@ -60,10 +60,11 @@ namespace PlayerTrack
 		public event StopHoverPlayerEventHandler StopHoverPlayer;
 		public event CategoryFilterEventHandler NewCategoryFilter;
 		public event EventHandler<bool> ConfigUpdated;
+        public bool IsInitialized;
 
 		public override void DrawView()
-		{
-			if (!IsVisible) return;
+        {
+            if (!IsVisible) return;
 			ImGui.SetNextWindowSize(new Vector2(200 * Scale, 250 * Scale), ImGuiCond.Always);
 			if (ImGui.Begin(Loc.Localize("PlayerListView", "PlayerTrack") + "###PlayerTrack_PlayerList_View",
 				CalcWindowFlags()))
@@ -215,6 +216,11 @@ namespace PlayerTrack
 
 		private void PlayerList()
 		{
+            if (!IsInitialized)
+            {
+                ImGui.Text(Loc.Localize("InitializingPlayerList", "Initializing... please wait."));
+                return;
+            }
 			if (TrackViewMode == TrackViewMode.AddPlayer) return;
 			if (Players != null && Players.Count > 0)
 			{

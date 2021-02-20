@@ -22,8 +22,9 @@ namespace PlayerTrack
 	public sealed class PlayerTrackPlugin : PluginBase, IPlayerTrackPlugin
 	{
 		private uint _currentTerritoryTypeId;
+        public bool IsInitializing { get; set; } = true;
 		private bool _isProcessing = true;
-		private Timer _onSaveTimer;
+        private Timer _onSaveTimer;
 		private Timer _onUpdateTimer;
 		private PlayerDetailPresenter _playerDetailPresenter;
 		private PlayerListPresenter _playerListPresenter;
@@ -43,15 +44,23 @@ namespace PlayerTrack
 				InitContent();
 				LoadConfig();
 				UpgradeBackup();
+                LoadUI();
 				LoadServices();
-				LoadUI();
-				SetupCommands();
+				InitializePresenters();
+                SetupCommands();
 				HandleFreshInstall();
 				StartTimers();
 				_currentTerritoryTypeId = GetTerritoryType();
 				LocationLastChanged = DateUtil.CurrentTime();
-				_isProcessing = false;
-			});
+                IsInitializing = false;
+                _isProcessing = false;
+            });
+		}
+
+        private void InitializePresenters()
+        {
+            _playerListPresenter.Initialize();
+            _settingsPresenter.Initialize();
 		}
 
 		public long LocationLastChanged { get; set; }
@@ -260,18 +269,21 @@ namespace PlayerTrack
 			}
 		}
 
-		private void OnUpdate(object sender, ElapsedEventArgs e)
+        private void OnUpdate(object sender, ElapsedEventArgs e)
 		{
 			try
 			{
 				// processing check
-				if (_isProcessing) return;
+                if (_isProcessing)
+                {
+                    return;
+                }
 				_isProcessing = true;
 
 				// combat check
 				if (Configuration.RestrictInCombat && InCombat())
 				{
-					_isProcessing = false;
+                    _isProcessing = false;
 					return;
 				}
 
@@ -279,7 +291,7 @@ namespace PlayerTrack
 				var territoryTypeId = GetTerritoryType();
 				if (territoryTypeId == 0)
 				{
-					PlayerService.ProcessExistingOnly();
+                    PlayerService.ProcessExistingOnly();
 					_isProcessing = false;
 					return;
 				}
@@ -287,7 +299,7 @@ namespace PlayerTrack
 				// update territory if needed
 				if (territoryTypeId != _currentTerritoryTypeId)
 				{
-					_currentTerritoryTypeId = territoryTypeId;
+                    _currentTerritoryTypeId = territoryTypeId;
 					LocationLastChanged = DateUtil.CurrentTime();
 				}
 
@@ -295,10 +307,10 @@ namespace PlayerTrack
 				var contentId = GetContentId(territoryTypeId);
 				if (contentId == 0)
 				{
-					InContent = false;
+                    InContent = false;
 					if (Configuration.RestrictToContent)
 					{
-						PlayerService.ProcessExistingOnly();
+                        PlayerService.ProcessExistingOnly();
 						_isProcessing = false;
 						return;
 					}
@@ -311,7 +323,7 @@ namespace PlayerTrack
 				// high end duty check
 				if (Configuration.RestrictToHighEndDuty && !IsHighEndDuty(contentId))
 				{
-					PlayerService.ProcessExistingOnly();
+                    PlayerService.ProcessExistingOnly();
 					_isProcessing = false;
 					return;
 				}
@@ -319,7 +331,7 @@ namespace PlayerTrack
 				// custom content filter check
 				if (Configuration.RestrictToCustom && !Configuration.PermittedContent.Contains(contentId))
 				{
-					PlayerService.ProcessExistingOnly();
+                    PlayerService.ProcessExistingOnly();
 					_isProcessing = false;
 					return;
 				}
@@ -397,10 +409,10 @@ namespace PlayerTrack
 
 		public void LoadServices()
 		{
-			LodestoneService = new LodestoneService(this);
-			CategoryService = new CategoryService(this);
-			PlayerService = new PlayerService(this);
-		}
+            LodestoneService = new LodestoneService(this);
+            CategoryService = new CategoryService(this);
+            PlayerService = new PlayerService(this);
+        }
 
 		public void UpgradeBackup()
 		{

@@ -89,12 +89,12 @@ namespace PlayerTrack
 			var currentTime = DateUtil.CurrentTime();
 			var data = _plugin.DataManager.ReadDataList("players.dat");
 			var players = new ConcurrentDictionary<string, TrackPlayer>();
-			if (data != null && data.Count > 0)
+            if (data != null && data.Count > 0)
 			{
 				if (metaData.Compressed)
 					foreach (var entry in data)
 					{
-						if (string.IsNullOrEmpty(entry)) continue;
+                        if (string.IsNullOrEmpty(entry)) continue;
 						var player = JsonConvert.DeserializeObject<KeyValuePair<string, TrackPlayer>>(
 							entry.Decompress(),
 							_jsonSerializerSettings);
@@ -110,15 +110,14 @@ namespace PlayerTrack
 					}
 			}
 
-			AllPlayers = players;
-
-			foreach (var player in AllPlayers)
+            AllPlayers = players;
+            foreach (var player in AllPlayers)
 			{
-				EnrichPlayerData(player.Value);
+                EnrichPlayerData(player.Value);
 				UpdateLodestoneStatus(player.Value);
 				SubmitLodestoneRequest(player.Value, currentTime);
-			}
-		}
+            }
+        }
 
 		private void LoadPlayersV1(TrackMetaData metaData)
 		{

@@ -122,7 +122,9 @@ namespace PlayerTrack.Mock
 			throw new NotImplementedException();
 		}
 
-		public long LocationLastChanged { get; set; }
+        public bool IsInitializing { get; set; }
+
+        public long LocationLastChanged { get; set; }
 
 		public TrackViewMode TrackViewMode { get; set; }
 		public void PrintHelpMessage()

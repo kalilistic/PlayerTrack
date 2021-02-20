@@ -40,11 +40,13 @@ namespace PlayerTrack
 		public event EventHandler<bool> RequestResetIcons;
 		public event EventHandler<bool> RequestPrintHelp;
 		public event EventHandler<bool> RequestToggleOverlay;
+        public bool IsInitialized;
 
 		public override void DrawView()
-		{
+        {
+            if (!IsInitialized) return;
 			if (!IsVisible) return;
-			var isVisible = IsVisible;
+            var isVisible = IsVisible;
 			if (IsCategoryDataUpdated)
 			{
 				Categories = NextCategories;

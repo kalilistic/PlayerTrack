@@ -12,20 +12,25 @@ namespace PlayerTrack
 			_playerListView = (PlayerListView) _view;
 			_playerListView.Configuration = _plugin.Configuration;
 			_playerListView.WorldNames = new[] {string.Empty};
-			_playerListView.CategoryNames = _plugin.CategoryService.GetCategoryNames();
-			_plugin.PlayerService.PlayersProcessed += PlayerServiceOnPlayersProcessed;
-			_plugin.CategoryService.CategoriesUpdated += CategoryServiceOnCategoriesUpdated;
-			_playerListView.ViewModeChanged += PlayerListViewOnViewModeChanged;
-			_playerListView.NewSearch += PlayerListViewOnNewSearch;
-			_playerListView.AddPlayer += PlayerListViewOnAddPlayer;
-			_playerListView.OpenPlayer += PlayerListViewOnOpenPlayer;
-			_playerListView.TargetPlayer += PlayerListViewOnTargetPlayer;
-			_playerListView.HoverPlayer += PlayerListViewOnHoverPlayer;
-			_playerListView.StopHoverPlayer += PlayerListViewOnStopHoverPlayer;
-			_playerListView.NewCategoryFilter += PlayerListViewOnNewCategoryFilter;
-			_playerListView.ConfigUpdated += PlayerListViewOnConfigUpdated;
-			InitializeList();
-		}
+        }
+
+        public void Initialize()
+        {
+            _playerListView.CategoryNames = _plugin.CategoryService.GetCategoryNames();
+            _plugin.PlayerService.PlayersProcessed += PlayerServiceOnPlayersProcessed;
+            _plugin.CategoryService.CategoriesUpdated += CategoryServiceOnCategoriesUpdated;
+            _playerListView.ViewModeChanged += PlayerListViewOnViewModeChanged;
+            _playerListView.NewSearch += PlayerListViewOnNewSearch;
+            _playerListView.AddPlayer += PlayerListViewOnAddPlayer;
+            _playerListView.OpenPlayer += PlayerListViewOnOpenPlayer;
+            _playerListView.TargetPlayer += PlayerListViewOnTargetPlayer;
+            _playerListView.HoverPlayer += PlayerListViewOnHoverPlayer;
+            _playerListView.StopHoverPlayer += PlayerListViewOnStopHoverPlayer;
+            _playerListView.NewCategoryFilter += PlayerListViewOnNewCategoryFilter;
+            _playerListView.ConfigUpdated += PlayerListViewOnConfigUpdated;
+            InitializeList();
+            _playerListView.IsInitialized = true;
+        }
 
 		private void InitializeList()
 		{

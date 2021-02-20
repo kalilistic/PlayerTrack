@@ -46,5 +46,6 @@ namespace PlayerTrack
 		void SetFocusTarget(int actorId);
 		void RevertFocusTarget();
 		int PluginVersionNumber();
+        bool IsInitializing { get; set; }
 	}
 }

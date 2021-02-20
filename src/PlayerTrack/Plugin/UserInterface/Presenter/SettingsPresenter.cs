@@ -10,9 +10,14 @@ namespace PlayerTrack
 		{
 			_view = new SettingsView {IsVisible = plugin.Configuration.FreshInstall};
 			_settingsView = (SettingsView) _view;
-			InitSettings();
-			AddListeners();
-		}
+        }
+
+        public void Initialize()
+        {
+            InitSettings();
+            AddListeners();
+            _settingsView.IsInitialized = true;
+        }
 
 		public void InitSettings()
 		{
