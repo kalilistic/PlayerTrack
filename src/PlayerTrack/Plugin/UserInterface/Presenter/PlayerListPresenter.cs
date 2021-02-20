@@ -111,7 +111,8 @@ namespace PlayerTrack
 
 		private void PlayerListViewOnViewModeChanged(TrackViewMode trackViewMode)
 		{
-			if (trackViewMode == TrackViewMode.PlayersByCategory)
+			_plugin.LogInfo("Changing view to " + trackViewMode.Name);
+            if (trackViewMode == TrackViewMode.PlayersByCategory)
 				PlayerListViewOnNewCategoryFilter(_plugin.Configuration.SelectedCategory);
 			if (trackViewMode == TrackViewMode.AddPlayer) _playerListView.WorldNames = _plugin.GetWorldNames();
 			if (trackViewMode == TrackViewMode.SearchForPlayers ||
@@ -119,7 +120,8 @@ namespace PlayerTrack
 				if (_playerListView.Players != null && _playerListView.Players.Count > 0)
 					_playerListView.Players.Clear();
 			_plugin.TrackViewMode = trackViewMode;
-		}
+            PlayerServiceOnPlayersProcessed();
+        }
 
 		public void PlayerServiceOnPlayersProcessed()
 		{
