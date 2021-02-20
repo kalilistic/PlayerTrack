@@ -280,6 +280,14 @@ namespace PlayerTrack
                 }
 				_isProcessing = true;
 
+
+				// enabled check
+                if (!Configuration.Enabled)
+                {
+                    _isProcessing = false;
+                    return;
+                }
+
 				// combat check
 				if (Configuration.RestrictInCombat && InCombat())
 				{

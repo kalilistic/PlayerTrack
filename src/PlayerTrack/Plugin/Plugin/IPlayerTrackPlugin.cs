@@ -47,5 +47,6 @@ namespace PlayerTrack
 		void RevertFocusTarget();
 		int PluginVersionNumber();
         bool IsInitializing { get; set; }
-	}
+        bool InCombat();
+    }
 }

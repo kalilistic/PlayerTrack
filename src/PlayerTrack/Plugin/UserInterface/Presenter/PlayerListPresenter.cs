@@ -111,7 +111,6 @@ namespace PlayerTrack
 
 		private void PlayerListViewOnViewModeChanged(TrackViewMode trackViewMode)
 		{
-			_plugin.LogInfo("Changing view to " + trackViewMode.Name);
             if (trackViewMode == TrackViewMode.PlayersByCategory)
 				PlayerListViewOnNewCategoryFilter(_plugin.Configuration.SelectedCategory);
 			if (trackViewMode == TrackViewMode.AddPlayer) _playerListView.WorldNames = _plugin.GetWorldNames();

@@ -123,6 +123,10 @@ namespace PlayerTrack.Mock
 		}
 
         public bool IsInitializing { get; set; }
+        public bool InCombat()
+        {
+            throw new NotImplementedException();
+        }
 
         public long LocationLastChanged { get; set; }
 

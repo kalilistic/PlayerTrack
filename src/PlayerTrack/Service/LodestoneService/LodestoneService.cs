@@ -1,5 +1,6 @@
 ﻿// ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
 // ReSharper disable InvertIf
+// ReSharper disable ConvertIfStatementToReturnStatement
 
 using System;
 using System.Collections.Generic;
@@ -102,11 +103,19 @@ namespace PlayerTrack
 			}
 		}
 
+        private bool ShouldWait()
+        {
+            if (!_plugin.Configuration.Enabled) return true;
+            if (_plugin.Configuration.RestrictInCombat && _plugin.InCombat()) return true;
+            return false;
+        }
+
 		private void ProcessRequests(object source, ElapsedEventArgs e)
-		{
-			if (_isProcessing) return;
-			_isProcessing = true;
-			while (_requests.Count > 0 && DateTime.UtcNow > _lodestoneCooldown)
+        {
+            if (_isProcessing) return;
+			if (ShouldWait()) return;
+            _isProcessing = true;
+			while (_requests.Count > 0 && !ShouldWait() && DateTime.UtcNow > _lodestoneCooldown)
 			{
 				ProcessRequest();
 				Thread.Sleep(_plugin.Configuration.LodestoneRequestDelay);
