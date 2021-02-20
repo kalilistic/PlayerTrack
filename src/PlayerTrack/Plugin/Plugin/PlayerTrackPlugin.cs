@@ -169,13 +169,27 @@ namespace PlayerTrack
 
 				_isProcessing = true;
 				RemoveCommands();
-				StopTimers();
-				PlayerService.SaveData();
-				CategoryService.Dispose();
-				LodestoneService.Dispose();
-				_settingsPresenter.Dispose();
-				_playerListPresenter.Dispose();
-				_playerDetailPresenter.Dispose();
+                try
+                {
+                    StopTimers();
+                }
+                catch
+                {
+                    // ignored
+                }
+                try
+                {
+                    PlayerService.SaveData();
+                    CategoryService.Dispose();
+                    LodestoneService.Dispose();
+                    _settingsPresenter.Dispose();
+                    _playerListPresenter.Dispose();
+                    _playerDetailPresenter.Dispose();
+				}
+                catch
+                {
+                    // ignored
+                }
 				base.Dispose();
 				_pluginInterface.UiBuilder.OnOpenConfigUi -= (sender, args) => DrawConfigUI();
 				_pluginInterface.UiBuilder.OnBuildUi -= DrawUI;
