@@ -11,6 +11,8 @@ namespace PlayerTrack
 {
 	public partial class PlayerService
 	{
+		private bool upgradeAttempted;
+		
 		public void SaveData()
 		{
 			try
@@ -124,6 +126,7 @@ namespace PlayerTrack
 			try
 			{
 				_plugin.LogInfo("V1 schema detected...will load and upgrade to latest.");
+				_plugin.LogInfo("Compression: " + metaData.Compressed);
 				var currentTime = DateUtil.CurrentTime();
 				var data = _plugin.DataManager.ReadDataStr("players.dat");
 				if (metaData.Compressed) data = data.Decompress();
@@ -137,6 +140,14 @@ namespace PlayerTrack
 					UpdateLodestoneStatus(player.Value);
 					SubmitLodestoneRequest(player.Value, currentTime);
 				}
+			}
+			catch (FormatException)
+			{
+				_plugin.LogInfo("FormatException so trying other compression.");
+				if (upgradeAttempted) return;
+				upgradeAttempted = true;
+				metaData.Compressed = !metaData.Compressed;
+				LoadPlayersV1(metaData);
 			}
 			catch (Exception ex)
 			{
