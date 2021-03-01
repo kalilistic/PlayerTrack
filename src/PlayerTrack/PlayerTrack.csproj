@@ -94,6 +94,7 @@
     <Compile Include="Common\Model\CharHeight.cs" />
     <Compile Include="Common\Model\FontAwesomeIcon.cs" />
     <Compile Include="Common\Model\ChatColor.cs" />
+    <Compile Include="Common\Model\ItemList.cs" />
     <Compile Include="Common\ResourceManager\ResourceManager.cs" />
     <Compile Include="Common\Model\SeIconChar.cs" />
     <Compile Include="Common\Model\PluginLanguage.cs" />

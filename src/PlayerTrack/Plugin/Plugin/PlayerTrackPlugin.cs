@@ -137,6 +137,16 @@ namespace PlayerTrack
 			SaveConfig(Configuration);
 		}
 
+		public string[] GetContentNames()
+		{
+			return ContentNames;
+		}
+
+		public uint[] GetContentIds()
+		{
+			return ContentIds;
+		}
+
 		public string[] GetWorldNames()
 		{
 			try
