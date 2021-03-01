@@ -93,9 +93,8 @@ namespace PlayerTrack
 						_plugin.LogError(ex, "Skipping player " + playerEntry.Key);
 					}
 			}
-
-			PlayersProcessed?.Invoke();
 			SendAlerts();
+			PlayersProcessed?.Invoke();
 		}
 
 		public void ProcessExistingOnly()
