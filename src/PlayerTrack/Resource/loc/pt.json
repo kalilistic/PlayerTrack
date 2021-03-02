@@ -4,18 +4,15 @@
         "description": "PlayerTrackPlugin.GetIconNames"
     },
     "HelpMessage1": {
-        "message":
-            "PlayerTrack helps you keep a record of who you meet and the content you played together. By default, this is instanced content only - but you can expand or restrict this in settings. You can see all the details on a player by clicking on their name in the overlay. Here you can also record notes and set a personalized icon/color.",
+        "message": "PlayerTrack helps you keep a record of who you meet and the content you played together. By default, this is instanced content only - but you can expand or restrict this in settings. You can see all the details on a player by clicking on their name in the overlay. Here you can also record notes and set a personalized icon/color.",
         "description": "PlayerTrackPlugin.PrintHelpMessage"
     },
     "HelpMessage2": {
-        "message":
-            "PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). If this happens, you'll see an indicator next to their home world and can mouse-over to see their previous residence.",
+        "message": "PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). If this happens, you'll see an indicator next to their home world and can mouse-over to see their previous residence.",
         "description": "PlayerTrackPlugin.PrintHelpMessage"
     },
     "HelpMessage3": {
-        "message":
-            "If you need help, reach out on discord or open an issue on GitHub. If you want to help add translations, you can submit updates on Crowdin. Links to both GitHub and Crowdin are available in settings.",
+        "message": "If you need help, reach out on discord or open an issue on GitHub. If you want to help add translations, you can submit updates on Crowdin. Links to both GitHub and Crowdin are available in settings.",
         "description": "PlayerTrackPlugin.PrintHelpMessage"
     },
     "InstallThankYou": {
@@ -225,6 +222,10 @@
     "PlayerSearch": {
         "message": "Search",
         "description": "PlayerListView.PlayerSearchInput"
+    },
+    "InitializingPlayerList": {
+        "message": "Initializing... please wait.",
+        "description": "PlayerListView.PlayerList"
     },
     "NoPlayers": {
         "message": "No players to show...",

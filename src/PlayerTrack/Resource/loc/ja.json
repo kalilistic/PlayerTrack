@@ -4,18 +4,15 @@
         "description": "PlayerTrackPlugin.GetIconNames"
     },
     "HelpMessage1": {
-        "message":
-            "PlayerTrack helps you keep a record of who you meet and the content you played together. By default, this is instanced content only - but you can expand or restrict this in settings. You can see all the details on a player by clicking on their name in the overlay. Here you can also record notes and set a personalized icon/color.",
+        "message": "PlayerTrack helps you keep a record of who you meet and the content you played together. By default, this is instanced content only - but you can expand or restrict this in settings. You can see all the details on a player by clicking on their name in the overlay. Here you can also record notes and set a personalized icon/color.",
         "description": "PlayerTrackPlugin.PrintHelpMessage"
     },
     "HelpMessage2": {
-        "message":
-            "PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). If this happens, you'll see an indicator next to their home world and can mouse-over to see their previous residence.",
+        "message": "PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). If this happens, you'll see an indicator next to their home world and can mouse-over to see their previous residence.",
         "description": "PlayerTrackPlugin.PrintHelpMessage"
     },
     "HelpMessage3": {
-        "message":
-            "If you need help, reach out on discord or open an issue on GitHub. If you want to help add translations, you can submit updates on Crowdin. Links to both GitHub and Crowdin are available in settings.",
+        "message": "If you need help, reach out on discord or open an issue on GitHub. If you want to help add translations, you can submit updates on Crowdin. Links to both GitHub and Crowdin are available in settings.",
         "description": "PlayerTrackPlugin.PrintHelpMessage"
     },
     "InstallThankYou": {
@@ -226,6 +223,10 @@
         "message": "Search",
         "description": "PlayerListView.PlayerSearchInput"
     },
+    "InitializingPlayerList": {
+        "message": "Initializing... please wait.",
+        "description": "PlayerListView.PlayerList"
+    },
     "NoPlayers": {
         "message": "No players to show...",
         "description": "PlayerListView.PlayerList"
@@ -411,67 +412,67 @@
         "description": "SettingsView.NewEncounterThreshold"
     },
     "RestrictInCombat": {
-        "message": "Don't process in combat",
+        "message": "戦闘中は処理しない",
         "description": "SettingsView.RestrictInCombat"
     },
     "RestrictInCombat_HelpMarker": {
-        "message": "stop processing data while in combat",
+        "message": "戦闘中のデータ処理は停止します",
         "description": "SettingsView.RestrictInCombat"
     },
     "RestrictToContent": {
-        "message": "Content Only",
+        "message": "コンテンツのみ",
         "description": "SettingsView.RestrictToContent"
     },
     "RestrictToContent_HelpMarker": {
-        "message": "restrict to instanced content and exclude overworld encounters",
+        "message": "インスタンスコンテンツ内でのみ作動します。コンテンツ外のフィールド上では作動しません。",
         "description": "SettingsView.RestrictToContent"
     },
     "RestrictToHighEndDuty": {
-        "message": "High-End Duty Only",
+        "message": "ハイエンドコンテンツのみ",
         "description": "SettingsView.RestrictToHighEndDuty"
     },
     "RestrictToHighEndDuty_HelpMarker": {
-        "message": "restrict to high-end duties only (e.g. savage)",
+        "message": "ハイエンドコンテンツ内のみ作動します。(例：極蛮神討滅戦)",
         "description": "SettingsView.RestrictToHighEndDuty"
     },
     "RestrictToCustom": {
-        "message": "Restrict to Following Content",
+        "message": "フォロー中のコンテンツのみ",
         "description": "SettingsView.RestrictToCustom"
     },
     "RestrictToCustom_HelpMarker": {
-        "message": "add content to list by using dropdown or remove by clicking on them",
+        "message": "ドロップダウンからリストにコンテンツを追加したり、それらをクリックして削除したりすることができます。",
         "description": "SettingsView.RestrictToCustom"
     },
     "Add": {
-        "message": "Add",
+        "message": "追加",
         "description": "SettingsView.RestrictToCustom"
     },
     "Reset": {
-        "message": "Reset",
+        "message": "リセット",
         "description": "SettingsView.RestrictToCustom"
     },
     "DupeContent": {
-        "message": "This content is already added!",
+        "message": "このコンテンツはすでに追加されています！",
         "description": "SettingsView.RestrictToCustom"
     },
     "EnableAlerts": {
-        "message": "Enable Alerts",
+        "message": "通知を有効にする",
         "description": "SettingsView.EnableAlerts"
     },
     "EnableAlerts_HelpMarker": {
-        "message": "globally disable alerts even if set for player",
+        "message": "各プレイヤーの設定で通知を有効にしている場合でも、チェックを外すと全ての通知を無効にします。",
         "description": "SettingsView.EnableAlerts"
     },
     "IncludeNotesInAlert": {
-        "message": "Include Notes in Alerts",
+        "message": "通知にメモを含む",
         "description": "SettingsView.IncludeNotesInAlerts"
     },
     "IncludeNotesInAlert_HelpMarker": {
-        "message": "include notes in alert message if available",
+        "message": "可能であれば通知メッセージにメモを含めます。",
         "description": "SettingsView.IncludeNotesInAlerts"
     },
     "AlertFrequency": {
-        "message": "Alert Frequency (hours)",
+        "message": "通知頻度(時間)",
         "description": "SettingsView.AlertFrequency"
     },
     "AlertFrequency_HelpMarker": {
@@ -487,7 +488,7 @@
         "description": "SettingsView.CategoryTable"
     },
     "CategoryAlerts": {
-        "message": "Alerts",
+        "message": "通知",
         "description": "SettingsView.CategoryTable"
     },
     "CategoryIcon": {
@@ -495,7 +496,7 @@
         "description": "SettingsView.CategoryTable"
     },
     "CategoryAction": {
-        "message": "Actions",
+        "message": "操作",
         "description": "SettingsView.CategoryTable"
     },
     "EnableCurrentTarget": {
