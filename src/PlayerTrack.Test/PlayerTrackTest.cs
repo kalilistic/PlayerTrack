@@ -5,27 +5,27 @@ using PlayerTrack.Mock;
 
 namespace PlayerTrack.Test
 {
-	[TestFixture]
-	public class PlayerTrackTest
-	{
-		[SetUp]
-		public void Setup()
-		{
-		}
+    [TestFixture]
+    public class PlayerTrackTest
+    {
+        [SetUp]
+        public void Setup()
+        {
+        }
 
-		[TearDown]
-		public void TearDown()
-		{
-		}
+        [TearDown]
+        public void TearDown()
+        {
+        }
 
-		public LodestoneService LodestoneService;
-		public PlayerService PlayerService;
-		private MockPlayerTrackPlugin _plugin;
+        public LodestoneService LodestoneService;
+        public PlayerService PlayerService;
+        private MockPlayerTrackPlugin _plugin;
 
-		[Test]
-		public void PlayerTrackTest1()
-		{
-			Assert.IsTrue(true);
-		}
-	}
+        [Test]
+        public void PlayerTrackTest1()
+        {
+            Assert.IsTrue(true);
+        }
+    }
 }

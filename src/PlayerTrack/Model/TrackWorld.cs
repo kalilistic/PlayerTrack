@@ -2,17 +2,17 @@
 
 namespace PlayerTrack
 {
-	[JsonObject(MemberSerialization.OptIn)]
-	public class TrackWorld
-	{
-		[JsonProperty] public uint Id;
+    [JsonObject(MemberSerialization.OptIn)]
+    public class TrackWorld
+    {
+        [JsonProperty] public uint Id;
 
-		public string Name;
+        public string Name;
 
 
-		public bool Equals(TrackWorld trackWorld)
-		{
-			return Id == trackWorld.Id;
-		}
-	}
+        public bool Equals(TrackWorld trackWorld)
+        {
+            return Id == trackWorld.Id;
+        }
+    }
 }

@@ -1,6 +1,6 @@
 ﻿namespace PlayerTrack.Mock
 {
-	public class MockConfig : PlayerTrackConfig
-	{
-	}
+    public class MockConfig : PlayerTrackConfig
+    {
+    }
 }

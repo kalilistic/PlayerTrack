@@ -1,9 +1,9 @@
 ﻿namespace PlayerTrack
 {
-	public enum TrackAlertState
-	{
-		NotSet = 0,
-		Enabled = 1,
-		Disabled = 2
-	}
+    public enum TrackAlertState
+    {
+        NotSet = 0,
+        Enabled = 1,
+        Disabled = 2
+    }
 }
