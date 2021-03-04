@@ -270,8 +270,25 @@ namespace PlayerTrack
         {
             try
             {
+                // processing check
                 if (_isProcessing) return;
                 _isProcessing = true;
+
+
+                // enabled check
+                if (!Configuration.Enabled)
+                {
+                    _isProcessing = false;
+                    return;
+                }
+
+                // combat check
+                if (Configuration.RestrictInCombat && InCombat())
+                {
+                    _isProcessing = false;
+                    return;
+                }
+                
                 PlayerService.SaveData();
                 _isProcessing = false;
             }
