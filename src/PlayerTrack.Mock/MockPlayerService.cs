@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PlayerTrack.Mock
 {
-    public class MockPlayerService : IPlayerService
+    public abstract class MockPlayerService : IPlayerService
     {
         public void ProcessLodestoneRequests()
         {
@@ -60,8 +60,7 @@ namespace PlayerTrack.Mock
             throw new NotImplementedException();
         }
 
-        public event PlayerService.ProcessPlayersEventHandler PlayersProcessed;
-
+        public abstract event PlayerService.ProcessPlayersEventHandler PlayersProcessed;
         public void ProcessPlayers(List<TrackPlayer> incomingPlayers)
         {
             throw new NotImplementedException();

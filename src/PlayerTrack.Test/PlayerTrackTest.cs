@@ -22,6 +22,11 @@ namespace PlayerTrack.Test
         public PlayerService PlayerService;
         private MockPlayerTrackPlugin _plugin;
 
+        public PlayerTrackTest(MockPlayerTrackPlugin plugin)
+        {
+            _plugin = plugin;
+        }
+
         [Test]
         public void PlayerTrackTest1()
         {
