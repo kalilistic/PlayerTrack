@@ -1,6 +1,6 @@
 {
     "Author": "kalilistic",
-    "Name": "PlayerTrack",
+    "Name": "<%name%>",
     "Description": "Keep track of players you meet.",
     "InternalName": "PlayerTrack",
     "AssemblyVersion": "<%version%>",
