@@ -156,12 +156,12 @@ namespace PlayerTrack
         {
             if (TrackViewMode.Code == TrackPlayerMode.AddPlayer.Code)
             {
-                ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale);
+                ImGui.SetNextItemWidth(ImGui.GetWindowSize().X - 30f);
                 if (ImGui.Combo("###PlayerTrack_PlayerAdd_Combo", ref _selectedWorld,
                     WorldNames,
                     WorldNames.Length))
 
-                    ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale / 1.3f);
+                    ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) / 1.3f);
                 ImGui.InputTextWithHint("###PlayerTrack_PlayerNameAdd_Input",
                     Loc.Localize("PlayerNameAddHint", "player name"), ref _addPlayerInput, 30);
 
@@ -175,7 +175,7 @@ namespace PlayerTrack
         {
             if (TrackViewMode.Code == TrackPlayerMode.SearchForPlayers.Code)
             {
-                ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale / 1.5f);
+                ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) / 1.5f);
                 ImGui.InputTextWithHint("###PlayerTrack_PlayerNameSearch_Input",
                     Loc.Localize("PlayerNameSearchHint", "player name"), ref _searchInput, 30);
                 ImGui.SameLine();
@@ -189,7 +189,7 @@ namespace PlayerTrack
             if (TrackViewMode.Code == TrackPlayerMode.PlayersByCategory.Code)
             {
                 var selectedCategory = Configuration.SelectedCategory;
-                ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale);
+                ImGui.SetNextItemWidth(ImGui.GetWindowSize().X - 30f);
                 if (ImGui.Combo("###PlayerTrack_PlayersByCategory_Combo", ref selectedCategory,
                     CategoryNames,
                     CategoryNames.Length))
@@ -204,7 +204,7 @@ namespace PlayerTrack
         private void SelectView()
         {
             var viewIndex = TrackViewMode.Index;
-            ImGui.SetNextItemWidth((ImGui.GetWindowSize().X - 30f) * Scale);
+            ImGui.SetNextItemWidth(ImGui.GetWindowSize().X - 30f);
             if (ImGui.Combo("###PlayerTrack_ViewMode_Combo", ref viewIndex,
                 TrackPlayerMode.ViewNames.ToArray(),
                 TrackPlayerMode.ViewNames.Count))
