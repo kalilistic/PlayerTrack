@@ -20,13 +20,10 @@ namespace PlayerTrack.Test
 
         public LodestoneService LodestoneService;
         public PlayerService PlayerService;
+        #pragma warning disable 169
         private MockPlayerTrackPlugin _plugin;
-
-        public PlayerTrackTest(MockPlayerTrackPlugin plugin)
-        {
-            _plugin = plugin;
-        }
-
+        #pragma warning restore 169
+        
         [Test]
         public void PlayerTrackTest1()
         {
