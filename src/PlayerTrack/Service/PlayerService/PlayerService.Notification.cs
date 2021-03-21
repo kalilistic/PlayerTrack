@@ -36,9 +36,9 @@ namespace PlayerTrack
                                     _plugin.PrintMessage(string.Format(
                                         Loc.Localize("PlayerAlertWithNotes", "{0} last seen {1} in {2}: {3}"),
                                         player.Value.Name,
-                                        player.Value.PreviouslyLastSeen, 
-                                        player.Value.AbbreviatedNotes,
-                                        location));
+                                        player.Value.PreviouslyLastSeen,
+                                        location,
+                                        player.Value.AbbreviatedNotes));
                                 else
                                     _plugin.PrintMessage(string.Format(
                                         Loc.Localize("PlayerAlert", "{0} last seen {1} in {2}."), player.Value.Name,
