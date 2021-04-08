@@ -236,8 +236,8 @@ namespace PlayerTrack
                     ImGui.SameLine();
                     ImGui.TextColored(player.Color, player.Name);
                     ImGui.EndGroup();
-                    if (ImGui.IsItemClicked(0)) OpenPlayer?.Invoke(player.Key);
-                    if (ImGui.IsItemClicked(1)) TargetPlayer?.Invoke(player.ActorId);
+                    if (ImGui.IsItemClicked(ImGuiMouseButton.Left)) OpenPlayer?.Invoke(player.Key);
+                    if (ImGui.IsItemClicked(ImGuiMouseButton.Right)) TargetPlayer?.Invoke(player.ActorId);
                     if (ImGui.IsItemHovered())
                     {
                         noHover = false;
