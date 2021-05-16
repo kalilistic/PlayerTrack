@@ -1,530 +1,530 @@
 {
-    "Default": {
-        "message": "Predeterminado",
-        "description": "PlayerTrackPlugin.GetIconNames"
-    },
-    "HelpMessage1": {
-        "message": "PlayerTrack te ayuda a mantener un registro de los jugadores con los que te encuentras y con los que haces contenido. Por defecto, sólo cubre contenido instanciado, pero puedes expandir o restringir ésto en los ajustes. Puedes ver todos los detalles de un jugador clicando en su nombre en el overlay. Aquí tambien puedes redactar notas y ponerle un icono/color personalizado.",
-        "description": "PlayerTrackPlugin.PrintHelpMessage"
-    },
-    "HelpMessage2": {
-        "message": "PlayerTrack utiliza la Lodestone para mantener los datos actualizados (por ejemplo, las transferencias de mundo). Si ésto ocurre, verás un indicador junto a su mundo hogar y podrás pasar el ratón por encima para ver su anterior residencia.",
-        "description": "PlayerTrackPlugin.PrintHelpMessage"
-    },
-    "HelpMessage3": {
-        "message": "Si necesitas ayuda, contacta en discord o abre un problema en GitHub. Si quieres ayudar a añadir traducciones, puedes suministrar actualizaciones en Drowdin. En los ajustes encontrarás enlaces a tanto GitHub como Crowdin.",
-        "description": "PlayerTrackPlugin.PrintHelpMessage"
-    },
-    "InstallThankYou": {
-        "message": "¡Gracias por instalar PlayerTrack!",
-        "description": "PlayerTrackPlugin.HandleFreshInstall"
-    },
-    "PlayerDetailView": {
-        "message": "PlayerTrack",
-        "description": "PlayerDetailView.DrawView"
-    },
-    "Save": {
-        "message": "Guardar",
-        "description": "PlayerDetailView.Controls"
-    },
-    "Cancel": {
-        "message": "Cancelar",
-        "description": "PlayerDetailView.Controls"
-    },
-    "DeleteConfirmation": {
-        "message": "Eliminar",
-        "description": "PlayerDetailView.Controls"
-    },
-    "ResetConfirmation": {
-        "message": "Restablecer",
-        "description": "PlayerDetailView.Controls"
-    },
-    "Lodestone": {
-        "message": "Lodestone",
-        "description": "PlayerDetailView.Controls"
-    },
-    "PlayerInfo": {
-        "message": "Información del jugador",
-        "description": "PlayerDetailView.PlayerInfo"
-    },
-    "PlayerStats": {
-        "message": "Estadísticas del jugador",
-        "description": "PlayerDetailView.PlayerInfo"
-    },
-    "PlayerName": {
-        "message": "Nombre",
-        "description": "PlayerDetailView.PlayerInfo"
-    },
-    "PlayerPreviousNames": {
-        "message": "Anteriormente conocido como {0}",
-        "description": "PlayerDetailView.PlayerInfo"
-    },
-    "PlayerFirstSeen": {
-        "message": "Visto por primera vez",
-        "description": "PlayerDetailView.PlayerInfo"
-    },
-    "PlayerHomeWorld": {
-        "message": "Mundo",
-        "description": "PlayerDetailView.PlayerInfo"
-    },
-    "PlayerPreviousWorlds": {
-        "message": "Anteriormente en {0}",
-        "description": "PlayerDetailView.PlayerInfo"
-    },
-    "PlayerLastSeen": {
-        "message": "Visto por última vez",
-        "description": "PlayerDetailView.PlayerInfo"
-    },
-    "PlayerFreeCompany": {
-        "message": "Free Company",
-        "description": "PlayerDetailView.PlayerInfo"
-    },
-    "PlayerSeenCount": {
-        "message": "Contador de encuentros",
-        "description": "PlayerDetailView.PlayerInfo"
-    },
-    "LodestoneStatus": {
-        "message": "Estado en la Lodestone",
-        "description": "PlayerDetailView.PlayerInfo"
-    },
-    "PlayerCustomize": {
-        "message": "Personaje",
-        "description": "PlayerDetailView.PlayerCharacterDetails"
-    },
-    "PlayerRace": {
-        "message": "Raza",
-        "description": "PlayerDetailView.PlayerCharacterDetails"
-    },
-    "PlayerGender": {
-        "message": "Género",
-        "description": "PlayerDetailView.PlayerCharacterDetails"
-    },
-    "PlayerTribe": {
-        "message": "Tribu",
-        "description": "PlayerDetailView.PlayerCharacterDetails"
-    },
-    "PlayerHeight": {
-        "message": "Altura",
-        "description": "PlayerDetailView.PlayerCharacterDetails"
-    },
-    "PlayerHeightValue": {
-        "message": "{0} pulgadas",
-        "description": "PlayerDetailView.PlayerCharacterDetails"
-    },
-    "DisplayOptions": {
-        "message": "Opciones de visualización",
-        "description": "PlayerDetailView.DisplaySettings"
-    },
-    "EnablePlayerAlerts": {
-        "message": "Activar alertas",
-        "description": "PlayerDetailView.PlayerOverride"
-    },
-    "PlayerNotes": {
-        "message": "Comentarios",
-        "description": "PlayerDetailView.PlayerNotes"
-    },
-    "Encounters": {
-        "message": "Encuentros",
-        "description": "PlayerDetailView.PlayerEncounters"
-    },
-    "EncounterTime": {
-        "message": "Tiempo",
-        "description": "PlayerDetailView.PlayerEncounters"
-    },
-    "EncounterDuration": {
-        "message": "Duración",
-        "description": "PlayerDetailView.PlayerEncounters"
-    },
-    "EncounterJob": {
-        "message": "Clase",
-        "description": "PlayerDetailView.PlayerEncounters"
-    },
-    "EncounterJobLevel": {
-        "message": "Niv",
-        "description": "PlayerDetailView.PlayerEncounters"
-    },
-    "EncounterLocation": {
-        "message": "Ubicación",
-        "description": "PlayerDetailView.PlayerEncounters"
-    },
-    "NoEncounters": {
-        "message": "No hay encuentros que mostrar...",
-        "description": "PlayerDetailView.PlayerEncounters"
-    },
-    "LodestoneModalTitle": {
-        "message": "Lodestone",
-        "description": "PlayerDetailView.LodestoneModal"
-    },
-    "LodestoneModalContent": {
-        "message": "Pendiente de verificación de Lodestone.",
-        "description": "PlayerDetailView.LodestoneModal"
-    },
-    "OK": {
-        "message": "Ok",
-        "description": "PlayerDetailView.LodestoneModal"
-    },
-    "ResetConfirmationModalTitle": {
-        "message": "Confirmación de ReiniciarConfirmación",
-        "description": "PlayerDetailView.ResetConfirmationModal"
-    },
-    "ResetConfirmationModalContent": {
-        "message": "¿Estás seguro de que quieres reiniciar?",
-        "description": "PlayerDetailView.ResetConfirmationModal"
-    },
-    "DeleteConfirmationModalTitle": {
-        "message": "Confirmación de borrado",
-        "description": "PlayerDetailView.DeleteConfirmationModal"
-    },
-    "DeleteConfirmationModalContent": {
-        "message": "¿Estás seguro de que deseas eliminarlo?",
-        "description": "PlayerDetailView.DeleteConfirmationModal"
-    },
-    "PlayerListView": {
-        "message": "PlayerTrack",
-        "description": "PlayerListView.DrawView"
-    },
-    "InvalidCharacterNameTitle": {
-        "message": "Nombre no válido",
-        "description": "PlayerListView.InvalidCharacterNameModal"
-    },
-    "InvalidCharacterNameModalContent": {
-        "message": "Nombre de personaje no válido.",
-        "description": "PlayerListView.InvalidCharacterNameModal"
-    },
-    "DuplicateCharacterTitle": {
-        "message": "Jugador duplicado",
-        "description": "PlayerListView.DuplicateCharacterModal"
-    },
-    "DuplicateCharacterModalContent": {
-        "message": "Ya hay un jugador con ese nombre/mundo.",
-        "description": "PlayerListView.DuplicateCharacterModal"
-    },
-    "AddCharacterSuccessTitle": {
-        "message": "Éxito",
-        "description": "PlayerListView.AddCharacterSuccessModal"
-    },
-    "AddCharacterSuccessModalContent": {
-        "message": "Personaje añadido con éxito.",
-        "description": "PlayerListView.AddCharacterSuccessModal"
-    },
-    "PlayerNameAddHint": {
-        "message": "nombre del jugador",
-        "description": "PlayerListView.PlayerAddInput"
-    },
-    "PlayerAdd": {
-        "message": "Añadir",
-        "description": "PlayerListView.PlayerAddInput"
-    },
-    "PlayerNameSearchHint": {
-        "message": "nombre del jugador",
-        "description": "PlayerListView.PlayerSearchInput"
-    },
-    "PlayerSearch": {
-        "message": "Buscar",
-        "description": "PlayerListView.PlayerSearchInput"
-    },
-    "InitializingPlayerList": {
-        "message": "Initializing... please wait.",
-        "description": "PlayerListView.PlayerList"
-    },
-    "NoPlayers": {
-        "message": "No hay jugadores para mostrar...",
-        "description": "PlayerListView.PlayerList"
-    },
-    "PlayerAlertWithNotes": {
-        "message": "{0} visto por última vez {1}: {2}",
-        "description": "PlayerService.SendAlerts"
-    },
-    "PlayerAlert": {
-        "message": "{0} fue visto por última vez {1}.",
-        "description": "PlayerService.SendAlerts"
-    },
-    "SettingsView": {
-        "message": "Ajustes de PlayerTrack",
-        "description": "SettingsView.DrawView"
-    },
-    "DeleteModalTitle": {
-        "message": "Confirmación de borrado",
-        "description": "SettingsView.DeleteModal"
-    },
-    "DeleteModalContent": {
-        "message": "¿Estás seguro de que deseas eliminarlo?",
-        "description": "SettingsView.DeleteModal"
-    },
-    "ResetModalTitle": {
-        "message": "Confirmación de Reinicio",
-        "description": "SettingsView.ResetModal"
-    },
-    "ResetModalContent": {
-        "message": "¿Estás seguro de que quieres resetear?",
-        "description": "SettingsView.ResetModal"
-    },
-    "General": {
-        "message": "General",
-        "description": "SettingsView.DrawTabs"
-    },
-    "Display": {
-        "message": "Display",
-        "description": "SettingsView.DrawTabs"
-    },
-    "Threshold": {
-        "message": "Umbral",
-        "description": "SettingsView.DrawTabs"
-    },
-    "Filters": {
-        "message": "Filtros",
-        "description": "SettingsView.DrawTabs"
-    },
-    "Icons": {
-        "message": "Iconos",
-        "description": "SettingsView.DrawTabs"
-    },
-    "Alerts": {
-        "message": "Alertas",
-        "description": "SettingsView.DrawTabs"
-    },
-    "Categories": {
-        "message": "Categorías",
-        "description": "SettingsView.DrawTabs"
-    },
-    "Targets": {
-        "message": "Objetivos",
-        "description": "SettingsView.DrawTabs"
-    },
-    "Backup": {
-        "message": "Copia de seguridad",
-        "description": "SettingsView.DrawTabs"
-    },
-    "Links": {
-        "message": "Enlaces",
-        "description": "SettingsView.DrawTabs"
-    },
-    "PluginEnabled": {
-        "message": "Plugin habilitado",
-        "description": "SettingsView.PluginEnabled"
-    },
-    "PluginEnabled_HelpMarker": {
-        "message": "activa o desactia el plugin",
-        "description": "SettingsView.PluginEnabled"
-    },
-    "ShowOverlay": {
-        "message": "Mostrar Overlay",
-        "description": "SettingsView.ShowOverlay"
-    },
-    "ShowOverlay_HelpMarker": {
-        "message": "muestra la ventana del overlay",
-        "description": "SettingsView.ShowOverlay"
-    },
-    "LockOverlay": {
-        "message": "Lock Overlay",
-        "description": "SettingsView.LockOverlay"
-    },
-    "LockOverlay_HelpMarker": {
-        "message": "keep the overlay windows in-place",
-        "description": "SettingsView.LockOverlay"
-    },
-    "DefaultView": {
-        "message": "Default View",
-        "description": "SettingsView.DefaultView"
-    },
-    "DefaultView_HelpMarker": {
-        "message": "set the default view to show on start up",
-        "description": "SettingsView.DefaultView"
-    },
-    "ShowPlayerCharacterDetails": {
-        "message": "Mostrar Detalles del Personaje",
-        "description": "SettingsView.ShowPlayerCharacterDetails"
-    },
-    "ShowPlayerCharacterDetails_HelpMarker": {
-        "message": "muestra detalles del personaje tales como la tribu o su género",
-        "description": "SettingsView.ShowPlayerCharacterDetails"
-    },
-    "ShowPlayerOverride": {
-        "message": "Mostrar Opciones de Visualización del Jugador",
-        "description": "SettingsView.ShowPlayerOverride"
-    },
-    "ShowPlayerOverride_HelpMarker": {
-        "message": "muestra opciones para reemplazar ajustes de visualización tales como el color o el icono",
-        "description": "SettingsView.ShowPlayerOverride"
-    },
-    "Language": {
-        "message": "Idioma",
-        "description": "SettingsView.SetLanguage"
-    },
-    "Language_HelpMarker": {
-        "message": "usa el idioma por defecto de la interfaz del plugin o cámbialo",
-        "description": "SettingsView.SetLanguage"
-    },
-    "RecentPlayerThreshold": {
-        "message": "Umbral de Jugadores Recientes (en minutos)",
-        "description": "SettingsView.RecentPlayerThreshold"
-    },
-    "RecentPlayerThreshold_HelpMarker": {
-        "message": "cantidad de tiempo que aparecerán los jugadores en jugadores recientes desde la última vez que fueron vistos",
-        "description": "SettingsView.RecentPlayerThreshold"
-    },
-    "SyncToLodestone": {
-        "message": "Sincronizar con Lodestone",
-        "description": "SettingsView.SyncToLodestone"
-    },
-    "SyncToLodestone_HelpMarker": {
-        "message": "extrae datos de la lodestone para llevar un registro de cambios de nombre o mundo",
-        "description": "SettingsView.SyncToLodestone"
-    },
-    "LodestoneLocale": {
-        "message": "Región de Lodestone",
-        "description": "SettingsView.LodestoneLocale"
-    },
-    "LodestoneLocale_HelpMarker": {
-        "message": "establece la región que se usará para el enlace al perfil de la lodestone",
-        "description": "SettingsView.LodestoneLocale"
-    },
-    "Compressed": {
-        "message": "Comprimir datos",
-        "description": "SettingsView.Compressed"
-    },
-    "Compressed_HelpMarker": {
-        "message": "comprime los datos guardados para reducir significativamente el tamaño de los archivos (se recomienda dejar activado)",
-        "description": "SettingsView.Compressed"
-    },
-    "BackupFrequency": {
-        "message": "Frecuencia de copias de seguridad (en horas)",
-        "description": "SettingsView.BackupFrequency"
-    },
-    "BackupFrequency_HelpMarker": {
-        "message": "frecuencia con la que se harán copias de seguridad de los datos de jugador en caso de que algo vaya mal",
-        "description": "SettingsView.BackupFrequency"
-    },
-    "BackupRetention": {
-        "message": "Retención de copias de seguridad (en unidades)",
-        "description": "SettingsView.BackupRetention"
-    },
-    "PlayerTrack_BackupRetention_HelpMarker": {
-        "message": "número de copias de seguridad que se almacenarán antes de borrar la más antigua",
-        "description": "SettingsView.BackupRetention"
-    },
-    "NewEncounterThreshold": {
-        "message": "Umbral de nuevos encuentros (en horas)",
-        "description": "SettingsView.NewEncounterThreshold"
-    },
-    "NewEncounterThreshold_HelpMarker": {
-        "message": "umbral para registrar un nuevo encuentro con un jugador en el mismo lugar",
-        "description": "SettingsView.NewEncounterThreshold"
-    },
-    "RestrictInCombat": {
-        "message": "No procesar en combate",
-        "description": "SettingsView.RestrictInCombat"
-    },
-    "RestrictInCombat_HelpMarker": {
-        "message": "dejar de procesar datos mientras se está en combate",
-        "description": "SettingsView.RestrictInCombat"
-    },
-    "RestrictToContent": {
-        "message": "Sólo Contenido",
-        "description": "SettingsView.RestrictToContent"
-    },
-    "RestrictToContent_HelpMarker": {
-        "message": "restringir a contenido instanciado y excluir encuentros en el mundo abierto",
-        "description": "SettingsView.RestrictToContent"
-    },
-    "RestrictToHighEndDuty": {
-        "message": "Sólo en contenido High-End",
-        "description": "SettingsView.RestrictToHighEndDuty"
-    },
-    "RestrictToHighEndDuty_HelpMarker": {
-        "message": "restringir a contenido high-end (por ejemplo, Savage)",
-        "description": "SettingsView.RestrictToHighEndDuty"
-    },
-    "RestrictToCustom": {
-        "message": "Restringir al siguiente contenido",
-        "description": "SettingsView.RestrictToCustom"
-    },
-    "RestrictToCustom_HelpMarker": {
-        "message": "añade contenido a la lista usando el menú desplegable, o elimina haciéndoles click",
-        "description": "SettingsView.RestrictToCustom"
-    },
-    "Add": {
-        "message": "Añadir",
-        "description": "SettingsView.RestrictToCustom"
-    },
-    "Reset": {
-        "message": "Restablecer",
-        "description": "SettingsView.RestrictToCustom"
-    },
-    "DupeContent": {
-        "message": "¡Este contenido ya está añadido!",
-        "description": "SettingsView.RestrictToCustom"
-    },
-    "EnableAlerts": {
-        "message": "Activar alertas",
-        "description": "SettingsView.EnableAlerts"
-    },
-    "EnableAlerts_HelpMarker": {
-        "message": "desactiva las alertas globalmente incluso si se están establecidas para el jugador",
-        "description": "SettingsView.EnableAlerts"
-    },
-    "IncludeNotesInAlert": {
-        "message": "Incluir notas en las alertas",
-        "description": "SettingsView.IncludeNotesInAlerts"
-    },
-    "IncludeNotesInAlert_HelpMarker": {
-        "message": "incluye notas en el mensaje de alerta si están disponibles",
-        "description": "SettingsView.IncludeNotesInAlerts"
-    },
-    "AlertFrequency": {
-        "message": "Frecuencia de alertas (en horas)",
-        "description": "SettingsView.AlertFrequency"
-    },
-    "AlertFrequency_HelpMarker": {
-        "message": "frecuencia con las que se mandan alertas al jugador",
-        "description": "SettingsView.AlertFrequency"
-    },
-    "CategoryName": {
-        "message": "Nombre",
-        "description": "SettingsView.CategoryTable"
-    },
-    "CategoryColor": {
-        "message": "Color",
-        "description": "SettingsView.CategoryTable"
-    },
-    "CategoryAlerts": {
-        "message": "Alertas",
-        "description": "SettingsView.CategoryTable"
-    },
-    "CategoryIcon": {
-        "message": "Icono",
-        "description": "SettingsView.CategoryTable"
-    },
-    "CategoryAction": {
-        "message": "Acciones",
-        "description": "SettingsView.CategoryTable"
-    },
-    "EnableCurrentTarget": {
-        "message": "Establecer como objetivo al hacer click derecho",
-        "description": "SettingsView.EnableCurrentTarget"
-    },
-    "EnableCurrentTarget_HelpMarker": {
-        "message": "haz click derecho en el nombre de un jugador para seleccionarlos",
-        "description": "SettingsView.EnableCurrentTarget"
-    },
-    "EnableFocusTarget": {
-        "message": "Marcar Focus Target al pasar el ratón por encima",
-        "description": "SettingsView.EnableFocusTarget"
-    },
-    "EnableFocusTarget_HelpMarker": {
-        "message": "pasa el ratón por encima del nombre de un jugador para hacerle focus target",
-        "description": "SettingsView.EnableFocusTarget"
-    },
-    "OpenGithub": {
-        "message": "GitHub",
-        "description": "SettingsView.DrawLinks"
-    },
-    "PrintHelp": {
-        "message": "Instrucciones",
-        "description": "SettingsView.DrawLinks"
-    },
-    "ImproveTranslation": {
-        "message": "Traducciones",
-        "description": "SettingsView.DrawLinks"
-    }
+  "Default": {
+    "message": "Predeterminado",
+    "description": "PlayerTrackPlugin.GetIconNames"
+  },
+  "HelpMessage1": {
+    "message": "PlayerTrack te ayuda a mantener un registro de los jugadores con los que te encuentras y con los que haces contenido. Por defecto, sólo cubre contenido instanciado, pero puedes expandir o restringir ésto en los ajustes. Puedes ver todos los detalles de un jugador clicando en su nombre en el overlay. Aquí tambien puedes redactar notas y ponerle un icono/color personalizado.",
+    "description": "PlayerTrackPlugin.PrintHelpMessage"
+  },
+  "HelpMessage2": {
+    "message": "PlayerTrack utiliza la Lodestone para mantener los datos actualizados (por ejemplo, las transferencias de mundo). Si ésto ocurre, verás un indicador junto a su mundo hogar y podrás pasar el ratón por encima para ver su anterior residencia.",
+    "description": "PlayerTrackPlugin.PrintHelpMessage"
+  },
+  "HelpMessage3": {
+    "message": "Si necesitas ayuda, contacta en discord o abre un problema en GitHub. Si quieres ayudar a añadir traducciones, puedes suministrar actualizaciones en Drowdin. En los ajustes encontrarás enlaces a tanto GitHub como Crowdin.",
+    "description": "PlayerTrackPlugin.PrintHelpMessage"
+  },
+  "InstallThankYou": {
+    "message": "¡Gracias por instalar PlayerTrack!",
+    "description": "PlayerTrackPlugin.HandleFreshInstall"
+  },
+  "PlayerDetailView": {
+    "message": "PlayerTrack",
+    "description": "PlayerDetailView.DrawView"
+  },
+  "Save": {
+    "message": "Guardar",
+    "description": "PlayerDetailView.Controls"
+  },
+  "Cancel": {
+    "message": "Cancelar",
+    "description": "PlayerDetailView.Controls"
+  },
+  "DeleteConfirmation": {
+    "message": "Eliminar",
+    "description": "PlayerDetailView.Controls"
+  },
+  "ResetConfirmation": {
+    "message": "Restablecer",
+    "description": "PlayerDetailView.Controls"
+  },
+  "Lodestone": {
+    "message": "Lodestone",
+    "description": "PlayerDetailView.Controls"
+  },
+  "PlayerInfo": {
+    "message": "Información del jugador",
+    "description": "PlayerDetailView.PlayerInfo"
+  },
+  "PlayerStats": {
+    "message": "Estadísticas del jugador",
+    "description": "PlayerDetailView.PlayerInfo"
+  },
+  "PlayerName": {
+    "message": "Nombre",
+    "description": "PlayerDetailView.PlayerInfo"
+  },
+  "PlayerPreviousNames": {
+    "message": "Anteriormente conocido como {0}",
+    "description": "PlayerDetailView.PlayerInfo"
+  },
+  "PlayerFirstSeen": {
+    "message": "Visto por primera vez",
+    "description": "PlayerDetailView.PlayerInfo"
+  },
+  "PlayerHomeWorld": {
+    "message": "Mundo",
+    "description": "PlayerDetailView.PlayerInfo"
+  },
+  "PlayerPreviousWorlds": {
+    "message": "Anteriormente en {0}",
+    "description": "PlayerDetailView.PlayerInfo"
+  },
+  "PlayerLastSeen": {
+    "message": "Visto por última vez",
+    "description": "PlayerDetailView.PlayerInfo"
+  },
+  "PlayerFreeCompany": {
+    "message": "Free Company",
+    "description": "PlayerDetailView.PlayerInfo"
+  },
+  "PlayerSeenCount": {
+    "message": "Contador de encuentros",
+    "description": "PlayerDetailView.PlayerInfo"
+  },
+  "LodestoneStatus": {
+    "message": "Estado en la Lodestone",
+    "description": "PlayerDetailView.PlayerInfo"
+  },
+  "PlayerCustomize": {
+    "message": "Personaje",
+    "description": "PlayerDetailView.PlayerCharacterDetails"
+  },
+  "PlayerRace": {
+    "message": "Raza",
+    "description": "PlayerDetailView.PlayerCharacterDetails"
+  },
+  "PlayerGender": {
+    "message": "Género",
+    "description": "PlayerDetailView.PlayerCharacterDetails"
+  },
+  "PlayerTribe": {
+    "message": "Tribu",
+    "description": "PlayerDetailView.PlayerCharacterDetails"
+  },
+  "PlayerHeight": {
+    "message": "Altura",
+    "description": "PlayerDetailView.PlayerCharacterDetails"
+  },
+  "PlayerHeightValue": {
+    "message": "{0} pulgadas",
+    "description": "PlayerDetailView.PlayerCharacterDetails"
+  },
+  "DisplayOptions": {
+    "message": "Opciones de visualización",
+    "description": "PlayerDetailView.DisplaySettings"
+  },
+  "EnablePlayerAlerts": {
+    "message": "Activar alertas",
+    "description": "PlayerDetailView.PlayerOverride"
+  },
+  "PlayerNotes": {
+    "message": "Comentarios",
+    "description": "PlayerDetailView.PlayerNotes"
+  },
+  "Encounters": {
+    "message": "Encuentros",
+    "description": "PlayerDetailView.PlayerEncounters"
+  },
+  "EncounterTime": {
+    "message": "Tiempo",
+    "description": "PlayerDetailView.PlayerEncounters"
+  },
+  "EncounterDuration": {
+    "message": "Duración",
+    "description": "PlayerDetailView.PlayerEncounters"
+  },
+  "EncounterJob": {
+    "message": "Clase",
+    "description": "PlayerDetailView.PlayerEncounters"
+  },
+  "EncounterJobLevel": {
+    "message": "Niv",
+    "description": "PlayerDetailView.PlayerEncounters"
+  },
+  "EncounterLocation": {
+    "message": "Ubicación",
+    "description": "PlayerDetailView.PlayerEncounters"
+  },
+  "NoEncounters": {
+    "message": "No hay encuentros que mostrar...",
+    "description": "PlayerDetailView.PlayerEncounters"
+  },
+  "LodestoneModalTitle": {
+    "message": "Lodestone",
+    "description": "PlayerDetailView.LodestoneModal"
+  },
+  "LodestoneModalContent": {
+    "message": "Pendiente de verificación de Lodestone.",
+    "description": "PlayerDetailView.LodestoneModal"
+  },
+  "OK": {
+    "message": "Ok",
+    "description": "PlayerDetailView.LodestoneModal"
+  },
+  "ResetConfirmationModalTitle": {
+    "message": "Confirmación de ReiniciarConfirmación",
+    "description": "PlayerDetailView.ResetConfirmationModal"
+  },
+  "ResetConfirmationModalContent": {
+    "message": "¿Estás seguro de que quieres reiniciar?",
+    "description": "PlayerDetailView.ResetConfirmationModal"
+  },
+  "DeleteConfirmationModalTitle": {
+    "message": "Confirmación de borrado",
+    "description": "PlayerDetailView.DeleteConfirmationModal"
+  },
+  "DeleteConfirmationModalContent": {
+    "message": "¿Estás seguro de que deseas eliminarlo?",
+    "description": "PlayerDetailView.DeleteConfirmationModal"
+  },
+  "PlayerListView": {
+    "message": "PlayerTrack",
+    "description": "PlayerListView.DrawView"
+  },
+  "InvalidCharacterNameTitle": {
+    "message": "Nombre no válido",
+    "description": "PlayerListView.InvalidCharacterNameModal"
+  },
+  "InvalidCharacterNameModalContent": {
+    "message": "Nombre de personaje no válido.",
+    "description": "PlayerListView.InvalidCharacterNameModal"
+  },
+  "DuplicateCharacterTitle": {
+    "message": "Jugador duplicado",
+    "description": "PlayerListView.DuplicateCharacterModal"
+  },
+  "DuplicateCharacterModalContent": {
+    "message": "Ya hay un jugador con ese nombre/mundo.",
+    "description": "PlayerListView.DuplicateCharacterModal"
+  },
+  "AddCharacterSuccessTitle": {
+    "message": "Éxito",
+    "description": "PlayerListView.AddCharacterSuccessModal"
+  },
+  "AddCharacterSuccessModalContent": {
+    "message": "Personaje añadido con éxito.",
+    "description": "PlayerListView.AddCharacterSuccessModal"
+  },
+  "PlayerNameAddHint": {
+    "message": "nombre del jugador",
+    "description": "PlayerListView.PlayerAddInput"
+  },
+  "PlayerAdd": {
+    "message": "Añadir",
+    "description": "PlayerListView.PlayerAddInput"
+  },
+  "PlayerNameSearchHint": {
+    "message": "nombre del jugador",
+    "description": "PlayerListView.PlayerSearchInput"
+  },
+  "PlayerSearch": {
+    "message": "Buscar",
+    "description": "PlayerListView.PlayerSearchInput"
+  },
+  "InitializingPlayerList": {
+    "message": "Inicializando... Espera, por favor.",
+    "description": "PlayerListView.PlayerList"
+  },
+  "NoPlayers": {
+    "message": "No hay jugadores para mostrar...",
+    "description": "PlayerListView.PlayerList"
+  },
+  "PlayerAlertWithNotes": {
+    "message": "{0} visto por última vez {1} en {2}: {3}",
+    "description": "PlayerService.SendAlerts"
+  },
+  "PlayerAlert": {
+    "message": "{0} visto por última vez {1} en {2}.",
+    "description": "PlayerService.SendAlerts"
+  },
+  "SettingsView": {
+    "message": "Ajustes de PlayerTrack",
+    "description": "SettingsView.DrawView"
+  },
+  "DeleteModalTitle": {
+    "message": "Confirmación de borrado",
+    "description": "SettingsView.DeleteModal"
+  },
+  "DeleteModalContent": {
+    "message": "¿Estás seguro de que deseas eliminarlo?",
+    "description": "SettingsView.DeleteModal"
+  },
+  "ResetModalTitle": {
+    "message": "Confirmación de Reinicio",
+    "description": "SettingsView.ResetModal"
+  },
+  "ResetModalContent": {
+    "message": "¿Estás seguro de que quieres resetear?",
+    "description": "SettingsView.ResetModal"
+  },
+  "General": {
+    "message": "General",
+    "description": "SettingsView.DrawTabs"
+  },
+  "Display": {
+    "message": "Visualización",
+    "description": "SettingsView.DrawTabs"
+  },
+  "Threshold": {
+    "message": "Umbral",
+    "description": "SettingsView.DrawTabs"
+  },
+  "Filters": {
+    "message": "Filtros",
+    "description": "SettingsView.DrawTabs"
+  },
+  "Icons": {
+    "message": "Iconos",
+    "description": "SettingsView.DrawTabs"
+  },
+  "Alerts": {
+    "message": "Alertas",
+    "description": "SettingsView.DrawTabs"
+  },
+  "Categories": {
+    "message": "Categorías",
+    "description": "SettingsView.DrawTabs"
+  },
+  "Targets": {
+    "message": "Objetivos",
+    "description": "SettingsView.DrawTabs"
+  },
+  "Backup": {
+    "message": "Copia de seguridad",
+    "description": "SettingsView.DrawTabs"
+  },
+  "Links": {
+    "message": "Enlaces",
+    "description": "SettingsView.DrawTabs"
+  },
+  "PluginEnabled": {
+    "message": "Plugin habilitado",
+    "description": "SettingsView.PluginEnabled"
+  },
+  "PluginEnabled_HelpMarker": {
+    "message": "activa o desactia el plugin",
+    "description": "SettingsView.PluginEnabled"
+  },
+  "ShowOverlay": {
+    "message": "Mostrar Overlay",
+    "description": "SettingsView.ShowOverlay"
+  },
+  "ShowOverlay_HelpMarker": {
+    "message": "muestra la ventana del overlay",
+    "description": "SettingsView.ShowOverlay"
+  },
+  "LockOverlay": {
+    "message": "Bloquear overlay",
+    "description": "SettingsView.LockOverlay"
+  },
+  "LockOverlay_HelpMarker": {
+    "message": "bloquea las ventanas del overlay",
+    "description": "SettingsView.LockOverlay"
+  },
+  "DefaultView": {
+    "message": "Vista por defecto",
+    "description": "SettingsView.DefaultView"
+  },
+  "DefaultView_HelpMarker": {
+    "message": "establece la vista por defecto que se mostrará al iniciar",
+    "description": "SettingsView.DefaultView"
+  },
+  "ShowPlayerCharacterDetails": {
+    "message": "Mostrar Detalles del Personaje",
+    "description": "SettingsView.ShowPlayerCharacterDetails"
+  },
+  "ShowPlayerCharacterDetails_HelpMarker": {
+    "message": "muestra detalles del personaje tales como la tribu o su género",
+    "description": "SettingsView.ShowPlayerCharacterDetails"
+  },
+  "ShowPlayerOverride": {
+    "message": "Mostrar Opciones de Visualización del Jugador",
+    "description": "SettingsView.ShowPlayerOverride"
+  },
+  "ShowPlayerOverride_HelpMarker": {
+    "message": "muestra opciones para reemplazar ajustes de visualización tales como el color o el icono",
+    "description": "SettingsView.ShowPlayerOverride"
+  },
+  "Language": {
+    "message": "Idioma",
+    "description": "SettingsView.SetLanguage"
+  },
+  "Language_HelpMarker": {
+    "message": "usa el idioma por defecto de la interfaz del plugin o cámbialo",
+    "description": "SettingsView.SetLanguage"
+  },
+  "RecentPlayerThreshold": {
+    "message": "Umbral de Jugadores Recientes (en minutos)",
+    "description": "SettingsView.RecentPlayerThreshold"
+  },
+  "RecentPlayerThreshold_HelpMarker": {
+    "message": "cantidad de tiempo que aparecerán los jugadores en jugadores recientes desde la última vez que fueron vistos",
+    "description": "SettingsView.RecentPlayerThreshold"
+  },
+  "SyncToLodestone": {
+    "message": "Sincronizar con Lodestone",
+    "description": "SettingsView.SyncToLodestone"
+  },
+  "SyncToLodestone_HelpMarker": {
+    "message": "extrae datos de la lodestone para llevar un registro de cambios de nombre o mundo",
+    "description": "SettingsView.SyncToLodestone"
+  },
+  "LodestoneLocale": {
+    "message": "Región de Lodestone",
+    "description": "SettingsView.LodestoneLocale"
+  },
+  "LodestoneLocale_HelpMarker": {
+    "message": "establece la región que se usará para el enlace al perfil de la lodestone",
+    "description": "SettingsView.LodestoneLocale"
+  },
+  "Compressed": {
+    "message": "Comprimir datos",
+    "description": "SettingsView.Compressed"
+  },
+  "Compressed_HelpMarker": {
+    "message": "comprime los datos guardados para reducir significativamente el tamaño de los archivos (se recomienda dejar activado)",
+    "description": "SettingsView.Compressed"
+  },
+  "BackupFrequency": {
+    "message": "Frecuencia de copias de seguridad (en horas)",
+    "description": "SettingsView.BackupFrequency"
+  },
+  "BackupFrequency_HelpMarker": {
+    "message": "frecuencia con la que se harán copias de seguridad de los datos de jugador en caso de que algo vaya mal",
+    "description": "SettingsView.BackupFrequency"
+  },
+  "BackupRetention": {
+    "message": "Retención de copias de seguridad (en unidades)",
+    "description": "SettingsView.BackupRetention"
+  },
+  "PlayerTrack_BackupRetention_HelpMarker": {
+    "message": "número de copias de seguridad que se almacenarán antes de borrar la más antigua",
+    "description": "SettingsView.BackupRetention"
+  },
+  "NewEncounterThreshold": {
+    "message": "Umbral de nuevos encuentros (en horas)",
+    "description": "SettingsView.NewEncounterThreshold"
+  },
+  "NewEncounterThreshold_HelpMarker": {
+    "message": "umbral para registrar un nuevo encuentro con un jugador en el mismo lugar",
+    "description": "SettingsView.NewEncounterThreshold"
+  },
+  "RestrictInCombat": {
+    "message": "No procesar en combate",
+    "description": "SettingsView.RestrictInCombat"
+  },
+  "RestrictInCombat_HelpMarker": {
+    "message": "dejar de procesar datos mientras se está en combate",
+    "description": "SettingsView.RestrictInCombat"
+  },
+  "RestrictToContent": {
+    "message": "Sólo Contenido",
+    "description": "SettingsView.RestrictToContent"
+  },
+  "RestrictToContent_HelpMarker": {
+    "message": "restringir a contenido instanciado y excluir encuentros en el mundo abierto",
+    "description": "SettingsView.RestrictToContent"
+  },
+  "RestrictToHighEndDuty": {
+    "message": "Sólo en contenido High-End",
+    "description": "SettingsView.RestrictToHighEndDuty"
+  },
+  "RestrictToHighEndDuty_HelpMarker": {
+    "message": "restringir a contenido high-end (por ejemplo, Savage)",
+    "description": "SettingsView.RestrictToHighEndDuty"
+  },
+  "RestrictToCustom": {
+    "message": "Restringir al siguiente contenido",
+    "description": "SettingsView.RestrictToCustom"
+  },
+  "RestrictToCustom_HelpMarker": {
+    "message": "añade contenido a la lista usando el menú desplegable, o elimina haciéndoles click",
+    "description": "SettingsView.RestrictToCustom"
+  },
+  "Add": {
+    "message": "Añadir",
+    "description": "SettingsView.RestrictToCustom"
+  },
+  "Reset": {
+    "message": "Restablecer",
+    "description": "SettingsView.RestrictToCustom"
+  },
+  "DupeContent": {
+    "message": "¡Este contenido ya está añadido!",
+    "description": "SettingsView.RestrictToCustom"
+  },
+  "EnableAlerts": {
+    "message": "Activar alertas",
+    "description": "SettingsView.EnableAlerts"
+  },
+  "EnableAlerts_HelpMarker": {
+    "message": "desactiva las alertas globalmente incluso si se están establecidas para el jugador",
+    "description": "SettingsView.EnableAlerts"
+  },
+  "IncludeNotesInAlert": {
+    "message": "Incluir notas en las alertas",
+    "description": "SettingsView.IncludeNotesInAlerts"
+  },
+  "IncludeNotesInAlert_HelpMarker": {
+    "message": "incluye notas en el mensaje de alerta si están disponibles",
+    "description": "SettingsView.IncludeNotesInAlerts"
+  },
+  "AlertFrequency": {
+    "message": "Frecuencia de alertas (en horas)",
+    "description": "SettingsView.AlertFrequency"
+  },
+  "AlertFrequency_HelpMarker": {
+    "message": "frecuencia con las que se mandan alertas al jugador",
+    "description": "SettingsView.AlertFrequency"
+  },
+  "CategoryName": {
+    "message": "Nombre",
+    "description": "SettingsView.CategoryTable"
+  },
+  "CategoryColor": {
+    "message": "Color",
+    "description": "SettingsView.CategoryTable"
+  },
+  "CategoryAlerts": {
+    "message": "Alertas",
+    "description": "SettingsView.CategoryTable"
+  },
+  "CategoryIcon": {
+    "message": "Icono",
+    "description": "SettingsView.CategoryTable"
+  },
+  "CategoryAction": {
+    "message": "Acciones",
+    "description": "SettingsView.CategoryTable"
+  },
+  "EnableCurrentTarget": {
+    "message": "Establecer como objetivo al hacer click derecho",
+    "description": "SettingsView.EnableCurrentTarget"
+  },
+  "EnableCurrentTarget_HelpMarker": {
+    "message": "haz click derecho en el nombre de un jugador para seleccionarlos",
+    "description": "SettingsView.EnableCurrentTarget"
+  },
+  "EnableFocusTarget": {
+    "message": "Marcar Focus Target al pasar el ratón por encima",
+    "description": "SettingsView.EnableFocusTarget"
+  },
+  "EnableFocusTarget_HelpMarker": {
+    "message": "pasa el ratón por encima del nombre de un jugador para hacerle focus target",
+    "description": "SettingsView.EnableFocusTarget"
+  },
+  "OpenGithub": {
+    "message": "GitHub",
+    "description": "SettingsView.DrawLinks"
+  },
+  "PrintHelp": {
+    "message": "Instrucciones",
+    "description": "SettingsView.DrawLinks"
+  },
+  "ImproveTranslation": {
+    "message": "Traducciones",
+    "description": "SettingsView.DrawLinks"
+  }
 }
