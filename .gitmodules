@@ -1,4 +1,0 @@
-[submodule "src/PlayerTrack/Common"]
-	path = src/PlayerTrack/Common
-	url = https://github.com/kalilistic/DalamudPluginCommon.git
-	branch = master
