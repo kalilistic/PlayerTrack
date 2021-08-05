@@ -64,6 +64,15 @@ namespace PlayerTrack
         }
 
         /// <summary>
+        /// Gets encounters.
+        /// </summary>
+        /// <returns>list of encounters.</returns>
+        public IEnumerable<Encounter> GetEncounters()
+        {
+            return this.GetItems<Encounter>().ToList();
+        }
+
+        /// <summary>
         /// Add encounters in bulk (used for migration).
         /// </summary>
         /// <param name="newEncounters">list of encounters to add.</param>

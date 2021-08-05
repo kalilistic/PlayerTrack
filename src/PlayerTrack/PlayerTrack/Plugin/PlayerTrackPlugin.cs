@@ -277,6 +277,31 @@ namespace PlayerTrack
             }
         }
 
+        /// <summary>
+        /// Fix or delete records based on known issues from previous versions.
+        /// This should be used with caution since it's destructive and irreversible.
+        /// </summary>
+        public void RunIntegrityCheck()
+        {
+            Logger.LogInfo("Starting integrity check.");
+            var players = this.PlayerService.GetPlayers();
+            Logger.LogInfo("Total Players Before Check: " + players.Length);
+            foreach (var player in players)
+            {
+                if (player.Value.LodestoneStatus == LodestoneStatus.Failed ||
+                    player.Value.HomeWorlds.First().Key == 0 ||
+                    !player.Value.Names.First().IsValidCharacterName())
+                {
+                    Logger.LogInfo($"Deleting Player: {player.Value.Key}");
+                    this.PlayerService.DeletePlayer(player.Value);
+                }
+            }
+
+            players = this.PlayerService.GetPlayers();
+            Logger.LogInfo("Total Players After Check: " + players.Length);
+            Logger.LogInfo("Finished running integrity check.");
+        }
+
         private void SetDefaultIcons()
         {
             this.Configuration.EnabledIcons = new List<FontAwesomeIcon>

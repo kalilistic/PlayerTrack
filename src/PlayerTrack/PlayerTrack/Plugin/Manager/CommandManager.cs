@@ -23,7 +23,10 @@ namespace PlayerTrack
             });
             this.plugin.PluginService.PluginInterface.CommandManager.AddHandler("/ptrackconfig", new CommandInfo(this.TogglePlayerTrackConfig)
             {
-                HelpMessage = "Show/hide PlayerTrack settings.",
+                ShowInHelp = false,
+            });
+            this.plugin.PluginService.PluginInterface.CommandManager.AddHandler("/ptrackintegrity", new CommandInfo(this.RunIntegrityCheck)
+            {
                 ShowInHelp = false,
             });
         }
@@ -35,6 +38,7 @@ namespace PlayerTrack
         {
             this.plugin.PluginService.PluginInterface.CommandManager.RemoveHandler("/ptrack");
             this.plugin.PluginService.PluginInterface.CommandManager.RemoveHandler("/ptrackconfig");
+            this.plugin.PluginService.PluginInterface.CommandManager.RemoveHandler("/ptrackintegrity");
         }
 
         private void TogglePlayerTrack(string command, string arguments)
@@ -47,6 +51,11 @@ namespace PlayerTrack
             this.plugin.Configuration.CurrentView = View.Settings;
             this.plugin.SaveConfig();
             this.plugin.WindowManager.MainWindow!.IsOpen = true;
+        }
+
+        private void RunIntegrityCheck(string command, string arguments)
+        {
+            this.plugin.RunIntegrityCheck();
         }
     }
 }
