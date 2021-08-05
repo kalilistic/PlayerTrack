@@ -119,6 +119,27 @@
     <ItemGroup>
       <Folder Include="PlayerTrack\Resource\translation" />
     </ItemGroup>
+		
+    <ItemGroup>
+      <None Remove="PlayerTrack\Resource\translation\de.json" />
+      <EmbeddedResource Include="PlayerTrack\Resource\translation\de.json" />
+      <None Remove="PlayerTrack\Resource\translation\es.json" />
+      <EmbeddedResource Include="PlayerTrack\Resource\translation\es.json" />
+      <None Remove="PlayerTrack\Resource\translation\fr.json" />
+      <EmbeddedResource Include="PlayerTrack\Resource\translation\fr.json" />
+      <None Remove="PlayerTrack\Resource\translation\it.json" />
+      <EmbeddedResource Include="PlayerTrack\Resource\translation\it.json" />
+      <None Remove="PlayerTrack\Resource\translation\ja.json" />
+      <EmbeddedResource Include="PlayerTrack\Resource\translation\ja.json" />
+      <None Remove="PlayerTrack\Resource\translation\no.json" />
+      <EmbeddedResource Include="PlayerTrack\Resource\translation\no.json" />
+      <None Remove="PlayerTrack\Resource\translation\pt.json" />
+      <EmbeddedResource Include="PlayerTrack\Resource\translation\pt.json" />
+      <None Remove="PlayerTrack\Resource\translation\ru.json" />
+      <EmbeddedResource Include="PlayerTrack\Resource\translation\ru.json" />
+      <None Remove="PlayerTrack\Resource\translation\zh.json" />
+      <EmbeddedResource Include="PlayerTrack\Resource\translation\zh.json" />
+    </ItemGroup>
 
     <Target Name="ILRepack" AfterTargets="Build">
 			<ItemGroup>
