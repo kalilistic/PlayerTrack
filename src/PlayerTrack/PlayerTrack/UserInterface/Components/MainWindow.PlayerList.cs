@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
 using CheapLoc;
+using Dalamud.DrunkenToad;
 using Dalamud.Interface;
 using ImGuiNET;
 
@@ -13,6 +15,8 @@ namespace PlayerTrack
     public partial class MainWindow
     {
         private string menuPlayerKey = string.Empty;
+        private long lastPlayerListRefresh = DateUtil.CurrentTime();
+        private KeyValuePair<string, Player>[] players = new KeyValuePair<string, Player>[0];
 
         private void ClearSelectedPlayer()
         {
@@ -27,7 +31,11 @@ namespace PlayerTrack
                 new Vector2(205 * ImGuiHelpers.GlobalScale, 0),
                 true);
 
-            var players = this.plugin.PlayerService.GetPlayers(this.searchInput);
+            if (DateUtil.CurrentTime() > this.lastPlayerListRefresh)
+            {
+                this.players = this.plugin.PlayerService.GetPlayers(this.searchInput);
+                this.lastPlayerListRefresh += this.plugin.Configuration.PlayerListRefreshFrequency;
+            }
 
             // use clipper to avoid performance hit on large player lists
             ImGuiListClipperPtr clipper;
@@ -36,17 +44,17 @@ namespace PlayerTrack
                 clipper = new ImGuiListClipperPtr(ImGuiNative.ImGuiListClipper_ImGuiListClipper());
             }
 
-            clipper.Begin(players.Length);
+            clipper.Begin(this.players.Length);
             while (clipper.Step())
             {
                 for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
                 {
                     ImGui.BeginGroup();
-                    var color = this.plugin.PlayerService.GetPlayerListColor(players[i].Value);
+                    var color = this.plugin.PlayerService.GetPlayerListColor(this.players[i].Value);
                     ImGui.PushStyleColor(ImGuiCol.Text, color);
                     if (ImGui.Selectable(
                         "###PlayerTrack_Player_Selectable_" + i,
-                        this.SelectedPlayer == players[i].Value,
+                        this.SelectedPlayer == this.players[i].Value,
                         ImGuiSelectableFlags.AllowDoubleClick))
                     {
                         // suppress double clicks
@@ -56,7 +64,7 @@ namespace PlayerTrack
                         }
 
                         // hide right panel if clicking same user while already open
-                        else if (this.SelectedPlayer?.Key == players[i].Key && this.plugin.Configuration.CurrentView == View.PlayerDetail)
+                        else if (this.SelectedPlayer?.Key == this.players[i].Key && this.plugin.Configuration.CurrentView == View.PlayerDetail)
                         {
                             this.ClearSelectedPlayer();
                             this.HideRightPanel();
@@ -65,7 +73,7 @@ namespace PlayerTrack
                         // open player in right panel
                         else
                         {
-                            this.SelectedPlayer = players[i].Value;
+                            this.SelectedPlayer = this.players[i].Value;
                             this.SelectedEncounters = this.plugin.EncounterService
                                                           .GetEncountersByPlayer(this.SelectedPlayer.Key)
                                                           .OrderByDescending(enc => enc.Created).ToList();
@@ -78,12 +86,12 @@ namespace PlayerTrack
 
                     // player icon
                     ImGui.PushFont(UiBuilder.IconFont);
-                    ImGui.TextColored(color,  this.plugin.PlayerService.GetPlayerIcon(players[i].Value));
+                    ImGui.TextColored(color,  this.plugin.PlayerService.GetPlayerIcon(this.players[i].Value));
                     ImGui.PopFont();
 
                     // player name;
                     ImGui.SameLine();
-                    ImGui.Text(players[i].Value.Names[0]);
+                    ImGui.Text(this.players[i].Value.Names[0]);
 
                     ImGui.PopStyleColor(1);
                     ImGui.EndGroup();
@@ -91,12 +99,12 @@ namespace PlayerTrack
                     // open menu options for selected player
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                     {
-                        this.menuPlayerKey = players[i].Key;
-                        ImGui.OpenPopup("###PlayerTrack_Player_Popup_" + players[i].Value.Id);
+                        this.menuPlayerKey = this.players[i].Key;
+                        ImGui.OpenPopup("###PlayerTrack_Player_Popup_" + this.players[i].Value.Id);
                     }
 
                     // menu for selected player
-                    if (ImGui.BeginPopup("###PlayerTrack_Player_Popup_" + players[i].Value.Id))
+                    if (ImGui.BeginPopup("###PlayerTrack_Player_Popup_" + this.players[i].Value.Id))
                     {
                         // validate player
                         var menuPlayer = this.plugin.PlayerService.GetPlayer(this.menuPlayerKey);
@@ -122,7 +130,7 @@ namespace PlayerTrack
                             Loc.Localize("Lodestone", "Lodestone"),
                             menuPlayer.LodestoneStatus == LodestoneStatus.Verified))
                         {
-                            this.plugin.LodestoneService.OpenLodestoneProfile(players[i].Value.LodestoneId);
+                            this.plugin.LodestoneService.OpenLodestoneProfile(this.players[i].Value.LodestoneId);
                         }
 
                         ImGui.Separator();

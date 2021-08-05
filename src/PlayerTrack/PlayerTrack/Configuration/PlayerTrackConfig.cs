@@ -150,6 +150,11 @@ namespace PlayerTrack
         public bool ShowOpenLodestoneContextMenu = true;
 
         /// <summary>
+        /// Frequency for refreshing player list (ms).
+        /// </summary>
+        public long PlayerListRefreshFrequency = 1000;
+
+        /// <summary>
         /// Gets or sets list of items to show above.
         /// </summary>
         public List<byte> ShowContextAboveThis { get; set; } = new ();

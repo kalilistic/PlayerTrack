@@ -1,4 +1,5 @@
 using CheapLoc;
+using Dalamud.DrunkenToad;
 using Dalamud.Interface;
 using ImGuiNET;
 
@@ -14,11 +15,15 @@ namespace PlayerTrack
         private void SearchBox()
         {
             ImGui.SetNextItemWidth(175 * ImGuiHelpers.GlobalScale);
-            ImGui.InputTextWithHint(
+            if (ImGui.InputTextWithHint(
                 "###PlayerTrack_SearchBox_Input",
                 Loc.Localize("SearchHint", "search"),
                 ref this.searchInput,
-                30);
+                30))
+            {
+                this.lastPlayerListRefresh = DateUtil.CurrentTime();
+            }
+
             ImGui.SameLine();
         }
     }
