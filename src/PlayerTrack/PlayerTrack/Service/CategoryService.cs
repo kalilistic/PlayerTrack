@@ -34,6 +34,7 @@ namespace PlayerTrack
                 var trackCategories = this.GetItems<Category>().ToList();
                 foreach (var category in trackCategories)
                 {
+                    category.SetTitle();
                     this.categories.Add(category.Id, category);
                 }
             }
@@ -142,6 +143,7 @@ namespace PlayerTrack
             {
                 Rank = rank,
             };
+            newCategory.SetTitle();
             lock (this.locker)
             {
                 this.categories.Add(id, newCategory);
@@ -160,6 +162,7 @@ namespace PlayerTrack
             {
                 if (!this.categories.ContainsKey(category.Id))
                 {
+                    category.SetTitle();
                     this.categories.Add(category.Id, category);
                     this.InsertItem(category);
                 }
@@ -197,6 +200,7 @@ namespace PlayerTrack
         /// <param name="category">category to save.</param>
         public void SaveCategory(Category category)
         {
+            category.SetTitle();
             this.categories[category.Id] = category;
             this.UpdateItem(category);
         }
@@ -210,6 +214,7 @@ namespace PlayerTrack
             {
                 var cats = new SortedList<int, Category>();
                 var defaultCategory = new Category(1) { Name = "Default", IsDefault = true };
+                defaultCategory.SetTitle();
                 cats.Add(0, defaultCategory);
                 foreach (var category in this.categories)
                 {

@@ -2,8 +2,6 @@ using System;
 using System.Numerics;
 
 using Dalamud.DrunkenToad;
-using Dalamud.Game.Text.SeStringHandling;
-using Dalamud.Game.Text.SeStringHandling.Payloads;
 using XivCommon.Functions.NamePlates;
 
 namespace PlayerTrack
@@ -45,6 +43,10 @@ namespace PlayerTrack
         {
             try
             {
+                // check if any nameplate features enabled
+                if (!this.plugin.Configuration.ChangeNamePlateTitleToCategory &&
+                    !this.plugin.Configuration.UseNamePlateColors) return;
+
                 // check if plugin started
                 if (!this.plugin.IsDoneLoading) return;
 
@@ -52,19 +54,18 @@ namespace PlayerTrack
                 if (args.Type != PlateType.Player || args.ActorId == 0) return;
 
                 // get player
-                var player = this.plugin.PlayerService.GetPlayer(args.ActorId);
+                var actor = this.plugin.ActorManager.GetPlayerCharacter(args.ActorId);
+                if (actor == null) return;
+                var player = this.plugin.PlayerService.GetPlayer(actor.Name, (ushort)actor.HomeWorld.Id);
                 if (player == null) return;
 
                 // set title
                 if (this.plugin.Configuration.ChangeNamePlateTitleToCategory)
                 {
                     var category = this.plugin.CategoryService.GetCategory(player.CategoryId);
-                    if (category is { IsDefault: false })
+                    if (category.IsDefault == false && category.Title != null)
                     {
-                        args.Title = new SeString(new Payload[]
-                        {
-                            new TextPayload($"《{category.Name}》"),
-                        });
+                        args.Title = category.Title;
                         args.Type = PlateType.LowTitleNoFc;
                     }
                 }

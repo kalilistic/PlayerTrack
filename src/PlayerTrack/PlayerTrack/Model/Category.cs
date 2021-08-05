@@ -1,6 +1,9 @@
 using System.Numerics;
 
+using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.Game.Text.SeStringHandling.Payloads;
 using Dalamud.Interface.Colors;
+using LiteDB;
 
 namespace PlayerTrack
 {
@@ -31,6 +34,12 @@ namespace PlayerTrack
         /// Gets or sets category name.
         /// </summary>
         public string Name { get; set; } = "New Category";
+
+        /// <summary>
+        /// Gets or sets category name as SeString.
+        /// </summary>
+        [BsonIgnore]
+        public SeString? Title { get; set; }
 
         /// <summary>
         /// Gets or sets category icon to display in list view.
@@ -78,7 +87,7 @@ namespace PlayerTrack
         /// <returns>Copy of category.</returns>
         public Category Copy()
         {
-            return new ()
+            var category = new Category
             {
                 Id = this.Id,
                 Name = this.Name,
@@ -88,6 +97,8 @@ namespace PlayerTrack
                 IsAlertEnabled = this.IsAlertEnabled,
                 IsDefault = this.IsDefault,
             };
+            category.SetTitle();
+            return category;
         }
 
         /// <summary>
@@ -108,6 +119,17 @@ namespace PlayerTrack
         {
             if (this.NamePlateColor != null) return (Vector4)this.NamePlateColor;
             return ImGuiColors.DalamudGrey;
+        }
+
+        /// <summary>
+        /// Set title as SeString based on name.
+        /// </summary>
+        public void SetTitle()
+        {
+            this.Title = new SeString(new Payload[]
+            {
+                new TextPayload($"《{this.Name}》"),
+            });
         }
     }
 }

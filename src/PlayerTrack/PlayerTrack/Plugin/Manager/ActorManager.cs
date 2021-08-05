@@ -82,6 +82,32 @@ namespace PlayerTrack
         }
 
         /// <summary>
+        /// Get actor by id.
+        /// </summary>
+        /// <param name="actorId">actorId of player to remove.</param>
+        /// <returns>actor or null.</returns>
+        public PlayerCharacter? GetPlayerCharacter(uint actorId)
+        {
+            try
+            {
+                lock (this.locker)
+                {
+                    if (this.actorTable != null)
+                    {
+                     return (PlayerCharacter?)this.actorTable.FirstOrDefault(
+                         actor => actor.ActorId == actorId && actor is PlayerCharacter);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Get actor by name.
         /// </summary>
         /// <param name="playerName">name of player to find.</param>
