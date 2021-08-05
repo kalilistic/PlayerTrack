@@ -1,4 +1,4 @@
-name: Release plugin
+name: Release plugin to custom repo
 
 on:
   workflow_dispatch: 
