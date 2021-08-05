@@ -1,1 +1,82 @@
-{}
+{
+  "InstallThankYou": {
+    "message": "Grazie per aver installato PlayerTrack!",
+    "description": "PlayerTrackPlugin.HandleFreshInstall"
+  },
+  "PlayerNameAddHint": {
+    "message": "Nome del Giocatore",
+    "description": "MainWindow.AddPlayer"
+  },
+  "Add": {
+    "message": "Aggiungi",
+    "description": "MainWindow.AddPlayer"
+  },
+  "Cancel": {
+    "message": "Annulla",
+    "description": "MainWindow.AddPlayer"
+  },
+  "Lodestone": {
+    "message": "Lodestone",
+    "description": "MainWindow.Lodestone"
+  },
+  "Encounters": {
+    "message": "Incontri",
+    "description": "MainWindow.PlayerDetail"
+  },
+  "PlayerHeightValue": {
+    "message": "{0} in",
+    "description": "MainWindow.PlayerCustomize"
+  },
+  "Reset": {
+    "message": "Resetta",
+    "description": "MainWindow.PlayerDisplay"
+  },
+  "PlayerInfo": {
+    "message": "Info Giocatore",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerStats": {
+    "message": "Statistiche Giocatore",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerName": {
+    "message": "Nome",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerPreviousNames": {
+    "message": "Precedentemente conosciuto come {0}",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerFirstSeen": {
+    "message": "Visto la prima volta",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerPreviousWorlds": {
+    "message": "Precedentemente su {0}",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerLastSeen": {
+    "message": "Visto per l'ultima volta",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerSeenCount": {
+    "message": "Conteggio Visto",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerNotes": {
+    "message": "Note",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "RestrictInCombat": {
+    "message": "Non processare in combattimento",
+    "description": "MainWindow.RestrictionSettings"
+  },
+  "RestrictToHighEndDuty": {
+    "message": "Solo High-End Duty",
+    "description": "MainWindow.RestrictionSettings"
+  },
+  "OK": {
+    "message": "OK",
+    "description": "ModalWindow.Draw"
+  }
+}
