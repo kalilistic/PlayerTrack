@@ -1,1 +1,34 @@
-{}
+{
+  "Add": {
+    "message": "追加",
+    "description": "MainWindow.AddPlayer"
+  },
+  "Reset": {
+    "message": "リセット",
+    "description": "MainWindow.PlayerDisplay"
+  },
+  "RestrictInCombat": {
+    "message": "戦闘中は処理しない",
+    "description": "MainWindow.RestrictionSettings"
+  },
+  "RestrictInCombat_HelpMarker": {
+    "message": "戦闘中のデータ処理は停止します",
+    "description": "MainWindow.RestrictionSettings"
+  },
+  "RestrictToContent": {
+    "message": "コンテンツのみ",
+    "description": "MainWindow.RestrictionSettings"
+  },
+  "RestrictToContent_HelpMarker": {
+    "message": "インスタンスコンテンツ内でのみ作動します。コンテンツ外のフィールド上では作動しません。",
+    "description": "MainWindow.RestrictionSettings"
+  },
+  "RestrictToHighEndDuty": {
+    "message": "ハイエンドコンテンツのみ",
+    "description": "MainWindow.RestrictionSettings"
+  },
+  "RestrictToHighEndDuty_HelpMarker": {
+    "message": "ハイエンドコンテンツ内のみ作動します。(例：極蛮神討滅戦)",
+    "description": "MainWindow.RestrictionSettings"
+  }
+}

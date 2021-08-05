@@ -1,1 +1,134 @@
-{}
+{
+  "HelpMessage1": {
+    "message": "PlayerTrack ajuda você a manter um registro de quem você conhece e o conteúdo que vocês jogaram juntos. Por padrão, isto é apenas para conteúdo instanciado - mas você pode expandir ou restringir isso nas configurações. Você pode ver todos os detalhes de um jogador clicando no nome dele na sobreposição. Aqui também você pode salvar notas e definir um ícone/cor personalizado.",
+    "description": "PlayerTrackPlugin.PrintHelpMessage"
+  },
+  "HelpMessage2": {
+    "message": "PlayerTrack usa Lodestone para manter os dados atualizados (por exemplo, transferências de mundo). Se isso acontecer, você verá um indicador perto de seu mundo natal e poderá passar o mouse sobre ele para ver sua residência anterior.",
+    "description": "PlayerTrackPlugin.PrintHelpMessage"
+  },
+  "InstallThankYou": {
+    "message": "Obrigado por instalar o PlayerTrack!",
+    "description": "PlayerTrackPlugin.HandleFreshInstall"
+  },
+  "PlayerNameAddHint": {
+    "message": "nome do jogador",
+    "description": "MainWindow.AddPlayer"
+  },
+  "Add": {
+    "message": "Adicionar",
+    "description": "MainWindow.AddPlayer"
+  },
+  "Cancel": {
+    "message": "Cancelar",
+    "description": "MainWindow.AddPlayer"
+  },
+  "Lodestone": {
+    "message": "Lodestone",
+    "description": "MainWindow.Lodestone"
+  },
+  "Encounters": {
+    "message": "Encontros",
+    "description": "MainWindow.PlayerDetail"
+  },
+  "Display": {
+    "message": "Exibir",
+    "description": "MainWindow.PlayerDetail"
+  },
+  "PlayerHeightValue": {
+    "message": "{0} pol",
+    "description": "MainWindow.PlayerCustomize"
+  },
+  "Alerts": {
+    "message": "Alertas",
+    "description": "MainWindow.PlayerDisplay"
+  },
+  "Reset": {
+    "message": "Resetar",
+    "description": "MainWindow.PlayerDisplay"
+  },
+  "PlayerInfo": {
+    "message": "Informações do Jogador",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerStats": {
+    "message": "Estatísticas do Jogador",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerName": {
+    "message": "Nome",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerPreviousNames": {
+    "message": "Anteriormente conhecido como {0}",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerFirstSeen": {
+    "message": "Visto pela primeira vez",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerPreviousWorlds": {
+    "message": "Anteriormente em {0}",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerLastSeen": {
+    "message": "Visto pela Última Vez",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerSeenCount": {
+    "message": "Contagem de Visualizações",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "PlayerNotes": {
+    "message": "Notas",
+    "description": "MainWindow.PlayerSummary"
+  },
+  "RestrictInCombat": {
+    "message": "Não processar quando em combate",
+    "description": "MainWindow.RestrictionSettings"
+  },
+  "RestrictInCombat_HelpMarker": {
+    "message": "parar de processar dados enquanto em combate",
+    "description": "MainWindow.RestrictionSettings"
+  },
+  "RestrictToContent": {
+    "message": "Apenas conteúdo",
+    "description": "MainWindow.RestrictionSettings"
+  },
+  "RestrictToContent_HelpMarker": {
+    "message": "restrungir a conteúdo de instâncias e excluir conteúdo do overworld",
+    "description": "MainWindow.RestrictionSettings"
+  },
+  "RestrictToHighEndDuty": {
+    "message": "Apenas Duty High-End",
+    "description": "MainWindow.RestrictionSettings"
+  },
+  "RestrictToHighEndDuty_HelpMarker": {
+    "message": "restringir apenas a duties high-end (exemplo: savage)",
+    "description": "MainWindow.RestrictionSettings"
+  },
+  "SyncToLodestone": {
+    "message": "Sincronizar com Lodestone",
+    "description": "MainWindow.LodestoneSettings"
+  },
+  "SyncToLodestone_HelpMarker": {
+    "message": "puxar os dados do jogador do lodestone para acompanhar mudanças de nome/mundo",
+    "description": "MainWindow.LodestoneSettings"
+  },
+  "LodestoneLocale": {
+    "message": "Lodestone - Idioma",
+    "description": "MainWindow.LodestoneSettings"
+  },
+  "LodestoneLocale_HelpMarker": {
+    "message": "definir localidade para link do perfil na Lodestone",
+    "description": "MainWindow.LodestoneSettings"
+  },
+  "DeleteConfirmationModalContent": {
+    "message": "Você realmente deseja excluir?",
+    "description": "ModalWindow.Draw"
+  },
+  "OK": {
+    "message": "OK",
+    "description": "ModalWindow.Draw"
+  }
+}
