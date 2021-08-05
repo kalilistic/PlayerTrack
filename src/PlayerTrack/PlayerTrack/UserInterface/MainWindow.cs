@@ -66,13 +66,13 @@ namespace PlayerTrack
                 if (this.plugin.Configuration.CurrentView == View.None)
                 {
                     this.plugin.Configuration.MainWindowHeight = vector2.Value.Y;
-                    this.Size = new Vector2(221 * ImGuiHelpers.GlobalScale, this.windowSize.Value.Y);
+                    this.Size = new Vector2(221, this.windowSize.Value.Y) / ImGuiHelpers.GlobalScale;
                 }
                 else
                 {
                     this.plugin.Configuration.MainWindowHeight = vector2.Value.Y;
                     this.plugin.Configuration.MainWindowWidth = vector2.Value.X;
-                    this.Size = new Vector2(this.windowSize.Value.X, this.windowSize.Value.Y);
+                    this.Size = new Vector2(this.windowSize.Value.X, this.windowSize.Value.Y) / ImGuiHelpers.GlobalScale;
                 }
             }
             else
