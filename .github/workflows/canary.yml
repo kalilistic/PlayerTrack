@@ -58,4 +58,4 @@ jobs:
       - name: Create PR
         run: |
           git config --local --add remote.upstream.gh-resolved base
-          gh pr create --title "${{env.PLUGIN_NAME}} ${{steps.getrel.outputs.release}}"
+          gh pr create --title "${{env.PLUGIN_NAME}} ${{steps.getrel.outputs.release}}" --body "New update."
