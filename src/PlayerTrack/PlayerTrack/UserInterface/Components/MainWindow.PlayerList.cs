@@ -82,7 +82,7 @@ namespace PlayerTrack
                     }
 
                     // remove extra padding
-                    ImGuiHelpers.ScaledRelativeSameLine(-10f);
+                    ImGuiHelpers.ScaledRelativeSameLine(-10f / ImGuiHelpers.GlobalScale);
 
                     // player icon
                     ImGui.PushFont(UiBuilder.IconFont);

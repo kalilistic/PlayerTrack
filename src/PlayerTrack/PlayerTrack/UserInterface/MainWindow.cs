@@ -25,6 +25,7 @@ namespace PlayerTrack
         private Vector2? windowSize;
         private Vector2 minimizedSize;
         private Vector2 maximizedSize;
+        private float minimizedWidth;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -72,6 +73,7 @@ namespace PlayerTrack
         public override void Draw()
         {
             // set size depending on view
+            this.minimizedWidth = 221 * ImGuiHelpers.GlobalScale;
             this.SetWindowSizes();
             var vector2 = this.Size;
             this.windowSize = ImGui.GetWindowSize();
@@ -80,7 +82,7 @@ namespace PlayerTrack
                 if (this.plugin.Configuration.CurrentView == View.None)
                 {
                     this.plugin.Configuration.MainWindowHeight = vector2.Value.Y;
-                    this.Size = new Vector2(221, this.windowSize.Value.Y) / ImGuiHelpers.GlobalScale;
+                    this.Size = new Vector2(this.minimizedWidth, this.windowSize.Value.Y) / ImGuiHelpers.GlobalScale;
                 }
                 else
                 {
@@ -138,7 +140,7 @@ namespace PlayerTrack
             var vector2 = this.windowSize;
             if (vector2 != null)
             {
-                this.Size = new Vector2(221 * ImGuiHelpers.GlobalScale, this.plugin.Configuration.MainWindowHeight);
+                this.Size = new Vector2(this.minimizedWidth, this.plugin.Configuration.MainWindowHeight);
             }
 
             this.plugin.Configuration.LastView = this.plugin.Configuration.CurrentView;
