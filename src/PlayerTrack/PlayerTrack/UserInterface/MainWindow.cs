@@ -54,6 +54,20 @@ namespace PlayerTrack
             this.IsOpen = this.plugin.Configuration.ShowWindow;
         }
 
+        /// <inheritdoc />
+        public override void OnOpen()
+        {
+            this.plugin.Configuration.ShowWindow = true;
+            this.plugin.SaveConfig();
+        }
+
+        /// <inheritdoc />
+        public override void OnClose()
+        {
+            this.plugin.Configuration.ShowWindow = false;
+            this.plugin.SaveConfig();
+        }
+
         /// <inheritdoc/>
         public override void Draw()
         {
