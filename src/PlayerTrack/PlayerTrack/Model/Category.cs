@@ -39,7 +39,7 @@ namespace PlayerTrack
         /// Gets or sets category name as SeString.
         /// </summary>
         [BsonIgnore]
-        public SeString? Title { get; set; }
+        public SeString? SeName { get; set; }
 
         /// <summary>
         /// Gets or sets category icon to display in list view.
@@ -97,7 +97,7 @@ namespace PlayerTrack
                 IsAlertEnabled = this.IsAlertEnabled,
                 IsDefault = this.IsDefault,
             };
-            category.SetTitle();
+            category.SetSeName();
             return category;
         }
 
@@ -122,11 +122,11 @@ namespace PlayerTrack
         }
 
         /// <summary>
-        /// Set title as SeString based on name.
+        /// Set SeString based on name.
         /// </summary>
-        public void SetTitle()
+        public void SetSeName()
         {
-            this.Title = new SeString(new Payload[]
+            this.SeName = new SeString(new Payload[]
             {
                 new TextPayload($"《{this.Name}》"),
             });

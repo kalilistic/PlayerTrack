@@ -219,6 +219,10 @@
     "message": "These settings will override category settings.",
     "description": "MainWindow.PlayerDisplay"
   },
+  "Title": {
+    "message": "Title",
+    "description": "MainWindow.PlayerDisplay"
+  },
   "Icon": {
     "message": "Icon",
     "description": "MainWindow.PlayerDisplay"
@@ -407,12 +411,12 @@
     "message": "override normal nameplate color with category/player colors",
     "description": "MainWindow.NamePlateSettings"
   },
-  "ChangeNamePlateTitleToCategory": {
-    "message": "Change nameplate title to category",
+  "ChangeNamePlateTitle": {
+    "message": "Change nameplate title",
     "description": "MainWindow.NamePlateSettings"
   },
-  "ChangeNamePlateTitleToCategory_HelpMarker": {
-    "message": "override normal nameplate title to use category name (if not default)",
+  "ChangeNamePlateTitle_HelpMarker": {
+    "message": "override normal nameplate to use title or category name",
     "description": "MainWindow.NamePlateSettings"
   },
   "MigrationInfo": {

@@ -44,7 +44,7 @@ namespace PlayerTrack
             try
             {
                 // check if any nameplate features enabled
-                if (!this.plugin.Configuration.ChangeNamePlateTitleToCategory &&
+                if (!this.plugin.Configuration.ChangeNamePlateTitle &&
                     !this.plugin.Configuration.UseNamePlateColors) return;
 
                 // check if plugin started
@@ -60,13 +60,24 @@ namespace PlayerTrack
                 if (player == null) return;
 
                 // set title
-                if (this.plugin.Configuration.ChangeNamePlateTitleToCategory)
+                if (this.plugin.Configuration.ChangeNamePlateTitle)
                 {
-                    var category = this.plugin.CategoryService.GetCategory(player.CategoryId);
-                    if (category.IsDefault == false && category.Title != null)
+                    // set title by player
+                    if (player.SeTitle != null)
                     {
-                        args.Title = category.Title;
+                        args.Title = player.SeTitle;
                         args.Type = PlateType.LowTitleNoFc;
+                    }
+
+                    // set title by category
+                    else
+                    {
+                        var category = this.plugin.CategoryService.GetCategory(player.CategoryId);
+                        if (category.IsDefault == false && category.SeName != null)
+                        {
+                            args.Title = category.SeName;
+                            args.Type = PlateType.LowTitleNoFc;
+                        }
                     }
                 }
 

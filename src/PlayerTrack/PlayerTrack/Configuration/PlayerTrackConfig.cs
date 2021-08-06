@@ -130,9 +130,9 @@ namespace PlayerTrack
         public bool UseNamePlateColors = true;
 
         /// <summary>
-        /// Change nameplate titles to their category (if not default).
+        /// Change nameplate titles to their override or category name.
         /// </summary>
-        public bool ChangeNamePlateTitleToCategory = true;
+        public bool ChangeNamePlateTitle = true;
 
         /// <summary>
         /// Only create encounters when in content and skip other areas.

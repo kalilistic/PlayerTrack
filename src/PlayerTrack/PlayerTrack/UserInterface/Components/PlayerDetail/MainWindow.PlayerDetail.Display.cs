@@ -48,6 +48,21 @@ namespace PlayerTrack
                                   "These settings will override category settings."));
             ImGuiHelpers.ScaledDummy(1f);
 
+            ImGui.Text(Loc.Localize("Title", "Title"));
+            ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
+
+            var title = this.SelectedPlayer.Title;
+            ImGui.SetNextItemWidth(150f * ImGuiHelpers.GlobalScale);
+            if (ImGui.InputText("###PlayerTrack_PlayerTitle_Input", ref title, 30))
+            {
+                this.SelectedPlayer.Title = title;
+                this.SelectedPlayer.SetSeTitle();
+                this.Plugin.PlayerService.UpdatePlayer(this.SelectedPlayer);
+                this.Plugin.NamePlateManager.ForceRedraw();
+            }
+
+            ImGui.Spacing();
+
             ImGui.Text(Loc.Localize("Icon", "Icon"));
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
 

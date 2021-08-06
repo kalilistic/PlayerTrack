@@ -3,6 +3,8 @@ using System.Linq;
 using System.Numerics;
 
 using Dalamud.DrunkenToad;
+using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.Game.Text.SeStringHandling.Payloads;
 using Dalamud.Interface.Colors;
 using LiteDB;
 
@@ -59,6 +61,17 @@ namespace PlayerTrack
         /// Gets or sets list of homeworlds (current and previous).
         /// </summary>
         public List<KeyValuePair<uint, string>> HomeWorlds { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets title.
+        /// </summary>
+        public string Title { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets title as SeString.
+        /// </summary>
+        [BsonIgnore]
+        public SeString? SeTitle { get; set; }
 
         /// <summary>
         /// Gets or sets free company abbreviation.
@@ -200,6 +213,8 @@ namespace PlayerTrack
             this.ListColor = null;
             this.NamePlateColor = null;
             this.IsAlertEnabled = false;
+            this.Title = string.Empty;
+            this.SeTitle = null;
         }
 
         /// <summary>
@@ -268,6 +283,24 @@ namespace PlayerTrack
             this.IsRecent = this.IsRecent || player.IsRecent;
             this.SeenCount += player.SeenCount;
             this.Notes += " " + player.Notes;
+        }
+
+        /// <summary>
+        /// Set SeString based on title.
+        /// </summary>
+        public void SetSeTitle()
+        {
+            if (string.IsNullOrEmpty(this.Title))
+            {
+                this.SeTitle = null;
+            }
+            else
+            {
+                this.SeTitle = new SeString(new Payload[]
+                {
+                    new TextPayload($"《{this.Title}》"),
+                });
+            }
         }
     }
 }

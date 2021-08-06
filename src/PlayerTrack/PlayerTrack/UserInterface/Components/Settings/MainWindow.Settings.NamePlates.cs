@@ -25,18 +25,18 @@ namespace PlayerTrack
                                            "override normal nameplate color with category/player colors"));
             ImGui.Spacing();
 
-            var changeNamePlateTitleToCategory = this.Plugin.Configuration.ChangeNamePlateTitleToCategory;
+            var changeNamePlateTitle = this.Plugin.Configuration.ChangeNamePlateTitle;
             if (ImGui.Checkbox(
-                Loc.Localize($"ChangeNamePlateTitleToCategory", "Change nameplate title to category"),
-                ref changeNamePlateTitleToCategory))
+                Loc.Localize($"ChangeNamePlateTitle", "Change nameplate title"),
+                ref changeNamePlateTitle))
             {
-                this.Plugin.Configuration.ChangeNamePlateTitleToCategory = changeNamePlateTitleToCategory;
+                this.Plugin.Configuration.ChangeNamePlateTitle = changeNamePlateTitle;
                 this.Plugin.SaveConfig();
             }
 
             ImGuiComponents.HelpMarker(Loc.Localize(
-                                           "ChangeNamePlateTitleToCategory_HelpMarker",
-                                           "override normal nameplate title to use category name (if not default)"));
+                                           "ChangeNamePlateTitle_HelpMarker",
+                                           "override normal nameplate to use title or category name"));
             ImGui.Spacing();
         }
     }

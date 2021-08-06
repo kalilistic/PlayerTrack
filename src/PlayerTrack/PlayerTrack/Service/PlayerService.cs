@@ -550,6 +550,9 @@ namespace PlayerTrack
             {
                 player.LastLocationName = this.plugin.PluginService.GameData.ContentName(player.LastContentId);
             }
+
+            // seTitle for nameplates
+            player.SetSeTitle();
         }
 
         private void LoadPlayers()
