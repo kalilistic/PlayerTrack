@@ -146,7 +146,7 @@ namespace PlayerTrack
                 args.Items.Insert(index, this.addShowMenuItem);
             }
 
-            if (this.plugin.Configuration.ShowOpenLodestoneContextMenu && this.selectedPlayer!.LodestoneStatus == LodestoneStatus.Verified)
+            if (this.plugin.Configuration.ShowOpenLodestoneContextMenu && this.selectedPlayer?.LodestoneStatus == LodestoneStatus.Verified)
             {
                 args.Items.Insert(index, this.openLodestoneMenuItem);
             }
