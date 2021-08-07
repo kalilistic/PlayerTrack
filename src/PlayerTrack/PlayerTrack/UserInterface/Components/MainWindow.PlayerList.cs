@@ -147,7 +147,7 @@ namespace PlayerTrack
                                     true))
                                 {
                                     menuPlayer.CategoryId = category.Key;
-                                    this.plugin.PlayerService.UpdatePlayer(menuPlayer);
+                                    this.plugin.PlayerService.UpdatePlayerCategory(menuPlayer);
                                 }
                             }
 

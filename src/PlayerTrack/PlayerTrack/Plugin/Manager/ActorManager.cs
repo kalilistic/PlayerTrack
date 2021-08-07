@@ -218,7 +218,7 @@ namespace PlayerTrack
                         this.playerList.Remove(player.Value.ActorId);
                         player.Value.IsCurrent = false;
                         player.Value.Updated = currentTime;
-                        this.plugin.PlayerService.UpdatePlayer(player.Value);
+                        this.plugin.PlayerService.RemovePlayerFromCurrentPlayers(player.Value);
                         if (updateEncounter)
                         {
                             this.plugin.EncounterService.UpdateLastUpdated(player.Value.Key, currentTime);

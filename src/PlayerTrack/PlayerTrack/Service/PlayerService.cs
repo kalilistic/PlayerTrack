@@ -217,14 +217,177 @@ namespace PlayerTrack
         }
 
         /// <summary>
-        /// Update player.
+        /// Remove player from current players.
         /// </summary>
         /// <param name="player">player to update.</param>
-        public void UpdatePlayer(Player player)
+        public void RemovePlayerFromCurrentPlayers(Player player)
         {
             if (this.players.ContainsKey(player.Key))
             {
-                this.players[player.Key] = player;
+                lock (this.locker)
+                {
+                    this.players[player.Key].IsCurrent = player.IsCurrent;
+                    this.players[player.Key].Updated = player.Updated;
+                }
+
+                this.UpdateItem(this.players[player.Key]);
+            }
+        }
+
+        /// <summary>
+        /// Update player category.
+        /// </summary>
+        /// <param name="player">player to update.</param>
+        public void UpdatePlayerCategory(Player player)
+        {
+            if (this.players.ContainsKey(player.Key))
+            {
+                lock (this.locker)
+                {
+                    this.players[player.Key].CategoryId = player.CategoryId;
+                }
+
+                this.UpdateItem(this.players[player.Key]);
+            }
+        }
+
+        /// <summary>
+        /// Update player title.
+        /// </summary>
+        /// <param name="player">player to update.</param>
+        public void UpdatePlayerTitle(Player player)
+        {
+            if (this.players.ContainsKey(player.Key))
+            {
+                lock (this.locker)
+                {
+                    this.players[player.Key].Title = player.Title;
+                    this.players[player.Key].SetSeTitle();
+                }
+
+                this.UpdateItem(this.players[player.Key]);
+                this.plugin.NamePlateManager.ForceRedraw();
+            }
+        }
+
+        /// <summary>
+        /// Update player icon.
+        /// </summary>
+        /// <param name="player">player to update.</param>
+        public void UpdatePlayerIcon(Player player)
+        {
+            if (this.players.ContainsKey(player.Key))
+            {
+                lock (this.locker)
+                {
+                    this.players[player.Key].Icon = player.Icon;
+                }
+
+                this.UpdateItem(this.players[player.Key]);
+            }
+        }
+
+        /// <summary>
+        /// Update player nameplate color.
+        /// </summary>
+        /// <param name="player">player to update.</param>
+        public void UpdatePlayerNamePlateColor(Player player)
+        {
+            if (this.players.ContainsKey(player.Key))
+            {
+                lock (this.locker)
+                {
+                    this.players[player.Key].NamePlateColor = player.NamePlateColor;
+                }
+
+                this.UpdateItem(this.players[player.Key]);
+                this.plugin.NamePlateManager.ForceRedraw();
+            }
+        }
+
+        /// <summary>
+        /// Update player alert.
+        /// </summary>
+        /// <param name="player">player to update.</param>
+        public void UpdatePlayerAlert(Player player)
+        {
+            if (this.players.ContainsKey(player.Key))
+            {
+                lock (this.locker)
+                {
+                    this.players[player.Key].IsAlertEnabled = player.IsAlertEnabled;
+                }
+
+                this.UpdateItem(this.players[player.Key]);
+            }
+        }
+
+        /// <summary>
+        /// Reset player overrides.
+        /// </summary>
+        /// <param name="player">player to update.</param>
+        public void ResetPlayerOverrides(Player player)
+        {
+            if (this.players.ContainsKey(player.Key))
+            {
+                lock (this.locker)
+                {
+                    this.players[player.Key].Reset();
+                }
+
+                this.UpdateItem(this.players[player.Key]);
+                this.plugin.NamePlateManager.ForceRedraw();
+            }
+        }
+
+        /// <summary>
+        /// Update player list color.
+        /// </summary>
+        /// <param name="player">player to update.</param>
+        public void UpdatePlayerListColor(Player player)
+        {
+            if (this.players.ContainsKey(player.Key))
+            {
+                lock (this.locker)
+                {
+                    this.players[player.Key].ListColor = player.ListColor;
+                }
+
+                this.UpdateItem(this.players[player.Key]);
+            }
+        }
+
+        /// <summary>
+        /// Update player notes.
+        /// </summary>
+        /// <param name="player">player to update.</param>
+        public void UpdatePlayerNotes(Player player)
+        {
+            if (this.players.ContainsKey(player.Key))
+            {
+                lock (this.locker)
+                {
+                    this.players[player.Key].Notes = player.Notes;
+                }
+
+                this.UpdateItem(this.players[player.Key]);
+            }
+        }
+
+        /// <summary>
+        /// Update player lodestone state.
+        /// </summary>
+        /// <param name="player">player to update.</param>
+        public void UpdatePlayerLodestoneState(Player player)
+        {
+            if (this.players.ContainsKey(player.Key))
+            {
+                lock (this.locker)
+                {
+                    this.players[player.Key].LodestoneStatus = player.LodestoneStatus;
+                    this.players[player.Key].LodestoneFailureCount = player.LodestoneFailureCount;
+                }
+
                 this.UpdateItem(this.players[player.Key]);
             }
         }
@@ -378,7 +541,6 @@ namespace PlayerTrack
             {
                 if (this.players.ContainsKey(response.PlayerKey))
                 {
-                    Logger.LogInfo(response.PlayerKey + " " + response.Status);
                     var currentPlayer = this.players[response.PlayerKey];
 
                     // if verified

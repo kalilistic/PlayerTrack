@@ -25,7 +25,6 @@ namespace PlayerTrack
 
             ImGui.Text(Loc.Localize("PlayerCategory", "Category"));
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
-            var categories = this.plugin.CategoryService.GetCategories();
             var categoryNames = this.plugin.CategoryService.GetCategoryNames().ToArray();
             var categoryIds = this.plugin.CategoryService.GetCategoryIds().ToArray();
             var currentCategory = this.plugin.CategoryService.GetCategory(this.SelectedPlayer.CategoryId);
@@ -38,7 +37,7 @@ namespace PlayerTrack
                 categoryNames.Length))
             {
                 this.SelectedPlayer.CategoryId = categoryIds[categoryIndex];
-                this.Plugin.PlayerService.UpdatePlayer(this.SelectedPlayer);
+                this.Plugin.PlayerService.UpdatePlayerCategory(this.SelectedPlayer);
                 this.plugin.NamePlateManager.ForceRedraw();
             }
 
@@ -57,9 +56,7 @@ namespace PlayerTrack
             if (ImGui.InputText("###PlayerTrack_PlayerTitle_Input", ref title, 30))
             {
                 this.SelectedPlayer.Title = title;
-                this.SelectedPlayer.SetSeTitle();
-                this.Plugin.PlayerService.UpdatePlayer(this.SelectedPlayer);
-                this.Plugin.NamePlateManager.ForceRedraw();
+                this.Plugin.PlayerService.UpdatePlayerTitle(this.SelectedPlayer);
             }
 
             ImGui.Spacing();
@@ -76,7 +73,7 @@ namespace PlayerTrack
               this.plugin.IconListNames().Length))
             {
               this.SelectedPlayer.Icon = this.plugin.IconListCodes()[iconIndex];
-              this.Plugin.PlayerService.UpdatePlayer(this.SelectedPlayer);
+              this.Plugin.PlayerService.UpdatePlayerIcon(this.SelectedPlayer);
             }
 
             ImGui.SameLine();
@@ -100,7 +97,7 @@ namespace PlayerTrack
                 if (ImGui.ColorPicker4("List Color###PlayerTrack_PlayerListColor_ColorPicker", ref listColor))
                 {
                     this.SelectedPlayer.ListColor = listColor;
-                    this.Plugin.PlayerService.UpdatePlayer(this.SelectedPlayer);
+                    this.Plugin.PlayerService.UpdatePlayerListColor(this.SelectedPlayer);
                 }
 
                 this.PlayerOverride_ListColorSwatchRow(0, 8);
@@ -124,8 +121,7 @@ namespace PlayerTrack
                 if (ImGui.ColorPicker4("NamePlate Color###PlayerTrack_PlayerNamePlateColor_ColorPicker", ref namePlateColor))
                 {
                     this.SelectedPlayer.NamePlateColor = namePlateColor;
-                    this.Plugin.PlayerService.UpdatePlayer(this.SelectedPlayer);
-                    this.plugin.NamePlateManager.ForceRedraw();
+                    this.Plugin.PlayerService.UpdatePlayerNamePlateColor(this.SelectedPlayer);
                 }
 
                 this.PlayerOverride_NamePlateColorSwatchRow(0, 8);
@@ -144,14 +140,14 @@ namespace PlayerTrack
                 ref isAlertEnabled))
             {
                 this.SelectedPlayer.IsAlertEnabled = isAlertEnabled;
-                this.Plugin.PlayerService.UpdatePlayer(this.SelectedPlayer);
+                this.Plugin.PlayerService.UpdatePlayerAlert(this.SelectedPlayer);
             }
 
             ImGuiHelpers.ScaledDummy(5f);
             if (ImGui.Button(Loc.Localize("Reset", "Reset") + "###PlayerTrack_PlayerOverrideModalReset_Button"))
             {
                 this.SelectedPlayer.Reset();
-                this.Plugin.PlayerService.UpdatePlayer(this.SelectedPlayer);
+                this.Plugin.PlayerService.ResetPlayerOverrides(this.SelectedPlayer);
             }
         }
 
@@ -163,7 +159,7 @@ namespace PlayerTrack
                 if (ImGui.ColorButton("###PlayerTrack_PlayerListColor_Swatch_" + i, this.colorPalette[i]))
                 {
                     this.SelectedPlayer!.ListColor = this.colorPalette[i];
-                    this.Plugin.PlayerService.UpdatePlayer(this.SelectedPlayer);
+                    this.Plugin.PlayerService.UpdatePlayerListColor(this.SelectedPlayer);
                 }
 
                 ImGui.SameLine();
@@ -178,7 +174,7 @@ namespace PlayerTrack
                 if (ImGui.ColorButton("###PlayerTrack_PlayerNamePlateColor_Swatch_" + i, this.colorPalette[i]))
                 {
                     this.SelectedPlayer!.NamePlateColor = this.colorPalette[i];
-                    this.Plugin.PlayerService.UpdatePlayer(this.SelectedPlayer);
+                    this.Plugin.PlayerService.UpdatePlayerNamePlateColor(this.SelectedPlayer);
                 }
 
                 ImGui.SameLine();

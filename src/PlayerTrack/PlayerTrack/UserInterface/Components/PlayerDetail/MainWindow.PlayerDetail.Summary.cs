@@ -109,7 +109,7 @@ namespace PlayerTrack
                 {
                     this.SelectedPlayer.LodestoneStatus = LodestoneStatus.Unverified;
                     this.SelectedPlayer.LodestoneFailureCount = 0;
-                    this.Plugin.PlayerService.UpdatePlayer(this.SelectedPlayer);
+                    this.Plugin.PlayerService.UpdatePlayerLodestoneState(this.SelectedPlayer);
                     this.Plugin.PlayerService.SubmitLodestoneRequest(this.SelectedPlayer);
                 }
             }
@@ -131,7 +131,7 @@ namespace PlayerTrack
                     y: -1 - (5f * ImGuiHelpers.GlobalScale))))
             {
                 this.SelectedPlayer.Notes = notes;
-                this.Plugin.PlayerService.UpdatePlayer(this.SelectedPlayer);
+                this.Plugin.PlayerService.UpdatePlayerNotes(this.SelectedPlayer);
             }
         }
     }
