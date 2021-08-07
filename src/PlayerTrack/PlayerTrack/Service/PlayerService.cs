@@ -378,9 +378,13 @@ namespace PlayerTrack
             {
                 if (this.players.ContainsKey(response.PlayerKey))
                 {
+                    Logger.LogInfo(response.PlayerKey + " " + response.Status);
                     var currentPlayer = this.players[response.PlayerKey];
+
+                    // if verified
                     if (response.Status == LodestoneStatus.Verified)
                     {
+                        // get player and merge for name/world changes
                         var player = this.GetPlayerByLodestoneId(response.LodestoneId);
                         if (player != null)
                         {
@@ -405,17 +409,17 @@ namespace PlayerTrack
 
                             this.DeletePlayer(player);
                         }
-
-                        currentPlayer.LodestoneId = response.LodestoneId;
-                        currentPlayer.LodestoneStatus = response.Status;
-                        currentPlayer.LodestoneLastUpdated = DateUtil.CurrentTime();
-                        if (currentPlayer.LodestoneStatus == LodestoneStatus.Failed)
-                        {
-                            currentPlayer.LodestoneFailureCount++;
-                        }
-
-                        this.UpdateItem(currentPlayer);
                     }
+
+                    currentPlayer.LodestoneId = response.LodestoneId;
+                    currentPlayer.LodestoneStatus = response.Status;
+                    currentPlayer.LodestoneLastUpdated = DateUtil.CurrentTime();
+                    if (currentPlayer.LodestoneStatus == LodestoneStatus.Failed)
+                    {
+                        currentPlayer.LodestoneFailureCount++;
+                    }
+
+                    this.UpdateItem(currentPlayer);
                 }
             }
         }
