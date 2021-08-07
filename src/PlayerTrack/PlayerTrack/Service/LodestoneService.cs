@@ -28,6 +28,7 @@ namespace PlayerTrack
         private readonly PlayerTrackPlugin plugin;
         private readonly Queue<LodestoneRequest> requestQueue = new ();
         private bool isProcessing;
+        private long lodestoneReprocess;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LodestoneService"/> class.
@@ -37,6 +38,7 @@ namespace PlayerTrack
         {
             var httpClientHandler = new HttpClientHandler();
             this.plugin = plugin;
+            this.lodestoneReprocess = DateUtil.CurrentTime() + this.plugin.Configuration.LodestoneReprocessDelay;
             this.httpClient = new HttpClient(httpClientHandler, true)
             {
                 Timeout = TimeSpan.FromMilliseconds(this.plugin.Configuration.LodestoneTimeout),
@@ -118,10 +120,22 @@ namespace PlayerTrack
         private void ProcessRequests(object source, ElapsedEventArgs e)
         {
             if (!this.plugin.IsDoneLoading) return;
+            if (!this.ShouldProcess()) return;
             if (this.isProcessing) return;
             this.isProcessing = true;
             try
             {
+                // check if should reprocess
+                if (DateUtil.CurrentTime() > this.lodestoneReprocess)
+                {
+                    this.lodestoneReprocess =
+                        DateUtil.CurrentTime() + this.plugin.Configuration.LodestoneReprocessDelay;
+                    this.plugin.PlayerService.ReprocessPlayersForLodestone();
+                    this.isProcessing = false;
+                    return;
+                }
+
+                // process requests
                 var requestFailureCount = 0;
                 while (this.requestQueue.Count > 0 &&
                        DateUtil.CurrentTime() > this.LodestoneCooldown &&

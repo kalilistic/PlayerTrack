@@ -36,13 +36,6 @@ namespace PlayerTrack
                 ImGui.TextColored(ImGuiColors.DPSRed, Loc.Localize("LodestoneUnavailable", "Unavailable"));
             }
 
-            // lodestone cooldown
-            ImGui.Text(Loc.Localize("LodestoneCooldown", "Cooldown"));
-            ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
-            ImGui.Text(isLodestoneAvailable
-                           ? "None"
-                           : (this.plugin.LodestoneService.LodestoneCooldown - DateUtil.CurrentTime()).ToDuration());
-
             // total requests
             ImGui.Text(Loc.Localize("LodestoneTotalRequests", "Request Count"));
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);

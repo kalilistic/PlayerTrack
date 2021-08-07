@@ -511,6 +511,25 @@ namespace PlayerTrack
         }
 
         /// <summary>
+        /// Reprocess lodestone requests after initial load.
+        /// </summary>
+        public void ReprocessPlayersForLodestone()
+        {
+            lock (this.locker)
+            {
+                var existingPlayers = this.GetItems<Player>().ToList();
+                var lodestoneRequests = this.plugin.LodestoneService.GetRequests().Select(request => request.PlayerKey).ToArray();
+                foreach (var player in existingPlayers)
+                {
+                    if (!lodestoneRequests.Contains(player.Key))
+                    {
+                        this.SubmitLodestoneRequest(player);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Submit lodestone request for player.
         /// </summary>
         /// <param name="player">player to submit for ldoestone lookup.</param>

@@ -30,6 +30,11 @@ namespace PlayerTrack
         public int LodestoneFailureDelay = 86400000;
 
         /// <summary>
+        /// Delay period for reprocessing players for lodestone requests.
+        /// </summary>
+        public int LodestoneReprocessDelay = 3600000;
+
+        /// <summary>
         /// Lodestone locale to open player profile with.
         /// </summary>
         public LodestoneLocale LodestoneLocale = LodestoneLocale.na;
@@ -57,7 +62,7 @@ namespace PlayerTrack
         /// <summary>
         /// Max number of times to retry a particular character automatically.
         /// </summary>
-        public int LodestoneMaxRetry = 5;
+        public int LodestoneMaxRetry = 2;
 
         /// <summary>
         /// Amount of time to wait for response for lodestone call.
