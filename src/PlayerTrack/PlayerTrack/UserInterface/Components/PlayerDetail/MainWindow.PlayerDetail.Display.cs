@@ -27,6 +27,7 @@ namespace PlayerTrack
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
             var categories = this.plugin.CategoryService.GetCategories();
             var categoryNames = this.plugin.CategoryService.GetCategoryNames().ToArray();
+            var categoryIds = this.plugin.CategoryService.GetCategoryIds().ToArray();
             var currentCategory = this.plugin.CategoryService.GetCategory(this.SelectedPlayer.CategoryId);
             var categoryIndex = Array.IndexOf(categoryNames, currentCategory.Name);
             ImGui.SetNextItemWidth(150f * ImGuiHelpers.GlobalScale);
@@ -36,7 +37,7 @@ namespace PlayerTrack
                 categoryNames,
                 categoryNames.Length))
             {
-                this.SelectedPlayer.CategoryId = categories[categoryIndex].Key;
+                this.SelectedPlayer.CategoryId = categoryIds[categoryIndex];
                 this.Plugin.PlayerService.UpdatePlayer(this.SelectedPlayer);
                 this.plugin.NamePlateManager.ForceRedraw();
             }

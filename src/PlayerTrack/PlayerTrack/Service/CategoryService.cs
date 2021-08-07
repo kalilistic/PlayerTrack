@@ -97,6 +97,18 @@ namespace PlayerTrack
         }
 
         /// <summary>
+        /// Get category ids.
+        /// </summary>
+        /// <returns>string array with category ids.</returns>
+        public int[] GetCategoryIds()
+        {
+            lock (this.locker)
+            {
+                return this.categories.OrderBy(cat1 => cat1.Value.Id).Select(cat2 => cat2.Value.Id).ToArray();
+            }
+        }
+
+        /// <summary>
         /// Decrease category rank to show lower in list.
         /// </summary>
         /// <param name="categoryId">category id for category to decrease in rank..</param>

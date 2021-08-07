@@ -235,43 +235,50 @@ namespace PlayerTrack
         /// <param name="player">player to add/update.</param>
         public void AddOrUpdatePlayer(Player player)
         {
-            // update player
-            if (this.players.ContainsKey(player.Key))
+            try
             {
-                var lastSeen = this.players[player.Key].Updated;
-                var lastLocation = this.players[player.Key].LastLocationName;
-                this.players[player.Key].UpdateFromNewCopy(player);
-                if (this.GetPlayerIsAlertEnabled(this.players[player.Key]) &&
-                    DateUtil.CurrentTime() > this.players[player.Key].SendNextAlert)
+                // update player
+                if (this.players.ContainsKey(player.Key))
                 {
-                    this.players[player.Key].SendNextAlert =
-                        DateUtil.CurrentTime() + this.plugin.Configuration.AlertFrequency;
-                    var message = string.Format(
-                        Loc.Localize("PlayerAlert", "last seen {0} ago in {1}."),
-                        (DateUtil.CurrentTime() - lastSeen).ToDuration(),
-                        lastLocation);
-                    this.plugin.PluginService.Chat.Print(
-                        this.players[player.Key].Names.First(),
-                        this.players[player.Key].HomeWorlds.First().Key,
-                        message,
-                        XivChatType.Notice);
+                    var lastSeen = this.players[player.Key].Updated;
+                    var lastLocation = this.players[player.Key].LastLocationName;
+                    this.players[player.Key].UpdateFromNewCopy(player);
+                    if (this.GetPlayerIsAlertEnabled(this.players[player.Key]) &&
+                        DateUtil.CurrentTime() > this.players[player.Key].SendNextAlert)
+                    {
+                        this.players[player.Key].SendNextAlert =
+                            DateUtil.CurrentTime() + this.plugin.Configuration.AlertFrequency;
+                        var message = string.Format(
+                            Loc.Localize("PlayerAlert", "last seen {0} ago in {1}."),
+                            (DateUtil.CurrentTime() - lastSeen).ToDuration(),
+                            lastLocation);
+                        this.plugin.PluginService.Chat.Print(
+                            this.players[player.Key].Names.First(),
+                            this.players[player.Key].HomeWorlds.First().Key,
+                            message,
+                            XivChatType.Notice);
+                    }
+
+                    this.UpdateItem(this.players[player.Key]);
                 }
 
-                this.UpdateItem(this.players[player.Key]);
+                // add player
+                else
+                {
+                    player.SendNextAlert = DateUtil.CurrentTime() + this.plugin.Configuration.AlertFrequency;
+                    lock (this.locker)
+                    {
+                        this.players.Add(player.Key, player);
+                    }
+
+                    this.InsertItem(player);
+                    this.RebuildIndex<Player>(p => p.Key);
+                    this.SubmitLodestoneRequest(player);
+                }
             }
-
-            // add player
-            else
+            catch (Exception ex)
             {
-                player.SendNextAlert = DateUtil.CurrentTime() + this.plugin.Configuration.AlertFrequency;
-                lock (this.locker)
-                {
-                    this.players.Add(player.Key, player);
-                }
-
-                this.InsertItem(player);
-                this.RebuildIndex<Player>(p => p.Key);
-                this.SubmitLodestoneRequest(player);
+                Logger.LogError(ex, "Failed to update " + player.Key);
             }
         }
 
