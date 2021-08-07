@@ -103,23 +103,23 @@ namespace PlayerTrack
                 // map categories
                 Category? defaultCategory = null;
                 var defaultColor = new Vector4(255, 255, 255, 1);
-                foreach (var trackCategory in trackCategories)
+                for (var i = 0; i < trackCategories.Count; i++)
                 {
-                    Vector4? color = trackCategory.Color;
+                    Vector4? color = trackCategories[i].Color;
                     if (color == defaultColor)
                     {
                         color = null;
                     }
 
-                    var category = new Category(trackCategory.Id)
+                    var category = new Category(trackCategories[i].Id)
                     {
-                        Name = trackCategory.Name,
-                        Icon = trackCategory.Icon,
+                        Name = trackCategories[i].Name,
+                        Icon = trackCategories[i].Icon,
                         ListColor = color,
                         NamePlateColor = color,
-                        IsDefault = trackCategory.IsDefault,
-                        IsAlertEnabled = trackCategory.EnableAlerts,
-                        Rank = trackCategory.Id,
+                        IsDefault = trackCategories[i].IsDefault,
+                        IsAlertEnabled = trackCategories[i].EnableAlerts,
+                        Rank = i,
                     };
                     if (category.IsDefault)
                     {
