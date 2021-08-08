@@ -23,6 +23,8 @@ namespace PlayerTrack
             : base(plugin, "PlayerTrack Config")
         {
             this.plugin = plugin;
+            this.Size = new Vector2(600f, 300f);
+            this.SizeCondition = ImGuiCond.Appearing;
         }
 
         /// <inheritdoc/>
