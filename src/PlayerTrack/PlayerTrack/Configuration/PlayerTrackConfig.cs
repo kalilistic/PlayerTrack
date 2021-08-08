@@ -202,6 +202,6 @@ namespace PlayerTrack
         /// <summary>
         /// Gets or sets show nameplates restriction.
         /// </summary>
-        public int RestrictShowNamePlates { get; set; } = 0;
+        public int ShowNamePlates { get; set; }
     }
 }

@@ -170,6 +170,12 @@ namespace PlayerTrack
         {
             try
             {
+                // skip if shouldn't process per conditions
+                if (!this.ShouldProcess())
+                {
+                    return;
+                }
+
                 // skip if waiting on actor table update
                 if (this.needsUpdate)
                 {
@@ -306,7 +312,7 @@ namespace PlayerTrack
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
             // check if should continue or is already in-progress
-            if (!this.ShouldProcess() || this.isProcessing) return;
+            if (this.isProcessing) return;
 
             // set to in-progress to avoid concurrent runs
             this.isProcessing = true;
@@ -344,7 +350,7 @@ namespace PlayerTrack
         private void OnFrameworkUpdate(Framework framework)
         {
             // check if should process or needs to
-            if (!this.ShouldProcess() || !this.needsUpdate) return;
+            if (!this.needsUpdate) return;
             try
             {
                 lock (this.locker)
