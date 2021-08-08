@@ -817,6 +817,17 @@ namespace PlayerTrack
             }
         }
 
+        private void LoadPlayer(Player player)
+        {
+            lock (this.locker)
+            {
+                this.SetDerivedFields(player);
+                this.players.Add(player.Key, player);
+            }
+
+            this.SubmitLodestoneRequest(player);
+        }
+
         private void LoadPlayers()
         {
             var existingPlayers = this.GetItems<Player>().ToList();
@@ -824,17 +835,10 @@ namespace PlayerTrack
             {
                 if (!this.players.ContainsKey(player.Key))
                 {
-                    lock (this.locker)
-                    {
-                        this.SetDerivedFields(player);
-                        this.players.Add(player.Key, player);
-                    }
-
-                    this.SubmitLodestoneRequest(player);
+                    this.LoadPlayer(player);
                 }
                 else
                 {
-                    Logger.LogError("Duplicate player detected so merging: " + player.Key);
                     var dupePlayers = existingPlayers.Where(p => p.Key.Equals(player.Key)).ToList();
                     if (dupePlayers.Count < 2) return;
                     var player1 = dupePlayers[0];
@@ -849,6 +853,7 @@ namespace PlayerTrack
                         }
 
                         this.DeletePlayer(player2);
+                        this.LoadPlayer(player1);
                         return;
                     }
 
@@ -859,6 +864,7 @@ namespace PlayerTrack
                     }
 
                     this.DeletePlayer(player1);
+                    this.LoadPlayer(player2);
                 }
             }
         }
