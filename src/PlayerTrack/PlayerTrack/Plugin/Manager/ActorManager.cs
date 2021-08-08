@@ -157,9 +157,12 @@ namespace PlayerTrack
         {
             if (this.plugin.Configuration.RestrictInCombat &&
                 this.plugin.PluginService.ClientState.Condition.InCombat()) return false;
-            if (this.plugin.Configuration.RestrictToContent && !this.plugin.PluginService.InContent()) return false;
-            if (this.plugin.Configuration.RestrictToHighEndDuty && !this.plugin.PluginService.InHighEndDuty())
-                return false;
+            var restrict =
+                ContentRestrictionType.GetContentRestrictionTypeByIndex(
+                    this.plugin.Configuration.RestrictAddUpdatePlayers);
+            if (restrict == ContentRestrictionType.ContentOnly && !this.plugin.PluginService.InContent()) return false;
+            if (restrict == ContentRestrictionType.HighEndDutyOnly &&
+                !this.plugin.PluginService.InHighEndDuty()) return false;
             return true;
         }
 

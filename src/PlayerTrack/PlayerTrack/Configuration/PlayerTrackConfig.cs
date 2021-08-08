@@ -188,5 +188,20 @@ namespace PlayerTrack
         /// Gets or sets a value indicating whether to show search box on player list.
         /// </summary>
         public bool ShowSearchBox { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets add players restriction.
+        /// </summary>
+        public int RestrictAddUpdatePlayers { get; set; } = 1;
+
+        /// <summary>
+        /// Gets or sets add encounters restriction.
+        /// </summary>
+        public int RestrictAddEncounters { get; set; } = 1;
+
+        /// <summary>
+        /// Gets or sets show nameplates restriction.
+        /// </summary>
+        public int RestrictShowNamePlates { get; set; } = 0;
     }
 }

@@ -30,17 +30,17 @@ namespace PlayerTrack
         {
             if (ImGui.BeginTabBar("###PlayerTrack_Config_TabBar", ImGuiTabBarFlags.None))
             {
-                if (ImGui.BeginTabItem(Loc.Localize("FiltersConfig", "Filters")))
-                {
-                    WindowManager.SpacerWithTabs();
-                    this.FiltersConfig();
-                    ImGui.EndTabItem();
-                }
-
                 if (ImGui.BeginTabItem(Loc.Localize("DisplayConfig", "Display")))
                 {
                     WindowManager.SpacerWithTabs();
                     this.DisplayConfig();
+                    ImGui.EndTabItem();
+                }
+
+                if (ImGui.BeginTabItem(Loc.Localize("ProcessingConfig", "Processing")))
+                {
+                    WindowManager.SpacerWithTabs();
+                    this.ProcessingConfig();
                     ImGui.EndTabItem();
                 }
 
