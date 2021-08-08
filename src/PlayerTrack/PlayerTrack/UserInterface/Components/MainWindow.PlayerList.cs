@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
@@ -16,7 +15,7 @@ namespace PlayerTrack
     {
         private string menuPlayerKey = string.Empty;
         private long lastPlayerListRefresh = DateUtil.CurrentTime();
-        private KeyValuePair<string, Player>[] players = new KeyValuePair<string, Player>[0];
+        private Player[] players = new Player[0];
 
         private void ClearSelectedPlayer()
         {
@@ -33,7 +32,7 @@ namespace PlayerTrack
 
             if (DateUtil.CurrentTime() > this.lastPlayerListRefresh)
             {
-                this.players = this.plugin.PlayerService.GetPlayers(this.searchInput);
+                this.players = this.plugin.PlayerService.GetSortedPlayers(this.searchInput);
                 this.lastPlayerListRefresh += this.plugin.Configuration.PlayerListRefreshFrequency;
             }
 
@@ -50,11 +49,11 @@ namespace PlayerTrack
                 for (var i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
                 {
                     ImGui.BeginGroup();
-                    var color = this.plugin.PlayerService.GetPlayerListColor(this.players[i].Value);
+                    var color = this.plugin.PlayerService.GetPlayerListColor(this.players[i]);
                     ImGui.PushStyleColor(ImGuiCol.Text, color);
                     if (ImGui.Selectable(
                         "###PlayerTrack_Player_Selectable_" + i,
-                        this.SelectedPlayer == this.players[i].Value,
+                        this.SelectedPlayer == this.players[i],
                         ImGuiSelectableFlags.AllowDoubleClick))
                     {
                         // suppress double clicks
@@ -73,7 +72,7 @@ namespace PlayerTrack
                         // open player in right panel
                         else
                         {
-                            this.SelectedPlayer = this.players[i].Value;
+                            this.SelectedPlayer = this.players[i];
                             this.SelectedEncounters = this.plugin.EncounterService
                                                           .GetEncountersByPlayer(this.SelectedPlayer.Key)
                                                           .OrderByDescending(enc => enc.Created).ToList();
@@ -86,12 +85,12 @@ namespace PlayerTrack
 
                     // player icon
                     ImGui.PushFont(UiBuilder.IconFont);
-                    ImGui.TextColored(color,  this.plugin.PlayerService.GetPlayerIcon(this.players[i].Value));
+                    ImGui.TextColored(color,  this.plugin.PlayerService.GetPlayerIcon(this.players[i]));
                     ImGui.PopFont();
 
                     // player name;
                     ImGui.SameLine();
-                    ImGui.Text(this.players[i].Value.Names[0]);
+                    ImGui.Text(this.players[i].Names[0]);
 
                     ImGui.PopStyleColor(1);
                     ImGui.EndGroup();
@@ -100,11 +99,11 @@ namespace PlayerTrack
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
                     {
                         this.menuPlayerKey = this.players[i].Key;
-                        ImGui.OpenPopup("###PlayerTrack_Player_Popup_" + this.players[i].Value.Id);
+                        ImGui.OpenPopup("###PlayerTrack_Player_Popup_" + this.players[i].Id);
                     }
 
                     // menu for selected player
-                    if (ImGui.BeginPopup("###PlayerTrack_Player_Popup_" + this.players[i].Value.Id))
+                    if (ImGui.BeginPopup("###PlayerTrack_Player_Popup_" + this.players[i].Id))
                     {
                         // validate player
                         var menuPlayer = this.plugin.PlayerService.GetPlayer(this.menuPlayerKey);
@@ -130,7 +129,7 @@ namespace PlayerTrack
                             Loc.Localize("Lodestone", "Lodestone"),
                             menuPlayer.LodestoneStatus == LodestoneStatus.Verified))
                         {
-                            this.plugin.LodestoneService.OpenLodestoneProfile(this.players[i].Value.LodestoneId);
+                            this.plugin.LodestoneService.OpenLodestoneProfile(this.players[i].LodestoneId);
                         }
 
                         ImGui.Separator();

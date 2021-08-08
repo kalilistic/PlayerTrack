@@ -21,6 +21,7 @@ namespace PlayerTrack
         private readonly object locker = new ();
         private readonly SortedList<string, Player> players = new ();
         private readonly PlayerTrackPlugin plugin;
+        private Player[] viewPlayers = new Player[0];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerService"/> class.
@@ -33,6 +34,7 @@ namespace PlayerTrack
             this.encounterService = plugin.EncounterService;
             this.categoryService = plugin.CategoryService;
             this.LoadPlayers();
+            this.UpdateViewPlayers();
         }
 
         /// <summary>
@@ -49,53 +51,63 @@ namespace PlayerTrack
         /// <summary>
         /// Get players.
         /// </summary>
-        /// <param name="nameFilter">name to filter by.</param>
         /// <returns>list of players.</returns>
-        public KeyValuePair<string, Player>[] GetPlayers(string nameFilter = "")
+        public KeyValuePair<string, Player>[]? GetPlayers()
         {
             try
             {
                 lock (this.locker)
                 {
-                    // create player list by mode
-                    KeyValuePair<string, Player>[] playersList = this.plugin.Configuration.ListMode switch
-                    {
-                        PlayerListMode.current => this.players.Where(pair => pair.Value.IsCurrent).ToArray(),
-                        PlayerListMode.recent => this.players.Where(pair => pair.Value.IsRecent).ToArray(),
-                        PlayerListMode.all => this.players.ToArray(),
-                        _ => throw new ArgumentOutOfRangeException(),
-                    };
-
-                    // filter by search
-                    if (!string.IsNullOrEmpty(nameFilter))
-                    {
-                        playersList = this.plugin.Configuration.SearchType switch
-                        {
-                            PlayerSearchType.startsWith => playersList
-                                                          .Where(
-                                                              pair => pair.Value.Names.First().ToLower().StartsWith(nameFilter.ToLower()))
-                                                          .ToArray(),
-                            PlayerSearchType.contains => playersList
-                                                        .Where(pair => pair.Value.Names.First().ToLower().Contains(nameFilter.ToLower()))
-                                                        .ToArray(),
-                            PlayerSearchType.exact => playersList
-                                                     .Where(pair => pair.Value.Names.First().ToLower().Equals(nameFilter.ToLower()))
-                                                     .ToArray(),
-                            _ => throw new ArgumentOutOfRangeException(),
-                        };
-                    }
-
-                    // filter by category
-                    if (this.plugin.Configuration.CategoryFilterId == 0) return playersList;
-                    return playersList
-                           .Where(pair => pair.Value.CategoryId == this.plugin.Configuration.CategoryFilterId)
-                           .ToArray();
+                    return this.players.ToArray();
                 }
             }
             catch (Exception)
             {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Get sorted players.
+        /// </summary>
+        /// <param name="nameFilter">name to filter by.</param>
+        /// <returns>list of players.</returns>
+        public Player[] GetSortedPlayers(string nameFilter = "")
+        {
+            try
+            {
+                Player[] playersList;
+                lock (this.locker)
+                {
+                    // create player list by mode
+                    playersList = this.viewPlayers.ToArray();
+                }
+
+                // filter by search
+                if (!string.IsNullOrEmpty(nameFilter))
+                {
+                    playersList = this.plugin.Configuration.SearchType switch
+                    {
+                        PlayerSearchType.startsWith => playersList
+                                                       .Where(
+                                                           player => player.Names.First().ToLower().StartsWith(nameFilter.ToLower()))
+                                                       .ToArray(),
+                        PlayerSearchType.contains => playersList
+                                                     .Where(player => player.Names.First().ToLower().Contains(nameFilter.ToLower()))
+                                                     .ToArray(),
+                        PlayerSearchType.exact => playersList
+                                                  .Where(player => player.Names.First().ToLower().Equals(nameFilter.ToLower()))
+                                                  .ToArray(),
+                        _ => throw new ArgumentOutOfRangeException(),
+                    };
+                }
+
+                return playersList;
+            }
+            catch (Exception)
+            {
                 Logger.LogDebug("Failed to retrieve players to display so trying again.");
-                return this.GetPlayers(nameFilter);
+                return this.GetSortedPlayers(nameFilter);
             }
         }
 
@@ -213,6 +225,7 @@ namespace PlayerTrack
                 this.encounterService.DeleteEncounters(player.Key);
                 this.DeleteItem<Player>(player.Id);
                 this.plugin.ActorManager.ClearPlayerCharacter(player.ActorId);
+                this.UpdateViewPlayers();
             }
         }
 
@@ -245,9 +258,11 @@ namespace PlayerTrack
                 lock (this.locker)
                 {
                     this.players[player.Key].CategoryId = player.CategoryId;
+                    this.players[player.Key].CategoryRank = this.plugin.CategoryService.GetCategory(player.CategoryId).Rank;
                 }
 
                 this.UpdateItem(this.players[player.Key]);
+                this.UpdateViewPlayers();
             }
         }
 
@@ -527,6 +542,7 @@ namespace PlayerTrack
             this.InsertItem(player);
             this.RebuildIndex<Player>(p => p.Key);
             this.SubmitLodestoneRequest(player);
+            this.UpdateViewPlayers();
 
             return player;
         }
@@ -614,7 +630,7 @@ namespace PlayerTrack
             lock (this.locker)
             {
                 IEnumerable<KeyValuePair<string, Player>> playersWithCategory = this.players.Where(kvp => kvp.Value.CategoryId == deletedCategoryId);
-                List<Player> playersWithCategoryList = new List<Player>();
+                List<Player> playersWithCategoryList = new ();
                 foreach (var player in playersWithCategory)
                 {
                     this.players[player.Key].CategoryId = defaultCategoryId;
@@ -622,6 +638,7 @@ namespace PlayerTrack
                 }
 
                 this.UpsertItems(playersWithCategoryList);
+                this.UpdateViewPlayers();
             }
         }
 
@@ -745,6 +762,59 @@ namespace PlayerTrack
 
             // seTitle for nameplates
             player.SetSeTitle();
+
+            // category rank
+            player.CategoryRank = this.plugin.CategoryService.GetCategory(player.CategoryId).Rank;
+        }
+
+        /// <summary>
+        /// Recalculate player category ranks after rank changing.
+        /// </summary>
+        public void UpdatePlayerCategoryRank()
+        {
+            lock (this.locker)
+            {
+                foreach (var player in this.players)
+                {
+                    player.Value.CategoryRank = this.plugin.CategoryService.GetCategory(player.Value.CategoryId).Rank;
+                }
+            }
+
+            this.UpdateViewPlayers();
+        }
+
+        /// <summary>
+        /// Update sorted player list for display.
+        /// </summary>
+        public void UpdateViewPlayers()
+        {
+            lock (this.locker)
+            {
+                if (this.plugin.Configuration.CategoryFilterId != 0)
+                {
+                    this.viewPlayers = this.plugin.Configuration.ListMode switch
+                    {
+                        PlayerListMode.current => this.players.Where(pair => pair.Value.IsCurrent && pair.Value.CategoryId == this.plugin.Configuration.CategoryFilterId)
+                                                      .Select(pair => pair.Value).OrderBy(player => player.CategoryRank).ThenBy(player => player.Names.First()).ToArray(),
+                        PlayerListMode.recent => this.players.Where(pair => pair.Value.IsRecent && pair.Value.CategoryId == this.plugin.Configuration.CategoryFilterId).Select(pair => pair.Value)
+                                                     .OrderBy(player => player.CategoryRank).ThenBy(player => player.Names.First()).ToArray(),
+                        PlayerListMode.all => this.players.Where(pair => pair.Value.CategoryId == this.plugin.Configuration.CategoryFilterId).Select(pair => pair.Value).OrderBy(player => player.CategoryRank).ThenBy(player => player.Names.First()).ToArray(),
+                        _ => throw new ArgumentOutOfRangeException(),
+                    };
+                }
+                else
+                {
+                    this.viewPlayers = this.plugin.Configuration.ListMode switch
+                    {
+                        PlayerListMode.current => this.players.Where(pair => pair.Value.IsCurrent)
+                                                      .Select(pair => pair.Value).OrderBy(player => player.CategoryRank).ThenBy(player => player.Names.First()).ToArray(),
+                        PlayerListMode.recent => this.players.Where(pair => pair.Value.IsRecent).Select(pair => pair.Value)
+                                                     .OrderBy(player => player.CategoryRank).ThenBy(player => player.Names.First()).ToArray(),
+                        PlayerListMode.all => this.players.Select(pair => pair.Value).OrderBy(player => player.CategoryRank).ThenBy(player => player.Names.First()).ToArray(),
+                        _ => throw new ArgumentOutOfRangeException(),
+                    };
+                }
+            }
         }
 
         private void LoadPlayers()

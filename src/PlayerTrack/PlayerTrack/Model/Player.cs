@@ -157,6 +157,12 @@ namespace PlayerTrack
         public int CategoryId { get; set; }
 
         /// <summary>
+        /// Gets or sets player category rank for sorting.
+        /// </summary>
+        [BsonIgnore]
+        public int CategoryRank { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the player is currently with you.
         /// </summary>
         [BsonIgnore]

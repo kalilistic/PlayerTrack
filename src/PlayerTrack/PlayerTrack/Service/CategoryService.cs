@@ -100,7 +100,7 @@ namespace PlayerTrack
         /// Get category ids.
         /// </summary>
         /// <returns>string array with category ids.</returns>
-        public int[] GetCategoryIds()
+        public IEnumerable<int> GetCategoryIds()
         {
             lock (this.locker)
             {
@@ -119,11 +119,14 @@ namespace PlayerTrack
                 var currentCategory = this.categories[categoryId];
                 if (currentCategory == null) return;
                 var swapCategory = this.categories.FirstOrDefault(pair => pair.Value.Rank == currentCategory.Rank + 1).Value;
+                if (swapCategory == null) return;
                 currentCategory.Rank += 1;
                 swapCategory.Rank -= 1;
                 this.UpdateItem(currentCategory);
                 this.UpdateItem(swapCategory);
             }
+
+            this.plugin.PlayerService.UpdatePlayerCategoryRank();
         }
 
         /// <summary>
@@ -137,11 +140,14 @@ namespace PlayerTrack
                 var currentCategory = this.categories[categoryId];
                 if (currentCategory == null) return;
                 var swapCategory = this.categories.FirstOrDefault(pair => pair.Value.Rank == currentCategory.Rank - 1).Value;
+                if (swapCategory == null) return;
                 currentCategory.Rank -= 1;
                 swapCategory.Rank += 1;
                 this.UpdateItem(currentCategory);
                 this.UpdateItem(swapCategory);
             }
+
+            this.plugin.PlayerService.UpdatePlayerCategoryRank();
         }
 
         /// <summary>
@@ -204,6 +210,7 @@ namespace PlayerTrack
 
             this.plugin.PlayerService.RemoveDeletedCategory(categoryId, this.GetDefaultCategory().Id);
             this.DeleteItem<Category>(deletedCategory.Id);
+            this.plugin.PlayerService.UpdatePlayerCategoryRank();
         }
 
         /// <summary>

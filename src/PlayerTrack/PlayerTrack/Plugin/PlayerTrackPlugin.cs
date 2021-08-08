@@ -284,12 +284,23 @@ namespace PlayerTrack
         public void RunIntegrityCheck()
         {
             Logger.LogInfo("Starting integrity check.");
+
+            // check categories
+            var categories = this.CategoryService.GetCategories().OrderBy(pair => pair.Value.Rank);
+
+            var count = 0;
+            foreach (var category in categories)
+            {
+                category.Value.Rank = count;
+                count += 1;
+            }
+
+            // check players
             var players = this.PlayerService.GetPlayers();
-            Logger.LogInfo("Total Players Before Check: " + players.Length);
+            if (players == null) return;
             foreach (var player in players)
             {
-                if (player.Value.LodestoneStatus == LodestoneStatus.Failed ||
-                    player.Value.HomeWorlds.First().Key == 0 ||
+                if (player.Value.HomeWorlds.First().Key == 0 ||
                     !player.Value.Names.First().IsValidCharacterName())
                 {
                     Logger.LogInfo($"Deleting Player: {player.Value.Key}");
@@ -297,8 +308,6 @@ namespace PlayerTrack
                 }
             }
 
-            players = this.PlayerService.GetPlayers();
-            Logger.LogInfo("Total Players After Check: " + players.Length);
             Logger.LogInfo("Finished running integrity check.");
         }
 

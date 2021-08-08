@@ -24,6 +24,7 @@ namespace PlayerTrack
             {
                 this.plugin.Configuration.ListMode = (PlayerListMode)listMode;
                 this.plugin.SaveConfig();
+                this.plugin.PlayerService.UpdateViewPlayers();
             }
 
             ImGui.Spacing();
