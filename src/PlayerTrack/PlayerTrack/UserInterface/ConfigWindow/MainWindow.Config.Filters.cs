@@ -5,11 +5,11 @@ using ImGuiNET;
 namespace PlayerTrack
 {
     /// <summary>
-    /// Filter Settings.
+    /// Filter Config.
     /// </summary>
-    public partial class MainWindow
+    public partial class ConfigWindow
     {
-        private void RestrictionSettings()
+        private void FiltersConfig()
         {
             var restrictInCombat = this.Plugin.Configuration.RestrictInCombat;
             if (ImGui.Checkbox(

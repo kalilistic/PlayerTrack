@@ -48,10 +48,7 @@ namespace PlayerTrack
 
         private void TogglePlayerTrackConfig(string command, string arguments)
         {
-            this.plugin.Configuration.CurrentView = View.Settings;
-            this.plugin.Configuration.ShowWindow = !this.plugin.WindowManager.MainWindow!.IsOpen;
-            this.plugin.SaveConfig();
-            this.plugin.WindowManager.MainWindow!.IsOpen = this.plugin.Configuration.ShowWindow;
+            this.plugin.WindowManager.ConfigWindow!.IsOpen ^= true;
         }
 
         private void RunIntegrityCheck(string command, string arguments)

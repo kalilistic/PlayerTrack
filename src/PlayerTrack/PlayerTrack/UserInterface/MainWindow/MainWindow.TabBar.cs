@@ -11,9 +11,6 @@ namespace PlayerTrack
         {
             switch (this.plugin.Configuration.CurrentView)
             {
-                case View.Settings:
-                    this.ShowSettings();
-                    break;
                 case View.PlayerDetail:
                     this.PlayerDetail();
                     break;

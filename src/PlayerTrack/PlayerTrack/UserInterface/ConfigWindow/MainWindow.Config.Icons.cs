@@ -8,13 +8,13 @@ using ImGuiNET;
 namespace PlayerTrack
 {
     /// <summary>
-    /// Icon Settings.
+    /// Icon Config.
     /// </summary>
-    public partial class MainWindow
+    public partial class ConfigWindow
     {
         private int selectedIconIndex = 4;
 
-        private void IconSettings()
+        private void IconConfig()
         {
             ImGui.Text(Loc.Localize("Icons", "Add / Remove Icons"));
             ImGuiComponents.HelpMarker(Loc.Localize(

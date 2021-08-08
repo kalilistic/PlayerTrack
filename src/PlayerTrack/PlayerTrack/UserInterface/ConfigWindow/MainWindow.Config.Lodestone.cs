@@ -7,11 +7,11 @@ using ImGuiNET;
 namespace PlayerTrack
 {
     /// <summary>
-    /// Lodestone Settings.
+    /// Lodestone Config.
     /// </summary>
-    public partial class MainWindow
+    public partial class ConfigWindow
     {
-        private void LodestoneSettings()
+        private void LodestoneConfig()
         {
             var syncToLodestone = this.Plugin.Configuration.SyncToLodestone;
             if (ImGui.Checkbox(

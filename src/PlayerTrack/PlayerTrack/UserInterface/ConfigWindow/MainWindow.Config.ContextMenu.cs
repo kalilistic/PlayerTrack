@@ -10,13 +10,13 @@ using ImGuiNET;
 namespace PlayerTrack
 {
     /// <summary>
-    /// Context Menu Settings.
+    /// Context Menu Config.
     /// </summary>
-    public partial class MainWindow
+    public partial class ConfigWindow
     {
         private int currentInternalAction;
 
-        private void ContextMenuSettings()
+        private void ContextMenuConfig()
         {
             var showAddShowInfoContextMenu = this.Plugin.Configuration.ShowAddShowInfoContextMenu;
             if (ImGui.Checkbox(

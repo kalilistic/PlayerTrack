@@ -10,11 +10,11 @@ using ImGuiNET;
 namespace PlayerTrack
 {
     /// <summary>
-    /// Category Settings.
+    /// Category Config.
     /// </summary>
-    public partial class MainWindow
+    public partial class ConfigWindow
     {
-        private void CategorySettings()
+        private void CategoryConfig()
         {
              // get sorted categories
             var categories = this.Plugin.CategoryService.GetSortedCategories().ToList();

@@ -39,10 +39,10 @@ namespace PlayerTrack
             // set world names for add player
             this.worldNames = this.plugin.PluginService.GameData.WorldNames().ToArray();
 
-            // set to settings view on load if left on player detail
+            // set to none on load if left on player detail
             if (this.plugin.Configuration.CurrentView == View.PlayerDetail)
             {
-                this.plugin.Configuration.CurrentView = View.Settings;
+                this.plugin.Configuration.CurrentView = View.None;
                 this.plugin.SaveConfig();
             }
 
@@ -102,8 +102,8 @@ namespace PlayerTrack
                 new Vector2(205 * ImGuiHelpers.GlobalScale, 0),
                 false);
             {
+                this.PlayerListControls();
                 this.SearchBox();
-                this.Menu();
                 this.PlayerList();
                 ImGui.EndChild();
             }
@@ -146,16 +146,6 @@ namespace PlayerTrack
             this.plugin.Configuration.LastView = this.plugin.Configuration.CurrentView;
             this.plugin.Configuration.CurrentView = View.None;
             this.plugin.SaveConfig();
-        }
-
-        private static void SpacerWithTabs()
-        {
-            ImGuiHelpers.ScaledDummy(1f);
-        }
-
-        private static void SpacerNoTabs()
-        {
-            ImGuiHelpers.ScaledDummy(28f);
         }
 
         private void SetWindowSizes()

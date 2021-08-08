@@ -5,11 +5,11 @@ using ImGuiNET;
 namespace PlayerTrack
 {
     /// <summary>
-    /// NamePlate Settings.
+    /// NamePlate Config.
     /// </summary>
-    public partial class MainWindow
+    public partial class ConfigWindow
     {
-        private void NamePlateSettings()
+        private void NamePlateConfig()
         {
             var useNamePlateColors = this.Plugin.Configuration.UseNamePlateColors;
             if (ImGui.Checkbox(

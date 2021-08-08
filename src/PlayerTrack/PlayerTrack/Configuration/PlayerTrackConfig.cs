@@ -47,7 +47,7 @@ namespace PlayerTrack
         /// <summary>
         /// List mode for what players to display.
         /// </summary>
-        public PlayerListMode ListMode = PlayerListMode.current;
+        public int PlayerFilterType = 0;
 
         /// <summary>
         /// Category to filter list by.
@@ -102,12 +102,12 @@ namespace PlayerTrack
         /// <summary>
         /// Last view.
         /// </summary>
-        public View LastView = View.Settings;
+        public View LastView = View.None;
 
         /// <summary>
         /// Current view.
         /// </summary>
-        public View CurrentView = View.Settings;
+        public View CurrentView = View.None;
 
         /// <summary>
         /// MainWi window width when expanded.
@@ -173,5 +173,15 @@ namespace PlayerTrack
         /// Gets or sets a value indicating whether show main window.
         /// </summary>
         public bool ShowWindow { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to show filter type on player list.
+        /// </summary>
+        public bool ShowFilterType { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to show search box on player list.
+        /// </summary>
+        public bool ShowSearchBox { get; set; } = true;
     }
 }

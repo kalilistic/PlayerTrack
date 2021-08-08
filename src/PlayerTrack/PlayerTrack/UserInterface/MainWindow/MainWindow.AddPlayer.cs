@@ -19,7 +19,7 @@ namespace PlayerTrack
 
         private void AddPlayer()
         {
-            SpacerNoTabs();
+            WindowManager.SpacerNoTabs();
             ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("AddPlayerModalContent", "Add player manually to your list."));
             ImGui.Spacing();
             ImGui.SetNextItemWidth(150f * ImGuiHelpers.GlobalScale);

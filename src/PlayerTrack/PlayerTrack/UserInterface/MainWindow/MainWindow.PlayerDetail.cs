@@ -17,28 +17,28 @@ namespace PlayerTrack
                 {
                     if (ImGui.BeginTabItem(Loc.Localize("Summary", "Summary")))
                     {
-                        SpacerWithTabs();
+                        WindowManager.SpacerWithTabs();
                         this.PlayerSummary();
                         ImGui.EndTabItem();
                     }
 
                     if (ImGui.BeginTabItem(Loc.Localize("Encounters", "Encounters")))
                     {
-                        SpacerWithTabs();
+                        WindowManager.SpacerWithTabs();
                         this.PlayerEncounters();
                         ImGui.EndTabItem();
                     }
 
                     if (ImGui.BeginTabItem(Loc.Localize("Appearance", "Appearance")))
                     {
-                        SpacerWithTabs();
+                        WindowManager.SpacerWithTabs();
                         this.PlayerCustomize();
                         ImGui.EndTabItem();
                     }
 
                     if (ImGui.BeginTabItem(Loc.Localize("Display", "Display")))
                     {
-                        SpacerWithTabs();
+                        WindowManager.SpacerWithTabs();
                         this.PlayerDisplay();
                         ImGui.EndTabItem();
                     }

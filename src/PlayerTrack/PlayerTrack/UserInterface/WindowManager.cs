@@ -1,3 +1,6 @@
+using System;
+
+using Dalamud.Interface;
 using Dalamud.Interface.Windowing;
 
 namespace PlayerTrack
@@ -17,6 +20,7 @@ namespace PlayerTrack
 
             // create windows
             this.MainWindow = new MainWindow(this.Plugin);
+            this.ConfigWindow = new ConfigWindow(this.Plugin);
             this.ModalWindow = new ModalWindow(this.Plugin);
             this.MigrationWindow = new MigrationWindow(this.Plugin);
 
@@ -26,12 +30,18 @@ namespace PlayerTrack
 
             // add event listeners
             this.Plugin.PluginService.PluginInterface.UiBuilder.OnBuildUi += this.OnBuildUi;
+            this.Plugin.PluginService.PluginInterface.UiBuilder.OnOpenConfigUi += this.OnOpenConfigUi;
         }
 
         /// <summary>
         /// Gets main PlayerTrack window.
         /// </summary>
         public MainWindow? MainWindow { get; }
+
+        /// <summary>
+        /// Gets config PlayerTrack window.
+        /// </summary>
+        public ConfigWindow? ConfigWindow { get; }
 
         /// <summary>
         /// Gets delete player confirmation window.
@@ -48,12 +58,29 @@ namespace PlayerTrack
         private PlayerTrackPlugin Plugin { get; }
 
         /// <summary>
-        /// Add main window and modal after plugin start.
+        /// Create a dummy scaled for use with tabs.
         /// </summary>
-        public void AddMainWindow()
+        public static void SpacerWithTabs()
+        {
+            ImGuiHelpers.ScaledDummy(1f);
+        }
+
+        /// <summary>
+        /// Create a dummy scaled for use without tabs.
+        /// </summary>
+        public static void SpacerNoTabs()
+        {
+            ImGuiHelpers.ScaledDummy(28f);
+        }
+
+        /// <summary>
+        /// Add windows after plugin start.
+        /// </summary>
+        public void AddWindows()
         {
             this.WindowSystem.AddWindow(this.MainWindow);
             this.WindowSystem.AddWindow(this.ModalWindow);
+            this.WindowSystem.AddWindow(this.ConfigWindow);
         }
 
         /// <summary>
@@ -62,6 +89,7 @@ namespace PlayerTrack
         public void Dispose()
         {
             this.Plugin.PluginService.PluginInterface.UiBuilder.OnBuildUi -= this.OnBuildUi;
+            this.Plugin.PluginService.PluginInterface.UiBuilder.OnOpenConfigUi -= this.OnOpenConfigUi;
             this.WindowSystem.RemoveAllWindows();
         }
 
@@ -71,6 +99,11 @@ namespace PlayerTrack
             if (!this.Plugin.PluginService.ClientState.IsLoggedIn()) return;
 
             this.WindowSystem.Draw();
+        }
+
+        private void OnOpenConfigUi(object sender, EventArgs e)
+        {
+            this.ConfigWindow!.IsOpen ^= true;
         }
     }
 }

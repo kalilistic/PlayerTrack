@@ -790,29 +790,41 @@ namespace PlayerTrack
         {
             lock (this.locker)
             {
-                if (this.plugin.Configuration.CategoryFilterId != 0)
+                var filterType =
+                    PlayerFilterType.GetPlayerFilterTypeByIndex(this.plugin.Configuration.PlayerFilterType);
+                if (filterType == PlayerFilterType.CurrentPlayers)
                 {
-                    this.viewPlayers = this.plugin.Configuration.ListMode switch
-                    {
-                        PlayerListMode.current => this.players.Where(pair => pair.Value.IsCurrent && pair.Value.CategoryId == this.plugin.Configuration.CategoryFilterId)
-                                                      .Select(pair => pair.Value).OrderBy(player => player.CategoryRank).ThenBy(player => player.Names.First()).ToArray(),
-                        PlayerListMode.recent => this.players.Where(pair => pair.Value.IsRecent && pair.Value.CategoryId == this.plugin.Configuration.CategoryFilterId).Select(pair => pair.Value)
-                                                     .OrderBy(player => player.CategoryRank).ThenBy(player => player.Names.First()).ToArray(),
-                        PlayerListMode.all => this.players.Where(pair => pair.Value.CategoryId == this.plugin.Configuration.CategoryFilterId).Select(pair => pair.Value).OrderBy(player => player.CategoryRank).ThenBy(player => player.Names.First()).ToArray(),
-                        _ => throw new ArgumentOutOfRangeException(),
-                    };
+                    this.viewPlayers = this.players
+                        .Where(pair => pair.Value.IsCurrent)
+                        .Select(pair => pair.Value)
+                        .OrderBy(player => player.CategoryRank)
+                        .ThenBy(player => player.Names.First()).ToArray();
+                }
+                else if (filterType == PlayerFilterType.RecentPlayers)
+                {
+                    this.viewPlayers = this.players
+                       .Where(pair => pair.Value.IsRecent)
+                       .Select(pair => pair.Value)
+                       .OrderBy(player => player.CategoryRank)
+                       .ThenBy(player => player.Names.First()).ToArray();
+                }
+                else if (filterType == PlayerFilterType.AllPlayers)
+                {
+                    this.viewPlayers = this.players
+                       .Select(pair => pair.Value)
+                       .OrderBy(player => player.CategoryRank)
+                       .ThenBy(player => player.Names.First()).ToArray();
+                }
+                else if (filterType == PlayerFilterType.PlayersByCategory)
+                {
+                    this.viewPlayers = this.players
+                       .Where(pair => pair.Value.CategoryId == this.plugin.Configuration.CategoryFilterId)
+                       .Select(pair => pair.Value)
+                       .OrderBy(player => player.Names.First()).ToArray();
                 }
                 else
                 {
-                    this.viewPlayers = this.plugin.Configuration.ListMode switch
-                    {
-                        PlayerListMode.current => this.players.Where(pair => pair.Value.IsCurrent)
-                                                      .Select(pair => pair.Value).OrderBy(player => player.CategoryRank).ThenBy(player => player.Names.First()).ToArray(),
-                        PlayerListMode.recent => this.players.Where(pair => pair.Value.IsRecent).Select(pair => pair.Value)
-                                                     .OrderBy(player => player.CategoryRank).ThenBy(player => player.Names.First()).ToArray(),
-                        PlayerListMode.all => this.players.Select(pair => pair.Value).OrderBy(player => player.CategoryRank).ThenBy(player => player.Names.First()).ToArray(),
-                        _ => throw new ArgumentOutOfRangeException(),
-                    };
+                    throw new ArgumentOutOfRangeException();
                 }
             }
         }

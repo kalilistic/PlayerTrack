@@ -86,7 +86,7 @@ namespace PlayerTrack
                         // start plugin
                         this.IsDoneLoading = true;
                         this.ActorManager.Start();
-                        this.WindowManager.AddMainWindow();
+                        this.WindowManager.AddWindows();
                     }
                 }
                 catch (Exception ex)

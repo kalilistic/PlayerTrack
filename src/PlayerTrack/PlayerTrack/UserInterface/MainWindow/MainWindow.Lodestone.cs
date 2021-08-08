@@ -21,7 +21,7 @@ namespace PlayerTrack
             var requests = this.plugin.LodestoneService.GetRequests();
 
             // heading
-            SpacerNoTabs();
+            WindowManager.SpacerNoTabs();
             ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("Lodestone", "Lodestone"));
 
             // lodestone state

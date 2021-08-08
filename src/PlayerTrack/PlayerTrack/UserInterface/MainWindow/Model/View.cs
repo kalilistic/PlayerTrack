@@ -16,11 +16,6 @@ namespace PlayerTrack
         PlayerDetail,
 
         /// <summary>
-        /// Settings view.
-        /// </summary>
-        Settings,
-
-        /// <summary>
         /// Add player view.
         /// </summary>
         AddPlayer,
