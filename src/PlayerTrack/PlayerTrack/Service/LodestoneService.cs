@@ -29,6 +29,7 @@ namespace PlayerTrack
         private readonly Queue<LodestoneRequest> requestQueue = new ();
         private bool isProcessing;
         private long lodestoneReprocess;
+        private int subsequentFailures;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LodestoneService"/> class.
@@ -161,7 +162,14 @@ namespace PlayerTrack
 
                     if (requestFailureCount >= this.plugin.Configuration.LodestoneMaxRetry)
                     {
-                        if (this.IsLodestoneAvailableInternal())
+                        var assumeLodestoneAvailable = true;
+                        if (this.subsequentFailures >= this.plugin.Configuration.LodestoneMaxSubsequentFailures)
+                        {
+                            assumeLodestoneAvailable = false;
+                            this.subsequentFailures = 0;
+                        }
+
+                        if (assumeLodestoneAvailable || this.IsLodestoneAvailableInternal())
                         {
                             var response = new LodestoneResponse
                             {

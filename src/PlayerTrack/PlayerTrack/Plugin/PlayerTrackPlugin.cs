@@ -330,6 +330,12 @@ namespace PlayerTrack
         {
             if (!this.Configuration.FreshInstall)
             {
+                if (this.Configuration.LodestoneMaxRetry > 3)
+                {
+                    this.Configuration.LodestoneMaxRetry = 3;
+                    this.SaveConfig();
+                }
+
                 return;
             }
 

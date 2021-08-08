@@ -65,6 +65,11 @@ namespace PlayerTrack
         public int LodestoneMaxRetry = 2;
 
         /// <summary>
+        /// Max number of failures before running health check to see if lodestone is available.
+        /// </summary>
+        public int LodestoneMaxSubsequentFailures = 3;
+
+        /// <summary>
         /// Amount of time to wait for response for lodestone call.
         /// </summary>
         public int LodestoneTimeout = 60000;
