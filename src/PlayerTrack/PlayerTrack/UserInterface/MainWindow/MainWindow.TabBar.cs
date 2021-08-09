@@ -1,5 +1,3 @@
-using System;
-
 namespace PlayerTrack
 {
     /// <summary>
@@ -9,6 +7,7 @@ namespace PlayerTrack
     {
         private void TabBar()
         {
+            // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
             switch (this.plugin.Configuration.CurrentView)
             {
                 case View.PlayerDetail:
@@ -22,8 +21,6 @@ namespace PlayerTrack
                     break;
                 case View.None:
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
     }
