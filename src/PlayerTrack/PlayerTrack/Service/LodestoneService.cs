@@ -90,6 +90,7 @@ namespace PlayerTrack
         {
             this.onRequestTimer.Elapsed -= this.ProcessRequests;
             this.onRequestTimer.Stop();
+            this.requestQueue.Clear();
             this.httpClient.Dispose();
         }
 
