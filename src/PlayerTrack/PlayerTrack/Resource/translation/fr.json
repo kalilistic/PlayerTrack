@@ -1,134 +1,118 @@
 {
-  "HelpMessage1": {
-    "message": "PlayerTrack vous permet de conserver un historique des personnages que vous rencontrez et des contenus auxquels vous avez joué ensemble. Par défaut, PlayerTrack ne fonctionne qu'en contenu instancié - mais vous pouvez modifier cela dans les paramètres. Vous pouvez voir tous les détails d'un personnage en cliquant sur leur nom dans l'overlay. Ici, vous pouvez également sauvegarder des notes, définir des catégories et leur assigner une icône et une couleur personnalisée.",
-    "description": "PlayerTrackPlugin.PrintHelpMessage"
-  },
-  "HelpMessage2": {
-    "message": "PlayerTrack utilise le Lodestone pour garder les données à jour (par exemple : les transferts de monde). Si cela arrive, un indicateur apparaître à côté du monde actuel d'un personnage et vous pourrez voir leur précédent monde de résidence.",
-    "description": "PlayerTrackPlugin.PrintHelpMessage"
-  },
-  "InstallThankYou": {
-    "message": "Merci d'avoir installé PlayerTrack !",
-    "description": "PlayerTrackPlugin.HandleFreshInstall"
-  },
-  "PlayerNameAddHint": {
-    "message": "nom du personnage",
-    "description": "MainWindow.AddPlayer"
-  },
-  "Add": {
-    "message": "Ajouter",
-    "description": "MainWindow.AddPlayer"
-  },
-  "Cancel": {
-    "message": "Annuler",
-    "description": "MainWindow.AddPlayer"
-  },
-  "Lodestone": {
-    "message": "Lodestone",
-    "description": "MainWindow.Lodestone"
-  },
-  "Encounters": {
-    "message": "Rencontres",
-    "description": "MainWindow.PlayerDetail"
-  },
-  "Display": {
-    "message": "Affichage",
-    "description": "MainWindow.PlayerDetail"
-  },
-  "PlayerHeightValue": {
-    "message": "{0} pouces",
-    "description": "MainWindow.PlayerCustomize"
-  },
-  "Alerts": {
-    "message": "Alertes",
-    "description": "MainWindow.PlayerDisplay"
-  },
-  "Reset": {
-    "message": "Réinitialiser",
-    "description": "MainWindow.PlayerDisplay"
-  },
-  "PlayerInfo": {
-    "message": "Infos sur le personnage",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerStats": {
-    "message": "Statistiques du personnage",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerName": {
-    "message": "Nom",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerPreviousNames": {
-    "message": "Précédemment connu en tant que {0}",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerFirstSeen": {
-    "message": "Vu pour la première fois",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerPreviousWorlds": {
-    "message": "Précédemment sur {0}",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerLastSeen": {
-    "message": "Vu pour la dernière fois",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerSeenCount": {
-    "message": "Nombre de rencontres",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerNotes": {
-    "message": "Notes",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "RestrictInCombat": {
-    "message": "Désactiver le traitement durant les combats",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "RestrictInCombat_HelpMarker": {
-    "message": "arrêter le traitement des données en cours de combat",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "RestrictToContent": {
-    "message": "Instances uniquement",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "RestrictToContent_HelpMarker": {
-    "message": "restreindre au contenu instancié et exclure les rencontres dans l'overworld",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "RestrictToHighEndDuty": {
-    "message": "Instances High-End uniquement",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "RestrictToHighEndDuty_HelpMarker": {
-    "message": "restreindre aux contenus instanciés de haute difficulté (exemple : Sadique, Fatal...)",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "SyncToLodestone": {
-    "message": "Synchroniser avec le Lodestone",
-    "description": "MainWindow.LodestoneSettings"
-  },
-  "SyncToLodestone_HelpMarker": {
-    "message": "extrait les données du personnage depuis le Lodestone pour suivre les changements de nom/de monde",
-    "description": "MainWindow.LodestoneSettings"
-  },
-  "LodestoneLocale": {
-    "message": "Locale du Lodestone",
-    "description": "MainWindow.LodestoneSettings"
-  },
-  "LodestoneLocale_HelpMarker": {
-    "message": "définir la locale des liens menant aux profils sur le Lodestone",
-    "description": "MainWindow.LodestoneSettings"
-  },
-  "DeleteConfirmationModalContent": {
-    "message": "Êtes-vous sûr·e de vouloir supprimer ce profil ?",
-    "description": "ModalWindow.Draw"
-  },
-  "OK": {
-    "message": "OK",
-    "description": "ModalWindow.Draw"
-  }
+    "HelpMessage1": {
+        "message": "PlayerTrack vous permet de conserver un historique des personnages que vous rencontrez et des contenus auxquels vous avez joué ensemble. Par défaut, PlayerTrack ne fonctionne qu'en contenu instancié - mais vous pouvez modifier cela dans les paramètres. Vous pouvez voir tous les détails d'un personnage en cliquant sur leur nom dans l'overlay. Ici, vous pouvez également sauvegarder des notes, définir des catégories et leur assigner une icône et une couleur personnalisée.",
+        "description": "PlayerTrackPlugin.PrintHelpMessage"
+    },
+    "HelpMessage2": {
+        "message": "PlayerTrack utilise le Lodestone pour garder les données à jour (par exemple : les transferts de monde). Si cela arrive, un indicateur apparaître à côté du monde actuel d'un personnage et vous pourrez voir leur précédent monde de résidence.",
+        "description": "PlayerTrackPlugin.PrintHelpMessage"
+    },
+    "InstallThankYou": {
+        "message": "Merci d'avoir installé PlayerTrack !",
+        "description": "PlayerTrackPlugin.HandleFreshInstall"
+    },
+    "Add": {
+        "message": "Ajouter",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "SyncToLodestone": {
+        "message": "Synchroniser avec le Lodestone",
+        "description": "ConfigWindow.LodestoneConfig"
+    },
+    "SyncToLodestone_HelpMarker": {
+        "message": "extrait les données du personnage depuis le Lodestone pour suivre les changements de nom/de monde",
+        "description": "ConfigWindow.LodestoneConfig"
+    },
+    "LodestoneLocale": {
+        "message": "Locale du Lodestone",
+        "description": "ConfigWindow.LodestoneConfig"
+    },
+    "LodestoneLocale_HelpMarker": {
+        "message": "définir la locale des liens menant aux profils sur le Lodestone",
+        "description": "ConfigWindow.LodestoneConfig"
+    },
+    "RestrictInCombat": {
+        "message": "Désactiver le traitement durant les combats",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "RestrictInCombat_HelpMarker": {
+        "message": "arrêter le traitement des données en cours de combat",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "PlayerNameAddHint": {
+        "message": "nom du personnage",
+        "description": "MainWindow.AddPlayer"
+    },
+    "Lodestone": {
+        "message": "Lodestone",
+        "description": "MainWindow.Lodestone"
+    },
+    "Encounters": {
+        "message": "Rencontres",
+        "description": "MainWindow.PlayerDetail"
+    },
+    "Display": {
+        "message": "Affichage",
+        "description": "MainWindow.PlayerDetail"
+    },
+    "PlayerHeightValue": {
+        "message": "{0} pouces",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "Alerts": {
+        "message": "Alertes",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "Reset": {
+        "message": "Réinitialiser",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "PlayerInfo": {
+        "message": "Infos sur le personnage",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerStats": {
+        "message": "Statistiques du personnage",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerName": {
+        "message": "Nom",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerPreviousNames": {
+        "message": "Précédemment connu en tant que {0}",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerFirstSeen": {
+        "message": "Vu pour la première fois",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerPreviousWorlds": {
+        "message": "Précédemment sur {0}",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerLastSeen": {
+        "message": "Vu pour la dernière fois",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerSeenCount": {
+        "message": "Nombre de rencontres",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerNotes": {
+        "message": "Notes",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "DeleteConfirmationModalContent": {
+        "message": "Êtes-vous sûr·e de vouloir supprimer ce profil ?",
+        "description": "ModalWindow.Draw"
+    },
+    "OK": {
+        "message": "OK",
+        "description": "ModalWindow.Draw"
+    },
+    "Cancel": {
+        "message": "Annuler",
+        "description": "ModalWindow.Draw"
+    }
 }
