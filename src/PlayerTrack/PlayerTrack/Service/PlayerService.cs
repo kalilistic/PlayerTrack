@@ -263,6 +263,7 @@ namespace PlayerTrack
 
                 this.UpdateItem(this.players[player.Key]);
                 this.UpdateViewPlayers();
+                this.plugin.NamePlateManager.ForceRedraw();
             }
         }
 

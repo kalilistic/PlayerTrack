@@ -76,7 +76,6 @@ namespace PlayerTrack
                     if (player.SeTitle != null)
                     {
                         args.Title = player.SeTitle;
-                        args.Type = PlateType.LowTitleNoFc;
                     }
 
                     // set title by category
@@ -86,7 +85,6 @@ namespace PlayerTrack
                         if (category.IsDefault == false && category.SeName != null)
                         {
                             args.Title = category.SeName;
-                            args.Type = PlateType.LowTitleNoFc;
                         }
                     }
                 }
@@ -99,6 +97,12 @@ namespace PlayerTrack
                     {
                         args.Colour = ((Vector4)color).ToByteColor();
                     }
+                }
+
+                // force consistent nameplate style
+                if (this.plugin.Configuration.ForceNamePlateStyle)
+                {
+                    args.Type = PlateType.LowTitleNoFc;
                 }
             }
             catch (Exception ex)

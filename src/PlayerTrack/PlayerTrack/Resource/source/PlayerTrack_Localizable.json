@@ -175,6 +175,14 @@
         "message": "override normal nameplate to use title or category name",
         "description": "ConfigWindow.NamePlateConfig"
     },
+    "ForceNamePlateStyle": {
+        "message": "Force consistent nameplate style",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "ForceNamePlateStyle_HelpMarker": {
+        "message": "force LowTitleNoFc nameplate style \nwhich looks more consistent \nbut hides FC and doesn't play nicely with other plugins",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
     "RestrictInCombat": {
         "message": "Don't process in combat",
         "description": "ConfigWindow.ProcessingConfig"

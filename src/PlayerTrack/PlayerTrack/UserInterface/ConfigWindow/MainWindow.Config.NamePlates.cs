@@ -25,6 +25,7 @@ namespace PlayerTrack
                 this.plugin.Configuration.ShowNamePlates = ContentRestrictionType.GetContentRestrictionTypeByIndex(showNamePlatesIndex).Index;
                 this.plugin.SaveConfig();
                 this.plugin.PlayerService.UpdateViewPlayers();
+                this.plugin.NamePlateManager.ForceRedraw();
             }
 
             ImGuiComponents.HelpMarker(Loc.Localize(
@@ -40,6 +41,7 @@ namespace PlayerTrack
             {
                 this.Plugin.Configuration.UseNamePlateColors = useNamePlateColors;
                 this.Plugin.SaveConfig();
+                this.plugin.NamePlateManager.ForceRedraw();
             }
 
             ImGuiComponents.HelpMarker(Loc.Localize(
@@ -55,11 +57,29 @@ namespace PlayerTrack
             {
                 this.Plugin.Configuration.ChangeNamePlateTitle = changeNamePlateTitle;
                 this.Plugin.SaveConfig();
+                this.plugin.NamePlateManager.ForceRedraw();
             }
 
             ImGuiComponents.HelpMarker(Loc.Localize(
                                            "ChangeNamePlateTitle_HelpMarker",
                                            "override normal nameplate to use title or category name"));
+            ImGui.Spacing();
+
+            // force nameplate style
+            var forceNamePlateStyle = this.Plugin.Configuration.ForceNamePlateStyle;
+            if (ImGui.Checkbox(
+                Loc.Localize($"ForceNamePlateStyle", "Force consistent nameplate style"),
+                ref forceNamePlateStyle))
+            {
+                this.Plugin.Configuration.ForceNamePlateStyle = forceNamePlateStyle;
+                this.Plugin.SaveConfig();
+                this.plugin.NamePlateManager.ForceRedraw();
+            }
+
+            ImGuiComponents.HelpMarker(Loc.Localize(
+                                           "ForceNamePlateStyle_HelpMarker",
+                                           "force LowTitleNoFc nameplate style which looks more " +
+                                           "consistent \nbut hides FC and doesn't play nicely with other plugins"));
             ImGui.Spacing();
         }
     }

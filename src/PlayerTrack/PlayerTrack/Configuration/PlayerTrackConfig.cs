@@ -208,5 +208,10 @@ namespace PlayerTrack
         /// Gets or sets a value indicating whether the window is locked in size/position.
         /// </summary>
         public bool LockWindow { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to force LowTitleNoFc style.
+        /// </summary>
+        public bool ForceNamePlateStyle { get; set; }
     }
 }
