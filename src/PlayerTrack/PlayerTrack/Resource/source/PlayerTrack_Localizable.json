@@ -1,438 +1,454 @@
 {
-  "SubMenuShowPlayerItem": {
-    "message": "Add/Show Info",
-    "description": "ContextMenuManager..ctor"
-  },
-  "SubMenuOpenLodestoneItem": {
-    "message": "Open Lodestone",
-    "description": "ContextMenuManager..ctor"
-  },
-  "None": {
-    "message": "None",
-    "description": "PlayerTrackPlugin.IconListNames"
-  },
-  "HelpMessage1": {
-    "message": "PlayerTrack helps you keep a record of who you meet and the content you played together. By default, this is instanced content only - but you can expand or restrict this in settings. You can see all the details on a player by clicking on their name in the overlay. Here you can also record notes and set a personalized icon/color.",
-    "description": "PlayerTrackPlugin.PrintHelpMessage"
-  },
-  "HelpMessage2": {
-    "message": "PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). If this happens, you'll see an indicator next to their home world and can mouse-over to see their previous residence.",
-    "description": "PlayerTrackPlugin.PrintHelpMessage"
-  },
-  "HelpMessage3": {
-    "message": "If you need help, reach out on discord or open an issue on GitHub. If you want to help add translations, you can submit updates on Crowdin.",
-    "description": "PlayerTrackPlugin.PrintHelpMessage"
-  },
-  "InstallThankYou": {
-    "message": "Thank you for installing PlayerTrack!",
-    "description": "PlayerTrackPlugin.HandleFreshInstall"
-  },
-  "PlayerAlert": {
-    "message": "last seen {0} ago in {1}.",
-    "description": "PlayerService.AddOrUpdatePlayer"
-  },
-  "AddPlayerModalContent": {
-    "message": "Add player manually to your list.",
-    "description": "MainWindow.AddPlayer"
-  },
-  "PlayerNameAddHint": {
-    "message": "player name",
-    "description": "MainWindow.AddPlayer"
-  },
-  "Add": {
-    "message": "Add",
-    "description": "MainWindow.AddPlayer"
-  },
-  "Cancel": {
-    "message": "Cancel",
-    "description": "MainWindow.AddPlayer"
-  },
-  "InvalidPlayerName": {
-    "message": "Not a valid player name - try again.",
-    "description": "MainWindow.AddPlayer"
-  },
-  "DuplicatePlayer": {
-    "message": "This player already exists in your list!",
-    "description": "MainWindow.AddPlayer"
-  },
-  "Lodestone": {
-    "message": "Lodestone",
-    "description": "MainWindow.Lodestone"
-  },
-  "LodestoneStatus": {
-    "message": "Status",
-    "description": "MainWindow.Lodestone"
-  },
-  "LodestoneAvailable": {
-    "message": "Available",
-    "description": "MainWindow.Lodestone"
-  },
-  "LodestoneUnavailable": {
-    "message": "Unavailable",
-    "description": "MainWindow.Lodestone"
-  },
-  "LodestoneCooldown": {
-    "message": "Cooldown",
-    "description": "MainWindow.Lodestone"
-  },
-  "LodestoneTotalRequests": {
-    "message": "Request Count",
-    "description": "MainWindow.Lodestone"
-  },
-  "LodestoneRequestsInQueue": {
-    "message": "Requests In Queue",
-    "description": "MainWindow.Lodestone"
-  },
-  "LodestoneNoRequests": {
-    "message": "There are no pending lodestone requests.",
-    "description": "MainWindow.Lodestone"
-  },
-  "OpenSettings": {
-    "message": "Open Settings",
-    "description": "MainWindow.Menu"
-  },
-  "OpenLodestoneService": {
-    "message": "Open Lodestone",
-    "description": "MainWindow.Menu"
-  },
-  "AddPlayer": {
-    "message": "Add Player",
-    "description": "MainWindow.Menu"
-  },
-  "OpenCrowdin": {
-    "message": "Open Crowdin",
-    "description": "MainWindow.Menu"
-  },
-  "OpenGitHub": {
-    "message": "Open GitHub",
-    "description": "MainWindow.Menu"
-  },
-  "PrintInstructions": {
-    "message": "Print Instructions",
-    "description": "MainWindow.Menu"
-  },
-  "Summary": {
-    "message": "Summary",
-    "description": "MainWindow.PlayerDetail"
-  },
-  "Encounters": {
-    "message": "Encounters",
-    "description": "MainWindow.PlayerDetail"
-  },
-  "Appearance": {
-    "message": "Appearance",
-    "description": "MainWindow.PlayerDetail"
-  },
-  "Display": {
-    "message": "Display",
-    "description": "MainWindow.PlayerDetail"
-  },
-  "TargetPlayer": {
-    "message": "Target",
-    "description": "MainWindow.PlayerList"
-  },
-  "FocusTargetPlayer": {
-    "message": "Focus Target",
-    "description": "MainWindow.PlayerList"
-  },
-  "ExaminePlayer": {
-    "message": "Examine",
-    "description": "MainWindow.PlayerList"
-  },
-  "Category": {
-    "message": "Category",
-    "description": "MainWindow.PlayerList"
-  },
-  "Delete": {
-    "message": "Delete",
-    "description": "MainWindow.PlayerList"
-  },
-  "SearchHint": {
-    "message": "search",
-    "description": "MainWindow.SearchBox"
-  },
-  "DisplaySettings": {
-    "message": "Display",
-    "description": "MainWindow.ShowSettings"
-  },
-  "RestrictionSettings": {
-    "message": "Restrictions",
-    "description": "MainWindow.ShowSettings"
-  },
-  "IconSettings": {
-    "message": "Icons",
-    "description": "MainWindow.ShowSettings"
-  },
-  "NamePlateSettings": {
-    "message": "NamePlates",
-    "description": "MainWindow.ShowSettings"
-  },
-  "ContextMenuSettings": {
-    "message": "ContextMenu",
-    "description": "MainWindow.ShowSettings"
-  },
-  "LodestoneSettings": {
-    "message": "Lodestone",
-    "description": "MainWindow.ShowSettings"
-  },
-  "CategorySettings": {
-    "message": "Categories",
-    "description": "MainWindow.ShowSettings"
-  },
-  "Gender": {
-    "message": "Gender",
-    "description": "MainWindow.PlayerCustomize"
-  },
-  "Race": {
-    "message": "Race",
-    "description": "MainWindow.PlayerCustomize"
-  },
-  "Tribe": {
-    "message": "Tribe",
-    "description": "MainWindow.PlayerCustomize"
-  },
-  "Height": {
-    "message": "Height",
-    "description": "MainWindow.PlayerCustomize"
-  },
-  "PlayerHeightValue": {
-    "message": "{0} in",
-    "description": "MainWindow.PlayerCustomize"
-  },
-  "Copy": {
-    "message": "Copy",
-    "description": "MainWindow.PlayerCustomize"
-  },
-  "NoAppearance": {
-    "message": "No appearance data found for this player.",
-    "description": "MainWindow.PlayerCustomize"
-  },
-  "NoAppearanceExplanation": {
-    "message": "This can happen for characters manually added or if the player was migrated from an earlier version of the plugin. Next time you encounter this player, the appearance data will be refreshed.",
-    "description": "MainWindow.PlayerCustomize"
-  },
-  "PlayerCategory": {
-    "message": "Category",
-    "description": "MainWindow.PlayerDisplay"
-  },
-  "OverrideNote": {
-    "message": "These settings will override category settings.",
-    "description": "MainWindow.PlayerDisplay"
-  },
-  "Title": {
-    "message": "Title",
-    "description": "MainWindow.PlayerDisplay"
-  },
-  "Icon": {
-    "message": "Icon",
-    "description": "MainWindow.PlayerDisplay"
-  },
-  "List": {
-    "message": "List",
-    "description": "MainWindow.PlayerDisplay"
-  },
-  "Nameplate": {
-    "message": "Nameplate",
-    "description": "MainWindow.PlayerDisplay"
-  },
-  "Alerts": {
-    "message": "Alerts",
-    "description": "MainWindow.PlayerDisplay"
-  },
-  "Reset": {
-    "message": "Reset",
-    "description": "MainWindow.PlayerDisplay"
-  },
-  "Time": {
-    "message": "Time",
-    "description": "MainWindow.PlayerEncounters"
-  },
-  "Duration": {
-    "message": "Duration",
-    "description": "MainWindow.PlayerEncounters"
-  },
-  "Job": {
-    "message": "Job",
-    "description": "MainWindow.PlayerEncounters"
-  },
-  "Lvl": {
-    "message": "Lvl",
-    "description": "MainWindow.PlayerEncounters"
-  },
-  "Location": {
-    "message": "Location",
-    "description": "MainWindow.PlayerEncounters"
-  },
-  "NoEncounters": {
-    "message": "No encounters found for this player.",
-    "description": "MainWindow.PlayerEncounters"
-  },
-  "NoEncountersExplanation": {
-    "message": "This can happen for characters manually added or if all the encounters have been deleted.",
-    "description": "MainWindow.PlayerEncounters"
-  },
-  "PlayerInfo": {
-    "message": "Player Info",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerStats": {
-    "message": "Player Stats",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerName": {
-    "message": "Name",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerPreviousNames": {
-    "message": "Previously known as {0}",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerFirstSeen": {
-    "message": "First Seen",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerHomeworld": {
-    "message": "Homeworld",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerPreviousWorlds": {
-    "message": "Previously on {0}",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerLastSeen": {
-    "message": "Last Seen",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "FreeCompany": {
-    "message": "Free Company",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerLastLocation": {
-    "message": "Last Location",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerLodestone": {
-    "message": "Lodestone",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerSeenCount": {
-    "message": "Seen Count",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "PlayerNotes": {
-    "message": "Notes",
-    "description": "MainWindow.PlayerSummary"
-  },
-  "ShowContextMenu": {
-    "message": "Show add/show info option",
-    "description": "MainWindow.ContextMenuSettings"
-  },
-  "ShowContextMenu_HelpMarker": {
-    "message": "show playertrack submenu on players",
-    "description": "MainWindow.ContextMenuSettings"
-  },
-  "ListMode": {
-    "message": "List Mode",
-    "description": "MainWindow.DisplaySettings"
-  },
-  "CategoryFilter": {
-    "message": "Category Filter",
-    "description": "MainWindow.DisplaySettings"
-  },
-  "SearchType": {
-    "message": "Search Type",
-    "description": "MainWindow.DisplaySettings"
-  },
-  "RestrictInCombat": {
-    "message": "Don't process in combat",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "RestrictInCombat_HelpMarker": {
-    "message": "stop processing data while in combat",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "OnlyCreateEncountersInContent": {
-    "message": "Create Encounters in Content Only",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "OnlyCreateEncountersInContent_HelpMarker": {
-    "message": "only create new encounters in content rather than open world",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "RestrictToContent": {
-    "message": "Content Only",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "RestrictToContent_HelpMarker": {
-    "message": "restrict to instanced content and exclude overworld encounters",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "RestrictToHighEndDuty": {
-    "message": "High-End Duty Only",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "RestrictToHighEndDuty_HelpMarker": {
-    "message": "restrict to high-end duties only (e.g. savage)",
-    "description": "MainWindow.RestrictionSettings"
-  },
-  "Icons": {
-    "message": "Add / Remove Icons",
-    "description": "MainWindow.IconSettings"
-  },
-  "AddRemoveIcons": {
-    "message": "add new icons using dropdown or remove icons by clicking on them",
-    "description": "MainWindow.IconSettings"
-  },
-  "DupeIcon": {
-    "message": "This icon is already added!",
-    "description": "MainWindow.IconSettings"
-  },
-  "SyncToLodestone": {
-    "message": "Sync to Lodestone",
-    "description": "MainWindow.LodestoneSettings"
-  },
-  "SyncToLodestone_HelpMarker": {
-    "message": "pull player data from lodestone to track name/world changes",
-    "description": "MainWindow.LodestoneSettings"
-  },
-  "LodestoneLocale": {
-    "message": "Lodestone Locale",
-    "description": "MainWindow.LodestoneSettings"
-  },
-  "LodestoneLocale_HelpMarker": {
-    "message": "set locale for lodestone profile link",
-    "description": "MainWindow.LodestoneSettings"
-  },
-  "UseNamePlateColors": {
-    "message": "Use nameplate color",
-    "description": "MainWindow.NamePlateSettings"
-  },
-  "UseNamePlateColors_HelpMarker": {
-    "message": "override normal nameplate color with category/player colors",
-    "description": "MainWindow.NamePlateSettings"
-  },
-  "ChangeNamePlateTitle": {
-    "message": "Change nameplate title",
-    "description": "MainWindow.NamePlateSettings"
-  },
-  "ChangeNamePlateTitle_HelpMarker": {
-    "message": "override normal nameplate to use title or category name",
-    "description": "MainWindow.NamePlateSettings"
-  },
-  "MigrationInfo": {
-    "message": "Thank you for updating PlayerTrack! The new version needs to migrate your data to a new format. This only runs once but may take awhile depending on how much data you have. Please be patient and do not interrupt the migration or you risk data loss. You can continue to play the game and this window will automatically close when complete.",
-    "description": "MigrationWindow.Draw"
-  },
-  "DeleteConfirmationModalTitle": {
-    "message": "Delete",
-    "description": "ModalWindow.Draw"
-  },
-  "DeleteConfirmationModalContent": {
-    "message": "Are you sure you want to delete?",
-    "description": "ModalWindow.Draw"
-  },
-  "OK": {
-    "message": "OK",
-    "description": "ModalWindow.Draw"
-  }
+    "SubMenuShowPlayerItem": {
+        "message": "Add/Show Info",
+        "description": "ContextMenuManager..ctor"
+    },
+    "SubMenuOpenLodestoneItem": {
+        "message": "Open Lodestone",
+        "description": "ContextMenuManager..ctor"
+    },
+    "None": {
+        "message": "None",
+        "description": "PlayerTrackPlugin.IconListNames"
+    },
+    "HelpMessage1": {
+        "message": "PlayerTrack helps you keep a record of who you meet and the content you played together. By default, this is instanced content only - but you can expand or restrict this in settings. You can see all the details on a player by clicking on their name in the overlay. Here you can also record notes and set a personalized icon/color.",
+        "description": "PlayerTrackPlugin.PrintHelpMessage"
+    },
+    "HelpMessage2": {
+        "message": "PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). If this happens, you'll see an indicator next to their home world and can mouse-over to see their previous residence.",
+        "description": "PlayerTrackPlugin.PrintHelpMessage"
+    },
+    "HelpMessage3": {
+        "message": "If you need help, reach out on discord or open an issue on GitHub. If you want to help add translations, you can submit updates on Crowdin.",
+        "description": "PlayerTrackPlugin.PrintHelpMessage"
+    },
+    "InstallThankYou": {
+        "message": "Thank you for installing PlayerTrack!",
+        "description": "PlayerTrackPlugin.HandleFreshInstall"
+    },
+    "PlayerAlert": {
+        "message": "last seen {0} ago in {1}.",
+        "description": "PlayerService.AddOrUpdatePlayer"
+    },
+    "DisplayConfig": {
+        "message": "Display",
+        "description": "ConfigWindow.Draw"
+    },
+    "ProcessingConfig": {
+        "message": "Processing",
+        "description": "ConfigWindow.Draw"
+    },
+    "IconConfig": {
+        "message": "Icons",
+        "description": "ConfigWindow.Draw"
+    },
+    "NamePlateConfig": {
+        "message": "NamePlates",
+        "description": "ConfigWindow.Draw"
+    },
+    "ContextMenuConfig": {
+        "message": "ContextMenu",
+        "description": "ConfigWindow.Draw"
+    },
+    "LodestoneConfig": {
+        "message": "Lodestone",
+        "description": "ConfigWindow.Draw"
+    },
+    "CategoryConfig": {
+        "message": "Categories",
+        "description": "ConfigWindow.Draw"
+    },
+    "Add": {
+        "message": "Add Category",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryName": {
+        "message": "Name",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryDefault": {
+        "message": "IsDefault",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryColors": {
+        "message": "Colors",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryAlerts": {
+        "message": "Alerts",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryIcon": {
+        "message": "Icon",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryAction": {
+        "message": "Actions",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "Default": {
+        "message": "Default",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "ShowContextMenu": {
+        "message": "Show add/show info option",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowContextMenu_HelpMarker": {
+        "message": "show playertrack submenu on players",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowFilterType": {
+        "message": "Show filter type",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowFilterType_HelpMarker": {
+        "message": "toggle to show filter type on player list",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowSearchBox": {
+        "message": "Show search box",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowSearchBox_HelpMarker": {
+        "message": "toggle to show search box on player list",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "LockWindow": {
+        "message": "Lock window",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchType_HelpMarker": {
+        "message": "keep main window locked in size/position",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchType": {
+        "message": "Search Type",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "Icons": {
+        "message": "Add / Remove Icons",
+        "description": "ConfigWindow.IconConfig"
+    },
+    "AddRemoveIcons": {
+        "message": "add new icons using dropdown or remove icons by clicking on them",
+        "description": "ConfigWindow.IconConfig"
+    },
+    "SyncToLodestone": {
+        "message": "Sync to Lodestone",
+        "description": "ConfigWindow.LodestoneConfig"
+    },
+    "SyncToLodestone_HelpMarker": {
+        "message": "pull player data from lodestone to track name/world changes",
+        "description": "ConfigWindow.LodestoneConfig"
+    },
+    "LodestoneLocale": {
+        "message": "Lodestone Locale",
+        "description": "ConfigWindow.LodestoneConfig"
+    },
+    "LodestoneLocale_HelpMarker": {
+        "message": "set locale for lodestone profile link",
+        "description": "ConfigWindow.LodestoneConfig"
+    },
+    "ShowNamePlates": {
+        "message": "Show Nameplates",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "ShowNamePlates_HelpMarker": {
+        "message": "when to show custom nameplates",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "UseNamePlateColors": {
+        "message": "Use nameplate color",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "UseNamePlateColors_HelpMarker": {
+        "message": "override normal nameplate color with category/player colors",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "ChangeNamePlateTitle": {
+        "message": "Change nameplate title",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "ChangeNamePlateTitle_HelpMarker": {
+        "message": "override normal nameplate to use title or category name",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "RestrictInCombat": {
+        "message": "Don't process in combat",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "RestrictInCombat_HelpMarker": {
+        "message": "stop processing data while in combat",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "RestrictAddUpdatePlayers": {
+        "message": "Add / Update Players",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "RestrictAddUpdatePlayers_HelpMarker": {
+        "message": "when to process players",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "RestrictAddEncounters": {
+        "message": "Add New Encounters",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "RestrictAddEncounters_HelpMarker": {
+        "message": "when to process new encounters (don't use always)",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "AddPlayerModalContent": {
+        "message": "Add player manually to your list.",
+        "description": "MainWindow.AddPlayer"
+    },
+    "PlayerNameAddHint": {
+        "message": "player name",
+        "description": "MainWindow.AddPlayer"
+    },
+    "Lodestone": {
+        "message": "Lodestone",
+        "description": "MainWindow.Lodestone"
+    },
+    "LodestoneStatus": {
+        "message": "Status",
+        "description": "MainWindow.Lodestone"
+    },
+    "LodestoneAvailable": {
+        "message": "Available",
+        "description": "MainWindow.Lodestone"
+    },
+    "LodestoneUnavailable": {
+        "message": "Unavailable",
+        "description": "MainWindow.Lodestone"
+    },
+    "LodestoneTotalRequests": {
+        "message": "Request Count",
+        "description": "MainWindow.Lodestone"
+    },
+    "LodestoneRequestsInQueue": {
+        "message": "Requests In Queue",
+        "description": "MainWindow.Lodestone"
+    },
+    "LodestoneNoRequests": {
+        "message": "There are no pending lodestone requests.",
+        "description": "MainWindow.Lodestone"
+    },
+    "Summary": {
+        "message": "Summary",
+        "description": "MainWindow.PlayerDetail"
+    },
+    "Encounters": {
+        "message": "Encounters",
+        "description": "MainWindow.PlayerDetail"
+    },
+    "Appearance": {
+        "message": "Appearance",
+        "description": "MainWindow.PlayerDetail"
+    },
+    "Display": {
+        "message": "Display",
+        "description": "MainWindow.PlayerDetail"
+    },
+    "TargetPlayer": {
+        "message": "Target",
+        "description": "MainWindow.PlayerList"
+    },
+    "FocusTargetPlayer": {
+        "message": "Focus Target",
+        "description": "MainWindow.PlayerList"
+    },
+    "ExaminePlayer": {
+        "message": "Examine",
+        "description": "MainWindow.PlayerList"
+    },
+    "Category": {
+        "message": "Category",
+        "description": "MainWindow.PlayerList"
+    },
+    "Delete": {
+        "message": "Delete",
+        "description": "MainWindow.PlayerList"
+    },
+    "SearchHint": {
+        "message": "search",
+        "description": "MainWindow.PlayerListControls"
+    },
+    "AddPlayer": {
+        "message": "Add Player",
+        "description": "MainWindow.PlayerListControls"
+    },
+    "OpenLodestoneService": {
+        "message": "Open Lodestone",
+        "description": "MainWindow.PlayerListControls"
+    },
+    "OpenSettings": {
+        "message": "Open Settings",
+        "description": "MainWindow.PlayerListControls"
+    },
+    "Gender": {
+        "message": "Gender",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "Race": {
+        "message": "Race",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "Tribe": {
+        "message": "Tribe",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "Height": {
+        "message": "Height",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "PlayerHeightValue": {
+        "message": "{0} in",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "Copy": {
+        "message": "Copy",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "NoAppearance": {
+        "message": "No appearance data found for this player.",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "NoAppearanceExplanation": {
+        "message": "This can happen for characters manually added or if the player was migrated from an earlier version of the plugin. Next time you encounter this player, the appearance data will be refreshed.",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "PlayerCategory": {
+        "message": "Category",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "OverrideNote": {
+        "message": "These config will override category config.",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "Title": {
+        "message": "Title",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "Icon": {
+        "message": "Icon",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "List": {
+        "message": "List",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "Nameplate": {
+        "message": "Nameplate",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "Alerts": {
+        "message": "Alerts",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "Reset": {
+        "message": "Reset",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "Time": {
+        "message": "Time",
+        "description": "MainWindow.PlayerEncounters"
+    },
+    "Duration": {
+        "message": "Duration",
+        "description": "MainWindow.PlayerEncounters"
+    },
+    "Job": {
+        "message": "Job",
+        "description": "MainWindow.PlayerEncounters"
+    },
+    "Lvl": {
+        "message": "Lvl",
+        "description": "MainWindow.PlayerEncounters"
+    },
+    "Location": {
+        "message": "Location",
+        "description": "MainWindow.PlayerEncounters"
+    },
+    "NoEncounters": {
+        "message": "No encounters found for this player.",
+        "description": "MainWindow.PlayerEncounters"
+    },
+    "NoEncountersExplanation": {
+        "message": "This can happen for characters manually added or if all the encounters have been deleted.",
+        "description": "MainWindow.PlayerEncounters"
+    },
+    "PlayerInfo": {
+        "message": "Player Info",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerStats": {
+        "message": "Player Stats",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerName": {
+        "message": "Name",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerPreviousNames": {
+        "message": "Previously known as {0}",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerFirstSeen": {
+        "message": "First Seen",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerHomeworld": {
+        "message": "Homeworld",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerPreviousWorlds": {
+        "message": "Previously on {0}",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerLastSeen": {
+        "message": "Last Seen",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "FreeCompany": {
+        "message": "Free Company",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerLastLocation": {
+        "message": "Last Location",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerLodestone": {
+        "message": "Lodestone",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerSeenCount": {
+        "message": "Seen Count",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerNotes": {
+        "message": "Notes",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "MigrationInfo": {
+        "message": "Thank you for updating PlayerTrack! The new version needs to migrate your data to a new format. This only runs once but may take awhile depending on how much data you have. Please be patient and do not interrupt the migration or you risk data loss. You can continue to play the game and this window will automatically close when complete.",
+        "description": "MigrationWindow.Draw"
+    },
+    "DeleteConfirmationModalTitle": {
+        "message": "Delete",
+        "description": "ModalWindow.Draw"
+    },
+    "DeleteConfirmationModalContent": {
+        "message": "Are you sure you want to delete?",
+        "description": "ModalWindow.Draw"
+    },
+    "OK": {
+        "message": "OK",
+        "description": "ModalWindow.Draw"
+    },
+    "Cancel": {
+        "message": "Cancel",
+        "description": "ModalWindow.Draw"
+    }
 }
