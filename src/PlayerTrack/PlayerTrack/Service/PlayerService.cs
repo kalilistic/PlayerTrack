@@ -853,7 +853,7 @@ namespace PlayerTrack
                 else
                 {
                     var dupePlayers = existingPlayers.Where(p => p.Key.Equals(player.Key)).ToList();
-                    if (dupePlayers.Count < 2) return;
+                    if (dupePlayers.Count < 2) continue;
                     var player1 = dupePlayers[0];
                     var player2 = dupePlayers[1];
                     if (player1.Created < player2.Created)
@@ -867,7 +867,7 @@ namespace PlayerTrack
 
                         this.DeletePlayer(player2);
                         this.LoadPlayer(player1);
-                        return;
+                        continue;
                     }
 
                     player2.Merge(player1);
