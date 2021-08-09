@@ -45,6 +45,29 @@ namespace PlayerTrack
                                            "toggle to show search box on player list"));
             ImGui.Spacing();
 
+            // lock overlay
+            var lockWindow = this.plugin.Configuration.LockWindow;
+            if (ImGui.Checkbox(
+                Loc.Localize("LockWindow", "Lock window") + "###PlayerTrack_LockWindow_Checkbox",
+                ref lockWindow))
+            {
+                this.plugin.Configuration.LockWindow = lockWindow;
+                this.Plugin.SaveConfig();
+                if (lockWindow)
+                {
+                    this.plugin.WindowManager.MainWindow?.LockWindow();
+                }
+                else
+                {
+                    this.plugin.WindowManager.MainWindow?.UnlockWindow();
+                }
+            }
+
+            ImGuiComponents.HelpMarker(Loc.Localize(
+                                           "SearchType_HelpMarker",
+                                           "keep main window locked in size/position"));
+            ImGui.Spacing();
+
             // search type
             ImGui.Text(Loc.Localize("SearchType", "Search Type"));
             var searchType = (int)this.plugin.Configuration.SearchType;

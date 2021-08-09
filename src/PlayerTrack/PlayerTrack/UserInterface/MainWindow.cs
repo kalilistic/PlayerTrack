@@ -51,6 +51,16 @@ namespace PlayerTrack
             this.Size = this.plugin.Configuration.CurrentView != View.None ?
                             this.maximizedSize : this.minimizedSize;
 
+            // set lock state
+            if (this.plugin.Configuration.LockWindow)
+            {
+                this.LockWindow();
+            }
+            else
+            {
+                this.UnlockWindow();
+            }
+
             // open window
             this.IsOpen = this.plugin.Configuration.ShowWindow;
         }
@@ -67,6 +77,22 @@ namespace PlayerTrack
         {
             this.plugin.Configuration.ShowWindow = false;
             this.plugin.SaveConfig();
+        }
+
+        /// <summary>
+        /// Lock window size/position.
+        /// </summary>
+        public void LockWindow()
+        {
+            this.Flags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove;
+        }
+
+        /// <summary>
+        /// Unlock window size/position.
+        /// </summary>
+        public void UnlockWindow()
+        {
+            this.Flags = ImGuiWindowFlags.None;
         }
 
         /// <inheritdoc/>
@@ -103,7 +129,6 @@ namespace PlayerTrack
                 false);
             {
                 this.PlayerListControls();
-                this.SearchBox();
                 this.PlayerList();
                 ImGui.EndChild();
             }
