@@ -166,6 +166,17 @@ namespace PlayerTrack
             return true;
         }
 
+        private bool SetUpdateEncounter()
+        {
+            var restrict =
+                ContentRestrictionType.GetContentRestrictionTypeByIndex(
+                    this.plugin.Configuration.RestrictAddEncounters);
+            if (restrict == ContentRestrictionType.ContentOnly && !this.plugin.PluginService.InContent()) return false;
+            if (restrict == ContentRestrictionType.HighEndDutyOnly &&
+                !this.plugin.PluginService.InHighEndDuty()) return false;
+            return true;
+        }
+
         private void GetPlayerCharacters()
         {
             try
@@ -216,8 +227,7 @@ namespace PlayerTrack
                 var anyUpdate = false;
                 var currentTime = DateUtil.CurrentTime();
                 var defaultCategoryId = this.plugin.CategoryService.GetDefaultCategory().Id;
-                var updateEncounter = this.contentId != 0 ||
-                                      (!this.plugin.Configuration.RestrictEncountersToContent && this.contentId == 0);
+                var updateEncounter = this.SetUpdateEncounter();
 
                 // check for removed actors
                 foreach (var player in this.playerList.ToList())

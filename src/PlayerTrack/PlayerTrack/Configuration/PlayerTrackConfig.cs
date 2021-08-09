@@ -145,11 +145,6 @@ namespace PlayerTrack
         public bool ChangeNamePlateTitle = true;
 
         /// <summary>
-        /// Only create encounters when in content and skip other areas.
-        /// </summary>
-        public bool RestrictEncountersToContent = true;
-
-        /// <summary>
         /// Show option to get/show player info via context menu.
         /// </summary>
         public bool ShowAddShowInfoContextMenu = true;
