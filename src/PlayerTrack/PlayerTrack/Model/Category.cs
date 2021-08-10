@@ -62,6 +62,11 @@ namespace PlayerTrack
         public bool IsAlertEnabled { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether nameplates are enabled.
+        /// </summary>
+        public bool IsNamePlateEnabled { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this is the default category for new players.
         /// </summary>
         public bool IsDefault { get; set; }

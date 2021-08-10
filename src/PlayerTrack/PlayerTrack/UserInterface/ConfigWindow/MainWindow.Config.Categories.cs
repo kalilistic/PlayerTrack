@@ -30,23 +30,26 @@ namespace PlayerTrack
 
             // setup category table
             ImGui.Separator();
-            ImGui.Columns(6, "###PlayerTrack_CategoryTable_Columns", true);
+            ImGui.Columns(7, "###PlayerTrack_CategoryTable_Columns", true);
             var baseWidth = ImGui.GetWindowSize().X / 6 * ImGuiHelpers.GlobalScale;
-            ImGui.SetColumnWidth(0, baseWidth + 20f);
-            ImGui.SetColumnWidth(1, ImGuiHelpers.GlobalScale * 70f);
-            ImGui.SetColumnWidth(2, ImGuiHelpers.GlobalScale * 70f);
-            ImGui.SetColumnWidth(3, ImGuiHelpers.GlobalScale * 50f);
-            ImGui.SetColumnWidth(4, baseWidth + 40f);
-            ImGui.SetColumnWidth(5, baseWidth + 40f);
+            ImGui.SetColumnWidth(0, baseWidth + 20f);                // name
+            ImGui.SetColumnWidth(1, ImGuiHelpers.GlobalScale * 70f); // isDefault
+            ImGui.SetColumnWidth(2, ImGuiHelpers.GlobalScale * 80f); // nameplates
+            ImGui.SetColumnWidth(3, ImGuiHelpers.GlobalScale * 50f); // alerts
+            ImGui.SetColumnWidth(4, ImGuiHelpers.GlobalScale * 70f); // colors
+            ImGui.SetColumnWidth(5, baseWidth + 40f);                // icon
+            ImGui.SetColumnWidth(6, baseWidth + 80f);                // controls
 
             // add table headings
             ImGui.Text(Loc.Localize("CategoryName", "Name"));
             ImGui.NextColumn();
             ImGui.Text(Loc.Localize("CategoryDefault", "IsDefault"));
             ImGui.NextColumn();
-            ImGui.Text(Loc.Localize("CategoryColors", "Colors"));
+            ImGui.Text(Loc.Localize("CategoryNamePlates", "NamePlates"));
             ImGui.NextColumn();
             ImGui.Text(Loc.Localize("CategoryAlerts", "Alerts"));
+            ImGui.NextColumn();
+            ImGui.Text(Loc.Localize("CategoryColors", "Colors"));
             ImGui.NextColumn();
             ImGui.Text(Loc.Localize("CategoryIcon", "Icon"));
             ImGui.NextColumn();
@@ -91,6 +94,28 @@ namespace PlayerTrack
                     }
                 }
 
+                // category nameplates
+                ImGui.NextColumn();
+                var enableNamePlates = category.IsNamePlateEnabled;
+                if (ImGui.Checkbox(
+                    "###PlayerTrack_EnableNamePlates_Checkbox" + i,
+                    ref enableNamePlates))
+                {
+                    category.IsNamePlateEnabled = enableNamePlates;
+                    this.Plugin.CategoryService.SaveCategory(category);
+                }
+
+                // category alerts
+                ImGui.NextColumn();
+                var enableAlerts = category.IsAlertEnabled;
+                if (ImGui.Checkbox(
+                    "###PlayerTrack_EnableCategoryAlerts_Checkbox" + i,
+                    ref enableAlerts))
+                {
+                    category.IsAlertEnabled = enableAlerts;
+                    this.Plugin.CategoryService.SaveCategory(category);
+                }
+
                 // category list color
                 ImGui.NextColumn();
                 var categoryListColor = category.EffectiveListColor();
@@ -130,17 +155,6 @@ namespace PlayerTrack
                     this.CategoryNamePlateColorSwatchRow(category, category.Id, 16, 24);
                     this.CategoryNamePlateColorSwatchRow(category, category.Id, 24, 32);
                     ImGui.EndPopup();
-                }
-
-                // category alerts
-                ImGui.NextColumn();
-                var enableAlerts = category.IsAlertEnabled;
-                if (ImGui.Checkbox(
-                    "###PlayerTrack_EnableCategoryAlerts_Checkbox" + i,
-                    ref enableAlerts))
-                {
-                    category.IsAlertEnabled = enableAlerts;
-                    this.Plugin.CategoryService.SaveCategory(category);
                 }
 
                 // category icon

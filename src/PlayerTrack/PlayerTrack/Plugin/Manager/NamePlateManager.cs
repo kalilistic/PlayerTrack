@@ -75,6 +75,10 @@ namespace PlayerTrack
                 var player = this.plugin.PlayerService.GetPlayer(actor.Name, (ushort)actor.HomeWorld.Id);
                 if (player == null) return;
 
+                // set category
+                var category = this.plugin.CategoryService.GetCategory(player.CategoryId);
+                if (!category.IsNamePlateEnabled) return;
+
                 // set title
                 if (this.plugin.Configuration.ChangeNamePlateTitle)
                 {
@@ -87,7 +91,6 @@ namespace PlayerTrack
                     // set title by category
                     else
                     {
-                        var category = this.plugin.CategoryService.GetCategory(player.CategoryId);
                         if (category.IsDefault == false && category.SeName != null)
                         {
                             args.Title = category.SeName;

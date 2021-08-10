@@ -222,6 +222,7 @@ namespace PlayerTrack
             category.SetSeName();
             this.categories[category.Id] = category;
             this.UpdateItem(category);
+            this.plugin.NamePlateManager.ForceRedraw();
         }
 
         /// <summary>
@@ -243,6 +244,8 @@ namespace PlayerTrack
                 this.InsertItem(defaultCategory);
                 this.categories = cats;
             }
+
+            this.plugin.NamePlateManager.ForceRedraw();
         }
 
         /// <summary>

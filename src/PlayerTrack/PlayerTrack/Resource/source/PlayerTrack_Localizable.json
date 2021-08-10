@@ -71,12 +71,16 @@
         "message": "IsDefault",
         "description": "ConfigWindow.CategoryConfig"
     },
-    "CategoryColors": {
-        "message": "Colors",
+    "CategoryNamePlates": {
+        "message": "NamePlates",
         "description": "ConfigWindow.CategoryConfig"
     },
     "CategoryAlerts": {
         "message": "Alerts",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryColors": {
+        "message": "Colors",
         "description": "ConfigWindow.CategoryConfig"
     },
     "CategoryIcon": {
