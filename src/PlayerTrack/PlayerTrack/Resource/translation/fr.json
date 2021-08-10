@@ -1,4 +1,16 @@
 {
+    "SubMenuShowPlayerItem": {
+        "message": "Ajouter/Afficher des Informations",
+        "description": "ContextMenuManager..ctor"
+    },
+    "SubMenuOpenLodestoneItem": {
+        "message": "Ouvrir le profil Lodestone",
+        "description": "ContextMenuManager..ctor"
+    },
+    "None": {
+        "message": "Aucun",
+        "description": "PlayerTrackPlugin.IconListNames"
+    },
     "HelpMessage1": {
         "message": "PlayerTrack vous permet de conserver un historique des personnages que vous rencontrez et des contenus auxquels vous avez joué ensemble. Par défaut, PlayerTrack ne fonctionne qu'en contenu instancié - mais vous pouvez modifier cela dans les paramètres. Vous pouvez voir tous les détails d'un personnage en cliquant sur leur nom dans l'overlay. Ici, vous pouvez également sauvegarder des notes, définir des catégories et leur assigner une icône et une couleur personnalisée.",
         "description": "PlayerTrackPlugin.PrintHelpMessage"
@@ -7,13 +19,121 @@
         "message": "PlayerTrack utilise le Lodestone pour garder les données à jour (par exemple : les transferts de monde). Si cela arrive, un indicateur apparaître à côté du monde actuel d'un personnage et vous pourrez voir leur précédent monde de résidence.",
         "description": "PlayerTrackPlugin.PrintHelpMessage"
     },
+    "HelpMessage3": {
+        "message": "Si vous avez besoin d'aide, contactez-nous sur Discord (en anglais) ou ouvrez une issue sur GitHub. Si vous voulez aider à l'ajout de traductions, vous pouvez soumettre des mises à jour sur Crowdin.",
+        "description": "PlayerTrackPlugin.PrintHelpMessage"
+    },
     "InstallThankYou": {
         "message": "Merci d'avoir installé PlayerTrack !",
         "description": "PlayerTrackPlugin.HandleFreshInstall"
     },
+    "PlayerAlert": {
+        "message": "vu pour la dernière fois il y a {0} dans {1}.",
+        "description": "PlayerService.AddOrUpdatePlayer"
+    },
+    "DisplayConfig": {
+        "message": "Affichage",
+        "description": "ConfigWindow.Draw"
+    },
+    "ProcessingConfig": {
+        "message": "En cours de traitement",
+        "description": "ConfigWindow.Draw"
+    },
+    "IconConfig": {
+        "message": "Icônes",
+        "description": "ConfigWindow.Draw"
+    },
+    "NamePlateConfig": {
+        "message": "Plaques de nom",
+        "description": "ConfigWindow.Draw"
+    },
+    "ContextMenuConfig": {
+        "message": "Menu Contextuel",
+        "description": "ConfigWindow.Draw"
+    },
+    "LodestoneConfig": {
+        "message": "Lodestone",
+        "description": "ConfigWindow.Draw"
+    },
+    "CategoryConfig": {
+        "message": "Catégories",
+        "description": "ConfigWindow.Draw"
+    },
     "Add": {
         "message": "Ajouter",
         "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryName": {
+        "message": "Nom",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryDefault": {
+        "message": "Par défaut",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryColors": {
+        "message": "Couleurs",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryAlerts": {
+        "message": "Alertes",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryIcon": {
+        "message": "Icône",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryAction": {
+        "message": "Actions",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "Default": {
+        "message": "Défaut",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "ShowContextMenu": {
+        "message": "Afficher l'option d'Ajouter/Afficher les Infos",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowContextMenu_HelpMarker": {
+        "message": "afficher le sous-menu contextuel de playertrack sur les personnages",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowFilterType": {
+        "message": "Afficher le type de filtre",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowFilterType_HelpMarker": {
+        "message": "activer/désactiver pour afficher le type de filtre dans la liste des personnages",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowSearchBox": {
+        "message": "Afficher la barre de recherche",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowSearchBox_HelpMarker": {
+        "message": "activer/désactiver pour afficher la recherche dans la liste des personnages",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "LockWindow": {
+        "message": "Verrouiller la fenêtre",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchType_HelpMarker": {
+        "message": "garde la fenêtre principale verrouillée en taille/position",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchType": {
+        "message": "Type de recherche",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "Icons": {
+        "message": "Ajouter / Supprimer des icônes",
+        "description": "ConfigWindow.IconConfig"
+    },
+    "AddRemoveIcons": {
+        "message": "ajoutez de nouveaux icônes via la liste déroulante ou retirer des icônes en cliquant dessus",
+        "description": "ConfigWindow.IconConfig"
     },
     "SyncToLodestone": {
         "message": "Synchroniser avec le Lodestone",
@@ -31,6 +151,38 @@
         "message": "définir la locale des liens menant aux profils sur le Lodestone",
         "description": "ConfigWindow.LodestoneConfig"
     },
+    "ShowNamePlates": {
+        "message": "Montrer les plaques de nom",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "ShowNamePlates_HelpMarker": {
+        "message": "quand afficher les plaques de noms personnalisées",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "UseNamePlateColors": {
+        "message": "Utiliser la couleur de la plaque de nom",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "UseNamePlateColors_HelpMarker": {
+        "message": "supplanter la couleur normale de la plaque de nom avec les couleurs des catégories/personnages",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "ChangeNamePlateTitle": {
+        "message": "Changer le titre de la plaque de nom",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "ChangeNamePlateTitle_HelpMarker": {
+        "message": "supplanter la plaque de nom normale pour utiliser le titre spécifié ou le nom de la catégorie",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "ForceNamePlateStyle": {
+        "message": "Forcer un style de plaque de nom consistant",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "ForceNamePlateStyle_HelpMarker": {
+        "message": "force le style de plaque de nom LowTitleNoFc\nqui est d'apparence plus consistant\nmais qui cache la CL et ne fonctionne pas très bien avec d'autres plugins",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
     "RestrictInCombat": {
         "message": "Désactiver le traitement durant les combats",
         "description": "ConfigWindow.ProcessingConfig"
@@ -38,6 +190,26 @@
     "RestrictInCombat_HelpMarker": {
         "message": "arrêter le traitement des données en cours de combat",
         "description": "ConfigWindow.ProcessingConfig"
+    },
+    "RestrictAddUpdatePlayers": {
+        "message": "Ajouter / Mettre à jour les personnages",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "RestrictAddUpdatePlayers_HelpMarker": {
+        "message": "quand procéder au traitement des personnages",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "RestrictAddEncounters": {
+        "message": "Ajouter les Nouvelles Rencontres",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "RestrictAddEncounters_HelpMarker": {
+        "message": "quand traiter les nouvelles rencontres (n'utilisez pas toujours)",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "AddPlayerModalContent": {
+        "message": "Ajouter manuellement un joueur à votre liste.",
+        "description": "MainWindow.AddPlayer"
     },
     "PlayerNameAddHint": {
         "message": "nom du personnage",
@@ -47,17 +219,137 @@
         "message": "Lodestone",
         "description": "MainWindow.Lodestone"
     },
+    "LodestoneStatus": {
+        "message": "Statut",
+        "description": "MainWindow.Lodestone"
+    },
+    "LodestoneAvailable": {
+        "message": "Disponible",
+        "description": "MainWindow.Lodestone"
+    },
+    "LodestoneUnavailable": {
+        "message": "Indisponible",
+        "description": "MainWindow.Lodestone"
+    },
+    "LodestoneTotalRequests": {
+        "message": "Nombre de Requêtes",
+        "description": "MainWindow.Lodestone"
+    },
+    "LodestoneRequestsInQueue": {
+        "message": "Requêtes en file d'attente",
+        "description": "MainWindow.Lodestone"
+    },
+    "LodestoneNoRequests": {
+        "message": "Aucune requête vers le Lodestone n'est en attente.",
+        "description": "MainWindow.Lodestone"
+    },
+    "Summary": {
+        "message": "Résumé",
+        "description": "MainWindow.PlayerDetail"
+    },
     "Encounters": {
         "message": "Rencontres",
+        "description": "MainWindow.PlayerDetail"
+    },
+    "Appearance": {
+        "message": "Apparence",
         "description": "MainWindow.PlayerDetail"
     },
     "Display": {
         "message": "Affichage",
         "description": "MainWindow.PlayerDetail"
     },
+    "TargetPlayer": {
+        "message": "Cible",
+        "description": "MainWindow.PlayerList"
+    },
+    "FocusTargetPlayer": {
+        "message": "Cible focalisée",
+        "description": "MainWindow.PlayerList"
+    },
+    "ExaminePlayer": {
+        "message": "Examiner",
+        "description": "MainWindow.PlayerList"
+    },
+    "Category": {
+        "message": "Catégorie",
+        "description": "MainWindow.PlayerList"
+    },
+    "Delete": {
+        "message": "Supprimer",
+        "description": "MainWindow.PlayerList"
+    },
+    "SearchHint": {
+        "message": "rechercher",
+        "description": "MainWindow.PlayerListControls"
+    },
+    "AddPlayer": {
+        "message": "Ajouter un personnage",
+        "description": "MainWindow.PlayerListControls"
+    },
+    "OpenLodestoneService": {
+        "message": "Ouvrir le profil Lodestone",
+        "description": "MainWindow.PlayerListControls"
+    },
+    "OpenSettings": {
+        "message": "Ouvrir les Paramètres",
+        "description": "MainWindow.PlayerListControls"
+    },
+    "Gender": {
+        "message": "Genre",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "Race": {
+        "message": "Race",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "Tribe": {
+        "message": "Tribu",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "Height": {
+        "message": "Taille",
+        "description": "MainWindow.PlayerCustomize"
+    },
     "PlayerHeightValue": {
         "message": "{0} pouces",
         "description": "MainWindow.PlayerCustomize"
+    },
+    "Copy": {
+        "message": "Copier",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "NoAppearance": {
+        "message": "Aucune donnée d'apparence trouvée pour ce personnage.",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "NoAppearanceExplanation": {
+        "message": "Cela peut se produire pour des personnages ajoutés manuellement ou si le personnage a été migré depuis une version antérieure du plugin. La prochaine fois que vous rencontrerez ce personnage, les données d'apparence seront actualisées.",
+        "description": "MainWindow.PlayerCustomize"
+    },
+    "PlayerCategory": {
+        "message": "Catégorie",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "OverrideNote": {
+        "message": "Ces configurations supplanteront la configuration des catégories.",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "Title": {
+        "message": "Titre",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "Icon": {
+        "message": "Icône",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "List": {
+        "message": "Liste",
+        "description": "MainWindow.PlayerDisplay"
+    },
+    "Nameplate": {
+        "message": "Plaque de nom",
+        "description": "MainWindow.PlayerDisplay"
     },
     "Alerts": {
         "message": "Alertes",
@@ -66,6 +358,34 @@
     "Reset": {
         "message": "Réinitialiser",
         "description": "MainWindow.PlayerDisplay"
+    },
+    "Time": {
+        "message": "Il y a",
+        "description": "MainWindow.PlayerEncounters"
+    },
+    "Duration": {
+        "message": "Durée",
+        "description": "MainWindow.PlayerEncounters"
+    },
+    "Job": {
+        "message": "Job",
+        "description": "MainWindow.PlayerEncounters"
+    },
+    "Lvl": {
+        "message": "Niv",
+        "description": "MainWindow.PlayerEncounters"
+    },
+    "Location": {
+        "message": "Lieu",
+        "description": "MainWindow.PlayerEncounters"
+    },
+    "NoEncounters": {
+        "message": "Aucune rencontre trouvée pour ce personnage.",
+        "description": "MainWindow.PlayerEncounters"
+    },
+    "NoEncountersExplanation": {
+        "message": "Cela peut arriver pour les personnages ajoutés manuellement ou si toutes les rencontres ont été supprimées.",
+        "description": "MainWindow.PlayerEncounters"
     },
     "PlayerInfo": {
         "message": "Infos sur le personnage",
@@ -87,12 +407,28 @@
         "message": "Vu pour la première fois",
         "description": "MainWindow.PlayerSummary"
     },
+    "PlayerHomeworld": {
+        "message": "Monde d'origine",
+        "description": "MainWindow.PlayerSummary"
+    },
     "PlayerPreviousWorlds": {
         "message": "Précédemment sur {0}",
         "description": "MainWindow.PlayerSummary"
     },
     "PlayerLastSeen": {
         "message": "Vu pour la dernière fois",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "FreeCompany": {
+        "message": "Compagnie Libre",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerLastLocation": {
+        "message": "Dernier lieu connu",
+        "description": "MainWindow.PlayerSummary"
+    },
+    "PlayerLodestone": {
+        "message": "Lodestone",
         "description": "MainWindow.PlayerSummary"
     },
     "PlayerSeenCount": {
@@ -102,6 +438,14 @@
     "PlayerNotes": {
         "message": "Notes",
         "description": "MainWindow.PlayerSummary"
+    },
+    "MigrationInfo": {
+        "message": "Merci d'avoir mis à jour PlayerTrack ! La nouvelle version nécessite une migration automatique de vos données actuelles vers un nouveau format. Cela ne se fait qu'une seule fois, mais peut prendre un certain temps selon la quantité de données que vous avez accumulée. Veuillez être patient et ne pas interrompre la migration ou vous risquez une perte de données. Vous pouvez continuer à jouer au jeu et cette fenêtre se fermera automatiquement à la complétion de la migration.",
+        "description": "MigrationWindow.Draw"
+    },
+    "DeleteConfirmationModalTitle": {
+        "message": "Supprimer",
+        "description": "ModalWindow.Draw"
     },
     "DeleteConfirmationModalContent": {
         "message": "Êtes-vous sûr·e de vouloir supprimer ce profil ?",
