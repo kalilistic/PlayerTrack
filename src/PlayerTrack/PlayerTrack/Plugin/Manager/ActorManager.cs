@@ -379,9 +379,9 @@ namespace PlayerTrack
                     this.localPlayerActorId = this.plugin.PluginService.PluginInterface.ClientState.LocalPlayer?.ActorId;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Logger.LogError(ex, "Failed to get latest actor table.");
+                Logger.LogDebug("Failed to get latest actor table.");
             }
 
             this.needsUpdate = false;
