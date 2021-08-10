@@ -85,6 +85,11 @@ namespace PlayerTrack
         public bool RestrictInCombat = true;
 
         /// <summary>
+        /// Toggle to disable nameplates in combat.
+        /// </summary>
+        public bool RestrictNamePlatesInCombat = false;
+
+        /// <summary>
         /// Toggle to restrict tracking to content only.
         /// </summary>
         public bool RestrictToContent = true;

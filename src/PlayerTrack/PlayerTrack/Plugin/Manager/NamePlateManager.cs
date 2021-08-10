@@ -44,6 +44,12 @@ namespace PlayerTrack
             try
             {
                 // check if nameplates should be used
+                if (this.plugin.Configuration.RestrictNamePlatesInCombat &&
+                    this.plugin.PluginService.ClientState.Condition.InCombat())
+                {
+                    return;
+                }
+
                 var restrict =
                     ContentRestrictionType.GetContentRestrictionTypeByIndex(this.plugin.Configuration.ShowNamePlates);
                 if (!(restrict == ContentRestrictionType.Always ||

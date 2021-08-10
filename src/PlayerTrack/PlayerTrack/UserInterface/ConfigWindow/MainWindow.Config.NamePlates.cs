@@ -12,6 +12,22 @@ namespace PlayerTrack
     {
         private void NamePlateConfig()
         {
+            // restrict in combat
+            var restrictNamePlatesInCombat = this.Plugin.Configuration.RestrictNamePlatesInCombat;
+            if (ImGui.Checkbox(
+                Loc.Localize("RestrictNamePlatesInCombat", "Don't show nameplates in combat") +
+                "###PlayerTrack_RestrictNamePlatesInCombat_Checkbox",
+                ref restrictNamePlatesInCombat))
+            {
+                this.Plugin.Configuration.RestrictNamePlatesInCombat = restrictNamePlatesInCombat;
+                this.Plugin.SaveConfig();
+            }
+
+            ImGuiComponents.HelpMarker(Loc.Localize(
+                                           "RestrictNamePlatesInCombat_HelpMarker",
+                                           "stop showing nameplates in combat regardless of other settings"));
+            ImGui.Spacing();
+
             // restrict nameplate use
             ImGui.Text(Loc.Localize("ShowNamePlates", "Show Nameplates"));
             var showNamePlatesIndex = this.plugin.Configuration.ShowNamePlates;

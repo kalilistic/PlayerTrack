@@ -151,6 +151,14 @@
         "message": "set locale for lodestone profile link",
         "description": "ConfigWindow.LodestoneConfig"
     },
+    "RestrictNamePlatesInCombat": {
+        "message": "Don't show nameplates in combat",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "RestrictNamePlatesInCombat_HelpMarker": {
+        "message": "stop showing nameplates in combat regardless of other settings",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
     "ShowNamePlates": {
         "message": "Show Nameplates",
         "description": "ConfigWindow.NamePlateConfig"
@@ -180,7 +188,7 @@
         "description": "ConfigWindow.NamePlateConfig"
     },
     "ForceNamePlateStyle_HelpMarker": {
-        "message": "force LowTitleNoFc nameplate style \nwhich looks more consistent \nbut hides FC and doesn't play nicely with other plugins",
+        "message": "force LowTitleNoFc nameplate style which looks more consistent \nbut hides FC and doesn't play nicely with other plugins",
         "description": "ConfigWindow.NamePlateConfig"
     },
     "RestrictInCombat": {
