@@ -843,41 +843,47 @@ namespace PlayerTrack
 
         private void LoadPlayers()
         {
+            this.MergeDuplicates();
             var existingPlayers = this.GetItems<Player>().ToList();
             foreach (var player in existingPlayers)
             {
                 if (!this.players.ContainsKey(player.Key))
                 {
-                    this.LoadPlayer(player);
+                    lock (this.locker)
+                    {
+                        this.SetDerivedFields(player);
+                        this.players.Add(player.Key, player);
+                    }
                 }
-                else
+
+                this.SubmitLodestoneRequest(player);
+            }
+        }
+
+        private void MergeDuplicates()
+        {
+            var playersInDB = this.GetItems<Player>().ToList();
+            var playerKeys = playersInDB.Select(pair => pair.Key.ToString()).ToList();
+            var dupeKeys = playerKeys.GroupBy(x => x)
+                                     .Where(group => group.Count() > 1)
+                                     .Select(group => group.Key).ToList();
+            if (dupeKeys.Count > 0)
+            {
+                Logger.LogError("Found Duplicate Keys: " + dupeKeys.Count);
+                foreach (var dupeKey in dupeKeys)
                 {
-                    var dupePlayers = existingPlayers.Where(p => p.Key.Equals(player.Key)).ToList();
-                    if (dupePlayers.Count < 2) continue;
-                    var player1 = dupePlayers[0];
-                    var player2 = dupePlayers[1];
-                    if (player1.Created < player2.Created)
-                    {
-                        player1.Merge(player2);
-                        this.UpdateItem(player1);
-                        if (player2.IsCurrent)
-                        {
-                            this.players.Remove(player2.Key);
-                        }
+                    var dupePlayers = playersInDB.Where(p => p.Key.Equals(dupeKey)).ToList();
+                    var sortedPlayers = dupePlayers.OrderBy(player => player.Created).ToArray();
+                    var originalPlayer = sortedPlayers.First();
+                    var deletePlayers = sortedPlayers.Skip(1).ToArray();
 
-                        this.DeletePlayer(player2);
-                        this.LoadPlayer(player1);
-                        continue;
+                    foreach (var deletedPlayer in deletePlayers)
+                    {
+                        originalPlayer.Merge(deletedPlayer);
+                        this.DeleteItem<Player>(deletedPlayer.Id);
                     }
 
-                    player2.Merge(player1);
-                    if (player1.IsCurrent)
-                    {
-                        this.players.Remove(player1.Key);
-                    }
-
-                    this.DeletePlayer(player1);
-                    this.LoadPlayer(player2);
+                    this.UpdateItem(originalPlayer);
                 }
             }
         }

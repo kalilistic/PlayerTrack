@@ -285,7 +285,7 @@ namespace PlayerTrack
         {
             Logger.LogInfo("Starting integrity check.");
 
-            // check categories
+            // fix category ranks
             var categories = this.CategoryService.GetCategories().OrderBy(pair => pair.Value.Rank);
 
             var count = 0;
@@ -295,18 +295,23 @@ namespace PlayerTrack
                 count += 1;
             }
 
-            // check players
+            // delete invalid players
             var players = this.PlayerService.GetPlayers();
-            if (players == null) return;
-            foreach (var player in players)
+            if (players != null)
             {
-                if (player.Value.HomeWorlds.First().Key == 0 ||
-                    !player.Value.Names.First().IsValidCharacterName())
+                foreach (var player in players)
                 {
-                    Logger.LogInfo($"Deleting Player: {player.Value.Key}");
-                    this.PlayerService.DeletePlayer(player.Value);
+                    if (player.Value.HomeWorlds.First().Key == 0 ||
+                        !player.Value.Names.First().IsValidCharacterName())
+                    {
+                        Logger.LogInfo($"Deleting Player: {player.Value.Key}");
+                        this.PlayerService.DeletePlayer(player.Value);
+                    }
                 }
             }
+
+            // run rebuild
+            this.BaseRepository.RebuildDatabase();
 
             Logger.LogInfo("Finished running integrity check.");
         }
