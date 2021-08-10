@@ -16,7 +16,7 @@ namespace PlayerTrack
     {
         private void Lodestone()
         {
-            const float sameLineOffset = 120f;
+            const float sameLineOffset = 140f;
             var isLodestoneAvailable = this.plugin.LodestoneService.IsLodestoneAvailable();
             var requests = this.plugin.LodestoneService.GetRequests();
 

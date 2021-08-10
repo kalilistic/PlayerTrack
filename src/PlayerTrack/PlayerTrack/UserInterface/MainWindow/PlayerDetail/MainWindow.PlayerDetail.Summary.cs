@@ -17,9 +17,18 @@ namespace PlayerTrack
         private void PlayerSummary()
         {
             if (this.SelectedPlayer == null) return;
-            const float sameLineOffset1 = 100f;
-            const float sameLineOffset2 = 260f;
-            const float sameLineOffset3 = 360f;
+
+            var sameLineOffset1 = 100f;
+            var sameLineOffset2 = 260f;
+            var sameLineOffset3 = 360f;
+
+            // FR override for more spacing
+            if (this.plugin.PluginService.PluginInterface.UiLanguage == "fr")
+            {
+                sameLineOffset1 = 120f;
+                sameLineOffset2 = 280f;
+                sameLineOffset3 = 450f;
+            }
 
             ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("PlayerInfo", "Player Info"));
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset2);
