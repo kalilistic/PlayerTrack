@@ -37,6 +37,18 @@ namespace PlayerTrack
                     category.SetSeName();
                     this.categories.Add(category.Id, category);
                 }
+
+                // remove extra default categories
+                var defaultCategories = trackCategories.Where(category => category.IsDefault).ToList();
+                if (defaultCategories.Count > 1)
+                {
+                    var updateCategories = defaultCategories.Skip(1).ToList();
+                    foreach (var category in updateCategories)
+                    {
+                        category.IsDefault = false;
+                        this.SaveCategory(category);
+                    }
+                }
             }
         }
 
@@ -222,7 +234,9 @@ namespace PlayerTrack
             category.SetSeName();
             this.categories[category.Id] = category;
             this.UpdateItem(category);
-            this.plugin.NamePlateManager.ForceRedraw();
+
+            // ReSharper disable once ConstantConditionalAccessQualifier
+            this.plugin.NamePlateManager?.ForceRedraw();
         }
 
         /// <summary>
