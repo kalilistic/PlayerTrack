@@ -71,6 +71,10 @@
         "message": "Par défaut",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "CategoryNamePlates": {
+        "message": "Plaques de nom",
+        "description": "ConfigWindow.CategoryConfig"
+    },
     "CategoryAlerts": {
         "message": "Alertes",
         "description": "ConfigWindow.CategoryConfig"
@@ -150,6 +154,14 @@
     "LodestoneLocale_HelpMarker": {
         "message": "définir la locale des liens menant aux profils sur le Lodestone",
         "description": "ConfigWindow.LodestoneConfig"
+    },
+    "RestrictNamePlatesInCombat": {
+        "message": "Ne pas afficher les plaques de noms en combat",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "RestrictNamePlatesInCombat_HelpMarker": {
+        "message": "arrêter d'afficher les plaques de noms en combat indépendamment des autres réglages",
+        "description": "ConfigWindow.NamePlateConfig"
     },
     "ShowNamePlates": {
         "message": "Montrer les plaques de nom",
