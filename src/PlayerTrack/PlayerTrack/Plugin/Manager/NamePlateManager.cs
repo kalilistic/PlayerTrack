@@ -1,7 +1,9 @@
 using System;
+using System.Linq;
 using System.Numerics;
 
 using Dalamud.DrunkenToad;
+using Dalamud.Game.ClientState.Actors.Types;
 using XivCommon.Functions.NamePlates;
 
 namespace PlayerTrack
@@ -70,8 +72,7 @@ namespace PlayerTrack
                 if (args.Type != PlateType.Player || args.ActorId == 0) return;
 
                 // get player
-                var actor = this.plugin.ActorManager.GetPlayerCharacter(args.ActorId);
-                if (actor == null) return;
+                if (this.plugin.PluginService.PluginInterface.ClientState.Actors.FirstOrDefault(act => act.ActorId == args.ActorId) is not PlayerCharacter actor) return;
                 var player = this.plugin.PlayerService.GetPlayer(actor.Name, (ushort)actor.HomeWorld.Id);
                 if (player == null) return;
 
