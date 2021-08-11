@@ -49,7 +49,6 @@ namespace PlayerTrack
         /// <summary>
         /// Gets or sets lodestone failure count to avoid repeatedly trying deleted or invalid characters.
         /// </summary>
-        [BsonIgnore]
         public int LodestoneFailureCount { get; set; }
 
         /// <summary>

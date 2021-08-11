@@ -721,8 +721,8 @@ namespace PlayerTrack
         {
             // filter requests not to be sent
             if (!this.plugin.Configuration.SyncToLodestone) return;
-            if (player.LodestoneStatus == LodestoneStatus.Verified || (player.LodestoneStatus == LodestoneStatus.Failed &&
-                player.LodestoneFailureCount >= this.plugin.Configuration.LodestoneMaxFailure &&
+            if (player.LodestoneStatus == LodestoneStatus.Verified || ((player.LodestoneStatus == LodestoneStatus.Failed &&
+                player.LodestoneFailureCount >= this.plugin.Configuration.LodestoneMaxFailure) ||
                 DateUtil.CurrentTime() > player.LodestoneLastUpdated + this.plugin.Configuration.LodestoneFailureDelay))
             {
                 return;
