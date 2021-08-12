@@ -133,3 +133,5 @@ resharper_field_can_be_made_read_only_global_highlighting = none
 resharper_convert_to_constant_global_highlighting = none
 resharper_unused_member_global_highlighting = none
 resharper_unused_member_local_highlighting = none
+resharper_convert_if_statement_to_switch_expression_highlighting = none
+resharper_convert_if_statement_to_switch_statement_highlighting = none
