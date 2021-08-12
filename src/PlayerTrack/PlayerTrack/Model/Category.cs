@@ -62,9 +62,14 @@ namespace PlayerTrack
         public bool IsAlertEnabled { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether nameplates are enabled.
+        /// Gets or sets a value indicating whether nameplates titles are enabled.
         /// </summary>
-        public bool IsNamePlateEnabled { get; set; }
+        public bool IsNamePlateTitleEnabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether nameplates colors are enabled.
+        /// </summary>
+        public bool IsNamePlateColorEnabled { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this is the default category for new players.
@@ -84,6 +89,9 @@ namespace PlayerTrack
             this.Icon = 0;
             this.ListColor = null;
             this.NamePlateColor = null;
+            this.IsNamePlateColorEnabled = false;
+            this.IsNamePlateTitleEnabled = false;
+            this.IsAlertEnabled = false;
         }
 
         /// <summary>

@@ -78,7 +78,6 @@ namespace PlayerTrack
 
                 // set category
                 var category = this.plugin.CategoryService.GetCategory(player.CategoryId);
-                if (!category.IsNamePlateEnabled) return;
 
                 // set title
                 if (this.plugin.Configuration.ChangeNamePlateTitle)
@@ -90,9 +89,9 @@ namespace PlayerTrack
                     }
 
                     // set title by category
-                    else
+                    else if (category.IsNamePlateTitleEnabled)
                     {
-                        if (category.IsDefault == false && category.SeName != null)
+                        if (category.IsNamePlateTitleEnabled && category.SeName != null)
                         {
                             args.Title = category.SeName;
                         }
@@ -102,10 +101,16 @@ namespace PlayerTrack
                 // set color
                 if (this.plugin.Configuration.UseNamePlateColors)
                 {
-                    var color = this.plugin.PlayerService.GetPlayerNamePlateColor(player);
-                    if (color != null)
+                    // set color by player
+                    if (player.NamePlateColor != null)
                     {
-                        args.Colour = ((Vector4)color).ToByteColor();
+                        args.Colour = ((Vector4)player.NamePlateColor).ToByteColor();
+                    }
+
+                    // set color by category
+                    else if (category.IsNamePlateColorEnabled && category.NamePlateColor != null)
+                    {
+                        args.Colour = ((Vector4)category.NamePlateColor).ToByteColor();
                     }
                 }
 

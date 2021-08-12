@@ -71,24 +71,28 @@
         "message": "IsDefault",
         "description": "ConfigWindow.CategoryConfig"
     },
-    "CategoryNamePlates": {
-        "message": "NamePlates",
-        "description": "ConfigWindow.CategoryConfig"
-    },
     "CategoryAlerts": {
         "message": "Alerts",
         "description": "ConfigWindow.CategoryConfig"
     },
-    "CategoryColors": {
-        "message": "Colors",
+    "CategoryNamePlates": {
+        "message": "NamePlate",
         "description": "ConfigWindow.CategoryConfig"
     },
-    "CategoryIcon": {
-        "message": "Icon",
+    "CategoryList": {
+        "message": "List Color/Icon",
         "description": "ConfigWindow.CategoryConfig"
     },
     "CategoryAction": {
         "message": "Actions",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryNamePlateTitleEnabled": {
+        "message": "Enable nameplate titles",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryNamePlateColor": {
+        "message": "Set nameplate color",
         "description": "ConfigWindow.CategoryConfig"
     },
     "Default": {
