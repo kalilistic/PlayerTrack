@@ -136,9 +136,8 @@ namespace PlayerTrack
                 swapCategory.Rank -= 1;
                 this.UpdateItem(currentCategory);
                 this.UpdateItem(swapCategory);
+                this.plugin.PlayerService.SetDerivedFieldsForAllPlayers();
             }
-
-            this.plugin.PlayerService.UpdatePlayerCategoryRank();
         }
 
         /// <summary>
@@ -157,9 +156,8 @@ namespace PlayerTrack
                 swapCategory.Rank += 1;
                 this.UpdateItem(currentCategory);
                 this.UpdateItem(swapCategory);
+                this.plugin.PlayerService.SetDerivedFieldsForAllPlayers();
             }
-
-            this.plugin.PlayerService.UpdatePlayerCategoryRank();
         }
 
         /// <summary>
@@ -222,7 +220,7 @@ namespace PlayerTrack
 
             this.plugin.PlayerService.RemoveDeletedCategory(categoryId, this.GetDefaultCategory().Id);
             this.DeleteItem<Category>(deletedCategory.Id);
-            this.plugin.PlayerService.UpdatePlayerCategoryRank();
+            this.plugin.PlayerService.SetDerivedFieldsForAllPlayers();
         }
 
         /// <summary>

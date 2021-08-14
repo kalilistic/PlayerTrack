@@ -862,17 +862,17 @@ namespace PlayerTrack
         /// <summary>
         /// Recalculate player category ranks after rank changing.
         /// </summary>
-        public void UpdatePlayerCategoryRank()
+        public void SetDerivedFieldsForAllPlayers()
         {
             lock (this.locker)
             {
                 foreach (var player in this.players)
                 {
-                    player.Value.CategoryRank = this.plugin.CategoryService.GetCategory(player.Value.CategoryId).Rank;
+                    this.SetDerivedFields(player.Value);
                 }
-            }
 
-            this.ResetViewPlayers();
+                this.ResetViewPlayers();
+            }
         }
 
         /// <summary>
@@ -919,7 +919,7 @@ namespace PlayerTrack
                 {
                     foreach (var kvp in this.players)
                     {
-                        if (!this.viewPlayers.ContainsKey(kvp.Value.SortKey))
+                        if (kvp.Value.CategoryId == this.plugin.Configuration.CategoryFilterId && !this.viewPlayers.ContainsKey(kvp.Value.SortKey))
                         {
                             this.viewPlayers.Add(kvp.Value.SortKey, kvp.Value);
                         }
