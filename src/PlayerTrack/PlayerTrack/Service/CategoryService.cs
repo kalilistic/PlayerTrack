@@ -104,7 +104,7 @@ namespace PlayerTrack
         {
             lock (this.locker)
             {
-                return this.categories.OrderBy(cat1 => cat1.Value.Id).Select(cat2 => cat2.Value.Name).ToArray();
+                return this.categories.OrderBy(pair => pair.Value.Rank).Select(cat2 => cat2.Value.Name).ToArray();
             }
         }
 
@@ -116,7 +116,7 @@ namespace PlayerTrack
         {
             lock (this.locker)
             {
-                return this.categories.OrderBy(cat1 => cat1.Value.Id).Select(cat2 => cat2.Value.Id).ToArray();
+                return this.categories.OrderBy(pair => pair.Value.Rank).Select(cat2 => cat2.Value.Id).ToArray();
             }
         }
 
