@@ -40,7 +40,7 @@ namespace PlayerTrack
             {
                 this.plugin.Configuration.ShowNamePlates = ContentRestrictionType.GetContentRestrictionTypeByIndex(showNamePlatesIndex).Index;
                 this.plugin.SaveConfig();
-                this.plugin.PlayerService.UpdateViewPlayers();
+                this.plugin.PlayerService.ResetViewPlayers();
                 this.plugin.NamePlateManager.ForceRedraw();
             }
 

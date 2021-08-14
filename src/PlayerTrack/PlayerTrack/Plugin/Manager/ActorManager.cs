@@ -224,7 +224,6 @@ namespace PlayerTrack
 
                 // prepare for updates
                 this.needsUpdate = true;
-                var anyUpdate = false;
                 var currentTime = DateUtil.CurrentTime();
                 var defaultCategoryId = this.plugin.CategoryService.GetDefaultCategory().Id;
                 var updateEncounter = this.SetUpdateEncounter();
@@ -235,7 +234,6 @@ namespace PlayerTrack
                     // remove existing player
                     if (currentActors.All(character => character!.ActorId != player.Value.ActorId))
                     {
-                        anyUpdate = true;
                         this.playerList.Remove(player.Value.ActorId);
                         player.Value.IsCurrent = false;
                         player.Value.Updated = currentTime;
@@ -298,17 +296,11 @@ namespace PlayerTrack
                                 IsCurrent = true,
                                 IsRecent = true,
                             };
-                            anyUpdate = true;
                             this.plugin.PlayerService.SetDerivedFields(newPlayer);
                             this.playerList.Add(character.ActorId, newPlayer);
                             this.plugin.PlayerService.AddOrUpdatePlayer(newPlayer);
                         }
                     }
-                }
-
-                if (anyUpdate)
-                {
-                    this.plugin.PlayerService.UpdateViewPlayers();
                 }
             }
             catch (Exception ex)

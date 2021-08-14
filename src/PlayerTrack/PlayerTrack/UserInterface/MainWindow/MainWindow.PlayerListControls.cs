@@ -33,7 +33,7 @@ namespace PlayerTrack
                 {
                     this.plugin.Configuration.PlayerFilterType = PlayerFilterType.GetPlayerFilterTypeByIndex(playerFilterTypeIndex).Index;
                     this.plugin.SaveConfig();
-                    this.plugin.PlayerService.UpdateViewPlayers();
+                    this.plugin.PlayerService.ResetViewPlayers();
                 }
             }
 
@@ -53,7 +53,7 @@ namespace PlayerTrack
                 {
                     this.plugin.Configuration.CategoryFilterId = categoryIds[categoryIndex];
                     this.plugin.SaveConfig();
-                    this.plugin.PlayerService.UpdateViewPlayers();
+                    this.plugin.PlayerService.ResetViewPlayers();
                 }
             }
 

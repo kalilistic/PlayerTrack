@@ -40,7 +40,7 @@ namespace PlayerTrack
             {
                 this.plugin.Configuration.RestrictAddUpdatePlayers = ContentRestrictionType.GetContentRestrictionTypeByIndex(restrictAddUpdatePlayersIndex).Index;
                 this.plugin.SaveConfig();
-                this.plugin.PlayerService.UpdateViewPlayers();
+                this.plugin.PlayerService.ResetViewPlayers();
             }
 
             ImGuiComponents.HelpMarker(Loc.Localize(
@@ -60,7 +60,7 @@ namespace PlayerTrack
             {
                 this.plugin.Configuration.RestrictAddEncounters = ContentRestrictionType.GetContentRestrictionTypeByIndex(restrictAddEncountersIndex).Index;
                 this.plugin.SaveConfig();
-                this.plugin.PlayerService.UpdateViewPlayers();
+                this.plugin.PlayerService.ResetViewPlayers();
             }
 
             ImGuiComponents.HelpMarker(Loc.Localize(
