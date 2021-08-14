@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Windows.Forms;
 using CheapLoc;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
@@ -163,6 +163,7 @@ namespace PlayerTrack
             this.selectedPlayer ??= this.plugin.PlayerService.AddPlayer(args.Text!.ToString(), args.ActorWorld);
 
             // open in detailed view
+            this.plugin.WindowManager.MainWindow!.SelectedPlayer = null;
             this.plugin.WindowManager.MainWindow!.SelectedPlayer = this.selectedPlayer;
             this.plugin.WindowManager.MainWindow!.SelectedEncounters = this.plugin.EncounterService
                                                                            .GetEncountersByPlayer(this.selectedPlayer.Key)
