@@ -624,16 +624,62 @@ namespace PlayerTrack
             {
                 if (this.players.ContainsKey(response.PlayerKey))
                 {
-                    this.players[response.PlayerKey].LodestoneId = response.LodestoneId;
-                    this.players[response.PlayerKey].LodestoneStatus = response.Status;
-                    this.players[response.PlayerKey].LodestoneLastUpdated = DateUtil.CurrentTime();
-                    if (this.players[response.PlayerKey].LodestoneStatus == LodestoneStatus.Failed)
+                    // get current player
+                    var currentPlayer = this.players[response.PlayerKey];
+
+                    // merge if duplicate
+                    if (response.Status == LodestoneStatus.Verified)
                     {
-                        this.players[response.PlayerKey].LodestoneFailureCount++;
+                        var originalPlayer = this.GetPlayerByLodestoneId(response.LodestoneId);
+                        if (originalPlayer != null)
+                        {
+                            // debug logs
+                            Logger.LogInfo("Found Duplicate Lodestone Id: " + response.LodestoneId);
+                            Logger.LogDebug("Original Player: " + originalPlayer);
+                            Logger.LogDebug("Newer Player: " + currentPlayer);
+
+                            // capture keys
+                            var originalKey = originalPlayer.Key;
+                            var originalSortKey = originalPlayer.SortKey;
+
+                            // merge current record into original record
+                            originalPlayer.Merge(currentPlayer);
+                            originalPlayer.Key = currentPlayer.Key;
+                            originalPlayer.LodestoneId = response.LodestoneId;
+                            originalPlayer.LodestoneStatus = response.Status;
+                            originalPlayer.LodestoneLastUpdated = DateUtil.CurrentTime();
+                            this.SetDerivedFields(originalPlayer);
+
+                            // delete current player
+                            this.DeletePlayer(currentPlayer);
+
+                            // remove and re-add original player due to key change
+                            this.players.Remove(originalKey);
+                            if (this.viewPlayers.ContainsKey(originalSortKey))
+                            {
+                                this.viewPlayers.Remove(originalSortKey);
+                            }
+
+                            this.players.Add(originalPlayer.Key, originalPlayer);
+                            this.UpdateItem(originalPlayer);
+
+                            // regenerate view players
+                            this.ResetViewPlayers();
+
+                            return;
+                        }
                     }
 
-                    this.UpdateItem(this.players[response.PlayerKey]);
-                    this.UpdateViewPlayer(this.players[response.PlayerKey].SortKey, this.players[response.PlayerKey]);
+                    currentPlayer.LodestoneId = response.LodestoneId;
+                    currentPlayer.LodestoneStatus = response.Status;
+                    currentPlayer.LodestoneLastUpdated = DateUtil.CurrentTime();
+                    if (currentPlayer.LodestoneStatus == LodestoneStatus.Failed)
+                    {
+                        currentPlayer.LodestoneFailureCount++;
+                    }
+
+                    this.UpdateItem(currentPlayer);
+                    this.UpdateViewPlayer(currentPlayer.SortKey, currentPlayer);
                 }
             }
         }

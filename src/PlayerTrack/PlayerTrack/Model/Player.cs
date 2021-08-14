@@ -327,10 +327,6 @@ namespace PlayerTrack
             sb.Append(System.Environment.NewLine);
             sb.Append("World: " + this.HomeWorlds.First().Key);
             sb.Append(System.Environment.NewLine);
-            sb.Append("LodeStatus: " + this.LodestoneStatus);
-            sb.Append(System.Environment.NewLine);
-            sb.Append("LodeID: " + this.LodestoneId);
-            sb.Append(System.Environment.NewLine);
             return sb.ToString();
         }
     }
