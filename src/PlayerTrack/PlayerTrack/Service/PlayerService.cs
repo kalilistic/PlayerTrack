@@ -65,6 +65,7 @@ namespace PlayerTrack
         /// <param name="player">new player.</param>
         public void UpdateViewPlayer(string sortKey, Player player)
         {
+            if (!this.plugin.Configuration.ShowWindow) return;
             lock (this.locker)
             {
                 if (this.viewPlayers.ContainsKey(sortKey))
@@ -103,7 +104,8 @@ namespace PlayerTrack
         {
             try
             {
-                Player[] playersList;
+                Player[] playersList = { };
+                if (!this.plugin.Configuration.ShowWindow) return playersList;
                 lock (this.locker)
                 {
                     // create player list by mode
@@ -246,7 +248,7 @@ namespace PlayerTrack
                 lock (this.locker)
                 {
                     this.players.Remove(player.Key);
-                    if (this.viewPlayers.ContainsKey(player.SortKey))
+                    if (this.plugin.Configuration.ShowWindow && this.viewPlayers.ContainsKey(player.SortKey))
                     {
                         this.viewPlayers.Remove(player.SortKey);
                     }
@@ -270,7 +272,7 @@ namespace PlayerTrack
                 {
                     this.players[player.Key].IsCurrent = player.IsCurrent;
                     this.players[player.Key].Updated = player.Updated;
-                    if (this.viewPlayers.ContainsKey(player.SortKey))
+                    if (this.plugin.Configuration.ShowWindow && this.viewPlayers.ContainsKey(player.SortKey))
                     {
                         if (PlayerFilterType.GetPlayerFilterTypeByIndex(this.plugin.Configuration.PlayerFilterType) ==
                             PlayerFilterType.CurrentPlayers)
@@ -489,13 +491,16 @@ namespace PlayerTrack
                             XivChatType.Notice);
                     }
 
-                    if (this.viewPlayers.ContainsKey(this.players[player.Key].SortKey))
+                    if (this.plugin.Configuration.ShowWindow)
                     {
-                        this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
-                    }
-                    else
-                    {
-                        this.viewPlayers.Add(player.SortKey, this.players[player.Key]);
+                        if (this.viewPlayers.ContainsKey(this.players[player.Key].SortKey))
+                        {
+                            this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
+                        }
+                        else
+                        {
+                            this.viewPlayers.Add(player.SortKey, this.players[player.Key]);
+                        }
                     }
 
                     this.UpdateItem(this.players[player.Key]);
@@ -508,7 +513,10 @@ namespace PlayerTrack
                     lock (this.locker)
                     {
                         this.players.Add(player.Key, player);
-                        this.viewPlayers.Add(player.SortKey, player);
+                        if (this.plugin.Configuration.ShowWindow)
+                        {
+                            this.viewPlayers.Add(player.SortKey, player);
+                        }
                     }
 
                     this.InsertItem(player);
@@ -655,7 +663,7 @@ namespace PlayerTrack
 
                             // remove and re-add original player due to key change
                             this.players.Remove(originalKey);
-                            if (this.viewPlayers.ContainsKey(originalSortKey))
+                            if (this.plugin.Configuration.ShowWindow && this.viewPlayers.ContainsKey(originalSortKey))
                             {
                                 this.viewPlayers.Remove(originalSortKey);
                             }

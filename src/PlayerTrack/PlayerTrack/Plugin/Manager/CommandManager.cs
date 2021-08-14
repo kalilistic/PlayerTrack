@@ -44,6 +44,10 @@ namespace PlayerTrack
         private void TogglePlayerTrack(string command, string arguments)
         {
             this.plugin.WindowManager.MainWindow!.IsOpen = !this.plugin.WindowManager.MainWindow!.IsOpen;
+            if (this.plugin.WindowManager.MainWindow!.IsOpen)
+            {
+                this.plugin.PlayerService.ResetViewPlayers();
+            }
         }
 
         private void TogglePlayerTrackConfig(string command, string arguments)
