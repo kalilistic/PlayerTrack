@@ -16,6 +16,12 @@ namespace PlayerTrack
 
         private void IconConfig()
         {
+            if (ImGui.SmallButton(Loc.Localize("IconGlossary", "Glossary") + "###PlayerTrack_OpenGlossary_Button"))
+            {
+                this.plugin.WindowManager.ModalWindow.Open(ModalWindow.ModalType.IconGlossary);
+            }
+
+            ImGui.Separator();
             ImGui.Text(Loc.Localize("Icons", "Add / Remove Icons"));
             ImGuiComponents.HelpMarker(Loc.Localize(
                 "AddRemoveIcons",

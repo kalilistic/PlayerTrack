@@ -135,6 +135,10 @@
         "message": "Search Type",
         "description": "ConfigWindow.DisplayConfig"
     },
+    "IconGlossary": {
+        "message": "Glossary",
+        "description": "ConfigWindow.IconConfig"
+    },
     "Icons": {
         "message": "Add / Remove Icons",
         "description": "ConfigWindow.IconConfig"
@@ -473,6 +477,10 @@
     },
     "Cancel": {
         "message": "Cancel",
+        "description": "ModalWindow.Draw"
+    },
+    "IconGlossaryModalTitle": {
+        "message": "Icon Glossary",
         "description": "ModalWindow.Draw"
     }
 }

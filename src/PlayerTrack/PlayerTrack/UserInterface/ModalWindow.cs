@@ -1,7 +1,7 @@
 using System;
-using System.Numerics;
 
 using CheapLoc;
+using Dalamud.Interface;
 using ImGuiNET;
 
 namespace PlayerTrack
@@ -16,7 +16,7 @@ namespace PlayerTrack
         /// </summary>
         public Player? Player;
 
-        private const ImGuiWindowFlags ModalFlags = ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse;
+        private const ImGuiWindowFlags ModalFlags = ImGuiWindowFlags.NoCollapse;
         private readonly PlayerTrackPlugin plugin;
         private ModalType currentModalType = ModalType.None;
 
@@ -28,8 +28,6 @@ namespace PlayerTrack
             : base(plugin, "ModalWindow", ModalFlags)
         {
             this.plugin = plugin;
-            this.Position = new Vector2(ImGui.GetIO().DisplaySize.X * 0.5f, ImGui.GetIO().DisplaySize.Y * 0.5f);
-            this.PositionCondition = ImGuiCond.Appearing;
         }
 
         /// <summary>
@@ -46,6 +44,11 @@ namespace PlayerTrack
             /// Confirmation to delete player.
             /// </summary>
             ConfirmDelete,
+
+            /// <summary>
+            /// Icon glossary to view what's available.
+            /// </summary>
+            IconGlossary,
         }
 
         /// <summary>
@@ -93,6 +96,27 @@ namespace PlayerTrack
                     ImGui.SameLine();
                     if (ImGui.Button(Loc.Localize("Cancel", "Cancel") +
                                      "###PlayerTrack_DeleteConfirmationModalCancel_Button"))
+                    {
+                        this.IsOpen = false;
+                    }
+
+                    break;
+                case ModalType.IconGlossary:
+                    this.WindowName = Loc.Localize("IconGlossaryModalTitle", "Icon Glossary") +
+                                      "###PlayerTrack_IconGlossaryModal_Window";
+                    var icons = this.plugin.PluginService.Icons;
+                    var iconNames = this.plugin.PluginService.IconNames;
+                    for (var i = 0; i < icons.Length; i++)
+                    {
+                        ImGui.PushFont(UiBuilder.IconFont);
+                        ImGui.Text(icons[i].ToIconString());
+                        ImGui.PopFont();
+                        ImGui.SameLine();
+                        ImGui.Text(iconNames[i]);
+                    }
+
+                    ImGui.Spacing();
+                    if (ImGui.Button(Loc.Localize("OK", "OK") + "###PlayerTrack_IconGlossaryModalOK_Button"))
                     {
                         this.IsOpen = false;
                     }
