@@ -69,10 +69,21 @@ namespace PlayerTrack
                     this.ContextMenuManager = new ContextMenuManager(this);
                     this.NamePlateManager = new NamePlateManager(this);
 
-                    // run backups
+                    // run backup
                     this.backupTimer = new Timer { Interval = this.Configuration.BackupFrequency, Enabled = false };
                     this.backupTimer.Elapsed += this.BackupTimerOnElapsed;
-                    this.BackupTimerOnElapsed(this, null);
+                    var pluginVersion = this.PluginService.PluginVersionNumber();
+                    if (this.Configuration.PluginVersion < pluginVersion)
+                    {
+                        Logger.LogInfo("Running backup since new version detected.");
+                        this.Configuration.PluginVersion = pluginVersion;
+                        this.SaveConfig();
+                        this.RunBackup();
+                    }
+                    else
+                    {
+                        this.BackupTimerOnElapsed(this, null);
+                    }
 
                     // migrate if needed
                     var success = Migrator.Migrate(this);
@@ -327,10 +338,16 @@ namespace PlayerTrack
         {
             if (DateUtil.CurrentTime() > this.Configuration.LastBackup + this.Configuration.BackupFrequency)
             {
-                this.Configuration.LastBackup = DateUtil.CurrentTime();
-                this.PluginService.BackupManager.CreateBackup();
-                this.PluginService.BackupManager.DeleteBackups(this.Configuration.BackupRetention);
+                Logger.LogInfo("Running backup due to frequency timer.");
+                this.RunBackup();
             }
+        }
+
+        private void RunBackup()
+        {
+            this.Configuration.LastBackup = DateUtil.CurrentTime();
+            this.PluginService.BackupManager.CreateBackup();
+            this.PluginService.BackupManager.DeleteBackups(this.Configuration.BackupRetention);
         }
 
         private void SetDefaultIcons()
