@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 
 using Dalamud.DrunkenToad;
 using Dalamud.Game.Text.SeStringHandling;
@@ -313,6 +314,24 @@ namespace PlayerTrack
                     new TextPayload($"《{this.Title}》"),
                 });
             }
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            StringBuilder sb = new ();
+            sb.Append(System.Environment.NewLine);
+            sb.Append("Key: " + this.Key);
+            sb.Append(System.Environment.NewLine);
+            sb.Append("Name: " + this.Names.First());
+            sb.Append(System.Environment.NewLine);
+            sb.Append("World: " + this.HomeWorlds.First().Key);
+            sb.Append(System.Environment.NewLine);
+            sb.Append("LodeStatus: " + this.LodestoneStatus);
+            sb.Append(System.Environment.NewLine);
+            sb.Append("LodeID: " + this.LodestoneId);
+            sb.Append(System.Environment.NewLine);
+            return sb.ToString();
         }
     }
 }

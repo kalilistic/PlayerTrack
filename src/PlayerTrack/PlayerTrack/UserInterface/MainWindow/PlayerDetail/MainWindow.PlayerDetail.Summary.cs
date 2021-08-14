@@ -49,7 +49,7 @@ namespace PlayerTrack
                 {
                     ImGui.SetTooltip(string.Format(
                                          Loc.Localize("PlayerPreviousNames", "Previously known as {0}"),
-                                         string.Join(",", this.SelectedPlayer.Names.Skip(1))));
+                                         string.Join(", ", this.SelectedPlayer.Names.Skip(1))));
                 }
             }
             else
@@ -77,7 +77,7 @@ namespace PlayerTrack
                 {
                     ImGui.SetTooltip(string.Format(
                                          Loc.Localize("PlayerPreviousWorlds", "Previously on {0}"),
-                                         string.Join(",", this.SelectedPlayer.HomeWorlds.Skip(1).Select(kvp => kvp.Value))));
+                                         string.Join(", ", this.SelectedPlayer.HomeWorlds.Skip(1).Select(kvp => kvp.Value))));
                 }
             }
             else

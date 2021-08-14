@@ -624,21 +624,6 @@ namespace PlayerTrack
             {
                 if (this.players.ContainsKey(response.PlayerKey))
                 {
-                    // if verified
-                    if (response.Status == LodestoneStatus.Verified)
-                    {
-                        // get player and merge for name/world changes
-                        var existingPlayer = this.GetPlayerByLodestoneId(response.LodestoneId);
-                        if (existingPlayer != null)
-                        {
-                            Logger.LogInfo("Lodestone Merge: " + response.PlayerKey + " / " + existingPlayer.Key);
-                            existingPlayer.Merge(this.players[response.PlayerKey]);
-                            this.SetDerivedFields(existingPlayer);
-                            this.players[response.PlayerKey] = existingPlayer;
-                            this.DeletePlayer(existingPlayer);
-                        }
-                    }
-
                     this.players[response.PlayerKey].LodestoneId = response.LodestoneId;
                     this.players[response.PlayerKey].LodestoneStatus = response.Status;
                     this.players[response.PlayerKey].LodestoneLastUpdated = DateUtil.CurrentTime();
@@ -648,9 +633,8 @@ namespace PlayerTrack
                     }
 
                     this.UpdateItem(this.players[response.PlayerKey]);
+                    this.UpdateViewPlayer(this.players[response.PlayerKey].SortKey, this.players[response.PlayerKey]);
                 }
-
-                this.ResetViewPlayers();
             }
         }
 
@@ -859,7 +843,7 @@ namespace PlayerTrack
                 {
                     foreach (var kvp in this.players)
                     {
-                        if (kvp.Value.IsCurrent)
+                        if (kvp.Value.IsCurrent && !this.viewPlayers.ContainsKey(kvp.Value.SortKey))
                         {
                             this.viewPlayers.Add(kvp.Value.SortKey, kvp.Value);
                         }
@@ -869,7 +853,7 @@ namespace PlayerTrack
                 {
                     foreach (var kvp in this.players)
                     {
-                        if (kvp.Value.IsRecent)
+                        if (kvp.Value.IsRecent && !this.viewPlayers.ContainsKey(kvp.Value.SortKey))
                         {
                             this.viewPlayers.Add(kvp.Value.SortKey, kvp.Value);
                         }
@@ -879,14 +863,20 @@ namespace PlayerTrack
                 {
                     foreach (var kvp in this.players)
                     {
-                        this.viewPlayers.Add(kvp.Value.SortKey, kvp.Value);
+                        if (!this.viewPlayers.ContainsKey(kvp.Value.SortKey))
+                        {
+                            this.viewPlayers.Add(kvp.Value.SortKey, kvp.Value);
+                        }
                     }
                 }
                 else if (filterType == PlayerFilterType.PlayersByCategory)
                 {
                     foreach (var kvp in this.players)
                     {
-                        this.viewPlayers.Add(kvp.Value.SortKey, kvp.Value);
+                        if (!this.viewPlayers.ContainsKey(kvp.Value.SortKey))
+                        {
+                            this.viewPlayers.Add(kvp.Value.SortKey, kvp.Value);
+                        }
                     }
                 }
             }
@@ -905,7 +895,8 @@ namespace PlayerTrack
 
         private void LoadPlayers()
         {
-            this.MergeDuplicates();
+            this.MergeKeyDuplicates();
+            this.MergeLodestoneDuplicates();
             var existingPlayers = this.GetItems<Player>().ToList();
             foreach (var player in existingPlayers)
             {
@@ -922,7 +913,38 @@ namespace PlayerTrack
             }
         }
 
-        private void MergeDuplicates()
+        private void MergeLodestoneDuplicates()
+        {
+            var playersInDB = this.GetItems<Player>().ToList();
+            var playerLodestoneIds = playersInDB.Where(player => player.LodestoneId != 0).Select(player => player.LodestoneId).ToList();
+            var dupeLodestoneIds = playerLodestoneIds.GroupBy(x => x)
+                                     .Where(group => group.Count() > 1)
+                                     .Select(group => group.Key).ToList();
+            if (dupeLodestoneIds.Count > 0)
+            {
+                Logger.LogInfo("Found Duplicate Lodestone Ids: " + dupeLodestoneIds.Count);
+                foreach (var dupeLodestoneId in dupeLodestoneIds)
+                {
+                    var dupePlayers = playersInDB.Where(p => p.LodestoneId == dupeLodestoneId).ToList();
+                    var sortedPlayers = dupePlayers.OrderBy(player => player.Created).ToArray();
+                    var originalPlayer = sortedPlayers.First();
+                    var deletePlayers = sortedPlayers.Skip(1).ToArray();
+                    var newKey = sortedPlayers.Last().Key;
+                    Logger.LogDebug("Original Player: " + originalPlayer);
+                    foreach (var deletedPlayer in deletePlayers)
+                    {
+                        Logger.LogDebug("Newer Player: " + deletedPlayer);
+                        originalPlayer.Merge(deletedPlayer);
+                        this.DeleteItem<Player>(deletedPlayer.Id);
+                    }
+
+                    originalPlayer.Key = newKey;
+                    this.UpdateItem(originalPlayer);
+                }
+            }
+        }
+
+        private void MergeKeyDuplicates()
         {
             var playersInDB = this.GetItems<Player>().ToList();
             var playerKeys = playersInDB.Select(pair => pair.Key.ToString()).ToList();
