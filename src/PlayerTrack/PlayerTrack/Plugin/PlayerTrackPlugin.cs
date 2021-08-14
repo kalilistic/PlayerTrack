@@ -76,9 +76,9 @@ namespace PlayerTrack
                     if (this.Configuration.PluginVersion < pluginVersion)
                     {
                         Logger.LogInfo("Running backup since new version detected.");
+                        this.RunUpgradeBackup();
                         this.Configuration.PluginVersion = pluginVersion;
                         this.SaveConfig();
-                        this.RunBackup();
                     }
                     else
                     {
@@ -339,14 +339,16 @@ namespace PlayerTrack
             if (DateUtil.CurrentTime() > this.Configuration.LastBackup + this.Configuration.BackupFrequency)
             {
                 Logger.LogInfo("Running backup due to frequency timer.");
-                this.RunBackup();
+                this.Configuration.LastBackup = DateUtil.CurrentTime();
+                this.PluginService.BackupManager.CreateBackup();
+                this.PluginService.BackupManager.DeleteBackups(this.Configuration.BackupRetention);
             }
         }
 
-        private void RunBackup()
+        private void RunUpgradeBackup()
         {
             this.Configuration.LastBackup = DateUtil.CurrentTime();
-            this.PluginService.BackupManager.CreateBackup();
+            this.PluginService.BackupManager.CreateBackup("upgrade/v" + this.Configuration.PluginVersion + "_");
             this.PluginService.BackupManager.DeleteBackups(this.Configuration.BackupRetention);
         }
 
