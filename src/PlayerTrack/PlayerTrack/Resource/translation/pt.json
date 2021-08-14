@@ -75,14 +75,6 @@
         "message": "Alertas",
         "description": "ConfigWindow.CategoryConfig"
     },
-    "CategoryColors": {
-        "message": "Cores",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryIcon": {
-        "message": "Ícone",
-        "description": "ConfigWindow.CategoryConfig"
-    },
     "CategoryAction": {
         "message": "Ações",
         "description": "ConfigWindow.CategoryConfig"
