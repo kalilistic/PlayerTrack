@@ -558,47 +558,30 @@ namespace PlayerTrack
             {
                 if (this.players.ContainsKey(response.PlayerKey))
                 {
-                    var currentPlayer = this.players[response.PlayerKey];
-
                     // if verified
                     if (response.Status == LodestoneStatus.Verified)
                     {
                         // get player and merge for name/world changes
-                        var player = this.GetPlayerByLodestoneId(response.LodestoneId);
-                        if (player != null)
+                        var existingPlayer = this.GetPlayerByLodestoneId(response.LodestoneId);
+                        if (existingPlayer != null)
                         {
-                            if (player.Created < currentPlayer.Created)
-                            {
-                                player.Merge(currentPlayer);
-                                this.UpdateItem(player);
-                                if (currentPlayer.IsCurrent)
-                                {
-                                    this.players.Remove(currentPlayer.Key);
-                                }
-
-                                this.DeletePlayer(currentPlayer);
-                                return;
-                            }
-
-                            currentPlayer.Merge(player);
-                            if (player.IsCurrent)
-                            {
-                                this.players.Remove(player.Key);
-                            }
-
-                            this.DeletePlayer(player);
+                            Logger.LogInfo("Lodestone Merge: " + response.PlayerKey + " / " + existingPlayer.Key);
+                            existingPlayer.Merge(this.players[response.PlayerKey]);
+                            this.SetDerivedFields(existingPlayer);
+                            this.players[response.PlayerKey] = existingPlayer;
+                            this.DeletePlayer(existingPlayer);
                         }
                     }
 
-                    currentPlayer.LodestoneId = response.LodestoneId;
-                    currentPlayer.LodestoneStatus = response.Status;
-                    currentPlayer.LodestoneLastUpdated = DateUtil.CurrentTime();
-                    if (currentPlayer.LodestoneStatus == LodestoneStatus.Failed)
+                    this.players[response.PlayerKey].LodestoneId = response.LodestoneId;
+                    this.players[response.PlayerKey].LodestoneStatus = response.Status;
+                    this.players[response.PlayerKey].LodestoneLastUpdated = DateUtil.CurrentTime();
+                    if (this.players[response.PlayerKey].LodestoneStatus == LodestoneStatus.Failed)
                     {
-                        currentPlayer.LodestoneFailureCount++;
+                        this.players[response.PlayerKey].LodestoneFailureCount++;
                     }
 
-                    this.UpdateItem(currentPlayer);
+                    this.UpdateItem(this.players[response.PlayerKey]);
                 }
             }
         }

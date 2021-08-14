@@ -259,6 +259,7 @@ namespace PlayerTrack
             if (this.Updated < player.Updated)
             {
                 // overwrite
+                this.Key = player.Key;
                 this.ActorId = player.ActorId;
                 this.FreeCompany = player.FreeCompany;
                 this.LastTerritoryType = player.LastTerritoryType;
