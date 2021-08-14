@@ -71,20 +71,12 @@
         "message": "Par défaut",
         "description": "ConfigWindow.CategoryConfig"
     },
-    "CategoryNamePlates": {
-        "message": "Plaques de nom",
-        "description": "ConfigWindow.CategoryConfig"
-    },
     "CategoryAlerts": {
         "message": "Alertes",
         "description": "ConfigWindow.CategoryConfig"
     },
-    "CategoryColors": {
-        "message": "Couleurs",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryIcon": {
-        "message": "Icône",
+    "CategoryNamePlates": {
+        "message": "Plaques de nom",
         "description": "ConfigWindow.CategoryConfig"
     },
     "CategoryAction": {
