@@ -26,6 +26,12 @@ namespace PlayerTrack
         public string Key { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets composite for sorting.
+        /// </summary>
+        [BsonIgnore]
+        public string SortKey { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets current actor id (may change).
         /// </summary>
         [BsonIgnore]

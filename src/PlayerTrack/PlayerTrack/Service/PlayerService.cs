@@ -21,7 +21,7 @@ namespace PlayerTrack
         private readonly object locker = new ();
         private readonly SortedList<string, Player> players = new ();
         private readonly PlayerTrackPlugin plugin;
-        private Player[] viewPlayers = new Player[0];
+        private SortedList<string, Player> viewPlayers = new ();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerService"/> class.
@@ -34,7 +34,7 @@ namespace PlayerTrack
             this.encounterService = plugin.EncounterService;
             this.categoryService = plugin.CategoryService;
             this.LoadPlayers();
-            this.UpdateViewPlayers();
+            this.ResetViewPlayers();
         }
 
         /// <summary>
@@ -46,6 +46,33 @@ namespace PlayerTrack
         public static string BuildPlayerKey(string name, uint worldId)
         {
             return string.Concat(name.Replace(' ', '_').ToUpper(), "_", worldId);
+        }
+
+        /// <summary>
+        ///  Build composite player sort key.
+        /// </summary>
+        /// <param name="player">player for sort key update.</param>
+        /// <returns>sort key.</returns>
+        public static string BuildPlayerSortKey(Player player)
+        {
+            return string.Concat(player.CategoryRank, "_", player.Key);
+        }
+
+        /// <summary>
+        /// Update view player.
+        /// </summary>
+        /// <param name="sortKey">original sort key.</param>
+        /// <param name="player">new player.</param>
+        public void UpdateViewPlayer(string sortKey, Player player)
+        {
+            lock (this.locker)
+            {
+                if (this.viewPlayers.ContainsKey(sortKey))
+                {
+                    this.viewPlayers.Remove(sortKey);
+                    this.viewPlayers.Add(player.SortKey, player);
+                }
+            }
         }
 
         /// <summary>
@@ -80,7 +107,7 @@ namespace PlayerTrack
                 lock (this.locker)
                 {
                     // create player list by mode
-                    playersList = this.viewPlayers.ToArray();
+                    playersList = this.viewPlayers.Select(pair => pair.Value).ToArray();
                 }
 
                 // filter by search
@@ -90,8 +117,7 @@ namespace PlayerTrack
                     {
                         PlayerSearchType.startsWith => playersList
                                                        .Where(
-                                                           player => player.Names.First().ToLower().StartsWith(nameFilter.ToLower()))
-                                                       .ToArray(),
+                                                           player => player.Names.First().ToLower().StartsWith(nameFilter.ToLower())).ToArray(),
                         PlayerSearchType.contains => playersList
                                                      .Where(player => player.Names.First().ToLower().Contains(nameFilter.ToLower()))
                                                      .ToArray(),
@@ -220,12 +246,15 @@ namespace PlayerTrack
                 lock (this.locker)
                 {
                     this.players.Remove(player.Key);
+                    if (this.viewPlayers.ContainsKey(player.SortKey))
+                    {
+                        this.viewPlayers.Remove(player.SortKey);
+                    }
                 }
 
                 this.encounterService.DeleteEncounters(player.Key);
                 this.DeleteItem<Player>(player.Id);
                 this.plugin.ActorManager.ClearPlayerCharacter(player.ActorId);
-                this.UpdateViewPlayers();
             }
         }
 
@@ -241,6 +270,12 @@ namespace PlayerTrack
                 {
                     this.players[player.Key].IsCurrent = player.IsCurrent;
                     this.players[player.Key].Updated = player.Updated;
+                    if (this.viewPlayers.ContainsKey(player.SortKey) &&
+                        PlayerFilterType.GetPlayerFilterTypeByIndex(this.plugin.Configuration.PlayerFilterType) ==
+                        PlayerFilterType.CurrentPlayers)
+                    {
+                        this.viewPlayers.Remove(player.SortKey);
+                    }
                 }
 
                 this.UpdateItem(this.players[player.Key]);
@@ -257,12 +292,14 @@ namespace PlayerTrack
             {
                 lock (this.locker)
                 {
+                    var originalSortKey = player.SortKey;
                     this.players[player.Key].CategoryId = player.CategoryId;
                     this.players[player.Key].CategoryRank = this.plugin.CategoryService.GetCategory(player.CategoryId).Rank;
+                    this.players[player.Key].SortKey = BuildPlayerSortKey(this.players[player.Key]);
+                    this.UpdateViewPlayer(originalSortKey, this.players[player.Key]);
                 }
 
                 this.UpdateItem(this.players[player.Key]);
-                this.UpdateViewPlayers();
                 this.plugin.NamePlateManager.ForceRedraw();
             }
         }
@@ -279,6 +316,7 @@ namespace PlayerTrack
                 {
                     this.players[player.Key].Title = player.Title;
                     this.players[player.Key].SetSeTitle();
+                    this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
                 }
 
                 this.UpdateItem(this.players[player.Key]);
@@ -297,6 +335,7 @@ namespace PlayerTrack
                 lock (this.locker)
                 {
                     this.players[player.Key].Icon = player.Icon;
+                    this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
                 }
 
                 this.UpdateItem(this.players[player.Key]);
@@ -314,6 +353,7 @@ namespace PlayerTrack
                 lock (this.locker)
                 {
                     this.players[player.Key].NamePlateColor = player.NamePlateColor;
+                    this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
                 }
 
                 this.UpdateItem(this.players[player.Key]);
@@ -332,6 +372,7 @@ namespace PlayerTrack
                 lock (this.locker)
                 {
                     this.players[player.Key].IsAlertEnabled = player.IsAlertEnabled;
+                    this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
                 }
 
                 this.UpdateItem(this.players[player.Key]);
@@ -349,6 +390,7 @@ namespace PlayerTrack
                 lock (this.locker)
                 {
                     this.players[player.Key].Reset();
+                    this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
                 }
 
                 this.UpdateItem(this.players[player.Key]);
@@ -367,6 +409,7 @@ namespace PlayerTrack
                 lock (this.locker)
                 {
                     this.players[player.Key].ListColor = player.ListColor;
+                    this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
                 }
 
                 this.UpdateItem(this.players[player.Key]);
@@ -384,6 +427,7 @@ namespace PlayerTrack
                 lock (this.locker)
                 {
                     this.players[player.Key].Notes = player.Notes;
+                    this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
                 }
 
                 this.UpdateItem(this.players[player.Key]);
@@ -402,6 +446,7 @@ namespace PlayerTrack
                 {
                     this.players[player.Key].LodestoneStatus = player.LodestoneStatus;
                     this.players[player.Key].LodestoneFailureCount = player.LodestoneFailureCount;
+                    this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
                 }
 
                 this.UpdateItem(this.players[player.Key]);
@@ -438,6 +483,7 @@ namespace PlayerTrack
                             XivChatType.Notice);
                     }
 
+                    this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
                     this.UpdateItem(this.players[player.Key]);
                 }
 
@@ -448,6 +494,7 @@ namespace PlayerTrack
                     lock (this.locker)
                     {
                         this.players.Add(player.Key, player);
+                        this.viewPlayers.Add(player.SortKey, player);
                     }
 
                     this.InsertItem(player);
@@ -471,6 +518,7 @@ namespace PlayerTrack
             foreach (var player in enumerable)
             {
                 this.players.Add(player.Key, player);
+                this.viewPlayers.Add(player.SortKey, player);
             }
 
             this.InsertItems(enumerable);
@@ -499,10 +547,12 @@ namespace PlayerTrack
                 CategoryId = this.plugin.CategoryService.GetDefaultCategory().Id,
                 SeenCount = 0,
             };
+            this.SetDerivedFields(player);
             lock (this.locker)
             {
                 if (this.players.ContainsKey(player.Key)) return player;
                 this.players.Add(player.Key, player);
+                this.viewPlayers.Add(player.SortKey, player);
             }
 
             this.InsertItem(player);
@@ -534,16 +584,18 @@ namespace PlayerTrack
                 CategoryId = this.plugin.CategoryService.GetDefaultCategory().Id,
                 SeenCount = 0,
             };
+            this.SetDerivedFields(player);
             lock (this.locker)
             {
                 if (this.players.ContainsKey(player.Key)) return player;
                 this.players.Add(player.Key, player);
+                this.viewPlayers.Add(player.SortKey, player);
             }
 
             this.InsertItem(player);
             this.RebuildIndex<Player>(p => p.Key);
             this.SubmitLodestoneRequest(player);
-            this.UpdateViewPlayers();
+            this.ResetViewPlayers();
 
             return player;
         }
@@ -600,6 +652,8 @@ namespace PlayerTrack
 
                     this.UpdateItem(currentPlayer);
                 }
+
+                this.ResetViewPlayers();
             }
         }
 
@@ -615,6 +669,12 @@ namespace PlayerTrack
                 {
                     this.players[player.Key].IsCurrent = false;
                     this.UpdateItem(this.players[player.Key]);
+                }
+
+                if (PlayerFilterType.GetPlayerFilterTypeByIndex(this.plugin.Configuration.PlayerFilterType) ==
+                    PlayerFilterType.CurrentPlayers)
+                {
+                    this.ResetViewPlayers();
                 }
             }
 
@@ -639,7 +699,7 @@ namespace PlayerTrack
                 }
 
                 this.UpsertItems(playersWithCategoryList);
-                this.UpdateViewPlayers();
+                this.ResetViewPlayers();
             }
         }
 
@@ -767,6 +827,9 @@ namespace PlayerTrack
 
             // category rank
             player.CategoryRank = this.plugin.CategoryService.GetCategory(player.CategoryId).Rank;
+
+            // set sort key
+            player.SortKey = BuildPlayerSortKey(player);
         }
 
         /// <summary>
@@ -782,51 +845,52 @@ namespace PlayerTrack
                 }
             }
 
-            this.UpdateViewPlayers();
+            this.ResetViewPlayers();
         }
 
         /// <summary>
         /// Update sorted player list for display.
         /// </summary>
-        public void UpdateViewPlayers()
+        public void ResetViewPlayers()
         {
             lock (this.locker)
             {
-                var filterType =
-                    PlayerFilterType.GetPlayerFilterTypeByIndex(this.plugin.Configuration.PlayerFilterType);
+                this.viewPlayers = new SortedList<string, Player>();
+                var filterType = PlayerFilterType.GetPlayerFilterTypeByIndex(this.plugin.Configuration.PlayerFilterType);
+
                 if (filterType == PlayerFilterType.CurrentPlayers)
                 {
-                    this.viewPlayers = this.players
-                        .Where(pair => pair.Value.IsCurrent)
-                        .Select(pair => pair.Value)
-                        .OrderBy(player => player.CategoryRank)
-                        .ThenBy(player => player.Names.First()).ToArray();
+                    foreach (var kvp in this.players)
+                    {
+                        if (kvp.Value.IsCurrent)
+                        {
+                            this.viewPlayers.Add(kvp.Value.SortKey, kvp.Value);
+                        }
+                    }
                 }
                 else if (filterType == PlayerFilterType.RecentPlayers)
                 {
-                    this.viewPlayers = this.players
-                       .Where(pair => pair.Value.IsRecent)
-                       .Select(pair => pair.Value)
-                       .OrderBy(player => player.CategoryRank)
-                       .ThenBy(player => player.Names.First()).ToArray();
+                    foreach (var kvp in this.players)
+                    {
+                        if (kvp.Value.IsRecent)
+                        {
+                            this.viewPlayers.Add(kvp.Value.SortKey, kvp.Value);
+                        }
+                    }
                 }
                 else if (filterType == PlayerFilterType.AllPlayers)
                 {
-                    this.viewPlayers = this.players
-                       .Select(pair => pair.Value)
-                       .OrderBy(player => player.CategoryRank)
-                       .ThenBy(player => player.Names.First()).ToArray();
+                    foreach (var kvp in this.players)
+                    {
+                        this.viewPlayers.Add(kvp.Value.SortKey, kvp.Value);
+                    }
                 }
                 else if (filterType == PlayerFilterType.PlayersByCategory)
                 {
-                    this.viewPlayers = this.players
-                       .Where(pair => pair.Value.CategoryId == this.plugin.Configuration.CategoryFilterId)
-                       .Select(pair => pair.Value)
-                       .OrderBy(player => player.Names.First()).ToArray();
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException();
+                    foreach (var kvp in this.players)
+                    {
+                        this.viewPlayers.Add(kvp.Value.SortKey, kvp.Value);
+                    }
                 }
             }
         }
