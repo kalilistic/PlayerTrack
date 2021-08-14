@@ -137,7 +137,17 @@ namespace PlayerTrack
         /// <summary>
         /// Number of backups to keep before deleting the oldest.
         /// </summary>
-        public int BackupRetention = 3;
+        public int BackupRetention = 7;
+
+        /// <summary>
+        /// Backup frequency in ms.
+        /// </summary>
+        public long BackupFrequency = 86400000;
+
+        /// <summary>
+        /// Last backup in ms.
+        /// </summary>
+        public long LastBackup;
 
         /// <summary>
         /// Use nameplate colors.

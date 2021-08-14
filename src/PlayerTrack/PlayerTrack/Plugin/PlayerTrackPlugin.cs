@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Timers;
 
 using CheapLoc;
 using Dalamud.DrunkenToad;
@@ -25,6 +26,8 @@ namespace PlayerTrack
         /// XivCommon library instance.
         /// </summary>
         public XivCommonBase XivCommon = null!;
+
+        private Timer backupTimer = null!;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerTrackPlugin"/> class.
@@ -67,8 +70,9 @@ namespace PlayerTrack
                     this.NamePlateManager = new NamePlateManager(this);
 
                     // run backups
-                    this.PluginService.BackupManager.CreateBackup();
-                    this.PluginService.BackupManager.DeleteBackups(this.Configuration.BackupRetention);
+                    this.backupTimer = new Timer { Interval = this.Configuration.BackupFrequency, Enabled = false };
+                    this.backupTimer.Elapsed += this.BackupTimerOnElapsed;
+                    this.BackupTimerOnElapsed(this, null);
 
                     // migrate if needed
                     var success = Migrator.Migrate(this);
@@ -85,6 +89,7 @@ namespace PlayerTrack
 
                         // start plugin
                         this.IsDoneLoading = true;
+                        this.backupTimer.Enabled = true;
                         this.ActorManager.Start();
                         this.WindowManager.AddWindows();
                     }
@@ -176,6 +181,8 @@ namespace PlayerTrack
         {
             try
             {
+                this.backupTimer.Elapsed -= this.BackupTimerOnElapsed;
+                this.backupTimer.Dispose();
                 this.CommandManager.Dispose();
                 this.NamePlateManager.Dispose();
                 this.ContextMenuManager.Dispose();
@@ -316,6 +323,16 @@ namespace PlayerTrack
             Logger.LogInfo("Finished running integrity check.");
         }
 
+        private void BackupTimerOnElapsed(object sender, ElapsedEventArgs? e)
+        {
+            if (DateUtil.CurrentTime() > this.Configuration.LastBackup + this.Configuration.BackupFrequency)
+            {
+                this.Configuration.LastBackup = DateUtil.CurrentTime();
+                this.PluginService.BackupManager.CreateBackup();
+                this.PluginService.BackupManager.DeleteBackups(this.Configuration.BackupRetention);
+            }
+        }
+
         private void SetDefaultIcons()
         {
             this.Configuration.EnabledIcons = new List<FontAwesomeIcon>
@@ -338,6 +355,12 @@ namespace PlayerTrack
                 if (this.Configuration.LodestoneMaxRetry > 3)
                 {
                     this.Configuration.LodestoneMaxRetry = 3;
+                    this.SaveConfig();
+                }
+
+                if (this.Configuration.BackupRetention < 7)
+                {
+                    this.Configuration.BackupRetention = 7;
                     this.SaveConfig();
                 }
 
