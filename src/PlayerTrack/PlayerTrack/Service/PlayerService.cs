@@ -270,11 +270,17 @@ namespace PlayerTrack
                 {
                     this.players[player.Key].IsCurrent = player.IsCurrent;
                     this.players[player.Key].Updated = player.Updated;
-                    if (this.viewPlayers.ContainsKey(player.SortKey) &&
-                        PlayerFilterType.GetPlayerFilterTypeByIndex(this.plugin.Configuration.PlayerFilterType) ==
-                        PlayerFilterType.CurrentPlayers)
+                    if (this.viewPlayers.ContainsKey(player.SortKey))
                     {
-                        this.viewPlayers.Remove(player.SortKey);
+                        if (PlayerFilterType.GetPlayerFilterTypeByIndex(this.plugin.Configuration.PlayerFilterType) ==
+                            PlayerFilterType.CurrentPlayers)
+                        {
+                            this.viewPlayers.Remove(player.SortKey);
+                        }
+                        else
+                        {
+                            this.UpdateViewPlayer(player.SortKey, player);
+                        }
                     }
                 }
 
@@ -483,7 +489,15 @@ namespace PlayerTrack
                             XivChatType.Notice);
                     }
 
-                    this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
+                    if (this.viewPlayers.ContainsKey(this.players[player.Key].SortKey))
+                    {
+                        this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
+                    }
+                    else
+                    {
+                        this.viewPlayers.Add(player.SortKey, this.players[player.Key]);
+                    }
+
                     this.UpdateItem(this.players[player.Key]);
                 }
 
