@@ -55,7 +55,7 @@ namespace PlayerTrack
         /// <returns>sort key.</returns>
         public static string BuildPlayerSortKey(Player player)
         {
-            return string.Concat(player.CategoryRank, "_", player.Key);
+            return string.Concat(player.CategoryRank.ToString().PadLeft(4, '0'), "_", player.Key);
         }
 
         /// <summary>
