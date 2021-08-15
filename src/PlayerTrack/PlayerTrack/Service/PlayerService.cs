@@ -748,7 +748,7 @@ namespace PlayerTrack
             if (player.ListColor != null) return (Vector4)player.ListColor;
             var category = this.categoryService.GetCategory(player.CategoryId);
             if (category is { ListColor: { } }) return (Vector4)category.ListColor;
-            return ImGuiColors.White;
+            return ImGuiColors.DalamudWhite;
         }
 
         /// <summary>

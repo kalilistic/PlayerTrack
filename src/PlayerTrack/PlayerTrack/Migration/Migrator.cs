@@ -102,6 +102,8 @@ namespace PlayerTrack
 
                 // map categories
                 Category? defaultCategory = null;
+
+                // this is intentionally incorrect to match how it was stored in v2
                 var defaultColor = new Vector4(255, 255, 255, 1);
                 for (var i = 0; i < trackCategories.Count; i++)
                 {

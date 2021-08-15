@@ -203,7 +203,7 @@ namespace PlayerTrack
         public Vector4 EffectiveListColor()
         {
             if (this.ListColor != null) return (Vector4)this.ListColor;
-            return ImGuiColors.White;
+            return ImGuiColors.DalamudWhite;
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace PlayerTrack
         public Vector4 EffectiveNamePlateColor()
         {
             if (this.NamePlateColor != null) return (Vector4)this.NamePlateColor;
-            return ImGuiColors.White;
+            return ImGuiColors.DalamudWhite;
         }
 
         /// <summary>

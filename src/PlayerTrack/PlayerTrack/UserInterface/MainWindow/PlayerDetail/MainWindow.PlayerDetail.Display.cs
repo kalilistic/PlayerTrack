@@ -79,7 +79,7 @@ namespace PlayerTrack
             ImGui.SameLine();
             ImGui.PushFont(UiBuilder.IconFont);
             ImGui.TextColored(
-                ImGuiColors.White,
+                ImGuiColors.DalamudWhite,
                 ((FontAwesomeIcon)this.SelectedPlayer.Icon).ToIconString());
             ImGui.PopFont();
 
