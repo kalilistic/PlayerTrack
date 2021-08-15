@@ -1,6 +1,7 @@
 using System;
 
 using CheapLoc;
+using Dalamud.DrunkenToad;
 using Dalamud.Interface;
 using ImGuiNET;
 
@@ -108,11 +109,36 @@ namespace PlayerTrack
                     var iconNames = this.plugin.PluginService.IconNames;
                     for (var i = 0; i < icons.Length; i++)
                     {
+                        ImGui.BeginGroup();
+                        if (this.Plugin.Configuration.EnabledIcons.Contains(icons[i]))
+                        {
+                            ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors2.ToadViolet);
+                        }
+
                         ImGui.PushFont(UiBuilder.IconFont);
                         ImGui.Text(icons[i].ToIconString());
                         ImGui.PopFont();
                         ImGui.SameLine();
                         ImGui.Text(iconNames[i]);
+                        if (this.Plugin.Configuration.EnabledIcons.Contains(icons[i]))
+                        {
+                            ImGui.PopStyleColor();
+                        }
+
+                        ImGui.EndGroup();
+                        if (ImGui.IsItemClicked())
+                        {
+                            if (this.Plugin.Configuration.EnabledIcons.Contains(icons[i]))
+                            {
+                                this.Plugin.Configuration.EnabledIcons.Remove(icons[i]);
+                                this.Plugin.SaveConfig();
+                            }
+                            else
+                            {
+                                this.Plugin.Configuration.EnabledIcons.Add(this.Plugin.PluginService.Icons[i]);
+                                this.Plugin.SaveConfig();
+                            }
+                        }
                     }
 
                     ImGui.Spacing();

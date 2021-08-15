@@ -21,6 +21,13 @@ namespace PlayerTrack
                 this.plugin.WindowManager.ModalWindow.Open(ModalWindow.ModalType.IconGlossary);
             }
 
+            ImGui.SameLine();
+            if (ImGui.SmallButton(Loc.Localize("Reset", "Reset") + "###PlayerTrack_IconReset_Button"))
+            {
+                this.selectedIconIndex = 4;
+                this.plugin.SetDefaultIcons();
+            }
+
             ImGui.Separator();
             ImGui.Text(Loc.Localize("Icons", "Add / Remove Icons"));
             ImGuiComponents.HelpMarker(Loc.Localize(
@@ -51,13 +58,6 @@ namespace PlayerTrack
                     this.Plugin.Configuration.EnabledIcons.Add(this.Plugin.PluginService.Icons[this.selectedIconIndex]);
                     this.Plugin.SaveConfig();
                 }
-            }
-
-            ImGui.SameLine();
-            if (ImGui.SmallButton(Loc.Localize("Reset", "Reset") + "###PlayerTrack_IconReset_Button"))
-            {
-                this.selectedIconIndex = 4;
-                this.Plugin.SaveConfig();
             }
 
             if (ImGui.BeginPopup("###PlayerTrack_DupeIcon_Popup"))

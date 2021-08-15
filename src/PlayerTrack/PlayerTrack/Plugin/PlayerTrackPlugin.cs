@@ -334,6 +334,25 @@ namespace PlayerTrack
             Logger.LogInfo("Finished running integrity check.");
         }
 
+        /// <summary>
+        /// Set default icons for fresh install or on reset.
+        /// </summary>
+        public void SetDefaultIcons()
+        {
+            this.Configuration.EnabledIcons = new List<FontAwesomeIcon>
+            {
+                FontAwesomeIcon.GrinBeam,
+                FontAwesomeIcon.GrinAlt,
+                FontAwesomeIcon.Meh,
+                FontAwesomeIcon.Frown,
+                FontAwesomeIcon.Angry,
+                FontAwesomeIcon.Flushed,
+                FontAwesomeIcon.Surprise,
+                FontAwesomeIcon.Tired,
+            };
+            this.SaveConfig();
+        }
+
         private void BackupTimerOnElapsed(object sender, ElapsedEventArgs? e)
         {
             if (DateUtil.CurrentTime() > this.Configuration.LastBackup + this.Configuration.BackupFrequency)
@@ -350,21 +369,6 @@ namespace PlayerTrack
             this.Configuration.LastBackup = DateUtil.CurrentTime();
             this.PluginService.BackupManager.CreateBackup("upgrade/v" + this.Configuration.PluginVersion + "_");
             this.PluginService.BackupManager.DeleteBackups(this.Configuration.BackupRetention);
-        }
-
-        private void SetDefaultIcons()
-        {
-            this.Configuration.EnabledIcons = new List<FontAwesomeIcon>
-            {
-                FontAwesomeIcon.GrinBeam,
-                FontAwesomeIcon.GrinAlt,
-                FontAwesomeIcon.Meh,
-                FontAwesomeIcon.Frown,
-                FontAwesomeIcon.Angry,
-                FontAwesomeIcon.Flushed,
-                FontAwesomeIcon.Surprise,
-                FontAwesomeIcon.Tired,
-            };
         }
 
         private void HandleFreshInstall()
