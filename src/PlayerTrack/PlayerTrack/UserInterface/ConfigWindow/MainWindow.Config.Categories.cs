@@ -133,6 +133,15 @@ namespace PlayerTrack
                     this.Plugin.CategoryService.SaveCategory(category);
                 }
 
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    ImGui.PushTextWrapPos(ImGui.GetFontSize() * 35f);
+                    ImGui.TextUnformatted(Loc.Localize("CategoryNamePlateColor", "Set nameplate color"));
+                    ImGui.PopTextWrapPos();
+                    ImGui.EndTooltip();
+                }
+
                 // category nameplate color
                 ImGui.SameLine();
                 var categoryNamePlateColor = category.EffectiveNamePlateColor();
@@ -152,15 +161,6 @@ namespace PlayerTrack
                     this.CategoryNamePlateColorSwatchRow(category, category.Id, 16, 24);
                     this.CategoryNamePlateColorSwatchRow(category, category.Id, 24, 32);
                     ImGui.EndPopup();
-                }
-
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.BeginTooltip();
-                    ImGui.PushTextWrapPos(ImGui.GetFontSize() * 35f);
-                    ImGui.TextUnformatted(Loc.Localize("CategoryNamePlateColor", "Set nameplate color"));
-                    ImGui.PopTextWrapPos();
-                    ImGui.EndTooltip();
                 }
 
                 // category list color
