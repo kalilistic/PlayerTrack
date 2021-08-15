@@ -12,6 +12,27 @@ namespace PlayerTrack
     {
         private void NamePlateConfig()
         {
+            // restrict nameplate use
+            ImGui.Text(Loc.Localize("ShowNamePlates", "Show Nameplates"));
+            var showNamePlatesIndex = this.plugin.Configuration.ShowNamePlates;
+            ImGui.SetNextItemWidth(180f * ImGuiHelpers.GlobalScale);
+            if (ImGui.Combo(
+                "###PlayerTrack_ShowNamePlates_Combo",
+                ref showNamePlatesIndex,
+                ContentRestrictionType.RestrictionTypeNames.ToArray(),
+                ContentRestrictionType.RestrictionTypeNames.Count))
+            {
+                this.plugin.Configuration.ShowNamePlates = ContentRestrictionType.GetContentRestrictionTypeByIndex(showNamePlatesIndex).Index;
+                this.plugin.SaveConfig();
+                this.plugin.PlayerService.ResetViewPlayers();
+                this.plugin.NamePlateManager.ForceRedraw();
+            }
+
+            ImGuiComponents.HelpMarker(Loc.Localize(
+                                           "ShowNamePlates_HelpMarker",
+                                           "when to show custom nameplates"));
+            ImGui.Spacing();
+
             // restrict in combat
             var restrictNamePlatesInCombat = this.Plugin.Configuration.RestrictNamePlatesInCombat;
             if (ImGui.Checkbox(
@@ -44,25 +65,20 @@ namespace PlayerTrack
                                            "don't update nameplate for dead players so easier to see they are dead"));
             ImGui.Spacing();
 
-            // restrict nameplate use
-            ImGui.Text(Loc.Localize("ShowNamePlates", "Show Nameplates"));
-            var showNamePlatesIndex = this.plugin.Configuration.ShowNamePlates;
-            ImGui.SetNextItemWidth(180f * ImGuiHelpers.GlobalScale);
-            if (ImGui.Combo(
-                "###PlayerTrack_ShowNamePlates_Combo",
-                ref showNamePlatesIndex,
-                ContentRestrictionType.RestrictionTypeNames.ToArray(),
-                ContentRestrictionType.RestrictionTypeNames.Count))
+            // default the nameplate color to the list color unless changed
+            var defaultNamePlateColorToListColor = this.Plugin.Configuration.DefaultNamePlateColorToListColor;
+            if (ImGui.Checkbox(
+                Loc.Localize("DefaultNamePlateColorToListColor", "Default nameplate color to list color") +
+                "###PlayerTrack_DefaultNamePlateColorToListColor_Checkbox",
+                ref defaultNamePlateColorToListColor))
             {
-                this.plugin.Configuration.ShowNamePlates = ContentRestrictionType.GetContentRestrictionTypeByIndex(showNamePlatesIndex).Index;
-                this.plugin.SaveConfig();
-                this.plugin.PlayerService.ResetViewPlayers();
-                this.plugin.NamePlateManager.ForceRedraw();
+                this.Plugin.Configuration.DefaultNamePlateColorToListColor = defaultNamePlateColorToListColor;
+                this.Plugin.SaveConfig();
             }
 
             ImGuiComponents.HelpMarker(Loc.Localize(
-                                           "ShowNamePlates_HelpMarker",
-                                           "when to show custom nameplates"));
+                                           "DefaultNamePlateColorToListColor_HelpMarker",
+                                           "default the nameplate color to the list color unless changed"));
             ImGui.Spacing();
 
             // use nameplate colors

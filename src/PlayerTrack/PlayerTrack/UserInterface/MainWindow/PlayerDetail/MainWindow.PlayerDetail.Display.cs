@@ -97,6 +97,11 @@ namespace PlayerTrack
                 if (ImGui.ColorPicker4("List Color###PlayerTrack_PlayerListColor_ColorPicker", ref listColor))
                 {
                     this.SelectedPlayer.ListColor = listColor;
+                    if (this.plugin.Configuration.DefaultNamePlateColorToListColor)
+                    {
+                        this.SelectedPlayer.NamePlateColor = listColor;
+                    }
+
                     this.Plugin.PlayerService.UpdatePlayerListColor(this.SelectedPlayer);
                 }
 

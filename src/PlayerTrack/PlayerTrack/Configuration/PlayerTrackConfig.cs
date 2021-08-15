@@ -165,6 +165,11 @@ namespace PlayerTrack
         public bool DisableNamePlateColorIfDead = true;
 
         /// <summary>
+        /// Default the nameplate color to the list color unless changed.
+        /// </summary>
+        public bool DefaultNamePlateColorToListColor = true;
+
+        /// <summary>
         /// Show option to get/show player info via context menu.
         /// </summary>
         public bool ShowAddShowInfoContextMenu = true;
