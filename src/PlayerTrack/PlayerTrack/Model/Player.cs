@@ -327,6 +327,10 @@ namespace PlayerTrack
             sb.Append(System.Environment.NewLine);
             sb.Append("World: " + this.HomeWorlds.First().Key);
             sb.Append(System.Environment.NewLine);
+            sb.Append("CategoryId: " + this.CategoryId);
+            sb.Append(System.Environment.NewLine);
+            sb.Append("CategoryRank: " + this.CategoryRank);
+            sb.Append(System.Environment.NewLine);
             return sb.ToString();
         }
     }

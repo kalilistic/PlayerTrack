@@ -499,7 +499,7 @@ namespace PlayerTrack
                         }
                         else
                         {
-                            this.viewPlayers.Add(player.SortKey, this.players[player.Key]);
+                            this.viewPlayers.Add(this.players[player.Key].SortKey, this.players[player.Key]);
                         }
                     }
 
