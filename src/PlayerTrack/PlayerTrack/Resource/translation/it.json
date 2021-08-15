@@ -7,6 +7,10 @@
         "message": "Aggiungi",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "Reset": {
+        "message": "Resetta",
+        "description": "ConfigWindow.IconConfig"
+    },
     "RestrictInCombat": {
         "message": "Non processare in combattimento",
         "description": "ConfigWindow.ProcessingConfig"
@@ -26,10 +30,6 @@
     "PlayerHeightValue": {
         "message": "{0} in",
         "description": "MainWindow.PlayerCustomize"
-    },
-    "Reset": {
-        "message": "Resetta",
-        "description": "MainWindow.PlayerDisplay"
     },
     "PlayerInfo": {
         "message": "Info Giocatore",

@@ -3,6 +3,10 @@
         "message": "追加",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "Reset": {
+        "message": "リセット",
+        "description": "ConfigWindow.IconConfig"
+    },
     "RestrictInCombat": {
         "message": "戦闘中は処理しない",
         "description": "ConfigWindow.ProcessingConfig"
@@ -10,9 +14,5 @@
     "RestrictInCombat_HelpMarker": {
         "message": "戦闘中のデータ処理は停止します",
         "description": "ConfigWindow.ProcessingConfig"
-    },
-    "Reset": {
-        "message": "リセット",
-        "description": "MainWindow.PlayerDisplay"
     }
 }
