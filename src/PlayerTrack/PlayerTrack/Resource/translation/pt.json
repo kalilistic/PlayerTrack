@@ -119,6 +119,10 @@
         "message": "Tipo de pesquisa",
         "description": "ConfigWindow.DisplayConfig"
     },
+    "Reset": {
+        "message": "Resetar",
+        "description": "ConfigWindow.IconConfig"
+    },
     "Icons": {
         "message": "Adicionar / Remover Ícones",
         "description": "ConfigWindow.IconConfig"
@@ -341,10 +345,6 @@
     },
     "Alerts": {
         "message": "Alertas",
-        "description": "MainWindow.PlayerDisplay"
-    },
-    "Reset": {
-        "message": "Resetar",
         "description": "MainWindow.PlayerDisplay"
     },
     "Time": {

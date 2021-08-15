@@ -15,6 +15,10 @@
         "message": "Añadir",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "Reset": {
+        "message": "Restablecer",
+        "description": "ConfigWindow.IconConfig"
+    },
     "SyncToLodestone": {
         "message": "Sincronizar con Lodestone",
         "description": "ConfigWindow.LodestoneConfig"
@@ -61,10 +65,6 @@
     },
     "Alerts": {
         "message": "Alertas",
-        "description": "MainWindow.PlayerDisplay"
-    },
-    "Reset": {
-        "message": "Restablecer",
         "description": "MainWindow.PlayerDisplay"
     },
     "PlayerInfo": {
