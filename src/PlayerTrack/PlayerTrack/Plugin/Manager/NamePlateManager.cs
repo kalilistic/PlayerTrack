@@ -71,13 +71,20 @@ namespace PlayerTrack
                 // check if valid
                 if (args.Type != PlateType.Player || args.ActorId == 0) return;
 
-                // get player
+                // get actor
                 if (this.plugin.PluginService.PluginInterface.ClientState.Actors.FirstOrDefault(act => act.ActorId == args.ActorId) is not PlayerCharacter actor) return;
+
                 var player = this.plugin.PlayerService.GetPlayer(actor.Name, (ushort)actor.HomeWorld.Id);
                 if (player == null) return;
 
                 // set category
                 var category = this.plugin.CategoryService.GetCategory(player.CategoryId);
+
+                // force consistent nameplate style
+                if (this.plugin.Configuration.ForceNamePlateStyle)
+                {
+                    args.Type = PlateType.LowTitleNoFc;
+                }
 
                 // set title
                 if (this.plugin.Configuration.ChangeNamePlateTitle)
@@ -99,6 +106,7 @@ namespace PlayerTrack
                 }
 
                 // set color
+                if (this.plugin.Configuration.DisableNamePlateColorIfDead && actor.IsDead()) return;
                 if (this.plugin.Configuration.UseNamePlateColors)
                 {
                     // set color by player
@@ -112,12 +120,6 @@ namespace PlayerTrack
                     {
                         args.Colour = ((Vector4)category.NamePlateColor).ToByteColor();
                     }
-                }
-
-                // force consistent nameplate style
-                if (this.plugin.Configuration.ForceNamePlateStyle)
-                {
-                    args.Type = PlateType.LowTitleNoFc;
                 }
             }
             catch (Exception ex)

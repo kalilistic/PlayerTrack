@@ -163,6 +163,14 @@
         "message": "set locale for lodestone profile link",
         "description": "ConfigWindow.LodestoneConfig"
     },
+    "DisableNamePlateColorIfDead": {
+        "message": "Disable nameplate color if player is dead",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "DisableNamePlateColorIfDead_HelpMarker": {
+        "message": "don't update nameplate for dead players so easier to see they are dead",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
     "RestrictNamePlatesInCombat": {
         "message": "Don't show nameplates in combat",
         "description": "ConfigWindow.NamePlateConfig"

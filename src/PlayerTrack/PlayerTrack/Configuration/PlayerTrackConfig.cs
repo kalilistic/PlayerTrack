@@ -160,6 +160,11 @@ namespace PlayerTrack
         public bool ChangeNamePlateTitle = true;
 
         /// <summary>
+        /// Don't update nameplate if player is dead.
+        /// </summary>
+        public bool DisableNamePlateColorIfDead = true;
+
+        /// <summary>
         /// Show option to get/show player info via context menu.
         /// </summary>
         public bool ShowAddShowInfoContextMenu = true;

@@ -28,6 +28,22 @@ namespace PlayerTrack
                                            "stop showing nameplates in combat regardless of other settings"));
             ImGui.Spacing();
 
+            // disable name plate color change if player is dead
+            var disableNamePlateColorIfDead = this.Plugin.Configuration.DisableNamePlateColorIfDead;
+            if (ImGui.Checkbox(
+                Loc.Localize("DisableNamePlateColorIfDead", "Disable nameplate color if player is dead") +
+                "###PlayerTrack_DisableNamePlateColorIfDead_Checkbox",
+                ref disableNamePlateColorIfDead))
+            {
+                this.Plugin.Configuration.DisableNamePlateColorIfDead = disableNamePlateColorIfDead;
+                this.Plugin.SaveConfig();
+            }
+
+            ImGuiComponents.HelpMarker(Loc.Localize(
+                                           "DisableNamePlateColorIfDead_HelpMarker",
+                                           "don't update nameplate for dead players so easier to see they are dead"));
+            ImGui.Spacing();
+
             // restrict nameplate use
             ImGui.Text(Loc.Localize("ShowNamePlates", "Show Nameplates"));
             var showNamePlatesIndex = this.plugin.Configuration.ShowNamePlates;
