@@ -75,16 +75,20 @@
         "message": "Alerts",
         "description": "ConfigWindow.CategoryConfig"
     },
-    "CategoryNamePlates": {
-        "message": "NamePlate",
-        "description": "ConfigWindow.CategoryConfig"
-    },
     "CategoryList": {
         "message": "List Color/Icon",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "CategoryNamePlates": {
+        "message": "NamePlate",
+        "description": "ConfigWindow.CategoryConfig"
+    },
     "CategoryAction": {
         "message": "Actions",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "Default": {
+        "message": "Default",
         "description": "ConfigWindow.CategoryConfig"
     },
     "CategoryNamePlateTitleEnabled": {
@@ -93,10 +97,6 @@
     },
     "CategoryNamePlateColor": {
         "message": "Set nameplate color",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "Default": {
-        "message": "Default",
         "description": "ConfigWindow.CategoryConfig"
     },
     "ShowContextMenu": {
@@ -139,6 +139,10 @@
         "message": "Glossary",
         "description": "ConfigWindow.IconConfig"
     },
+    "Reset": {
+        "message": "Reset",
+        "description": "ConfigWindow.IconConfig"
+    },
     "Icons": {
         "message": "Add / Remove Icons",
         "description": "ConfigWindow.IconConfig"
@@ -163,12 +167,12 @@
         "message": "set locale for lodestone profile link",
         "description": "ConfigWindow.LodestoneConfig"
     },
-    "DisableNamePlateColorIfDead": {
-        "message": "Disable nameplate color if player is dead",
+    "ShowNamePlates": {
+        "message": "Show Nameplates",
         "description": "ConfigWindow.NamePlateConfig"
     },
-    "DisableNamePlateColorIfDead_HelpMarker": {
-        "message": "don't update nameplate for dead players so easier to see they are dead",
+    "ShowNamePlates_HelpMarker": {
+        "message": "when to show custom nameplates",
         "description": "ConfigWindow.NamePlateConfig"
     },
     "RestrictNamePlatesInCombat": {
@@ -179,12 +183,20 @@
         "message": "stop showing nameplates in combat regardless of other settings",
         "description": "ConfigWindow.NamePlateConfig"
     },
-    "ShowNamePlates": {
-        "message": "Show Nameplates",
+    "DisableNamePlateColorIfDead": {
+        "message": "Disable nameplate color if player is dead",
         "description": "ConfigWindow.NamePlateConfig"
     },
-    "ShowNamePlates_HelpMarker": {
-        "message": "when to show custom nameplates",
+    "DisableNamePlateColorIfDead_HelpMarker": {
+        "message": "don't update nameplate for dead players so easier to see they are dead",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "DefaultNamePlateColorToListColor": {
+        "message": "Default nameplate color to list color",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "DefaultNamePlateColorToListColor_HelpMarker": {
+        "message": "default the nameplate color to the list color unless changed",
         "description": "ConfigWindow.NamePlateConfig"
     },
     "UseNamePlateColors": {
@@ -381,10 +393,6 @@
     },
     "Alerts": {
         "message": "Alerts",
-        "description": "MainWindow.PlayerDisplay"
-    },
-    "Reset": {
-        "message": "Reset",
         "description": "MainWindow.PlayerDisplay"
     },
     "Time": {
