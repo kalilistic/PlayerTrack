@@ -646,9 +646,16 @@ namespace PlayerTrack
                             Logger.LogDebug("Original Player: " + originalPlayer);
                             Logger.LogDebug("Newer Player: " + currentPlayer);
 
-                            // capture keys
+                            // determine change types
+                            var isNameChanged = !originalPlayer.Names.First().Equals(currentPlayer.Names.First());
+                            var isWorldChanged = originalPlayer.HomeWorlds.First().Key !=
+                                                 currentPlayer.HomeWorlds.First().Key;
+
+                            // capture original data before update
                             var originalKey = originalPlayer.Key;
                             var originalSortKey = originalPlayer.SortKey;
+                            var originalPlayerName = string.Copy(originalPlayer.Names.First());
+                            var originalWorldName = string.Copy(originalPlayer.HomeWorlds.First().Value);
 
                             // merge current record into original record
                             originalPlayer.Merge(currentPlayer);
@@ -673,6 +680,33 @@ namespace PlayerTrack
 
                             // regenerate view players
                             this.ResetViewPlayers();
+
+                            // send name change alert
+                            if (this.plugin.Configuration.SendNameChangeAlert && isNameChanged)
+                            {
+                                var message = string.Format(
+                                    Loc.Localize("PlayerNameChangeAlert", "changed their name from {0}."),
+                                    originalPlayerName);
+                                this.plugin.PluginService.Chat.Print(
+                                    this.players[currentPlayer.Key].Names.First(),
+                                    this.players[currentPlayer.Key].HomeWorlds.First().Key,
+                                    message,
+                                    XivChatType.Notice);
+                            }
+
+                            // send home world change alert
+                            if (this.plugin.Configuration.SendWorldTransferAlert && isWorldChanged)
+                            {
+                                var message = string.Format(
+                                    Loc.Localize("PlayerWorldTransferAlert", "transferred from {0} to {1}."),
+                                    originalWorldName,
+                                    originalPlayer.HomeWorlds.First().Value);
+                                this.plugin.PluginService.Chat.Print(
+                                    this.players[currentPlayer.Key].Names.First(),
+                                    this.players[currentPlayer.Key].HomeWorlds.First().Key,
+                                    message,
+                                    XivChatType.Notice);
+                            }
 
                             return;
                         }

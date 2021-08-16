@@ -67,6 +67,13 @@ namespace PlayerTrack
                     ImGui.EndTabItem();
                 }
 
+                if (ImGui.BeginTabItem(Loc.Localize("AlertsConfig", "Alerts")))
+                {
+                    WindowManager.SpacerWithTabs();
+                    this.AlertsConfig();
+                    ImGui.EndTabItem();
+                }
+
                 if (ImGui.BeginTabItem(Loc.Localize("LodestoneConfig", "Lodestone")))
                 {
                     WindowManager.SpacerWithTabs();
