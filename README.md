@@ -1,4 +1,5 @@
 # PlayerTrack
+[![Build plugin](https://github.com/kalilistic/PlayerTrack/actions/workflows/build.yml/badge.svg)](https://github.com/kalilistic/PlayerTrack/actions/workflows/build.yml)
 
 Dalamud plugin to keep track of players you meet in FFXIV.
 

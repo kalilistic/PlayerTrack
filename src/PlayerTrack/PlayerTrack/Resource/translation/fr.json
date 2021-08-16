@@ -123,6 +123,10 @@
         "message": "Type de recherche",
         "description": "ConfigWindow.DisplayConfig"
     },
+    "Reset": {
+        "message": "Réinitialiser",
+        "description": "ConfigWindow.IconConfig"
+    },
     "Icons": {
         "message": "Ajouter / Supprimer des icônes",
         "description": "ConfigWindow.IconConfig"
@@ -147,20 +151,20 @@
         "message": "définir la locale des liens menant aux profils sur le Lodestone",
         "description": "ConfigWindow.LodestoneConfig"
     },
-    "RestrictNamePlatesInCombat": {
-        "message": "Ne pas afficher les plaques de noms en combat",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "RestrictNamePlatesInCombat_HelpMarker": {
-        "message": "arrêter d'afficher les plaques de noms en combat indépendamment des autres réglages",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
     "ShowNamePlates": {
         "message": "Montrer les plaques de nom",
         "description": "ConfigWindow.NamePlateConfig"
     },
     "ShowNamePlates_HelpMarker": {
         "message": "quand afficher les plaques de noms personnalisées",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "RestrictNamePlatesInCombat": {
+        "message": "Ne pas afficher les plaques de noms en combat",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "RestrictNamePlatesInCombat_HelpMarker": {
+        "message": "arrêter d'afficher les plaques de noms en combat indépendamment des autres réglages",
         "description": "ConfigWindow.NamePlateConfig"
     },
     "UseNamePlateColors": {
@@ -357,10 +361,6 @@
     },
     "Alerts": {
         "message": "Alertes",
-        "description": "MainWindow.PlayerDisplay"
-    },
-    "Reset": {
-        "message": "Réinitialiser",
         "description": "MainWindow.PlayerDisplay"
     },
     "Time": {
