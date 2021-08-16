@@ -49,6 +49,22 @@ namespace PlayerTrack
                                            "stop showing nameplates in combat regardless of other settings"));
             ImGui.Spacing();
 
+            // use nameplate colors
+            var useNamePlateColors = this.Plugin.Configuration.UseNamePlateColors;
+            if (ImGui.Checkbox(
+                Loc.Localize($"UseNamePlateColors", "Use nameplate color"),
+                ref useNamePlateColors))
+            {
+                this.Plugin.Configuration.UseNamePlateColors = useNamePlateColors;
+                this.Plugin.SaveConfig();
+                this.plugin.NamePlateManager.ForceRedraw();
+            }
+
+            ImGuiComponents.HelpMarker(Loc.Localize(
+                                           "UseNamePlateColors_HelpMarker",
+                                           "override normal nameplate color with category/player colors"));
+            ImGui.Spacing();
+
             // disable name plate color change if player is dead
             var disableNamePlateColorIfDead = this.Plugin.Configuration.DisableNamePlateColorIfDead;
             if (ImGui.Checkbox(
@@ -79,22 +95,6 @@ namespace PlayerTrack
             ImGuiComponents.HelpMarker(Loc.Localize(
                                            "DefaultNamePlateColorToListColor_HelpMarker",
                                            "default the nameplate color to the list color unless changed"));
-            ImGui.Spacing();
-
-            // use nameplate colors
-            var useNamePlateColors = this.Plugin.Configuration.UseNamePlateColors;
-            if (ImGui.Checkbox(
-                Loc.Localize($"UseNamePlateColors", "Use nameplate color"),
-                ref useNamePlateColors))
-            {
-                this.Plugin.Configuration.UseNamePlateColors = useNamePlateColors;
-                this.Plugin.SaveConfig();
-                this.plugin.NamePlateManager.ForceRedraw();
-            }
-
-            ImGuiComponents.HelpMarker(Loc.Localize(
-                                           "UseNamePlateColors_HelpMarker",
-                                           "override normal nameplate color with category/player colors"));
             ImGui.Spacing();
 
             // use nameplate titles
