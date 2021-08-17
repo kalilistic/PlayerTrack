@@ -47,7 +47,7 @@ namespace PlayerTrack
         /// <summary>
         /// List mode for what players to display.
         /// </summary>
-        public int PlayerFilterType = 0;
+        public int PlayerFilterType = 2;
 
         /// <summary>
         /// Category to filter list by.
@@ -120,14 +120,14 @@ namespace PlayerTrack
         public View CurrentView = View.None;
 
         /// <summary>
-        /// MainWi window width when expanded.
+        /// Main window width when expanded.
         /// </summary>
-        public float MainWindowWidth = 142;
+        public float MainWindowWidth = 700;
 
         /// <summary>
         /// Main window height.
         /// </summary>
-        public float MainWindowHeight = 222;
+        public float MainWindowHeight = 400;
 
         /// <summary>
         /// Plugin version to use for special processing on upgrades.
