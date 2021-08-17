@@ -502,7 +502,8 @@ namespace PlayerTrack
                         {
                             this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
                         }
-                        else
+                        else if (!(this.plugin.Configuration.PlayerFilterType == PlayerFilterType.PlayersByCategory.Index &&
+                                   this.plugin.Configuration.CategoryFilterId != 0))
                         {
                             this.viewPlayers.Add(this.players[player.Key].SortKey, this.players[player.Key]);
                         }
@@ -518,7 +519,8 @@ namespace PlayerTrack
                     lock (this.locker)
                     {
                         this.players.Add(player.Key, player);
-                        if (this.plugin.Configuration.ShowWindow)
+                        if (this.plugin.Configuration.ShowWindow &&
+                            this.plugin.Configuration.PlayerFilterType != PlayerFilterType.PlayersByCategory.Index)
                         {
                             this.viewPlayers.Add(player.SortKey, player);
                         }
