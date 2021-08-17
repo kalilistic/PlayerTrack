@@ -33,7 +33,7 @@ namespace PlayerTrack
             });
             this.plugin.PluginService.PluginInterface.CommandManager.AddHandler("/ptrackowenc", new CommandInfo(this.DeleteOverworldEncounters)
             {
-                HelpMessage = "Delete overworld encounters from previous versions.",
+                HelpMessage = "Delete overworld encounters from previous versions or settings.",
                 ShowInHelp = true,
             });
         }

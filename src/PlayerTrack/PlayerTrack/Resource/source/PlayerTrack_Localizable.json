@@ -211,6 +211,14 @@
         "message": "stop showing nameplates in combat regardless of other settings",
         "description": "ConfigWindow.NamePlateConfig"
     },
+    "UseNamePlateColors": {
+        "message": "Use nameplate color",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "UseNamePlateColors_HelpMarker": {
+        "message": "override normal nameplate color with category/player colors",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
     "DisableNamePlateColorIfDead": {
         "message": "Disable nameplate color if player is dead",
         "description": "ConfigWindow.NamePlateConfig"
@@ -225,14 +233,6 @@
     },
     "DefaultNamePlateColorToListColor_HelpMarker": {
         "message": "default the nameplate color to the list color unless changed",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "UseNamePlateColors": {
-        "message": "Use nameplate color",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "UseNamePlateColors_HelpMarker": {
-        "message": "override normal nameplate color with category/player colors",
         "description": "ConfigWindow.NamePlateConfig"
     },
     "ChangeNamePlateTitle": {
@@ -256,7 +256,7 @@
         "description": "ConfigWindow.ProcessingConfig"
     },
     "RestrictInCombat_HelpMarker": {
-        "message": "stop processing data while in combat",
+        "message": "stop processing players while in combat",
         "description": "ConfigWindow.ProcessingConfig"
     },
     "RestrictAddUpdatePlayers": {
@@ -264,7 +264,7 @@
         "description": "ConfigWindow.ProcessingConfig"
     },
     "RestrictAddUpdatePlayers_HelpMarker": {
-        "message": "when to process players",
+        "message": "when to add or update players in your area",
         "description": "ConfigWindow.ProcessingConfig"
     },
     "RestrictAddEncounters": {
@@ -272,7 +272,7 @@
         "description": "ConfigWindow.ProcessingConfig"
     },
     "RestrictAddEncounters_HelpMarker": {
-        "message": "when to process new encounters (don't use always)",
+        "message": "when to add new encounters (new row in the encounters tab). don't recommend using always as this will significantly increase file size.",
         "description": "ConfigWindow.ProcessingConfig"
     },
     "AddPlayerModalContent": {

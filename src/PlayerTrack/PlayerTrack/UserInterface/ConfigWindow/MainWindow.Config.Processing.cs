@@ -25,7 +25,7 @@ namespace PlayerTrack
 
             ImGuiComponents.HelpMarker(Loc.Localize(
                                            "RestrictInCombat_HelpMarker",
-                                           "stop processing data while in combat"));
+                                           "stop processing players while in combat"));
             ImGui.Spacing();
 
             // add / update players
@@ -45,7 +45,7 @@ namespace PlayerTrack
 
             ImGuiComponents.HelpMarker(Loc.Localize(
                                            "RestrictAddUpdatePlayers_HelpMarker",
-                                           "when to process players"));
+                                           "when to add or update players in your area"));
             ImGui.Spacing();
 
             // add encounters
@@ -65,7 +65,8 @@ namespace PlayerTrack
 
             ImGuiComponents.HelpMarker(Loc.Localize(
                                            "RestrictAddEncounters_HelpMarker",
-                                           "when to process new encounters (don't use always)"));
+                                           "when to add new encounters (new row in the encounters tab). " +
+                                           "don't recommend using always as this will significantly increase file size."));
             ImGui.Spacing();
         }
     }
