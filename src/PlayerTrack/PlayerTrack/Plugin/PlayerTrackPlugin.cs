@@ -328,6 +328,18 @@ namespace PlayerTrack
                 }
             }
 
+            // delete orphan encounters
+            var playerKeys = this.PlayerService.GetPlayers()?.Select(pair => pair.Key).ToList() !;
+            var encounters = this.EncounterService.GetEncounters().ToList();
+            foreach (var encounter in encounters)
+            {
+                if (!playerKeys.Contains(encounter.PlayerKey))
+                {
+                    Logger.LogInfo($"Deleting Encounter: {encounter.PlayerKey} {encounter.LocationName}");
+                    this.EncounterService.DeleteEncounter(encounter);
+                }
+            }
+
             // run rebuild
             this.BaseRepository.RebuildDatabase();
 

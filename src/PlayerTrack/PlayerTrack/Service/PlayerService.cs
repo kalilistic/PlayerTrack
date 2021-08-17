@@ -241,7 +241,8 @@ namespace PlayerTrack
         /// Delete player.
         /// </summary>
         /// <param name="player">player to delete.</param>
-        public void DeletePlayer(Player player)
+        /// <param name="deleteEncounters">whether to delete encounters too.</param>
+        public void DeletePlayer(Player player, bool deleteEncounters = true)
         {
             if (this.players.ContainsKey(player.Key))
             {
@@ -254,7 +255,11 @@ namespace PlayerTrack
                     }
                 }
 
-                this.encounterService.DeleteEncounters(player.Key);
+                if (deleteEncounters)
+                {
+                    this.encounterService.DeleteEncounters(player.Key);
+                }
+
                 this.DeleteItem<Player>(player.Id);
                 this.plugin.ActorManager.ClearPlayerCharacter(player.ActorId);
             }
@@ -663,10 +668,23 @@ namespace PlayerTrack
                             originalPlayer.LodestoneId = response.LodestoneId;
                             originalPlayer.LodestoneStatus = response.Status;
                             originalPlayer.LodestoneLastUpdated = DateUtil.CurrentTime();
+
+                            // re-key encounters from old key
+                            var encounters = this.encounterService.GetEncountersByPlayer(originalKey).ToList();
+                            if (encounters.Any())
+                            {
+                                foreach (var encounter in encounters)
+                                {
+                                    encounter.PlayerKey = currentPlayer.Key;
+                                    this.encounterService.UpdateEncounter(encounter);
+                                }
+                            }
+
+                            // update derived fields since may have changed
                             this.SetDerivedFields(originalPlayer);
 
                             // delete current player
-                            this.DeletePlayer(currentPlayer);
+                            this.DeletePlayer(currentPlayer, false);
 
                             // remove and re-add original player due to key change
                             this.players.Remove(originalKey);
@@ -684,6 +702,8 @@ namespace PlayerTrack
                             // send name change alert
                             if (this.plugin.Configuration.SendNameChangeAlert && isNameChanged)
                             {
+                                Logger.LogDebug(
+                                    $"Sending Name Change Alert {originalPlayerName} to {this.players[currentPlayer.Key].Names.First()}");
                                 var message = string.Format(
                                     Loc.Localize("PlayerNameChangeAlert", "changed their name from {0}."),
                                     originalPlayerName);
@@ -697,6 +717,8 @@ namespace PlayerTrack
                             // send home world change alert
                             if (this.plugin.Configuration.SendWorldTransferAlert && isWorldChanged)
                             {
+                                Logger.LogDebug(
+                                    $"Sending Name Change Alert {originalPlayerName} transfer from {originalWorldName} to {originalPlayer.HomeWorlds.First().Value}");
                                 var message = string.Format(
                                     Loc.Localize("PlayerWorldTransferAlert", "transferred from {0} to {1}."),
                                     originalWorldName,
@@ -984,7 +1006,6 @@ namespace PlayerTrack
         private void LoadPlayers()
         {
             this.MergeKeyDuplicates();
-            this.MergeLodestoneDuplicates();
             var existingPlayers = this.GetItems<Player>().ToList();
             foreach (var player in existingPlayers)
             {
@@ -998,37 +1019,6 @@ namespace PlayerTrack
                 }
 
                 this.SubmitLodestoneRequest(player);
-            }
-        }
-
-        private void MergeLodestoneDuplicates()
-        {
-            var playersInDB = this.GetItems<Player>().ToList();
-            var playerLodestoneIds = playersInDB.Where(player => player.LodestoneId != 0).Select(player => player.LodestoneId).ToList();
-            var dupeLodestoneIds = playerLodestoneIds.GroupBy(x => x)
-                                     .Where(group => group.Count() > 1)
-                                     .Select(group => group.Key).ToList();
-            if (dupeLodestoneIds.Count > 0)
-            {
-                Logger.LogInfo("Found Duplicate Lodestone Ids: " + dupeLodestoneIds.Count);
-                foreach (var dupeLodestoneId in dupeLodestoneIds)
-                {
-                    var dupePlayers = playersInDB.Where(p => p.LodestoneId == dupeLodestoneId).ToList();
-                    var sortedPlayers = dupePlayers.OrderBy(player => player.Created).ToArray();
-                    var originalPlayer = sortedPlayers.First();
-                    var deletePlayers = sortedPlayers.Skip(1).ToArray();
-                    var newKey = sortedPlayers.Last().Key;
-                    Logger.LogDebug("Original Player: " + originalPlayer);
-                    foreach (var deletedPlayer in deletePlayers)
-                    {
-                        Logger.LogDebug("Newer Player: " + deletedPlayer);
-                        originalPlayer.Merge(deletedPlayer);
-                        this.DeleteItem<Player>(deletedPlayer.Id);
-                    }
-
-                    originalPlayer.Key = newKey;
-                    this.UpdateItem(originalPlayer);
-                }
             }
         }
 

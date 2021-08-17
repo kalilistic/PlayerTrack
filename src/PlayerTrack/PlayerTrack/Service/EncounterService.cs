@@ -132,6 +132,23 @@ namespace PlayerTrack
         }
 
         /// <summary>
+        /// Update encounter.
+        /// </summary>
+        /// <param name="encounter">encounter to update.</param>
+        public void UpdateEncounter(Encounter encounter)
+        {
+            lock (this.locker)
+            {
+                if (this.currentEncounters.ContainsKey(encounter.PlayerKey))
+                {
+                    this.currentEncounters.Remove(encounter.PlayerKey);
+                }
+            }
+
+            this.UpdateItem(encounter);
+        }
+
+        /// <summary>
         /// Set derived fields to reduce storage needs.
         /// </summary>
         /// <param name="encounter">encounter to calculate derived fields for.</param>
