@@ -95,26 +95,6 @@ namespace PlayerTrack
         }
 
         /// <summary>
-        /// Create a copy of the category.
-        /// </summary>
-        /// <returns>Copy of category.</returns>
-        public Category Copy()
-        {
-            var category = new Category
-            {
-                Id = this.Id,
-                Name = this.Name,
-                Icon = this.Icon,
-                ListColor = this.ListColor,
-                NamePlateColor = this.NamePlateColor,
-                IsAlertEnabled = this.IsAlertEnabled,
-                IsDefault = this.IsDefault,
-            };
-            category.SetSeName();
-            return category;
-        }
-
-        /// <summary>
         /// Get effective category list color.
         /// </summary>
         /// <returns>list color.</returns>

@@ -118,11 +118,6 @@ namespace PlayerTrack
         public bool IsDoneLoading { get; set; }
 
         /// <summary>
-        /// Gets or sets plugin name.
-        /// </summary>
-        public string PluginName { get; set; } = null!;
-
-        /// <summary>
         /// Gets or sets plugin configuration.
         /// </summary>
         public PlayerTrackConfig Configuration { get; set; } = null!;
@@ -387,18 +382,6 @@ namespace PlayerTrack
         {
             if (!this.Configuration.FreshInstall)
             {
-                if (this.Configuration.LodestoneMaxRetry > 3)
-                {
-                    this.Configuration.LodestoneMaxRetry = 3;
-                    this.SaveConfig();
-                }
-
-                if (this.Configuration.BackupRetention < 7)
-                {
-                    this.Configuration.BackupRetention = 7;
-                    this.SaveConfig();
-                }
-
                 return;
             }
 

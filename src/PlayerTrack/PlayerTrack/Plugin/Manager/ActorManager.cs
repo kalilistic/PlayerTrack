@@ -81,68 +81,6 @@ namespace PlayerTrack
             }
         }
 
-        /// <summary>
-        /// Get actor by id.
-        /// </summary>
-        /// <param name="actorId">actorId of player to remove.</param>
-        /// <returns>actor or null.</returns>
-        public PlayerCharacter? GetPlayerCharacter(uint actorId)
-        {
-            try
-            {
-                lock (this.locker)
-                {
-                    if (this.actorTable != null)
-                    {
-                     return (PlayerCharacter?)this.actorTable.FirstOrDefault(
-                         actor => actor.ActorId == actorId && actor is PlayerCharacter);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Get actor by name.
-        /// </summary>
-        /// <param name="playerName">name of player to find.</param>
-        /// <param name="worldId">world id of player to find (optional).</param>
-        /// <returns>actor or null.</returns>
-        public int? GetPlayerCharacter(string playerName, uint worldId = 0)
-        {
-            try
-            {
-                lock (this.locker)
-                {
-                    if (this.actorTable != null)
-                    {
-                        if (worldId != 0)
-                        {
-                            return this.actorTable.FirstOrDefault(
-                                actor => actor is PlayerCharacter character &&
-                                         character.Name.Equals(playerName) &&
-                                         character.HomeWorld.Id == worldId)?.ActorId;
-                        }
-
-                        return this.actorTable.FirstOrDefault(
-                            actor => actor is PlayerCharacter character &&
-                                     character.Name.Equals(playerName))?.ActorId;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-
-            return null;
-        }
-
         private void OnLogout(object sender, EventArgs e)
         {
             lock (this.locker)
