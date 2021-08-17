@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+
+using Dalamud.DrunkenToad;
 
 namespace PlayerTrack
 {
@@ -168,6 +171,33 @@ namespace PlayerTrack
             {
                 encounter.LocationName = this.plugin.PluginService.GameData.ContentName(contentId);
             }
+        }
+
+        /// <summary>
+        /// Delete overworld encounters.
+        /// </summary>
+        public void DeleteOverworldEncounters()
+        {
+            Task.Run(() =>
+            {
+                this.plugin.PluginService.Chat.PrintNotice("Starting to delete overworld encounters...this may take awhile.");
+                var encounters = this.GetEncounters().ToList();
+                var deleteCount = 0;
+                foreach (var encounter in encounters)
+                {
+                    var contentId = this.plugin.PluginService.GameData.ContentId(encounter.TerritoryType);
+                    if (contentId == 0)
+                    {
+                        Logger.LogDebug($"Deleting Encounter: {encounter.Id} {encounter.PlayerKey}");
+                        this.DeleteEncounter(encounter);
+                        deleteCount += 1;
+                    }
+                }
+
+                Logger.LogInfo($"Deleted {deleteCount} encounters.");
+                this.RebuildDatabase();
+                this.plugin.PluginService.Chat.PrintNotice("Finished deleting overworld encounters.");
+            });
         }
     }
 }

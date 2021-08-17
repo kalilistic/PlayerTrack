@@ -23,11 +23,18 @@ namespace PlayerTrack
             });
             this.plugin.PluginService.PluginInterface.CommandManager.AddHandler("/ptrackconfig", new CommandInfo(this.TogglePlayerTrackConfig)
             {
-                ShowInHelp = false,
+                HelpMessage = "Open PlayerTrack settings.",
+                ShowInHelp = true,
             });
             this.plugin.PluginService.PluginInterface.CommandManager.AddHandler("/ptrackintegrity", new CommandInfo(this.RunIntegrityCheck)
             {
-                ShowInHelp = false,
+                HelpMessage = "Clean-up and delete erroneous data from previous versions.",
+                ShowInHelp = true,
+            });
+            this.plugin.PluginService.PluginInterface.CommandManager.AddHandler("/ptrackowenc", new CommandInfo(this.DeleteOverworldEncounters)
+            {
+                HelpMessage = "Delete overworld encounters from previous versions.",
+                ShowInHelp = true,
             });
         }
 
@@ -39,6 +46,7 @@ namespace PlayerTrack
             this.plugin.PluginService.PluginInterface.CommandManager.RemoveHandler("/ptrack");
             this.plugin.PluginService.PluginInterface.CommandManager.RemoveHandler("/ptrackconfig");
             this.plugin.PluginService.PluginInterface.CommandManager.RemoveHandler("/ptrackintegrity");
+            this.plugin.PluginService.PluginInterface.CommandManager.RemoveHandler("/ptrackowenc");
         }
 
         private void TogglePlayerTrack(string command, string arguments)
@@ -58,6 +66,11 @@ namespace PlayerTrack
         private void RunIntegrityCheck(string command, string arguments)
         {
             this.plugin.RunIntegrityCheck();
+        }
+
+        private void DeleteOverworldEncounters(string command, string arguments)
+        {
+            this.plugin.EncounterService.DeleteOverworldEncounters();
         }
     }
 }
