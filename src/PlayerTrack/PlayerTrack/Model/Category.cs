@@ -62,6 +62,16 @@ namespace PlayerTrack
         public bool IsAlertEnabled { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to send name change alert.
+        /// </summary>
+        public bool IsNameChangeAlertEnabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to send world transfer alert.
+        /// </summary>
+        public bool IsWorldTransferAlertEnabled { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether nameplates titles are enabled.
         /// </summary>
         public bool IsNamePlateTitleEnabled { get; set; }

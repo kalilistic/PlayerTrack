@@ -701,8 +701,11 @@ namespace PlayerTrack
                             // regenerate view players
                             this.ResetViewPlayers();
 
+                            // get category to check alerts
+                            var category = this.plugin.CategoryService.GetCategory(originalPlayer.CategoryId);
+
                             // send name change alert
-                            if (this.plugin.Configuration.SendNameChangeAlert && isNameChanged)
+                            if (category.IsNameChangeAlertEnabled && isNameChanged)
                             {
                                 Logger.LogDebug(
                                     $"Sending Name Change Alert {originalPlayerName} to {this.players[currentPlayer.Key].Names.First()}");
@@ -717,7 +720,7 @@ namespace PlayerTrack
                             }
 
                             // send home world change alert
-                            if (this.plugin.Configuration.SendWorldTransferAlert && isWorldChanged)
+                            if (category.IsWorldTransferAlertEnabled && isWorldChanged)
                             {
                                 Logger.LogDebug(
                                     $"Sending Name Change Alert {originalPlayerName} transfer from {originalWorldName} to {originalPlayer.HomeWorlds.First().Value}");

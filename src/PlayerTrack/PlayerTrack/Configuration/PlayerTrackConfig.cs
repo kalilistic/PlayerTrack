@@ -233,15 +233,5 @@ namespace PlayerTrack
         /// Gets or sets a value indicating whether to force LowTitleNoFc style.
         /// </summary>
         public bool ForceNamePlateStyle { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to send name change alert.
-        /// </summary>
-        public bool SendNameChangeAlert { get; set; } = true;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to send world transfer alert.
-        /// </summary>
-        public bool SendWorldTransferAlert { get; set; } = true;
     }
 }

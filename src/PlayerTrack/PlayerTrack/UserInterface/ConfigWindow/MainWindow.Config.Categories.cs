@@ -34,7 +34,7 @@ namespace PlayerTrack
             var baseWidth = ImGui.GetWindowSize().X / 6 * ImGuiHelpers.GlobalScale;
             ImGui.SetColumnWidth(0, baseWidth + 20f);                 // name
             ImGui.SetColumnWidth(1, ImGuiHelpers.GlobalScale * 70f);  // isDefault
-            ImGui.SetColumnWidth(2, ImGuiHelpers.GlobalScale * 50f);  // alerts
+            ImGui.SetColumnWidth(2, ImGuiHelpers.GlobalScale * 100f);  // alerts
             ImGui.SetColumnWidth(3, baseWidth + 80f);                 // list
             ImGui.SetColumnWidth(4, ImGuiHelpers.GlobalScale * 110f); // nameplates
             ImGui.SetColumnWidth(5, baseWidth + 80f);                 // controls
@@ -93,13 +93,60 @@ namespace PlayerTrack
 
                 // category alerts
                 ImGui.NextColumn();
-                var enableAlerts = category.IsAlertEnabled;
+                var lastSeenAlerts = category.IsAlertEnabled;
                 if (ImGui.Checkbox(
                     "###PlayerTrack_EnableCategoryAlerts_Checkbox" + i,
-                    ref enableAlerts))
+                    ref lastSeenAlerts))
                 {
-                    category.IsAlertEnabled = enableAlerts;
+                    category.IsAlertEnabled = lastSeenAlerts;
                     this.Plugin.CategoryService.SaveCategory(category);
+                }
+
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    ImGui.PushTextWrapPos(ImGui.GetFontSize() * 35f);
+                    ImGui.TextUnformatted(Loc.Localize("CategoryNamePlateTitleEnabled", "send alert with when and where you last saw the player"));
+                    ImGui.PopTextWrapPos();
+                    ImGui.EndTooltip();
+                }
+
+                ImGui.SameLine();
+                var sendNameChangeAlert = category.IsNameChangeAlertEnabled;
+                if (ImGui.Checkbox(
+                    "###PlayerTrack_SendNameChangeAlert_Checkbox" + i,
+                    ref sendNameChangeAlert))
+                {
+                    category.IsNameChangeAlertEnabled = sendNameChangeAlert;
+                    this.Plugin.CategoryService.SaveCategory(category);
+                }
+
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    ImGui.PushTextWrapPos(ImGui.GetFontSize() * 35f);
+                    ImGui.TextUnformatted(Loc.Localize("CategorySendNameChangeAlert", "send name change alert in chat when detected from lodestone lookup"));
+                    ImGui.PopTextWrapPos();
+                    ImGui.EndTooltip();
+                }
+
+                ImGui.SameLine();
+                var sendWorldTransferAlert = category.IsWorldTransferAlertEnabled;
+                if (ImGui.Checkbox(
+                    "###PlayerTrack_SendWorldTransferAlert_Checkbox" + i,
+                    ref sendWorldTransferAlert))
+                {
+                    category.IsWorldTransferAlertEnabled = sendWorldTransferAlert;
+                    this.Plugin.CategoryService.SaveCategory(category);
+                }
+
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    ImGui.PushTextWrapPos(ImGui.GetFontSize() * 35f);
+                    ImGui.TextUnformatted(Loc.Localize("CategorySendWorldTransferAlert", "send world transfer alert in chat when detected from lodestone lookup"));
+                    ImGui.PopTextWrapPos();
+                    ImGui.EndTooltip();
                 }
 
                 // category list color

@@ -23,7 +23,7 @@ namespace PlayerTrack
             : base(plugin, "PlayerTrack Config")
         {
             this.plugin = plugin;
-            this.Size = new Vector2(750f, 300f);
+            this.Size = new Vector2(800f, 400f);
             this.SizeCondition = ImGuiCond.Appearing;
         }
 
@@ -64,13 +64,6 @@ namespace PlayerTrack
                 {
                     WindowManager.SpacerWithTabs();
                     this.ContextMenuConfig();
-                    ImGui.EndTabItem();
-                }
-
-                if (ImGui.BeginTabItem(Loc.Localize("AlertsConfig", "Alerts")))
-                {
-                    WindowManager.SpacerWithTabs();
-                    this.AlertsConfig();
                     ImGui.EndTabItem();
                 }
 
