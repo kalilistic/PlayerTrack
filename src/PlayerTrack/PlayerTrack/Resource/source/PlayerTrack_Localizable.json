@@ -59,10 +59,6 @@
         "message": "ContextMenu",
         "description": "ConfigWindow.Draw"
     },
-    "AlertsConfig": {
-        "message": "Alerts",
-        "description": "ConfigWindow.Draw"
-    },
     "LodestoneConfig": {
         "message": "Lodestone",
         "description": "ConfigWindow.Draw"
@@ -70,22 +66,6 @@
     "CategoryConfig": {
         "message": "Categories",
         "description": "ConfigWindow.Draw"
-    },
-    "SendNameChangeAlert": {
-        "message": "Send name change alert",
-        "description": "ConfigWindow.AlertsConfig"
-    },
-    "SendNameChangeAlert_HelpMarker": {
-        "message": "send name change alert in chat when detected from lodestone lookup",
-        "description": "ConfigWindow.AlertsConfig"
-    },
-    "SendWorldTransferAlert": {
-        "message": "Send world transfer alert",
-        "description": "ConfigWindow.AlertsConfig"
-    },
-    "SendWorldTransferAlert_HelpMarker": {
-        "message": "send world transfer alert in chat when detected from lodestone lookup",
-        "description": "ConfigWindow.AlertsConfig"
     },
     "Add": {
         "message": "Add Category",
@@ -115,16 +95,20 @@
         "message": "Actions",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "CategoryNamePlateTitleEnabled": {
+        "message": "send alert with when and where you last saw the player",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategorySendNameChangeAlert": {
+        "message": "send name change alert in chat when detected from lodestone lookup",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategorySendWorldTransferAlert": {
+        "message": "send world transfer alert in chat when detected from lodestone lookup",
+        "description": "ConfigWindow.CategoryConfig"
+    },
     "Default": {
         "message": "Default",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryNamePlateTitleEnabled": {
-        "message": "Enable nameplate titles",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryNamePlateColor": {
-        "message": "Set nameplate color",
         "description": "ConfigWindow.CategoryConfig"
     },
     "ShowContextMenu": {
