@@ -222,7 +222,7 @@ namespace PlayerTrack
         /// <summary>
         /// Gets or sets show nameplates restriction.
         /// </summary>
-        public int ShowNamePlates { get; set; }
+        public int ShowNamePlates { get; set; } = 1;
 
         /// <summary>
         /// Gets or sets a value indicating whether the window is locked in size/position.
