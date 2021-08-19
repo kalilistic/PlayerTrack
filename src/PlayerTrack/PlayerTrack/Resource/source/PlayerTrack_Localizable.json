@@ -179,6 +179,10 @@
         "message": "set locale for lodestone profile link",
         "description": "ConfigWindow.LodestoneConfig"
     },
+    "NamePlateCompatabilityWarning": {
+        "message": "Warning: Not all of these settings will work if you are using other plugins that modify nameplates.",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
     "ShowNamePlates": {
         "message": "Show Nameplates",
         "description": "ConfigWindow.NamePlateConfig"
