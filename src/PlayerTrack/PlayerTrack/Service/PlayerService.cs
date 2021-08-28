@@ -760,10 +760,12 @@ namespace PlayerTrack
         {
             lock (this.locker)
             {
+                var currentTime = DateUtil.CurrentTime();
                 IEnumerable<KeyValuePair<string, Player>> currentPlayers = this.players.Where(kvp => kvp.Value.IsCurrent);
                 foreach (var player in currentPlayers)
                 {
                     this.players[player.Key].IsCurrent = false;
+                    this.encounterService.UpdateLastUpdated(player.Key, currentTime);
                     this.UpdateItem(this.players[player.Key]);
                 }
 
