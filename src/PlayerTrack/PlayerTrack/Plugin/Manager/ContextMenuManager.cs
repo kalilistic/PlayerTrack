@@ -103,8 +103,8 @@ namespace PlayerTrack
             var actionIds = args.Items.Select(baseContextMenuItem => ((NativeContextMenuItem)baseContextMenuItem).InternalAction).ToList();
 
             // default
-            if (this.plugin.Configuration.ShowContextAboveThis.Count == 0 &&
-                this.plugin.Configuration.ShowContextBelowThis.Count == 0)
+            if (args.ParentAddonName == "FriendList" || (this.plugin.Configuration.ShowContextAboveThis.Count == 0 &&
+                this.plugin.Configuration.ShowContextBelowThis.Count == 0))
             {
                 if (this.plugin.Configuration.ShowAddShowInfoContextMenu)
                 {
