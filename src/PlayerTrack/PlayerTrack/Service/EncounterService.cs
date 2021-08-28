@@ -89,17 +89,32 @@ namespace PlayerTrack
         /// Add encounter.
         /// </summary>
         /// <param name="encounter">encounter to add.</param>
-        public void AddEncounter(Encounter encounter)
+        public void AddOrUpdateEncounter(Encounter encounter)
         {
             lock (this.locker)
             {
                 if (!this.currentEncounters.ContainsKey(encounter.PlayerKey))
                 {
-                    this.currentEncounters.Add(encounter.PlayerKey, encounter);
+                    // use existing encounter if same territory type and within threshold to avoid spam
+                    var lastEncounter = this.GetEncountersByPlayer(encounter.PlayerKey).LastOrDefault();
+                    if (lastEncounter != null && (lastEncounter.TerritoryType == encounter.TerritoryType &&
+                        encounter.Updated - lastEncounter.Updated < this.plugin.Configuration
+                                                                        .CreateNewEncounterThreshold))
+                    {
+                        Logger.LogDebug($"Updating existing encounter {encounter.PlayerKey}");
+                        lastEncounter.Updated = encounter.Updated;
+                        this.currentEncounters.Add(encounter.PlayerKey, lastEncounter);
+                        this.UpdateItem(lastEncounter);
+                    }
+                    else
+                    {
+                        Logger.LogDebug($"Adding new encounter for {encounter.PlayerKey}");
+                        this.currentEncounters.Add(encounter.PlayerKey, encounter);
+                        this.InsertItem(encounter);
+                    }
                 }
             }
 
-            this.InsertItem(encounter);
             this.RebuildIndex<Encounter>(enc => enc.PlayerKey);
         }
 

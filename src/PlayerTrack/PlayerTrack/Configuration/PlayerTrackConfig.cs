@@ -185,6 +185,11 @@ namespace PlayerTrack
         public long PlayerListRefreshFrequency = 1000;
 
         /// <summary>
+        /// Threshold in ms before creating new encounter within same territoryType.
+        /// </summary>
+        public int CreateNewEncounterThreshold = 600000;
+
+        /// <summary>
         /// Gets or sets list of items to show above.
         /// </summary>
         public List<byte> ShowContextAboveThis { get; set; } = new ();

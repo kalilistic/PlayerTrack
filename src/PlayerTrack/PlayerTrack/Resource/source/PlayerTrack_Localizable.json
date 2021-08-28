@@ -263,6 +263,14 @@
         "message": "when to add new encounters (new row in the encounters tab). don't recommend using always as this will significantly increase file size.",
         "description": "ConfigWindow.ProcessingConfig"
     },
+    "NewEncounterThreshold": {
+        "message": "New Encounter Threshold (minutes)",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "NewEncounterThreshold_HelpMarker": {
+        "message": "threshold for creating new encounter for player in same location",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
     "AddPlayerModalContent": {
         "message": "Add player manually to your list.",
         "description": "MainWindow.AddPlayer"

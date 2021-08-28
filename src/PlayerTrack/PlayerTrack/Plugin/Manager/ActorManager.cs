@@ -208,7 +208,7 @@ namespace PlayerTrack
                                     JobLvl = character.Level,
                                 };
                                 this.plugin.EncounterService.SetDerivedFields(encounter);
-                                this.plugin.EncounterService.AddEncounter(encounter);
+                                this.plugin.EncounterService.AddOrUpdateEncounter(encounter);
                             }
 
                             // setup player for add/update
