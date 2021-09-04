@@ -1,5 +1,4 @@
 using System;
-using System.Windows.Forms;
 
 using CheapLoc;
 using Dalamud.DrunkenToad;
@@ -22,15 +21,17 @@ namespace PlayerTrack
             {
                 ImGui.Text(Loc.Localize("Gender", "Gender"));
                 ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
-                ImGui.Text(this.plugin.PluginService.GameData.GenderName(this.SelectedPlayer.CharaCustomizeData.Gender));
+                ImGui.Text(this.SelectedPlayer.CharaCustomizeData.Gender == 0
+                               ? Loc.Localize("GenderValue", "Male")
+                               : Loc.Localize("GenderValue", "Female"));
 
                 ImGui.Text(Loc.Localize("Race", "Race"));
                 ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
-                ImGui.Text(this.plugin.PluginService.GameData.RaceName(this.SelectedPlayer.CharaCustomizeData.Race, this.SelectedPlayer.CharaCustomizeData.Gender));
+                ImGui.Text(PlayerTrackPlugin.DataManager.Race(this.SelectedPlayer.CharaCustomizeData.Race, this.SelectedPlayer.CharaCustomizeData.Gender));
 
                 ImGui.Text(Loc.Localize("Tribe", "Tribe"));
                 ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
-                ImGui.Text(this.plugin.PluginService.GameData.TribeName(this.SelectedPlayer.CharaCustomizeData.Tribe, this.SelectedPlayer.CharaCustomizeData.Gender));
+                ImGui.Text(PlayerTrackPlugin.DataManager.Tribe(this.SelectedPlayer.CharaCustomizeData.Tribe, this.SelectedPlayer.CharaCustomizeData.Gender));
 
                 ImGui.Text(Loc.Localize("Height", "Height"));
                 ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
@@ -43,7 +44,7 @@ namespace PlayerTrack
                 {
                     if (ImGui.Button(Loc.Localize("Copy", "Copy") + "###PlayerTrack_PlayerAppearanceCopy_Button"))
                     {
-                        Clipboard.SetText(BitConverter.ToString(this.SelectedPlayer.Customize));
+                        ImGui.SetClipboardText(BitConverter.ToString(this.SelectedPlayer.Customize));
                     }
                 }
             }

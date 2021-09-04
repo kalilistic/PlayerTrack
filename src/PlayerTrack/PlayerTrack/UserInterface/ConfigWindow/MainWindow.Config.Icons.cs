@@ -1,6 +1,7 @@
 using System.Linq;
 
 using CheapLoc;
+using Dalamud.DrunkenToad;
 using Dalamud.Interface;
 using Dalamud.Interface.Components;
 using ImGuiNET;
@@ -38,24 +39,24 @@ namespace PlayerTrack
             ImGui.Combo(
                 "###PlayerTrack_Icon_Combo",
                 ref this.selectedIconIndex,
-                this.Plugin.PluginService.IconNames,
-                this.Plugin.PluginService.Icons.Length);
+                IconHelper.IconNames,
+                IconHelper.Icons.Length);
             ImGui.SameLine();
 
             ImGui.PushFont(UiBuilder.IconFont);
-            ImGui.Text(this.Plugin.PluginService.Icons[this.selectedIconIndex].ToIconString());
+            ImGui.Text(IconHelper.Icons[this.selectedIconIndex].ToIconString());
             ImGui.PopFont();
             ImGui.SameLine();
 
             if (ImGui.SmallButton(Loc.Localize("Add", "Add") + "###PlayerTrack_IconAdd_Button"))
             {
-                if (this.Plugin.Configuration.EnabledIcons.Contains(this.Plugin.PluginService.Icons[this.selectedIconIndex]))
+                if (this.Plugin.Configuration.EnabledIcons.Contains(IconHelper.Icons[this.selectedIconIndex]))
                 {
                     ImGui.OpenPopup("###PlayerTrack_DupeIcon_Popup");
                 }
                 else
                 {
-                    this.Plugin.Configuration.EnabledIcons.Add(this.Plugin.PluginService.Icons[this.selectedIconIndex]);
+                    this.Plugin.Configuration.EnabledIcons.Add(IconHelper.Icons[this.selectedIconIndex]);
                     this.Plugin.SaveConfig();
                 }
             }

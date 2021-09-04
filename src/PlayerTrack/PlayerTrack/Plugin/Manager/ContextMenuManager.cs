@@ -64,7 +64,7 @@ namespace PlayerTrack
                 case "CrossWorldLinkshell":
                 case "ContentMemberList":
                 case "BlackList":
-                    return args.Text != null && args.ActorWorld != 0 && args.ActorWorld != 65535;
+                    return args.Text != null && args.ObjectWorld != 0 && args.ObjectWorld != 65535;
 
                 default:
                     return false;
@@ -90,13 +90,13 @@ namespace PlayerTrack
             if (!this.plugin.IsDoneLoading) return;
 
             // hide on own player
-            if (args.ActorId == this.plugin.PluginService.PluginInterface.ClientState.LocalPlayer.ActorId) return;
+            if (args.ObjectId == PlayerTrackPlugin.ClientState.LocalPlayer!.ObjectId) return;
 
             // validate menu
             if (!IsMenuValid(args)) return;
 
             // set player if existing
-            this.selectedPlayer = this.plugin.PlayerService.GetPlayer(args.Text!.ToString(), args.ActorWorld);
+            this.selectedPlayer = this.plugin.PlayerService.GetPlayer(args.Text!.ToString(), args.ObjectWorld);
 
             // setup
             var index = 0;
@@ -160,7 +160,7 @@ namespace PlayerTrack
         private void OnOpenPlayerInfo(ContextMenuItemSelectedArgs args)
         {
             // get player or add if doesn't exist
-            this.selectedPlayer ??= this.plugin.PlayerService.AddPlayer(args.Text!.ToString(), args.ActorWorld);
+            this.selectedPlayer ??= this.plugin.PlayerService.AddPlayer(args.Text!.ToString(), args.ObjectWorld);
 
             // open in detailed view
             this.plugin.WindowManager.MainWindow!.SelectedPlayer = null;

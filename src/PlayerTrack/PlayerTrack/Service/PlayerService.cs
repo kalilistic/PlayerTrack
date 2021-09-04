@@ -28,7 +28,7 @@ namespace PlayerTrack
         /// </summary>
         /// <param name="plugin">PlayerTrack plugin.</param>
         public PlayerService(PlayerTrackPlugin plugin)
-            : base(plugin.PluginService)
+            : base(PlayerTrackPlugin.GetPluginFolder())
         {
             this.plugin = plugin;
             this.encounterService = plugin.EncounterService;
@@ -150,7 +150,7 @@ namespace PlayerTrack
             {
                 lock (this.locker)
                 {
-                    this.players.TryGetValue(key, out Player player);
+                    this.players.TryGetValue(key, out var player);
                     return player;
                 }
             }
@@ -210,7 +210,7 @@ namespace PlayerTrack
         /// <returns>player or null.</returns>
         public Player? GetPlayer(string playerName, string worldName)
         {
-            var worldId = this.plugin.PluginService.GameData.WorldId(worldName);
+            var worldId = PlayerTrackPlugin.DataManager.WorldId(worldName);
             return this.GetPlayer(playerName, (ushort)worldId);
         }
 
@@ -227,7 +227,7 @@ namespace PlayerTrack
                 var key = BuildPlayerKey(playerName, worldId);
                 lock (this.locker)
                 {
-                    this.players.TryGetValue(key, out Player player);
+                    this.players.TryGetValue(key, out var player);
                     return player;
                 }
             }
@@ -489,7 +489,7 @@ namespace PlayerTrack
                             Loc.Localize("PlayerAlert", "last seen {0} ago in {1}."),
                             (DateUtil.CurrentTime() - lastSeen).ToDuration(),
                             lastLocation);
-                        this.plugin.PluginService.Chat.Print(
+                        PlayerTrackPlugin.Chat.PluginPrint(
                             this.players[player.Key].Names.First(),
                             this.players[player.Key].HomeWorlds.First().Key,
                             message,
@@ -562,7 +562,7 @@ namespace PlayerTrack
         /// <returns>returns new player.</returns>
         public Player AddPlayer(string playerName, string worldName)
         {
-            var worldId = this.plugin.PluginService.GameData.WorldId(worldName);
+            var worldId = PlayerTrackPlugin.DataManager.WorldId(worldName);
             var currentTime = DateUtil.CurrentTime();
             var player = new Player
             {
@@ -599,7 +599,7 @@ namespace PlayerTrack
         /// <returns>returns new player.</returns>
         public Player AddPlayer(string playerName, ushort worldId)
         {
-            var worldName = this.plugin.PluginService.GameData.WorldName(worldId);
+            var worldName = PlayerTrackPlugin.DataManager.WorldName(worldId);
             var currentTime = DateUtil.CurrentTime();
             var player = new Player
             {
@@ -661,8 +661,8 @@ namespace PlayerTrack
                             // capture original data before update
                             var originalKey = originalPlayer.Key;
                             var originalSortKey = originalPlayer.SortKey;
-                            var originalPlayerName = string.Copy(originalPlayer.Names.First());
-                            var originalWorldName = string.Copy(originalPlayer.HomeWorlds.First().Value);
+                            var originalPlayerName = originalPlayer.Names.First();
+                            var originalWorldName = originalPlayer.HomeWorlds.First().Value;
 
                             // merge current record into original record
                             originalPlayer.Merge(currentPlayer);
@@ -712,7 +712,7 @@ namespace PlayerTrack
                                 var message = string.Format(
                                     Loc.Localize("PlayerNameChangeAlert", "changed their name from {0}."),
                                     originalPlayerName);
-                                this.plugin.PluginService.Chat.Print(
+                                PlayerTrackPlugin.Chat.PluginPrint(
                                     this.players[currentPlayer.Key].Names.First(),
                                     this.players[currentPlayer.Key].HomeWorlds.First().Key,
                                     message,
@@ -728,7 +728,7 @@ namespace PlayerTrack
                                     Loc.Localize("PlayerWorldTransferAlert", "transferred from {0} to {1}."),
                                     originalWorldName,
                                     originalPlayer.HomeWorlds.First().Value);
-                                this.plugin.PluginService.Chat.Print(
+                                PlayerTrackPlugin.Chat.PluginPrint(
                                     this.players[currentPlayer.Key].Names.First(),
                                     this.players[currentPlayer.Key].HomeWorlds.First().Key,
                                     message,
@@ -909,15 +909,15 @@ namespace PlayerTrack
             }
 
             // last location / content id
-            player.LastContentId = this.plugin.PluginService.GameData.ContentId(player.LastTerritoryType);
+            player.LastContentId = PlayerTrackPlugin.DataManager.ContentId(player.LastTerritoryType);
             if (player.LastContentId == 0)
             {
-                var placeName = this.plugin.PluginService.GameData.PlaceName(player.LastTerritoryType);
+                var placeName = PlayerTrackPlugin.DataManager.PlaceName(player.LastTerritoryType);
                 player.LastLocationName = string.IsNullOrEmpty(placeName) ? "Eorzea" : placeName;
             }
             else
             {
-                player.LastLocationName = this.plugin.PluginService.GameData.ContentName(player.LastContentId);
+                player.LastLocationName = PlayerTrackPlugin.DataManager.ContentName(player.LastTerritoryType);
             }
 
             // seTitle for nameplates

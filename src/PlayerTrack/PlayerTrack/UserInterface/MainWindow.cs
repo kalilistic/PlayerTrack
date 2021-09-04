@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 
+using Dalamud.DrunkenToad;
 using Dalamud.Interface;
 using ImGuiNET;
 
@@ -37,7 +38,7 @@ namespace PlayerTrack
             this.plugin = plugin;
 
             // set world names for add player
-            this.worldNames = this.plugin.PluginService.GameData.WorldNames().ToArray();
+            this.worldNames = PlayerTrackPlugin.DataManager.WorldNames();
 
             // set to none on load if left on player detail
             if (this.plugin.Configuration.CurrentView == View.PlayerDetail)

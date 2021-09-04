@@ -1,12 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
 
 using CheapLoc;
+using Dalamud.Configuration;
+using Dalamud.Data;
 using Dalamud.DrunkenToad;
+using Dalamud.Game;
+using Dalamud.Game.ClientState;
+using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.ClientState.Objects;
+using Dalamud.Game.Command;
+using Dalamud.Game.Gui;
 using Dalamud.Interface;
+using Dalamud.IoC;
 using Dalamud.Plugin;
 using XivCommon;
 
@@ -15,40 +25,39 @@ namespace PlayerTrack
     /// <summary>
     /// PlayerTrack.
     /// </summary>
-    public class PlayerTrackPlugin
+    public class PlayerTrackPlugin : IDalamudPlugin
     {
-        /// <summary>
-        /// Plugin service.
-        /// </summary>
-        public PluginService PluginService = null!;
-
         /// <summary>
         /// XivCommon library instance.
         /// </summary>
         public XivCommonBase XivCommon = null!;
 
+        /// <summary>
+        /// Backup manager.
+        /// </summary>
+        public BackupManager BackupManager = null!;
+
         private Timer backupTimer = null!;
+        private Localization localization = null!;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerTrackPlugin"/> class.
         /// </summary>
-        /// <param name="pluginName">Plugin name.</param>
-        /// <param name="pluginInterface">Plugin interface.</param>
-        public PlayerTrackPlugin(string pluginName, DalamudPluginInterface pluginInterface)
+        public PlayerTrackPlugin()
         {
             Task.Run(() =>
             {
                 try
                 {
                     // setup common libs
-                    this.PluginService = new PluginService(pluginName, pluginInterface);
-                    const Hooks hooks = Hooks.NamePlates | Hooks.ContextMenu;
-                    this.XivCommon = new XivCommonBase(pluginInterface, hooks);
+                    this.localization = new Localization(PluginInterface, CommandManager);
+                    this.BackupManager = new BackupManager(PluginInterface.GetPluginConfigDirectory());
+                    this.XivCommon = new XivCommonBase(Hooks.NamePlates | Hooks.ContextMenu);
 
                     // load config
                     try
                     {
-                        this.Configuration = this.PluginService.LoadConfig() as PluginConfig ?? new PluginConfig();
+                        this.Configuration = PluginInterface.GetPluginConfig() as PluginConfig ?? new PluginConfig();
                     }
                     catch (Exception ex)
                     {
@@ -58,21 +67,20 @@ namespace PlayerTrack
                     }
 
                     // setup services
-                    this.BaseRepository = new BaseRepository(this.PluginService);
                     this.LodestoneService = new LodestoneService(this);
                     this.ActorManager = new ActorManager(this);
                     this.CategoryService = new CategoryService(this);
                     this.EncounterService = new EncounterService(this);
                     this.PlayerService = new PlayerService(this);
                     this.WindowManager = new WindowManager(this);
-                    this.CommandManager = new CommandManager(this);
+                    this.PluginCommandManager = new PluginCommandManager(this);
                     this.ContextMenuManager = new ContextMenuManager(this);
                     this.NamePlateManager = new NamePlateManager(this);
 
                     // run backup
                     this.backupTimer = new Timer { Interval = this.Configuration.BackupFrequency, Enabled = false };
                     this.backupTimer.Elapsed += this.BackupTimerOnElapsed;
-                    var pluginVersion = this.PluginService.PluginVersionNumber();
+                    var pluginVersion = Assembly.GetExecutingAssembly().VersionNumber();
                     if (this.Configuration.PluginVersion < pluginVersion)
                     {
                         Logger.LogInfo("Running backup since new version detected.");
@@ -111,6 +119,72 @@ namespace PlayerTrack
                 }
             });
         }
+
+        /// <summary>
+        /// Gets pluginInterface.
+        /// </summary>
+        [PluginService]
+        [RequiredVersion("1.0")]
+        public static DalamudPluginInterface PluginInterface { get; private set; } = null!;
+
+        /// <summary>
+        /// Gets command manager.
+        /// </summary>
+        [PluginService]
+        [RequiredVersion("1.0")]
+        public static CommandManager CommandManager { get; private set; } = null!;
+
+        /// <summary>
+        /// Gets chat gui.
+        /// </summary>
+        [PluginService]
+        [RequiredVersion("1.0")]
+        public static ChatGui Chat { get; private set; } = null!;
+
+        /// <summary>
+        /// Gets client state.
+        /// </summary>
+        [PluginService]
+        [RequiredVersion("1.0")]
+        public static ClientState ClientState { get; private set; } = null!;
+
+        /// <summary>
+        /// Gets framework.
+        /// </summary>
+        [PluginService]
+        [RequiredVersion("1.0")]
+        public static Framework Framework { get; private set; } = null!;
+
+        /// <summary>
+        /// Gets condition.
+        /// </summary>
+        [PluginService]
+        [RequiredVersion("1.0")]
+        public static Condition Condition { get; private set; } = null!;
+
+        /// <summary>
+        /// Gets data manager.
+        /// </summary>
+        [PluginService]
+        [RequiredVersion("1.0")]
+        public static DataManager DataManager { get; private set; } = null!;
+
+        /// <summary>
+        /// Gets object table.
+        /// </summary>
+        [PluginService]
+        [RequiredVersion("1.0")]
+        public static ObjectTable ObjectTable { get; private set; } = null!;
+
+        /// <summary>
+        /// Gets target manager.
+        /// </summary>
+        [PluginService]
+        [RequiredVersion("1.0")]
+        public static TargetManager TargetManager { get; private set; } = null!;
+
+        /// <inheritdoc/>
+        public string Name => "PlayerTrack";
 
         /// <summary>
         /// Gets or sets a value indicating whether plugin is done loading.
@@ -170,14 +244,23 @@ namespace PlayerTrack
         /// <summary>
         /// Gets or sets command manager to handle user commands.
         /// </summary>
-        public CommandManager CommandManager { get; set; } = null!;
+        public PluginCommandManager PluginCommandManager { get; set; } = null!;
+
+        /// <summary>
+        /// Get plugin folder.
+        /// </summary>
+        /// <returns>plugin folder name.</returns>
+        public static string GetPluginFolder()
+        {
+            return PluginInterface.GetPluginConfigDirectory();
+        }
 
         /// <summary>
         /// Save plugin configuration.
         /// </summary>
         public void SaveConfig()
         {
-            this.PluginService.SaveConfig(this.Configuration);
+            PluginInterface.SavePluginConfig((IPluginConfiguration)this.Configuration);
         }
 
         /// <summary>
@@ -189,21 +272,22 @@ namespace PlayerTrack
             {
                 this.backupTimer.Elapsed -= this.BackupTimerOnElapsed;
                 this.backupTimer.Dispose();
-                this.CommandManager.Dispose();
+                this.PluginCommandManager.Dispose();
                 this.NamePlateManager.Dispose();
                 this.ContextMenuManager.Dispose();
                 this.XivCommon.Dispose();
                 this.LodestoneService.Dispose();
-                this.PluginService.Dispose();
                 this.ActorManager.Dispose();
                 this.WindowManager.Dispose();
+                this.localization.Dispose();
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, "Failed to dispose plugin properly.");
             }
 
-            this.PluginService.PluginInterface.Dispose();
+            PluginInterface.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -251,34 +335,30 @@ namespace PlayerTrack
         /// </summary>
         public void PrintHelpMessage()
         {
-            var helpMessages = new[]
-            {
-                Loc.Localize(
-                    "HelpMessage1",
-                    "PlayerTrack helps you keep a record of who you meet and the content you played together. " +
-                    "By default, this is instanced content only - but you can expand or restrict this in settings. " +
-                    "You can see all the details on a player by clicking on their name in the overlay. " +
-                    "Here you can also record notes and set a personalized icon/color."),
-                Loc.Localize(
-                    "HelpMessage2",
-                    "PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). " +
-                    "If this happens, you'll see an indicator next to their home world and " +
-                    "can mouse-over to see their previous residence."),
-                Loc.Localize(
-                    "HelpMessage3",
-                    "If you need help, reach out on discord or open an issue on GitHub. If you want to " +
-                    "help add translations, you can submit updates on Crowdin."),
-            };
-            this.PluginService.Chat.PrintNotice(helpMessages);
+            Chat.PluginPrintNotice(Loc.Localize(
+                                       "HelpMessage1",
+                                       "PlayerTrack helps you keep a record of who you meet and the content you played together. " +
+                                       "By default, this is instanced content only - but you can expand or restrict this in settings. " +
+                                       "You can see all the details on a player by clicking on their name in the overlay. " +
+                                       "Here you can also record notes and set a personalized icon/color."));
+            Chat.PluginPrintNotice(Loc.Localize(
+                                       "HelpMessage2",
+                                       "PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). " +
+                                       "If this happens, you'll see an indicator next to their home world and " +
+                                       "can mouse-over to see their previous residence."));
+            Chat.PluginPrintNotice(Loc.Localize(
+                                       "HelpMessage3",
+                                       "If you need help, reach out on discord or open an issue on GitHub. If you want to " +
+                                       "help add translations, you can submit updates on Crowdin."));
         }
 
         /// <summary>
         /// Open examine window for actor.
         /// </summary>
         /// <param name="actorId">actor id.</param>
-        public void OpenExamineWindow(int actorId)
+        public void OpenExamineWindow(uint actorId)
         {
-            var player = this.PlayerService.GetPlayer((uint)actorId);
+            var player = this.PlayerService.GetPlayer(actorId);
             if (player is not { IsCurrent: true }) return;
             try
             {
@@ -366,16 +446,16 @@ namespace PlayerTrack
             {
                 Logger.LogInfo("Running backup due to frequency timer.");
                 this.Configuration.LastBackup = DateUtil.CurrentTime();
-                this.PluginService.BackupManager.CreateBackup();
-                this.PluginService.BackupManager.DeleteBackups(this.Configuration.BackupRetention);
+                this.BackupManager.CreateBackup();
+                this.BackupManager.DeleteBackups(this.Configuration.BackupRetention);
             }
         }
 
         private void RunUpgradeBackup()
         {
             this.Configuration.LastBackup = DateUtil.CurrentTime();
-            this.PluginService.BackupManager.CreateBackup("upgrade/v" + this.Configuration.PluginVersion + "_");
-            this.PluginService.BackupManager.DeleteBackups(this.Configuration.BackupRetention);
+            this.BackupManager.CreateBackup("upgrade/v" + this.Configuration.PluginVersion + "_");
+            this.BackupManager.DeleteBackups(this.Configuration.BackupRetention);
         }
 
         private void HandleFreshInstall()
@@ -387,7 +467,7 @@ namespace PlayerTrack
 
             this.BaseRepository.SetVersion(3);
             this.SetDefaultIcons();
-            this.PluginService.Chat.PrintNotice(Loc.Localize("InstallThankYou", "Thank you for installing PlayerTrack!"));
+            Chat.PluginPrintNotice(Loc.Localize("InstallThankYou", "Thank you for installing PlayerTrack!"));
             this.PrintHelpMessage();
             this.Configuration.FreshInstall = false;
             this.SaveConfig();

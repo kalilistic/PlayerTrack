@@ -4,8 +4,9 @@ using System.Linq;
 using System.Timers;
 
 using Dalamud.DrunkenToad;
-using Dalamud.Game.ClientState.Actors.Types;
-using Dalamud.Game.Internal;
+using Dalamud.Game;
+using Dalamud.Game.ClientState.Objects.SubKinds;
+using Dalamud.Game.ClientState.Objects.Types;
 
 using Timer = System.Timers.Timer;
 
@@ -16,7 +17,7 @@ namespace PlayerTrack
     /// </summary>
     public class ActorManager
     {
-        private readonly Dictionary<int, Player> playerList = new ();
+        private readonly Dictionary<uint, Player> playerList = new ();
         private readonly Timer timer;
         private readonly PlayerTrackPlugin plugin;
         private readonly object locker = new ();
@@ -26,8 +27,8 @@ namespace PlayerTrack
         private bool isProcessing;
         private bool needsUpdate;
         private bool territoryIsChanged;
-        private Actor[]? actorTable;
-        private int? localPlayerActorId;
+        private GameObject[]? actorTable;
+        private uint localPlayerActorId;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ActorManager"/> class.
@@ -36,10 +37,10 @@ namespace PlayerTrack
         public ActorManager(PlayerTrackPlugin plugin)
         {
             this.plugin = plugin;
-            this.SetLocationProperties(this.plugin.PluginService.ClientState.TerritoryType());
-            this.plugin.PluginService.ClientState.OnTerritoryChanged += this.OnTerritoryChanged;
-            this.plugin.PluginService.PluginInterface.Framework.OnUpdateEvent += this.OnFrameworkUpdate;
-            this.plugin.PluginService.PluginInterface.ClientState.OnLogout += this.OnLogout;
+            this.SetLocationProperties(PlayerTrackPlugin.ClientState.TerritoryType);
+            PlayerTrackPlugin.ClientState.TerritoryChanged += this.TerritoryChanged;
+            PlayerTrackPlugin.Framework.Update += this.Update;
+            PlayerTrackPlugin.ClientState.Logout += this.Logout;
             this.timer = new Timer { Interval = 1000, Enabled = false };
             this.timer.Elapsed += this.OnTimerElapsed;
         }
@@ -60,9 +61,9 @@ namespace PlayerTrack
         {
             this.timer.Enabled = false;
             this.timer.Elapsed -= this.OnTimerElapsed;
-            this.plugin.PluginService.ClientState.OnTerritoryChanged -= this.OnTerritoryChanged;
-            this.plugin.PluginService.PluginInterface.Framework.OnUpdateEvent -= this.OnFrameworkUpdate;
-            this.plugin.PluginService.PluginInterface.ClientState.OnLogout -= this.OnLogout;
+            PlayerTrackPlugin.ClientState.TerritoryChanged -= this.TerritoryChanged;
+            PlayerTrackPlugin.Framework.Update -= this.Update;
+            PlayerTrackPlugin.ClientState.Logout -= this.Logout;
             this.timer.Dispose();
         }
 
@@ -70,7 +71,7 @@ namespace PlayerTrack
         /// Clear character from player list (used after deletions).
         /// </summary>
         /// <param name="actorId">actorId of player to remove.</param>
-        public void ClearPlayerCharacter(int actorId)
+        public void ClearPlayerCharacter(uint actorId)
         {
             lock (this.locker)
             {
@@ -81,7 +82,7 @@ namespace PlayerTrack
             }
         }
 
-        private void OnLogout(object sender, EventArgs e)
+        private void Logout(object? sender, EventArgs e)
         {
             lock (this.locker)
             {
@@ -94,13 +95,13 @@ namespace PlayerTrack
         private bool ShouldProcess()
         {
             if (this.plugin.Configuration.RestrictInCombat &&
-                this.plugin.PluginService.ClientState.Condition.InCombat()) return false;
+                PlayerTrackPlugin.Condition.InCombat()) return false;
             var restrict =
                 ContentRestrictionType.GetContentRestrictionTypeByIndex(
                     this.plugin.Configuration.RestrictAddUpdatePlayers);
-            if (restrict == ContentRestrictionType.ContentOnly && !this.plugin.PluginService.InContent()) return false;
+            if (restrict == ContentRestrictionType.ContentOnly && !PlayerTrackPlugin.Condition.InCombat()) return false;
             if (restrict == ContentRestrictionType.HighEndDutyOnly &&
-                !this.plugin.PluginService.InHighEndDuty()) return false;
+                !PlayerTrackPlugin.DataManager.InHighEndDuty(PlayerTrackPlugin.ClientState.TerritoryType)) return false;
             return true;
         }
 
@@ -109,9 +110,9 @@ namespace PlayerTrack
             var restrict =
                 ContentRestrictionType.GetContentRestrictionTypeByIndex(
                     this.plugin.Configuration.RestrictAddEncounters);
-            if (restrict == ContentRestrictionType.ContentOnly && !this.plugin.PluginService.InContent()) return false;
+            if (restrict == ContentRestrictionType.ContentOnly && !PlayerTrackPlugin.DataManager.InContent(PlayerTrackPlugin.ClientState.TerritoryType)) return false;
             if (restrict == ContentRestrictionType.HighEndDutyOnly &&
-                !this.plugin.PluginService.InHighEndDuty()) return false;
+                !PlayerTrackPlugin.DataManager.InHighEndDuty(PlayerTrackPlugin.ClientState.TerritoryType)) return false;
             return true;
         }
 
@@ -138,7 +139,7 @@ namespace PlayerTrack
                 }
 
                 // skip if local player is invalid
-                if (this.localPlayerActorId is null or 0)
+                if (this.localPlayerActorId == 0)
                 {
                     this.needsUpdate = true;
                     return;
@@ -154,9 +155,9 @@ namespace PlayerTrack
                         return;
                     }
 
-                    currentActors = this.actorTable
+                    currentActors = this.actorTable!
                                         .Where(actor => actor.IsValidPlayerCharacter() &&
-                                                        actor.ActorId != this.localPlayerActorId)
+                                                        actor.ObjectId != this.localPlayerActorId)
                                         .Select(actor => actor as PlayerCharacter).ToList();
                 }
 
@@ -170,7 +171,7 @@ namespace PlayerTrack
                 foreach (var player in this.playerList.ToList())
                 {
                     // remove existing player
-                    if (currentActors.All(character => character!.ActorId != player.Value.ActorId))
+                    if (currentActors.All(character => character!.ObjectId != player.Value.ActorId))
                     {
                         this.playerList.Remove(player.Value.ActorId);
                         player.Value.IsCurrent = false;
@@ -190,10 +191,10 @@ namespace PlayerTrack
                     {
                         if (character == null) continue;
                         var playerKey =
-                            PlayerService.BuildPlayerKey(character.Name, character.HomeWorld.Id);
+                            PlayerService.BuildPlayerKey(character.Name.ToString(), character.HomeWorld.Id);
 
                         // create new player/encounter if new occurence
-                        if (!this.playerList.ContainsKey(character!.ActorId))
+                        if (!this.playerList.ContainsKey(character!.ObjectId))
                         {
                             // add/update encounter if needed
                             if (updateEncounter)
@@ -215,17 +216,16 @@ namespace PlayerTrack
                             var newPlayer = new Player
                             {
                                 Key = playerKey,
-                                ActorId = character.ActorId,
+                                ActorId = character.ObjectId,
                                 Names = new List<string>
                                 {
-                                    character.Name,
+                                    character.Name.ToString(),
                                 },
                                 HomeWorlds = new List<KeyValuePair<uint, string>>
                                 {
-                                    new (character.HomeWorld.Id, this.plugin.PluginService.GameData.WorldName(
-                                            character.HomeWorld.Id)),
+                                    new (character.HomeWorld.Id, character.HomeWorld.GameData.Name.ToString()),
                                 },
-                                FreeCompany = Player.DetermineFreeCompany(this.contentId, character.CompanyTag),
+                                FreeCompany = Player.DetermineFreeCompany(this.contentId, character.CompanyTag.ToString()),
                                 Customize = character.Customize,
                                 LastTerritoryType = this.territoryType,
                                 Created = currentTime,
@@ -235,7 +235,7 @@ namespace PlayerTrack
                                 IsRecent = true,
                             };
                             this.plugin.PlayerService.SetDerivedFields(newPlayer);
-                            this.playerList.Add(character.ActorId, newPlayer);
+                            this.playerList.Add(character.ObjectId, newPlayer);
                             this.plugin.PlayerService.AddOrUpdatePlayer(newPlayer);
                         }
                     }
@@ -274,7 +274,7 @@ namespace PlayerTrack
             this.isProcessing = false;
         }
 
-        private void OnTerritoryChanged(ushort newTerritoryType)
+        private void TerritoryChanged(object? sender, ushort newTerritoryType)
         {
             this.territoryIsChanged = true;
             this.nextTerritoryType = newTerritoryType;
@@ -284,10 +284,10 @@ namespace PlayerTrack
         private void SetLocationProperties(ushort newTerritoryType)
         {
             this.territoryType = newTerritoryType;
-            this.contentId = this.plugin.PluginService.GameData.ContentId(this.territoryType);
+            this.contentId = PlayerTrackPlugin.DataManager.ContentId(this.territoryType);
         }
 
-        private void OnFrameworkUpdate(Framework framework)
+        private void Update(Framework framework1)
         {
             // check if should process or needs to
             if (!this.needsUpdate) return;
@@ -305,8 +305,8 @@ namespace PlayerTrack
                     }
 
                     // copy actor info
-                    this.actorTable = this.plugin.PluginService.PluginInterface.ClientState.Actors.ToArray();
-                    this.localPlayerActorId = this.plugin.PluginService.PluginInterface.ClientState.LocalPlayer?.ActorId;
+                    this.actorTable = PlayerTrackPlugin.ObjectTable.ToArray();
+                    this.localPlayerActorId = PlayerTrackPlugin.ClientState.LocalPlayer?.ObjectId ?? 0;
                 }
             }
             catch (Exception)

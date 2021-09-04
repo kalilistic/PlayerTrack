@@ -30,7 +30,7 @@ namespace PlayerTrack
         /// <summary>
         /// Gets or sets encounter territory type id.
         /// </summary>
-        public uint TerritoryType { get; set; }
+        public ushort TerritoryType { get; set; }
 
         /// <summary>
         /// Gets or sets encounter player's class/job id.

@@ -20,7 +20,7 @@ namespace PlayerTrack
         /// </summary>
         /// <param name="plugin">EncounterTrack plugin.</param>
         public EncounterService(PlayerTrackPlugin plugin)
-            : base(plugin.PluginService)
+            : base(PlayerTrackPlugin.GetPluginFolder())
         {
             this.plugin = plugin;
         }
@@ -173,18 +173,20 @@ namespace PlayerTrack
         public void SetDerivedFields(Encounter encounter)
         {
             // job code
-            encounter.JobCode = this.plugin.PluginService.GameData.ClassJobCode(encounter.JobId);
+            encounter.JobCode = PlayerTrackPlugin.DataManager.ClassJobCode(encounter.JobId);
 
             // last location / content id
-            var contentId = this.plugin.PluginService.GameData.ContentId(encounter.TerritoryType);
+            var contentId = PlayerTrackPlugin.DataManager.ContentId(encounter.TerritoryType);
             if (contentId == 0)
             {
-                var placeName = this.plugin.PluginService.GameData.PlaceName(encounter.TerritoryType);
+                var placeName =
+                    PlayerTrackPlugin.PluginInterface.Sanitizer.Sanitize(
+                        PlayerTrackPlugin.DataManager.PlaceName(encounter.TerritoryType));
                 encounter.LocationName = string.IsNullOrEmpty(placeName) ? "Eorzea" : placeName;
             }
             else
             {
-                encounter.LocationName = this.plugin.PluginService.GameData.ContentName(contentId);
+                encounter.LocationName = PlayerTrackPlugin.DataManager.ContentName(encounter.TerritoryType);
             }
         }
 
@@ -195,12 +197,12 @@ namespace PlayerTrack
         {
             Task.Run(() =>
             {
-                this.plugin.PluginService.Chat.PrintNotice("Starting to delete overworld encounters...this may take awhile.");
+                PlayerTrackPlugin.Chat.PluginPrintNotice("Starting to delete overworld encounters...this may take awhile.");
                 var encounters = this.GetEncounters().ToList();
                 var deleteCount = 0;
                 foreach (var encounter in encounters)
                 {
-                    var contentId = this.plugin.PluginService.GameData.ContentId(encounter.TerritoryType);
+                    var contentId = PlayerTrackPlugin.DataManager.ContentId(encounter.TerritoryType);
                     if (contentId == 0)
                     {
                         Logger.LogDebug($"Deleting Encounter: {encounter.Id} {encounter.PlayerKey}");
@@ -211,7 +213,7 @@ namespace PlayerTrack
 
                 Logger.LogInfo($"Deleted {deleteCount} encounters.");
                 this.RebuildDatabase();
-                this.plugin.PluginService.Chat.PrintNotice("Finished deleting overworld encounters.");
+                PlayerTrackPlugin.Chat.PluginPrintNotice("Finished deleting overworld encounters.");
             });
         }
     }

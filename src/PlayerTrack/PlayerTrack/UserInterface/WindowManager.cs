@@ -1,5 +1,3 @@
-using System;
-
 using Dalamud.Interface;
 using Dalamud.Interface.Windowing;
 
@@ -29,8 +27,8 @@ namespace PlayerTrack
             this.WindowSystem.AddWindow(this.MigrationWindow);
 
             // add event listeners
-            this.Plugin.PluginService.PluginInterface.UiBuilder.OnBuildUi += this.OnBuildUi;
-            this.Plugin.PluginService.PluginInterface.UiBuilder.OnOpenConfigUi += this.OnOpenConfigUi;
+            PlayerTrackPlugin.PluginInterface.UiBuilder.Draw += this.Draw;
+            PlayerTrackPlugin.PluginInterface.UiBuilder.OpenConfigUi += this.OpenConfigUi;
         }
 
         /// <summary>
@@ -78,9 +76,9 @@ namespace PlayerTrack
         /// </summary>
         public void AddWindows()
         {
-            this.WindowSystem.AddWindow(this.MainWindow);
+            this.WindowSystem.AddWindow(this.MainWindow!);
             this.WindowSystem.AddWindow(this.ModalWindow);
-            this.WindowSystem.AddWindow(this.ConfigWindow);
+            this.WindowSystem.AddWindow(this.ConfigWindow!);
         }
 
         /// <summary>
@@ -88,20 +86,20 @@ namespace PlayerTrack
         /// </summary>
         public void Dispose()
         {
-            this.Plugin.PluginService.PluginInterface.UiBuilder.OnBuildUi -= this.OnBuildUi;
-            this.Plugin.PluginService.PluginInterface.UiBuilder.OnOpenConfigUi -= this.OnOpenConfigUi;
+            PlayerTrackPlugin.PluginInterface.UiBuilder.Draw -= this.Draw;
+            PlayerTrackPlugin.PluginInterface.UiBuilder.OpenConfigUi -= this.OpenConfigUi;
             this.WindowSystem.RemoveAllWindows();
         }
 
-        private void OnBuildUi()
+        private void Draw()
         {
             // only show when logged in
-            if (!this.Plugin.PluginService.ClientState.IsLoggedIn()) return;
+            if (!PlayerTrackPlugin.ClientState.IsLoggedIn) return;
 
             this.WindowSystem.Draw();
         }
 
-        private void OnOpenConfigUi(object sender, EventArgs e)
+        private void OpenConfigUi()
         {
             this.ConfigWindow!.IsOpen ^= true;
         }

@@ -1,9 +1,10 @@
 using System;
-using System.Linq;
 using System.Numerics;
 
 using Dalamud.DrunkenToad;
-using Dalamud.Game.ClientState.Actors.Types;
+using Dalamud.Game.ClientState.Objects.SubKinds;
+using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.Game.Text.SeStringHandling.Payloads;
 using XivCommon.Functions.NamePlates;
 
 namespace PlayerTrack
@@ -47,7 +48,7 @@ namespace PlayerTrack
             {
                 // check if nameplates should be used
                 if (this.plugin.Configuration.RestrictNamePlatesInCombat &&
-                    this.plugin.PluginService.ClientState.Condition.InCombat())
+                    PlayerTrackPlugin.Condition.InCombat())
                 {
                     return;
                 }
@@ -55,8 +56,8 @@ namespace PlayerTrack
                 var restrict =
                     ContentRestrictionType.GetContentRestrictionTypeByIndex(this.plugin.Configuration.ShowNamePlates);
                 if (!(restrict == ContentRestrictionType.Always ||
-                      (restrict == ContentRestrictionType.ContentOnly && this.plugin.PluginService.InContent()) ||
-                      (restrict == ContentRestrictionType.HighEndDutyOnly && this.plugin.PluginService.InHighEndDuty())))
+                      (restrict == ContentRestrictionType.ContentOnly && PlayerTrackPlugin.DataManager.InContent(PlayerTrackPlugin.ClientState.TerritoryType)) ||
+                      (restrict == ContentRestrictionType.HighEndDutyOnly && PlayerTrackPlugin.DataManager.InHighEndDuty(PlayerTrackPlugin.ClientState.TerritoryType))))
                 {
                     return;
                 }
@@ -69,12 +70,13 @@ namespace PlayerTrack
                 if (!this.plugin.IsDoneLoading) return;
 
                 // check if valid
-                if (args.Type != PlateType.Player || args.ActorId == 0) return;
+                if (args.Type != PlateType.Player || args.ObjectId == 0) return;
 
                 // get actor
-                if (this.plugin.PluginService.PluginInterface.ClientState.Actors.FirstOrDefault(act => act.ActorId == args.ActorId) is not PlayerCharacter actor) return;
+                var actorGameObject = PlayerTrackPlugin.ObjectTable.SearchById(args.ObjectId);
+                if (actorGameObject == null || actorGameObject is not PlayerCharacter actorPlayer) return;
 
-                var player = this.plugin.PlayerService.GetPlayer(actor.Name, (ushort)actor.HomeWorld.Id);
+                var player = this.plugin.PlayerService.GetPlayer(actorPlayer.Name.ToString(), (ushort)actorPlayer.HomeWorld.Id);
                 if (player == null) return;
 
                 // set category
@@ -106,7 +108,7 @@ namespace PlayerTrack
                 }
 
                 // set color
-                if (this.plugin.Configuration.DisableNamePlateColorIfDead && actor.IsDead()) return;
+                if (this.plugin.Configuration.DisableNamePlateColorIfDead && actorPlayer.IsDead()) return;
                 if (this.plugin.Configuration.UseNamePlateColors)
                 {
                     // set color by player

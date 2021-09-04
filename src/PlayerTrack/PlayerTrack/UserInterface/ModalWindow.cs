@@ -105,8 +105,8 @@ namespace PlayerTrack
                 case ModalType.IconGlossary:
                     this.WindowName = Loc.Localize("IconGlossaryModalTitle", "Icon Glossary") +
                                       "###PlayerTrack_IconGlossaryModal_Window";
-                    var icons = this.plugin.PluginService.Icons;
-                    var iconNames = this.plugin.PluginService.IconNames;
+                    var icons = IconHelper.Icons;
+                    var iconNames = IconHelper.IconNames;
                     for (var i = 0; i < icons.Length; i++)
                     {
                         ImGui.BeginGroup();
@@ -135,7 +135,7 @@ namespace PlayerTrack
                             }
                             else
                             {
-                                this.Plugin.Configuration.EnabledIcons.Add(this.Plugin.PluginService.Icons[i]);
+                                this.Plugin.Configuration.EnabledIcons.Add(IconHelper.Icons[i]);
                                 this.Plugin.SaveConfig();
                             }
                         }

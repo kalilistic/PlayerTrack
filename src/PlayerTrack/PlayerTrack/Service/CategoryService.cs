@@ -18,7 +18,7 @@ namespace PlayerTrack
         /// </summary>
         /// <param name="plugin">base plugin.</param>
         public CategoryService(PlayerTrackPlugin plugin)
-            : base(plugin.PluginService)
+            : base(PlayerTrackPlugin.GetPluginFolder())
         {
             this.plugin = plugin;
             this.LoadCategories();
@@ -129,9 +129,7 @@ namespace PlayerTrack
             lock (this.locker)
             {
                 var currentCategory = this.categories[categoryId];
-                if (currentCategory == null) return;
                 var swapCategory = this.categories.FirstOrDefault(pair => pair.Value.Rank == currentCategory.Rank + 1).Value;
-                if (swapCategory == null) return;
                 currentCategory.Rank += 1;
                 swapCategory.Rank -= 1;
                 this.UpdateItem(currentCategory);
@@ -149,9 +147,7 @@ namespace PlayerTrack
             lock (this.locker)
             {
                 var currentCategory = this.categories[categoryId];
-                if (currentCategory == null) return;
                 var swapCategory = this.categories.FirstOrDefault(pair => pair.Value.Rank == currentCategory.Rank - 1).Value;
-                if (swapCategory == null) return;
                 currentCategory.Rank -= 1;
                 swapCategory.Rank += 1;
                 this.UpdateItem(currentCategory);

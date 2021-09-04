@@ -36,7 +36,7 @@ namespace PlayerTrack
         /// Gets or sets current actor id (may change).
         /// </summary>
         [BsonIgnore]
-        public int ActorId { get; set; }
+        public uint ActorId { get; set; }
 
         /// <summary>
         /// Gets or sets lodestone id.
@@ -87,7 +87,7 @@ namespace PlayerTrack
         /// <summary>
         /// Gets or sets the last seen territory type id.
         /// </summary>
-        public uint LastTerritoryType { get; set; }
+        public ushort LastTerritoryType { get; set; }
 
         /// <summary>
         /// Gets or sets the last seen content id.

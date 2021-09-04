@@ -100,7 +100,11 @@ namespace PlayerTrack
         /// <param name="lodestoneId">lodestone id.</param>
         public void OpenLodestoneProfile(uint lodestoneId)
         {
-            Process.Start("https://" + this.plugin.Configuration.LodestoneLocale + ".finalfantasyxiv.com/lodestone/character/" + lodestoneId);
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "https://" + this.plugin.Configuration.LodestoneLocale + ".finalfantasyxiv.com/lodestone/character/" + lodestoneId,
+                UseShellExecute = true,
+            });
         }
 
         /// <summary>
@@ -115,7 +119,7 @@ namespace PlayerTrack
         private bool ShouldProcess()
         {
             if (this.plugin.Configuration.RestrictInCombat &&
-                this.plugin.PluginService.ClientState.Condition.InCombat()) return false;
+                PlayerTrackPlugin.Condition.InCombat()) return false;
             return true;
         }
 

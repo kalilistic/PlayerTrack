@@ -49,9 +49,9 @@ namespace PlayerTrack
                 PrintAndLog(ex.Message + " Stack Trace:" + ex.StackTrace);
 
                 // clean up from failed migration attempt
-                plugin.PluginService.BackupManager.CreateBackup(
+                plugin.BackupManager.CreateBackup(
                     "upgrade/v" + plugin.Configuration.PluginVersion + "_failed_");
-                File.Delete(plugin.PluginService.PluginFolder() + "/data/data.db");
+                File.Delete(PlayerTrackPlugin.GetPluginFolder() + "/data/data.db");
 
                 return false;
             }
@@ -62,12 +62,12 @@ namespace PlayerTrack
         private static bool MigrateJSONFormat()
         {
             // check if json meta data file exists
-            if (File.Exists(plugin.PluginService.PluginFolder() + "/data/data.meta"))
+            if (File.Exists(PlayerTrackPlugin.GetPluginFolder() + "/data/data.meta"))
             {
                 // read meta data file
                 Logger.LogInfo("JSON Format detected.");
                 var metaDataStr =
-                    File.ReadAllText(plugin.PluginService.PluginFolder() + "/data/data.meta");
+                    File.ReadAllText(PlayerTrackPlugin.GetPluginFolder() + "/data/data.meta");
                 if (string.IsNullOrEmpty(metaDataStr)) throw new Exception("Failed to read json meta data.");
 
                 // read data by json version
@@ -75,7 +75,7 @@ namespace PlayerTrack
                 PrintAndLog("Starting schema migration.");
                 PrintAndLog("Starting to load original data.");
                 var metaData = JsonConvert.DeserializeObject<TrackMetaData>(metaDataStr);
-                isJSONCompressed = metaData.Compressed;
+                isJSONCompressed = metaData!.Compressed;
                 Logger.LogInfo("JSON compressed: " + isJSONCompressed);
                 Dictionary<string, TrackPlayer> trackPlayers = new ();
                 switch (metaData.SchemaVersion)
@@ -90,7 +90,7 @@ namespace PlayerTrack
                         break;
                 }
 
-                var data = File.ReadAllText(plugin.PluginService.PluginFolder() + "/data/categories.dat");
+                var data = File.ReadAllText(PlayerTrackPlugin.GetPluginFolder() + "/data/categories.dat");
                 var trackCategories = JsonConvert.DeserializeObject<List<TrackCategory>>(data, SerializerUtil.CamelCaseJsonSerializer());
                 PrintAndLog("Finished loading original data.");
 
@@ -105,7 +105,7 @@ namespace PlayerTrack
 
                 // this is intentionally incorrect to match how it was stored in v2
                 var defaultColor = new Vector4(255, 255, 255, 1);
-                for (var i = 0; i < trackCategories.Count; i++)
+                for (var i = 0; i < trackCategories!.Count; i++)
                 {
                     Vector4? color = trackCategories[i].Color;
                     if (color == defaultColor)
@@ -140,12 +140,14 @@ namespace PlayerTrack
 
                 if (defaultCategory != null)
                 {
+                    // ReSharper disable once ConstantConditionalAccessQualifier
                     var firstId = plugin.CategoryService.GetCategories().FirstOrDefault(pair => pair.Key == 1).Value?.Id;
                     defaultCategory.Id = firstId == null ? 1 : plugin.CategoryService.NextID();
                     plugin.CategoryService.AddCategory(defaultCategory);
                 }
 
                 // map players / encounters
+                // ReSharper disable once UseDeconstruction
                 foreach (var trackPlayer in trackPlayers)
                 {
                     encounters.AddRange(trackPlayer.Value.Encounters.Select(trackEncounter => new Encounter
@@ -153,7 +155,7 @@ namespace PlayerTrack
                         PlayerKey = trackPlayer.Key,
                         Created = trackEncounter.Created,
                         Updated = trackEncounter.Updated,
-                        TerritoryType = trackEncounter.Location.TerritoryType,
+                        TerritoryType = (ushort)trackEncounter.Location.TerritoryType,
                         JobId = trackEncounter.Job.Id,
                         JobLvl = trackEncounter.Job.Lvl,
                     }));
@@ -166,7 +168,7 @@ namespace PlayerTrack
                         LodestoneLastUpdated = trackPlayer.Value.Lodestone.LastUpdated,
                         LodestoneFailureCount = trackPlayer.Value.Lodestone.FailureCount,
                         Names = trackPlayer.Value.Names,
-                        LastTerritoryType = trackPlayer.Value.Encounters.Last().Location.TerritoryType,
+                        LastTerritoryType = (ushort)trackPlayer.Value.Encounters.Last().Location.TerritoryType,
                         Created = trackPlayer.Value.Created,
                         Updated = trackPlayer.Value.Encounters.Last().Updated,
                         SeenCount = trackPlayer.Value.Encounters.Count,
@@ -180,7 +182,7 @@ namespace PlayerTrack
                         HomeWorlds = new List<KeyValuePair<uint, string>>(),
                     };
 
-                    var contentId = plugin.PluginService.GameData.ContentId(player.LastTerritoryType);
+                    var contentId = PlayerTrackPlugin.DataManager.ContentId(player.LastTerritoryType);
                     player.FreeCompany = Player.DetermineFreeCompany(contentId, trackPlayer.Value.FreeCompany);
                     foreach (var world in trackPlayer.Value.HomeWorlds)
                     {
@@ -205,11 +207,11 @@ namespace PlayerTrack
 
                 // back up old files
                 PrintAndLog("Starting to clean up old files.");
-                plugin.PluginService.BackupManager.CreateBackup(
+                plugin.BackupManager.CreateBackup(
                     "upgrade/v" + plugin.Configuration.PluginVersion + "_");
-                File.Delete(plugin.PluginService.PluginFolder() + "/data/categories.dat");
-                File.Delete(plugin.PluginService.PluginFolder() + "/data/players.dat");
-                File.Delete(plugin.PluginService.PluginFolder() + "/data/data.meta");
+                File.Delete(PlayerTrackPlugin.GetPluginFolder() + "/data/categories.dat");
+                File.Delete(PlayerTrackPlugin.GetPluginFolder() + "/data/players.dat");
+                File.Delete(PlayerTrackPlugin.GetPluginFolder() + "/data/data.meta");
                 PrintAndLog("Finished cleaning up old files.");
 
                 // return success
@@ -222,24 +224,24 @@ namespace PlayerTrack
 
         private static Dictionary<string, TrackPlayer> MigrateV1()
         {
-            var data = File.ReadAllText(plugin.PluginService.PluginFolder() + "/data/players.dat");
+            var data = File.ReadAllText(PlayerTrackPlugin.GetPluginFolder() + "/data/players.dat");
             if (isJSONCompressed) data = data.Decompress();
 
             var players = JsonConvert.DeserializeObject<Dictionary<string, TrackPlayer>>(
                 data,
                 SerializerUtil.CamelCaseJsonSerializer());
-            return EnrichJSONData(players);
+            return EnrichJSONData(players!);
         }
 
         private static Dictionary<string, TrackPlayer> MigrateV2()
         {
             var data = new List<string> { string.Empty };
-            using (var sr = new StreamReader(plugin.PluginService.PluginFolder() + "/data/players.dat"))
+            using (var sr = new StreamReader(PlayerTrackPlugin.GetPluginFolder() + "/data/players.dat"))
             {
                 string line;
 
                 // ReSharper disable once AssignNullToNotNullAttribute
-                while ((line = sr.ReadLine()) != null) data.Add(line);
+                while ((line = sr.ReadLine() !) != null) data.Add(line);
             }
 
             data = data.Where(s => !string.IsNullOrEmpty(s)).ToList();
@@ -281,7 +283,7 @@ namespace PlayerTrack
                 // homeworlds
                 foreach (var world in player.HomeWorlds)
                 {
-                    world.Name = plugin.PluginService.GameData.WorldName(world.Id);
+                    world.Name = PlayerTrackPlugin.DataManager.WorldName(world.Id);
                 }
 
                 // encounters
@@ -289,11 +291,11 @@ namespace PlayerTrack
                 foreach (var encounter in player.Encounters)
                 {
                     encounter.Location.PlaceName =
-                        plugin.PluginService.GameData.PlaceName(encounter.Location.TerritoryType);
+                        PlayerTrackPlugin.DataManager.PlaceName(encounter.Location.TerritoryType);
                     encounter.Location.ContentName =
-                        plugin.PluginService.GameData.ContentName(
-                            plugin.PluginService.GameData.ContentId(encounter.Location.TerritoryType));
-                    encounter.Job.Code = plugin.PluginService.GameData.ClassJobCode(encounter.Job.Id);
+                        PlayerTrackPlugin.DataManager.ContentName(
+                            (ushort)PlayerTrackPlugin.DataManager.ContentId((ushort)encounter.Location.TerritoryType));
+                    encounter.Job.Code = PlayerTrackPlugin.DataManager.ClassJobCode(encounter.Job.Id);
                 }
 
                 player.Encounters = encounters;

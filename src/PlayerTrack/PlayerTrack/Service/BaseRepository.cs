@@ -8,9 +8,9 @@ namespace PlayerTrack
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseRepository"/> class.
         /// </summary>
-        /// <param name="pluginService">plugin service.</param>
-        public BaseRepository(PluginService pluginService)
-            : base(pluginService)
+        /// <param name="pluginFolder">plugin folder.</param>
+        protected BaseRepository(string pluginFolder)
+            : base(pluginFolder)
         {
         }
 

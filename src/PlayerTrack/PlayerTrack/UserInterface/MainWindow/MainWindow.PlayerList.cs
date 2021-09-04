@@ -112,12 +112,12 @@ namespace PlayerTrack
                         // menu items for actions
                         if (ImGui.MenuItem(Loc.Localize("TargetPlayer", "Target"), menuPlayer.IsCurrent))
                         {
-                            this.plugin.PluginService.ClientState.Targets.SetCurrentTarget(menuPlayer.ActorId);
+                            PlayerTrackPlugin.TargetManager.SetTarget(PlayerTrackPlugin.ObjectTable.SearchById(menuPlayer.ActorId));
                         }
 
                         if (ImGui.MenuItem(Loc.Localize("FocusTargetPlayer", "Focus Target"), menuPlayer.IsCurrent))
                         {
-                            this.plugin.PluginService.ClientState.Targets.SetFocusTarget(menuPlayer.ActorId);
+                            PlayerTrackPlugin.TargetManager.SetFocusTarget(PlayerTrackPlugin.ObjectTable.SearchById(menuPlayer.ActorId));
                         }
 
                         if (ImGui.MenuItem(Loc.Localize("ExaminePlayer", "Examine"), menuPlayer.IsCurrent))

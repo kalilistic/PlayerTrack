@@ -1,4 +1,18 @@
 ﻿name: PlayerTrack
 author: kalilistic
-description: Keep track of players you meet.
+punchline: Keep track of players you meet.
+description: |-
+    PlayerTrack helps you keep a record of who you meet and the content you played together.
+    Organize players into categories, keep notes, and track them across name/world changes.
+    Customization options include colors, icons, nameplates, and alerts.
+tags:
+    - player
+    - track
+    - orwell
 repo_url: https://github.com/kalilistic/PlayerTrack
+icon_url: https://github.com/goatcorp/DalamudPlugins/blob/api4/plugins/PlayerTrack/images/icon.png
+image_urls:
+    - https://github.com/goatcorp/DalamudPlugins/blob/api4/plugins/PlayerTrack/images/image1.png
+    - https://github.com/goatcorp/DalamudPlugins/blob/api4/plugins/PlayerTrack/images/image2.png
+    - https://github.com/goatcorp/DalamudPlugins/blob/api4/plugins/PlayerTrack/images/image3.png
+dalamud_api_level: 4

@@ -5,33 +5,33 @@ namespace PlayerTrack
     /// <summary>
     /// Manage plugin commands.
     /// </summary>
-    public class CommandManager
+    public class PluginCommandManager
     {
         private readonly PlayerTrackPlugin plugin;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommandManager"/> class.
+        /// Initializes a new instance of the <see cref="PluginCommandManager"/> class.
         /// </summary>
         /// <param name="plugin">plugin.</param>
-        public CommandManager(PlayerTrackPlugin plugin)
+        public PluginCommandManager(PlayerTrackPlugin plugin)
         {
             this.plugin = plugin;
-            this.plugin.PluginService.PluginInterface.CommandManager.AddHandler("/ptrack", new CommandInfo(this.TogglePlayerTrack)
+            PlayerTrackPlugin.CommandManager.AddHandler("/ptrack", new CommandInfo(this.TogglePlayerTrack)
             {
                 HelpMessage = "Show/hide PlayerTrack.",
                 ShowInHelp = true,
             });
-            this.plugin.PluginService.PluginInterface.CommandManager.AddHandler("/ptrackconfig", new CommandInfo(this.TogglePlayerTrackConfig)
+            PlayerTrackPlugin.CommandManager.AddHandler("/ptrackconfig", new CommandInfo(this.TogglePlayerTrackConfig)
             {
                 HelpMessage = "Open PlayerTrack settings.",
                 ShowInHelp = true,
             });
-            this.plugin.PluginService.PluginInterface.CommandManager.AddHandler("/ptrackintegrity", new CommandInfo(this.RunIntegrityCheck)
+            PlayerTrackPlugin.CommandManager.AddHandler("/ptrackintegrity", new CommandInfo(this.RunIntegrityCheck)
             {
                 HelpMessage = "Clean-up and delete erroneous data from previous versions.",
                 ShowInHelp = true,
             });
-            this.plugin.PluginService.PluginInterface.CommandManager.AddHandler("/ptrackowenc", new CommandInfo(this.DeleteOverworldEncounters)
+            PlayerTrackPlugin.CommandManager.AddHandler("/ptrackowenc", new CommandInfo(this.DeleteOverworldEncounters)
             {
                 HelpMessage = "Delete overworld encounters from previous versions or settings.",
                 ShowInHelp = true,
@@ -43,10 +43,10 @@ namespace PlayerTrack
         /// </summary>
         public void Dispose()
         {
-            this.plugin.PluginService.PluginInterface.CommandManager.RemoveHandler("/ptrack");
-            this.plugin.PluginService.PluginInterface.CommandManager.RemoveHandler("/ptrackconfig");
-            this.plugin.PluginService.PluginInterface.CommandManager.RemoveHandler("/ptrackintegrity");
-            this.plugin.PluginService.PluginInterface.CommandManager.RemoveHandler("/ptrackowenc");
+            PlayerTrackPlugin.CommandManager.RemoveHandler("/ptrack");
+            PlayerTrackPlugin.CommandManager.RemoveHandler("/ptrackconfig");
+            PlayerTrackPlugin.CommandManager.RemoveHandler("/ptrackintegrity");
+            PlayerTrackPlugin.CommandManager.RemoveHandler("/ptrackowenc");
         }
 
         private void TogglePlayerTrack(string command, string arguments)

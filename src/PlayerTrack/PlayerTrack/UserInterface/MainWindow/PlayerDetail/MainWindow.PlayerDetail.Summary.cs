@@ -23,7 +23,7 @@ namespace PlayerTrack
             var sameLineOffset3 = 360f;
 
             // FR override for more spacing
-            if (this.plugin.PluginService.PluginInterface.UiLanguage == "fr")
+            if (PlayerTrackPlugin.PluginInterface.UiLanguage == "fr")
             {
                 sameLineOffset1 = 120f;
                 sameLineOffset2 = 280f;
