@@ -147,12 +147,7 @@ namespace PlayerTrack
         /// <param name="view">View to show.</param>
         public void ShowRightPanel(View view)
         {
-            var vector2 = this.windowSize;
-            if (vector2 != null)
-            {
-                this.Size = new Vector2(this.plugin.Configuration.MainWindowWidth, this.plugin.Configuration.MainWindowHeight);
-            }
-
+            this.Size = new Vector2(this.plugin.Configuration.MainWindowWidth, this.plugin.Configuration.MainWindowHeight);
             this.plugin.Configuration.LastView = this.plugin.Configuration.CurrentView;
             this.plugin.Configuration.CurrentView = view;
             this.plugin.SaveConfig();
