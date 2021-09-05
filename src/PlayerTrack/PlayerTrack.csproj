@@ -133,19 +133,6 @@
       <EmbeddedResource Include="PlayerTrack\Resource\translation\zh.json" />
     </ItemGroup>
 
-		<Target Name="PostBuild" AfterTargets="Build">
-			<ItemGroup>
-				<InputAssemblies Include="$(TargetPath)" />
-				<InputAssemblies Include="$(TargetDir)*.dll" Exclude="$(TargetPath)" />
-			</ItemGroup>
-			<Exec Command="$(PkgILRepack)\tools\ILRepack.exe /union /lib:$(DalamudLibPath) /out:$(TargetDir)$(TargetFileName) @(InputAssemblies, ' ')" />
-			<MakeDir Directories="$(TargetDir)out\" />
-			<Exec Command="copy $(TargetDir)$(TargetFileName) $(TargetDir)out\$(TargetFileName)" />
-			<Exec Command="copy $(TargetDir)XivCommon.dll $(TargetDir)out\XivCommon.dll" />
-			<Exec Command="copy $(TargetDir)LiteDB.dll $(TargetDir)out\LiteDB.dll" />
-			<Exec Command="copy $(TargetDir)Dalamud.DrunkenToad.dll $(TargetDir)out\Dalamud.DrunkenToad.dll" />
-		</Target>
-		
 		<Target Name="MergeDeps" AfterTargets="Build">
 			<ItemGroup>
 				<InputAssemblies Include="$(TargetPath)" />
