@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Timers;
 
 using CheapLoc;
-using Dalamud.Configuration;
 using Dalamud.Data;
 using Dalamud.DrunkenToad;
 using Dalamud.Game;
@@ -57,16 +56,18 @@ namespace PlayerTrack
                     // load config
                     try
                     {
-                        this.Configuration = PluginInterface.GetPluginConfig() as PluginConfig ?? new PluginConfig();
+                        this.Configuration = PluginInterface.GetPluginConfig() as PlayerTrackConfig ??
+                                             new PlayerTrackConfig();
                     }
                     catch (Exception ex)
                     {
                         Logger.LogError("Failed to load config so creating new one.", ex);
-                        this.Configuration = new PluginConfig();
+                        this.Configuration = new PlayerTrackConfig();
                         this.SaveConfig();
                     }
 
                     // setup services
+                    this.BaseRepository = new BaseRepository(GetPluginFolder());
                     this.LodestoneService = new LodestoneService(this);
                     this.ActorManager = new ActorManager(this);
                     this.CategoryService = new CategoryService(this);
@@ -78,7 +79,7 @@ namespace PlayerTrack
                     this.NamePlateManager = new NamePlateManager(this);
 
                     // run backup
-                    this.backupTimer = new Timer { Interval = this.Configuration.BackupFrequency, Enabled = false };
+                    this.backupTimer = new Timer {Interval = this.Configuration.BackupFrequency, Enabled = false};
                     this.backupTimer.Elapsed += this.BackupTimerOnElapsed;
                     var pluginVersion = Assembly.GetExecutingAssembly().VersionNumber();
                     if (this.Configuration.PluginVersion < pluginVersion)
@@ -194,7 +195,7 @@ namespace PlayerTrack
         /// <summary>
         /// Gets or sets plugin configuration.
         /// </summary>
-        public PlayerTrackConfig Configuration { get; set; } = null!;
+        public PlayerTrackConfig Configuration { get; set; } = new();
 
         /// <summary>
         /// Gets or sets base repository.
@@ -260,7 +261,7 @@ namespace PlayerTrack
         /// </summary>
         public void SaveConfig()
         {
-            PluginInterface.SavePluginConfig((IPluginConfiguration)this.Configuration);
+            PluginInterface.SavePluginConfig(this.Configuration);
         }
 
         /// <summary>
@@ -296,9 +297,9 @@ namespace PlayerTrack
         /// <returns>array of icon names.</returns>
         public string[] IconListNames()
         {
-            var namesList = new List<string> { Loc.Localize("None", "None") };
+            var namesList = new List<string> {Loc.Localize("None", "None")};
             namesList.AddRange(this.Configuration.EnabledIcons.ToList()
-                                            .Select(icon => icon.ToString()));
+                                   .Select(icon => icon.ToString()));
             return namesList.ToArray();
         }
 
@@ -308,7 +309,7 @@ namespace PlayerTrack
         /// <returns>array of icon codes.</returns>
         public int[] IconListCodes()
         {
-            var codesList = new List<int> { 0 };
+            var codesList = new List<int> {0};
             codesList.AddRange(this.Configuration.EnabledIcons.ToList().Select(icon => (int)icon));
             return codesList.ToArray();
         }
@@ -359,7 +360,7 @@ namespace PlayerTrack
         public void OpenExamineWindow(uint actorId)
         {
             var player = this.PlayerService.GetPlayer(actorId);
-            if (player is not { IsCurrent: true }) return;
+            if (player is not {IsCurrent: true}) return;
             try
             {
                 this.XivCommon.Functions.Examine.OpenExamineWindow(actorId);

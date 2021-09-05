@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 
+using Dalamud.Configuration;
 using Dalamud.Interface;
 
 namespace PlayerTrack
@@ -7,7 +8,7 @@ namespace PlayerTrack
     /// <summary>
     /// PlayerTrack configuration.
     /// </summary>
-    public abstract class PlayerTrackConfig
+    public class PlayerTrackConfig : IPluginConfiguration
     {
         /// <summary>
         /// Frequency to show alerts to avoid spamming.
@@ -238,5 +239,8 @@ namespace PlayerTrack
         /// Gets or sets a value indicating whether to force LowTitleNoFc style.
         /// </summary>
         public bool ForceNamePlateStyle { get; set; }
+
+        /// <inheritdoc />
+        public int Version { get; set; }
     }
 }
