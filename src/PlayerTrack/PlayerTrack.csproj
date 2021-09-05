@@ -145,7 +145,7 @@
 		
 		<Target Name="CopyToDevPlugins" AfterTargets="MergeDeps" Condition="'$(Configuration)' == 'Debug'">
 			<Exec Command="if not exist $(AppData)\XIVLauncher\devPlugins\$(TargetName) (mkdir $(AppData)\XIVLauncher\devPlugins\$(TargetName))" />
-			<Exec Command="copy $(TargetDir)out\$(TargetFileName) $(AppData)\XIVLauncher\devPlugins\$(TargetName)\$(TargetFileName)" />
+			<Exec Command="copy $(TargetDir)$(TargetFileName) $(AppData)\XIVLauncher\devPlugins\$(TargetName)\$(TargetFileName)" />
 			<Exec Command="copy $(TargetDir)*.pdb $(AppData)\XIVLauncher\devPlugins\$(TargetName)" />
 		</Target>
 		
