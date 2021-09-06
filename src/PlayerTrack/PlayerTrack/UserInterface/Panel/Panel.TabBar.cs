@@ -3,11 +3,15 @@ using System;
 namespace PlayerTrack
 {
     /// <summary>
-    /// Main Tab Bar for navigation.
+    /// Panel with tab bar.
     /// </summary>
-    public partial class MainWindow
+    public partial class Panel
     {
-        private void TabBar()
+        /// <summary>
+        /// Draw panel.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">unrecognized view.</exception>
+        public void Draw()
         {
             switch (this.plugin.Configuration.CurrentView)
             {

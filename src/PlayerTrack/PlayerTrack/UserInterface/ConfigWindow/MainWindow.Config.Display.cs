@@ -56,16 +56,39 @@ namespace PlayerTrack
                 if (lockWindow)
                 {
                     this.plugin.WindowManager.MainWindow?.LockWindow();
+                    this.plugin.WindowManager.PlayerDetailWindow.LockWindow();
                 }
                 else
                 {
                     this.plugin.WindowManager.MainWindow?.UnlockWindow();
+                    this.plugin.WindowManager.PlayerDetailWindow.UnlockWindow();
                 }
             }
 
             ImGuiComponents.HelpMarker(Loc.Localize(
-                                           "SearchType_HelpMarker",
+                                           "LockWindow_HelpMarker",
                                            "keep main window locked in size/position"));
+            ImGui.Spacing();
+
+            // combine player detail window
+            var combinedPlayerDetailWindow = this.plugin.Configuration.CombinedPlayerDetailWindow;
+            if (ImGui.Checkbox(
+                Loc.Localize("CombinedPlayerDetailWindow", "Combine windows") + "###PlayerTrack_CombinedPlayerDetailWindow_Checkbox",
+                ref combinedPlayerDetailWindow))
+            {
+                this.plugin.Configuration.CombinedPlayerDetailWindow = combinedPlayerDetailWindow;
+                this.plugin.WindowManager.ShouldTogglePlayerDetail = true;
+                if (combinedPlayerDetailWindow)
+                {
+                    this.plugin.WindowManager.Panel!.ShowPanel(View.AddPlayer);
+                }
+
+                this.Plugin.SaveConfig();
+            }
+
+            ImGuiComponents.HelpMarker(Loc.Localize(
+                                           "CombinedPlayerDetailWindow_HelpMarker",
+                                           "show combined or separate windows like original version"));
             ImGui.Spacing();
 
             // search type

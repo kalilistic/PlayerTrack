@@ -75,7 +75,7 @@ namespace PlayerTrack
             // add dummy spacing if nothing available so can still open menu
             if (!this.Plugin.Configuration.ShowSearchBox && !this.Plugin.Configuration.ShowFilterType)
             {
-                var vector2 = this.windowSize;
+                var vector2 = this.WindowSize;
                 if (vector2 != null) ImGui.Dummy(new Vector2(vector2.Value.X, 5f));
             }
 
@@ -93,13 +93,13 @@ namespace PlayerTrack
                 if (ImGui.MenuItem(
                     Loc.Localize("AddPlayer", "Add Player")))
                 {
-                    this.ToggleRightPanel(View.AddPlayer);
+                    this.plugin.WindowManager.Panel!.TogglePanel(View.AddPlayer);
                 }
 
                 if (ImGui.MenuItem(
                     Loc.Localize("OpenLodestoneService", "Open Lodestone")))
                 {
-                    this.ToggleRightPanel(View.Lodestone);
+                    this.plugin.WindowManager.Panel!.TogglePanel(View.Lodestone);
                 }
 
                 if (ImGui.MenuItem(

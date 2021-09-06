@@ -90,7 +90,7 @@ namespace PlayerTrack
                     {
                         this.IsOpen = false;
 
-                        this.plugin.WindowManager.MainWindow!.HideRightPanel();
+                        this.plugin.WindowManager.Panel!.HidePanel();
                         this.plugin.PlayerService.DeletePlayer(this.Player!);
                     }
 

@@ -163,13 +163,13 @@ namespace PlayerTrack
             this.selectedPlayer ??= this.plugin.PlayerService.AddPlayer(args.Text!.ToString(), args.ObjectWorld);
 
             // open in detailed view
-            this.plugin.WindowManager.MainWindow!.SelectedPlayer = null;
-            this.plugin.WindowManager.MainWindow!.SelectedPlayer = this.selectedPlayer;
-            this.plugin.WindowManager.MainWindow!.SelectedEncounters = this.plugin.EncounterService
+            this.plugin.WindowManager.Panel!.SelectedPlayer = null;
+            this.plugin.WindowManager.Panel!.SelectedPlayer = this.selectedPlayer;
+            this.plugin.WindowManager.Panel!.SelectedEncounters = this.plugin.EncounterService
                                                                            .GetEncountersByPlayer(this.selectedPlayer.Key)
                                                                            .OrderByDescending(enc => enc.Created).ToList();
             this.plugin.WindowManager.MainWindow!.IsOpen = true;
-            this.plugin.WindowManager.MainWindow.ShowRightPanel(View.PlayerDetail);
+            this.plugin.WindowManager.Panel!.ShowPanel(View.PlayerDetail);
         }
     }
 }

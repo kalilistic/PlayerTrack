@@ -240,6 +240,11 @@ namespace PlayerTrack
         /// </summary>
         public bool ForceNamePlateStyle { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to open player details combined or separate.
+        /// </summary>
+        public bool CombinedPlayerDetailWindow { get; set; } = true;
+
         /// <inheritdoc />
         public int Version { get; set; }
     }

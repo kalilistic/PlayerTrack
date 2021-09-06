@@ -12,7 +12,7 @@ namespace PlayerTrack
     /// <summary>
     /// Player Detail Summary View.
     /// </summary>
-    public partial class MainWindow
+    public partial class Panel
     {
         private void PlayerSummary()
         {
@@ -118,8 +118,8 @@ namespace PlayerTrack
                 {
                     this.SelectedPlayer.LodestoneStatus = LodestoneStatus.Unverified;
                     this.SelectedPlayer.LodestoneFailureCount = 0;
-                    this.Plugin.PlayerService.UpdatePlayerLodestoneState(this.SelectedPlayer);
-                    this.Plugin.PlayerService.SubmitLodestoneRequest(this.SelectedPlayer);
+                    this.plugin.PlayerService.UpdatePlayerLodestoneState(this.SelectedPlayer);
+                    this.plugin.PlayerService.SubmitLodestoneRequest(this.SelectedPlayer);
                 }
             }
 
@@ -140,7 +140,7 @@ namespace PlayerTrack
                     y: -1 - (5f * ImGuiHelpers.GlobalScale))))
             {
                 this.SelectedPlayer.Notes = notes;
-                this.Plugin.PlayerService.UpdatePlayerNotes(this.SelectedPlayer);
+                this.plugin.PlayerService.UpdatePlayerNotes(this.SelectedPlayer);
             }
         }
     }

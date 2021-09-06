@@ -17,10 +17,12 @@ namespace PlayerTrack
             this.Plugin = playerTrackPlugin;
 
             // create windows
+            this.Panel = new Panel(this.Plugin);
             this.MainWindow = new MainWindow(this.Plugin);
             this.ConfigWindow = new ConfigWindow(this.Plugin);
             this.ModalWindow = new ModalWindow(this.Plugin);
             this.MigrationWindow = new MigrationWindow(this.Plugin);
+            this.PlayerDetailWindow = new PlayerDetailWindow(this.Plugin);
 
             // setup window system
             this.WindowSystem = new WindowSystem("PlayerTrackWindowSystem");
@@ -30,6 +32,16 @@ namespace PlayerTrack
             PlayerTrackPlugin.PluginInterface.UiBuilder.Draw += this.Draw;
             PlayerTrackPlugin.PluginInterface.UiBuilder.OpenConfigUi += this.OpenConfigUi;
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to toggle player detail on next draw.
+        /// </summary>
+        public bool ShouldTogglePlayerDetail { get; set; }
+
+        /// <summary>
+        /// Gets panel for main views (e.g. detailed player, lodestone).
+        /// </summary>
+        public Panel? Panel { get; }
 
         /// <summary>
         /// Gets main PlayerTrack window.
@@ -50,6 +62,11 @@ namespace PlayerTrack
         /// Gets migration window.
         /// </summary>
         public MigrationWindow MigrationWindow { get; }
+
+        /// <summary>
+        /// Gets player detail window (for when displayed separately).
+        /// </summary>
+        public PlayerDetailWindow PlayerDetailWindow { get; }
 
         private WindowSystem WindowSystem { get; }
 
@@ -79,6 +96,10 @@ namespace PlayerTrack
             this.WindowSystem.AddWindow(this.MainWindow!);
             this.WindowSystem.AddWindow(this.ModalWindow);
             this.WindowSystem.AddWindow(this.ConfigWindow!);
+            if (!this.Plugin.Configuration.CombinedPlayerDetailWindow)
+            {
+                this.WindowSystem.AddWindow(this.PlayerDetailWindow);
+            }
         }
 
         /// <summary>
@@ -91,10 +112,30 @@ namespace PlayerTrack
             this.WindowSystem.RemoveAllWindows();
         }
 
+        private void TogglePlayerDetailWindow()
+        {
+            if (this.Plugin.Configuration.CombinedPlayerDetailWindow)
+            {
+                this.WindowSystem.RemoveWindow(this.PlayerDetailWindow);
+            }
+            else
+            {
+                this.WindowSystem.AddWindow(this.PlayerDetailWindow);
+            }
+
+            this.ShouldTogglePlayerDetail = false;
+        }
+
         private void Draw()
         {
             // only show when logged in
             if (!PlayerTrackPlugin.ClientState.IsLoggedIn) return;
+
+            // check if should add/remove player detail
+            if (this.ShouldTogglePlayerDetail)
+            {
+                this.TogglePlayerDetailWindow();
+            }
 
             this.WindowSystem.Draw();
         }

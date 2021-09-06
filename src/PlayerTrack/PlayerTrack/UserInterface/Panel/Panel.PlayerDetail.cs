@@ -6,7 +6,7 @@ namespace PlayerTrack
     /// <summary>
     /// Player Detail View.
     /// </summary>
-    public partial class MainWindow
+    public partial class Panel
     {
         private void PlayerDetail()
         {

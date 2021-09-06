@@ -10,7 +10,7 @@ namespace PlayerTrack
     /// <summary>
     /// Player Detail Encounters View.
     /// </summary>
-    public partial class MainWindow
+    public partial class Panel
     {
         private void PlayerEncounters()
         {

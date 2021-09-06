@@ -10,7 +10,7 @@ namespace PlayerTrack
     /// <summary>
     /// Player Detail Appearance View.
     /// </summary>
-    public partial class MainWindow
+    public partial class Panel
     {
         private void PlayerCustomize()
         {

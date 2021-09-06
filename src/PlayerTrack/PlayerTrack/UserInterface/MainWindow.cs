@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.Numerics;
 
-using Dalamud.DrunkenToad;
 using Dalamud.Interface;
 using ImGuiNET;
 
@@ -13,20 +11,25 @@ namespace PlayerTrack
     public partial class MainWindow : PluginWindow
     {
         /// <summary>
-        /// Selected player to view.
+        /// Window size.
         /// </summary>
-        public Player? SelectedPlayer;
+        public Vector2? WindowSize;
 
         /// <summary>
-        /// Selected encounters for detailed view.
+        /// Minimized size.
         /// </summary>
-        public List<Encounter>? SelectedEncounters;
+        public Vector2 MinimizedSize;
 
+        /// <summary>
+        /// Maximized size.
+        /// </summary>
+        public Vector2 MaximizedSize;
+
+        /// <summary>
+        /// Minimized width.
+        /// </summary>
+        public float MinimizedWidth;
         private readonly PlayerTrackPlugin plugin;
-        private Vector2? windowSize;
-        private Vector2 minimizedSize;
-        private Vector2 maximizedSize;
-        private float minimizedWidth;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -36,9 +39,6 @@ namespace PlayerTrack
             : base(plugin, "PlayerTrack")
         {
             this.plugin = plugin;
-
-            // set world names for add player
-            this.worldNames = PlayerTrackPlugin.DataManager.WorldNames();
 
             // set to none on load if left on player detail
             if (this.plugin.Configuration.CurrentView == View.PlayerDetail)
@@ -50,7 +50,7 @@ namespace PlayerTrack
             // set window sizes
             this.SetWindowSizes();
             this.Size = this.plugin.Configuration.CurrentView != View.None ?
-                            this.maximizedSize : this.minimizedSize;
+                            this.MaximizedSize : this.MinimizedSize;
 
             // set lock state
             if (this.plugin.Configuration.LockWindow)
@@ -99,94 +99,84 @@ namespace PlayerTrack
         /// <inheritdoc/>
         public override void Draw()
         {
-            // set size depending on view
-            this.minimizedWidth = 221 * ImGuiHelpers.GlobalScale;
+            // get sizes
+            this.MinimizedWidth = 221 * ImGuiHelpers.GlobalScale;
             this.SetWindowSizes();
             var vector2 = this.Size;
-            this.windowSize = ImGui.GetWindowSize();
-            if (vector2 != null)
+            this.WindowSize = ImGui.GetWindowSize();
+
+            // check if combined or separate panel
+            if (this.plugin.Configuration.CombinedPlayerDetailWindow)
             {
-                if (this.plugin.Configuration.CurrentView == View.None)
+                // set size depending on view
+                if (vector2 != null)
                 {
-                    this.plugin.Configuration.MainWindowHeight = vector2.Value.Y;
-                    this.Size = new Vector2(this.minimizedWidth, this.windowSize.Value.Y) / ImGuiHelpers.GlobalScale;
+                    if (this.plugin.Configuration.CurrentView == View.None)
+                    {
+                        this.plugin.Configuration.MainWindowHeight = vector2.Value.Y;
+                        this.Size = new Vector2(this.MinimizedWidth, this.WindowSize.Value.Y) / ImGuiHelpers.GlobalScale;
+                    }
+                    else
+                    {
+                        this.plugin.Configuration.MainWindowHeight = vector2.Value.Y;
+                        this.plugin.Configuration.MainWindowWidth = vector2.Value.X;
+                        this.Size = new Vector2(this.WindowSize.Value.X, this.WindowSize.Value.Y) / ImGuiHelpers.GlobalScale;
+                    }
                 }
                 else
                 {
-                    this.plugin.Configuration.MainWindowHeight = vector2.Value.Y;
-                    this.plugin.Configuration.MainWindowWidth = vector2.Value.X;
-                    this.Size = new Vector2(this.windowSize.Value.X, this.windowSize.Value.Y) / ImGuiHelpers.GlobalScale;
+                    this.Size = this.WindowSize;
                 }
+
+                // left panel
+                ImGui.BeginChild(
+                    "###PlayerTrack_LeftPanel_Child",
+                    new Vector2(205 * ImGuiHelpers.GlobalScale, 0),
+                    false);
+                {
+                    this.PlayerListControls();
+                    this.PlayerList();
+                    ImGui.EndChild();
+                }
+
+                // right panel
+                ImGui.SameLine();
+                ImGui.BeginChild("###PlayerTrack_RightPanel_Child");
+                this.plugin.WindowManager.Panel?.Draw();
+                ImGui.EndChild();
             }
             else
             {
-                this.Size = this.windowSize;
+                // set to minimized size if not set
+                if (vector2 != null)
+                {
+                    this.plugin.Configuration.MainWindowHeight = vector2.Value.Y;
+                    this.Size = new Vector2(this.MinimizedWidth, this.WindowSize.Value.Y) / ImGuiHelpers.GlobalScale;
+                }
+                else
+                {
+                    this.Size = this.WindowSize;
+                }
+
+                // left panel
+                ImGui.BeginChild(
+                    "###PlayerTrack_LeftPanel_Child",
+                    new Vector2(205 * ImGuiHelpers.GlobalScale, 0),
+                    false);
+                {
+                    this.PlayerListControls();
+                    this.PlayerList();
+                    ImGui.EndChild();
+                }
             }
-
-            // left panel
-            ImGui.BeginChild(
-                "###PlayerTrack_LeftPanel_Child",
-                new Vector2(205 * ImGuiHelpers.GlobalScale, 0),
-                false);
-            {
-                this.PlayerListControls();
-                this.PlayerList();
-                ImGui.EndChild();
-            }
-
-            // right panel
-            ImGui.SameLine();
-            ImGui.BeginChild("###PlayerTrack_RightPanel_Child");
-            this.TabBar();
-            ImGui.EndChild();
-        }
-
-        /// <summary>
-        /// Show right panel.
-        /// </summary>
-        /// <param name="view">View to show.</param>
-        public void ShowRightPanel(View view)
-        {
-            this.Size = new Vector2(this.plugin.Configuration.MainWindowWidth, this.plugin.Configuration.MainWindowHeight);
-            this.plugin.Configuration.LastView = this.plugin.Configuration.CurrentView;
-            this.plugin.Configuration.CurrentView = view;
-            this.plugin.SaveConfig();
-        }
-
-        /// <summary>
-        /// Hide right panel.
-        /// </summary>
-        public void HideRightPanel()
-        {
-            var vector2 = this.windowSize;
-            if (vector2 != null)
-            {
-                this.Size = new Vector2(this.minimizedWidth, this.plugin.Configuration.MainWindowHeight);
-            }
-
-            this.plugin.Configuration.LastView = this.plugin.Configuration.CurrentView;
-            this.plugin.Configuration.CurrentView = View.None;
-            this.plugin.SaveConfig();
         }
 
         private void SetWindowSizes()
         {
-            this.minimizedSize =
+            this.MinimizedSize =
                 new Vector2(220 * ImGuiHelpers.GlobalScale, this.plugin.Configuration.MainWindowHeight);
-            this.maximizedSize =
+            this.MaximizedSize =
                 new Vector2(this.plugin.Configuration.MainWindowWidth, this.plugin.Configuration.MainWindowHeight);
-        }
-
-        private void ToggleRightPanel(View view)
-        {
-            if (view == this.plugin.Configuration.CurrentView)
-            {
-                this.HideRightPanel();
-            }
-            else
-            {
-                this.ShowRightPanel(view);
-            }
         }
     }
 }

@@ -12,7 +12,7 @@ namespace PlayerTrack
     /// <summary>
     /// Lodestone Queue View.
     /// </summary>
-    public partial class MainWindow
+    public partial class Panel
     {
         private void Lodestone()
         {

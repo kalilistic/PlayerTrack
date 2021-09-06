@@ -9,7 +9,7 @@ namespace PlayerTrack
     /// <summary>
     /// Add Player View.
     /// </summary>
-    public partial class MainWindow
+    public partial class Panel
     {
         private readonly string[] worldNames;
         private int selectedWorld;
@@ -68,7 +68,8 @@ namespace PlayerTrack
                 this.addPlayerInput = string.Empty;
                 this.showInvalidNameError = false;
                 this.showDuplicatePlayerError = false;
-                this.HideRightPanel();
+
+                // this.HideRightPanel(); TODO
             }
 
             ImGui.Spacing();

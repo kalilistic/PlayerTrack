@@ -20,7 +20,7 @@ namespace PlayerTrack
         private void ClearSelectedPlayer()
         {
             this.menuPlayerKey = string.Empty;
-            this.SelectedPlayer = null;
+            this.plugin.WindowManager.Panel!.SelectedPlayer = null;
         }
 
         private void PlayerList()
@@ -53,7 +53,7 @@ namespace PlayerTrack
                     ImGui.PushStyleColor(ImGuiCol.Text, color);
                     if (ImGui.Selectable(
                         "###PlayerTrack_Player_Selectable_" + i,
-                        this.SelectedPlayer == this.players[i],
+                        this.plugin.WindowManager.Panel!.SelectedPlayer == this.players[i],
                         ImGuiSelectableFlags.AllowDoubleClick))
                     {
                         // suppress double clicks
@@ -63,20 +63,20 @@ namespace PlayerTrack
                         }
 
                         // hide right panel if clicking same user while already open
-                        else if (this.SelectedPlayer?.Key == this.players[i].Key && this.plugin.Configuration.CurrentView == View.PlayerDetail)
+                        else if (this.plugin.WindowManager.Panel!.SelectedPlayer?.Key == this.players[i].Key && this.plugin.Configuration.CurrentView == View.PlayerDetail)
                         {
                             this.ClearSelectedPlayer();
-                            this.HideRightPanel();
+                            this.plugin.WindowManager.Panel!.HidePanel();
                         }
 
                         // open player in right panel
                         else
                         {
-                            this.SelectedPlayer = this.players[i];
-                            this.SelectedEncounters = this.plugin.EncounterService
-                                                          .GetEncountersByPlayer(this.SelectedPlayer.Key)
+                            this.plugin.WindowManager.Panel!.SelectedPlayer = this.players[i];
+                            this.plugin.WindowManager.Panel!.SelectedEncounters = this.plugin.EncounterService
+                                                          .GetEncountersByPlayer(this.plugin.WindowManager.Panel!.SelectedPlayer.Key)
                                                           .OrderByDescending(enc => enc.Created).ToList();
-                            this.ShowRightPanel(View.PlayerDetail);
+                            this.plugin.WindowManager.Panel!.ShowPanel(View.PlayerDetail);
                         }
                     }
 
