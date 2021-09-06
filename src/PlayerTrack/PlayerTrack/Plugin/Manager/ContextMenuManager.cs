@@ -16,6 +16,7 @@ namespace PlayerTrack
         private readonly PlayerTrackPlugin plugin;
         private readonly NormalContextMenuItem addShowMenuItem;
         private readonly NormalContextMenuItem openLodestoneMenuItem;
+        private readonly NormalContextSubMenuItem contextSubMenuItem;
 
         private Player? selectedPlayer;
 
@@ -37,6 +38,8 @@ namespace PlayerTrack
                 {
                 new TextPayload(Loc.Localize("SubMenuOpenLodestoneItem", "Open Lodestone")),
                 }), this.OnOpenLodestoneProfile);
+            this.contextSubMenuItem =
+                new NormalContextSubMenuItem(Loc.Localize("SetCategoryContextMenu", "Set Category"), this.OnOpenCategoryMenu);
         }
 
         /// <summary>
@@ -116,6 +119,11 @@ namespace PlayerTrack
                     args.Items.Add(this.openLodestoneMenuItem);
                 }
 
+                if (this.plugin.Configuration.ShowSetCategoryContextMenu)
+                {
+                    args.Items.Add(this.contextSubMenuItem);
+                }
+
                 return;
             }
 
@@ -140,15 +148,20 @@ namespace PlayerTrack
                 index = args.Items.Count;
             }
 
-            // insert menu options
-            if (this.plugin.Configuration.ShowAddShowInfoContextMenu)
+            // // insert menu options
+            if (this.plugin.Configuration.ShowSetCategoryContextMenu)
             {
-                args.Items.Insert(index, this.addShowMenuItem);
+                args.Items.Insert(index, this.contextSubMenuItem);
             }
 
             if (this.plugin.Configuration.ShowOpenLodestoneContextMenu && this.selectedPlayer?.LodestoneStatus == LodestoneStatus.Verified)
             {
                 args.Items.Insert(index, this.openLodestoneMenuItem);
+            }
+
+            if (this.plugin.Configuration.ShowAddShowInfoContextMenu)
+            {
+                args.Items.Insert(index, this.addShowMenuItem);
             }
         }
 
@@ -170,6 +183,28 @@ namespace PlayerTrack
                                                                            .OrderByDescending(enc => enc.Created).ToList();
             this.plugin.WindowManager.MainWindow!.IsOpen = true;
             this.plugin.WindowManager.Panel!.ShowPanel(View.PlayerDetail);
+        }
+
+        private void OnOpenCategoryMenu(ContextMenuOpenArgs args)
+        {
+            var categoryNames = this.plugin.CategoryService.GetCategoryNames().Reverse().ToArray();
+            var categoryIds = this.plugin.CategoryService.GetCategoryIds().Reverse().ToArray();
+            for (var i = 0; i < categoryIds.Length; i++)
+            {
+                var index = i;
+                args.Items.Insert(i, new NormalContextMenuItem(
+                  new SeString(new TextPayload(categoryNames[i])), _ =>
+                  {
+                      var player = this.selectedPlayer;
+                      if (player != null)
+                      {
+                          player.CategoryId = categoryIds[index];
+                          this.plugin.PlayerService.UpdatePlayerCategory(player);
+                      }
+
+                      this.plugin.NamePlateManager.ForceRedraw();
+                  }));
+            }
         }
     }
 }

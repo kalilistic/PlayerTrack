@@ -20,7 +20,7 @@ namespace PlayerTrack
         {
             var showAddShowInfoContextMenu = this.Plugin.Configuration.ShowAddShowInfoContextMenu;
             if (ImGui.Checkbox(
-                Loc.Localize($"ShowContextMenu", "Show add/show info option"),
+                Loc.Localize($"ShowAddShowInfoContextMenu", "Show add/show info option"),
                 ref showAddShowInfoContextMenu))
             {
                 this.Plugin.Configuration.ShowAddShowInfoContextMenu = showAddShowInfoContextMenu;
@@ -28,13 +28,13 @@ namespace PlayerTrack
             }
 
             ImGuiComponents.HelpMarker(Loc.Localize(
-                                           "ShowContextMenu_HelpMarker",
-                                           "show playertrack submenu on players"));
+                                           "ShowAddShowInfoContextMenu_HelpMarker",
+                                           "show add/show info context menu on players"));
             ImGui.Spacing();
 
             var showOpenLodestoneContextMenu = this.Plugin.Configuration.ShowOpenLodestoneContextMenu;
             if (ImGui.Checkbox(
-                Loc.Localize($"ShowContextMenu", "Show open lodestone profile option"),
+                Loc.Localize($"ShowOpenLodestoneContextMenu", "Show open lodestone profile option"),
                 ref showOpenLodestoneContextMenu))
             {
                 this.Plugin.Configuration.ShowOpenLodestoneContextMenu = showOpenLodestoneContextMenu;
@@ -42,8 +42,22 @@ namespace PlayerTrack
             }
 
             ImGuiComponents.HelpMarker(Loc.Localize(
-                                           "ShowContextMenu_HelpMarker",
-                                           "show playertrack submenu on players"));
+                                           "ShowOpenLodestoneContextMenu_HelpMarker",
+                                           "show open lodestone context menu on players"));
+            ImGui.Spacing();
+
+            var showSetCategoryContextMenu = this.Plugin.Configuration.ShowSetCategoryContextMenu;
+            if (ImGui.Checkbox(
+                Loc.Localize($"ShowSetCategoryContextMenu", "Show set category option"),
+                ref showSetCategoryContextMenu))
+            {
+                this.Plugin.Configuration.ShowSetCategoryContextMenu = showSetCategoryContextMenu;
+                this.Plugin.SaveConfig();
+            }
+
+            ImGuiComponents.HelpMarker(Loc.Localize(
+                                           "ShowSetCategoryContextMenu_HelpMarker",
+                                           "show set category context menu on players"));
             ImGui.Spacing();
 
             ImGui.Text(Loc.Localize("ShowContextPosition", "Set context menu item position"));

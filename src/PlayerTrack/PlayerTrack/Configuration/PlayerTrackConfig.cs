@@ -181,6 +181,11 @@ namespace PlayerTrack
         public bool ShowOpenLodestoneContextMenu = true;
 
         /// <summary>
+        /// Show option to set category via context menu.
+        /// </summary>
+        public bool ShowSetCategoryContextMenu = true;
+
+        /// <summary>
         /// Frequency for refreshing player list (ms).
         /// </summary>
         public long PlayerListRefreshFrequency = 1000;
