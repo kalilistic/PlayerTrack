@@ -35,7 +35,7 @@ namespace PlayerTrack
                 ref this.addPlayerInput,
                 30);
             ImGui.Spacing();
-            if (ImGui.Button(Loc.Localize("Add", "Add") + "###PlayerTrack_AddPlayerModalOK_Button"))
+            if (ImGui.Button(Loc.Localize("AddPlayerModalButton", "Add") + "###PlayerTrack_AddPlayerModalOK_Button"))
             {
                 this.showInvalidNameError = false;
                 this.showDuplicatePlayerError = false;

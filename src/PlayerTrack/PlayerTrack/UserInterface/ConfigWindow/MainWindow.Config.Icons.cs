@@ -48,7 +48,7 @@ namespace PlayerTrack
             ImGui.PopFont();
             ImGui.SameLine();
 
-            if (ImGui.SmallButton(Loc.Localize("Add", "Add") + "###PlayerTrack_IconAdd_Button"))
+            if (ImGui.SmallButton(Loc.Localize("AddIcon", "Add") + "###PlayerTrack_IconAdd_Button"))
             {
                 if (this.Plugin.Configuration.EnabledIcons.Contains(IconHelper.Icons[this.selectedIconIndex]))
                 {

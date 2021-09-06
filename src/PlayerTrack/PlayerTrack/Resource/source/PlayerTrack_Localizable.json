@@ -7,6 +7,10 @@
         "message": "Open Lodestone",
         "description": "ContextMenuManager..ctor"
     },
+    "SetCategoryContextMenu": {
+        "message": "Set Category",
+        "description": "ContextMenuManager..ctor"
+    },
     "None": {
         "message": "None",
         "description": "PlayerTrackPlugin.IconListNames"
@@ -67,7 +71,7 @@
         "message": "Categories",
         "description": "ConfigWindow.Draw"
     },
-    "Add": {
+    "AddCategory": {
         "message": "Add Category",
         "description": "ConfigWindow.CategoryConfig"
     },
@@ -95,7 +99,7 @@
         "message": "Actions",
         "description": "ConfigWindow.CategoryConfig"
     },
-    "CategoryNamePlateTitleEnabled": {
+    "CategorySendLastSeenAlert": {
         "message": "send alert with when and where you last saw the player",
         "description": "ConfigWindow.CategoryConfig"
     },
@@ -111,12 +115,68 @@
         "message": "Default",
         "description": "ConfigWindow.CategoryConfig"
     },
-    "ShowContextMenu": {
+    "CategoryNamePlateTitleEnabled": {
+        "message": "Enable nameplate titles",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryNamePlateColor": {
+        "message": "Set nameplate color",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "ShowAddShowInfoContextMenu": {
         "message": "Show add/show info option",
         "description": "ConfigWindow.ContextMenuConfig"
     },
-    "ShowContextMenu_HelpMarker": {
-        "message": "show playertrack submenu on players",
+    "ShowAddShowInfoContextMenu_HelpMarker": {
+        "message": "show add/show info context menu on players",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowOpenLodestoneContextMenu": {
+        "message": "Show open lodestone profile option",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowOpenLodestoneContextMenu_HelpMarker": {
+        "message": "show open lodestone context menu on players",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowSetCategoryContextMenu": {
+        "message": "Show set category option",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowSetCategoryContextMenu_HelpMarker": {
+        "message": "show set category context menu on players",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowContextPosition": {
+        "message": "Set context menu item position",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowContextPosition_HelpMarker": {
+        "message": "show above or below the first matching item in the menu.",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowAbove": {
+        "message": "Show Above",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowBelow": {
+        "message": "Show Below",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowAboveList": {
+        "message": "Show Above",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "NoContextItems": {
+        "message": "None",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowBelowList": {
+        "message": "Show Below",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "DupeContextBelow": {
+        "message": "This context item is already added!",
         "description": "ConfigWindow.ContextMenuConfig"
     },
     "ShowFilterType": {
@@ -139,12 +199,24 @@
         "message": "Lock window",
         "description": "ConfigWindow.DisplayConfig"
     },
-    "SearchType_HelpMarker": {
+    "LockWindow_HelpMarker": {
         "message": "keep main window locked in size/position",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "CombinedPlayerDetailWindow": {
+        "message": "Combine windows",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "CombinedPlayerDetailWindow_HelpMarker": {
+        "message": "show combined or separate windows like original version",
         "description": "ConfigWindow.DisplayConfig"
     },
     "SearchType": {
         "message": "Search Type",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchType_HelpMarker": {
+        "message": "type of search to perform",
         "description": "ConfigWindow.DisplayConfig"
     },
     "IconGlossary": {
@@ -161,6 +233,14 @@
     },
     "AddRemoveIcons": {
         "message": "add new icons using dropdown or remove icons by clicking on them",
+        "description": "ConfigWindow.IconConfig"
+    },
+    "AddIcon": {
+        "message": "Add",
+        "description": "ConfigWindow.IconConfig"
+    },
+    "DupeIcon": {
+        "message": "This icon is already added!",
         "description": "ConfigWindow.IconConfig"
     },
     "SyncToLodestone": {
@@ -271,58 +351,6 @@
         "message": "threshold for creating new encounter for player in same location",
         "description": "ConfigWindow.ProcessingConfig"
     },
-    "AddPlayerModalContent": {
-        "message": "Add player manually to your list.",
-        "description": "MainWindow.AddPlayer"
-    },
-    "PlayerNameAddHint": {
-        "message": "player name",
-        "description": "MainWindow.AddPlayer"
-    },
-    "Lodestone": {
-        "message": "Lodestone",
-        "description": "MainWindow.Lodestone"
-    },
-    "LodestoneStatus": {
-        "message": "Status",
-        "description": "MainWindow.Lodestone"
-    },
-    "LodestoneAvailable": {
-        "message": "Available",
-        "description": "MainWindow.Lodestone"
-    },
-    "LodestoneUnavailable": {
-        "message": "Unavailable",
-        "description": "MainWindow.Lodestone"
-    },
-    "LodestoneTotalRequests": {
-        "message": "Request Count",
-        "description": "MainWindow.Lodestone"
-    },
-    "LodestoneRequestsInQueue": {
-        "message": "Requests In Queue",
-        "description": "MainWindow.Lodestone"
-    },
-    "LodestoneNoRequests": {
-        "message": "There are no pending lodestone requests.",
-        "description": "MainWindow.Lodestone"
-    },
-    "Summary": {
-        "message": "Summary",
-        "description": "MainWindow.PlayerDetail"
-    },
-    "Encounters": {
-        "message": "Encounters",
-        "description": "MainWindow.PlayerDetail"
-    },
-    "Appearance": {
-        "message": "Appearance",
-        "description": "MainWindow.PlayerDetail"
-    },
-    "Display": {
-        "message": "Display",
-        "description": "MainWindow.PlayerDetail"
-    },
     "TargetPlayer": {
         "message": "Target",
         "description": "MainWindow.PlayerList"
@@ -333,6 +361,10 @@
     },
     "ExaminePlayer": {
         "message": "Examine",
+        "description": "MainWindow.PlayerList"
+    },
+    "Lodestone": {
+        "message": "Lodestone",
         "description": "MainWindow.PlayerList"
     },
     "Category": {
@@ -347,7 +379,7 @@
         "message": "search",
         "description": "MainWindow.PlayerListControls"
     },
-    "AddPlayer": {
+    "AddPlayerMenuItem": {
         "message": "Add Player",
         "description": "MainWindow.PlayerListControls"
     },
@@ -358,146 +390,6 @@
     "OpenSettings": {
         "message": "Open Settings",
         "description": "MainWindow.PlayerListControls"
-    },
-    "Gender": {
-        "message": "Gender",
-        "description": "MainWindow.PlayerCustomize"
-    },
-    "Race": {
-        "message": "Race",
-        "description": "MainWindow.PlayerCustomize"
-    },
-    "Tribe": {
-        "message": "Tribe",
-        "description": "MainWindow.PlayerCustomize"
-    },
-    "Height": {
-        "message": "Height",
-        "description": "MainWindow.PlayerCustomize"
-    },
-    "PlayerHeightValue": {
-        "message": "{0} in",
-        "description": "MainWindow.PlayerCustomize"
-    },
-    "Copy": {
-        "message": "Copy",
-        "description": "MainWindow.PlayerCustomize"
-    },
-    "NoAppearance": {
-        "message": "No appearance data found for this player.",
-        "description": "MainWindow.PlayerCustomize"
-    },
-    "NoAppearanceExplanation": {
-        "message": "This can happen for characters manually added or if the player was migrated from an earlier version of the plugin. Next time you encounter this player, the appearance data will be refreshed.",
-        "description": "MainWindow.PlayerCustomize"
-    },
-    "PlayerCategory": {
-        "message": "Category",
-        "description": "MainWindow.PlayerDisplay"
-    },
-    "OverrideNote": {
-        "message": "These config will override category config.",
-        "description": "MainWindow.PlayerDisplay"
-    },
-    "Title": {
-        "message": "Title",
-        "description": "MainWindow.PlayerDisplay"
-    },
-    "Icon": {
-        "message": "Icon",
-        "description": "MainWindow.PlayerDisplay"
-    },
-    "List": {
-        "message": "List",
-        "description": "MainWindow.PlayerDisplay"
-    },
-    "Nameplate": {
-        "message": "Nameplate",
-        "description": "MainWindow.PlayerDisplay"
-    },
-    "Alerts": {
-        "message": "Alerts",
-        "description": "MainWindow.PlayerDisplay"
-    },
-    "Time": {
-        "message": "Time",
-        "description": "MainWindow.PlayerEncounters"
-    },
-    "Duration": {
-        "message": "Duration",
-        "description": "MainWindow.PlayerEncounters"
-    },
-    "Job": {
-        "message": "Job",
-        "description": "MainWindow.PlayerEncounters"
-    },
-    "Lvl": {
-        "message": "Lvl",
-        "description": "MainWindow.PlayerEncounters"
-    },
-    "Location": {
-        "message": "Location",
-        "description": "MainWindow.PlayerEncounters"
-    },
-    "NoEncounters": {
-        "message": "No encounters found for this player.",
-        "description": "MainWindow.PlayerEncounters"
-    },
-    "NoEncountersExplanation": {
-        "message": "This can happen for characters manually added or if all the encounters have been deleted.",
-        "description": "MainWindow.PlayerEncounters"
-    },
-    "PlayerInfo": {
-        "message": "Player Info",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerStats": {
-        "message": "Player Stats",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerName": {
-        "message": "Name",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerPreviousNames": {
-        "message": "Previously known as {0}",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerFirstSeen": {
-        "message": "First Seen",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerHomeworld": {
-        "message": "Homeworld",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerPreviousWorlds": {
-        "message": "Previously on {0}",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerLastSeen": {
-        "message": "Last Seen",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "FreeCompany": {
-        "message": "Free Company",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerLastLocation": {
-        "message": "Last Location",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerLodestone": {
-        "message": "Lodestone",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerSeenCount": {
-        "message": "Seen Count",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerNotes": {
-        "message": "Notes",
-        "description": "MainWindow.PlayerSummary"
     },
     "MigrationInfo": {
         "message": "Thank you for updating PlayerTrack! The new version needs to migrate your data to a new format. This only runs once but may take awhile depending on how much data you have. Please be patient and do not interrupt the migration or you risk data loss. You can continue to play the game and this window will automatically close when complete.",
@@ -522,5 +414,217 @@
     "IconGlossaryModalTitle": {
         "message": "Icon Glossary",
         "description": "ModalWindow.Draw"
+    },
+    "AddPlayerModalContent": {
+        "message": "Add player manually to your list.",
+        "description": "Panel.AddPlayer"
+    },
+    "PlayerNameAddHint": {
+        "message": "player name",
+        "description": "Panel.AddPlayer"
+    },
+    "AddPlayerModalButton": {
+        "message": "Add",
+        "description": "Panel.AddPlayer"
+    },
+    "InvalidPlayerName": {
+        "message": "Not a valid player name - try again.",
+        "description": "Panel.AddPlayer"
+    },
+    "DuplicatePlayer": {
+        "message": "This player already exists in your list!",
+        "description": "Panel.AddPlayer"
+    },
+    "LodestoneStatus": {
+        "message": "Status",
+        "description": "Panel.Lodestone"
+    },
+    "LodestoneAvailable": {
+        "message": "Available",
+        "description": "Panel.Lodestone"
+    },
+    "LodestoneUnavailable": {
+        "message": "Unavailable",
+        "description": "Panel.Lodestone"
+    },
+    "LodestoneTotalRequests": {
+        "message": "Request Count",
+        "description": "Panel.Lodestone"
+    },
+    "LodestoneRequestsInQueue": {
+        "message": "Requests In Queue",
+        "description": "Panel.Lodestone"
+    },
+    "LodestoneNoRequests": {
+        "message": "There are no pending lodestone requests.",
+        "description": "Panel.Lodestone"
+    },
+    "Summary": {
+        "message": "Summary",
+        "description": "Panel.PlayerDetail"
+    },
+    "Encounters": {
+        "message": "Encounters",
+        "description": "Panel.PlayerDetail"
+    },
+    "Appearance": {
+        "message": "Appearance",
+        "description": "Panel.PlayerDetail"
+    },
+    "Display": {
+        "message": "Display",
+        "description": "Panel.PlayerDetail"
+    },
+    "Gender": {
+        "message": "Gender",
+        "description": "Panel.PlayerCustomize"
+    },
+    "GenderFemale": {
+        "message": "Female",
+        "description": "Panel.PlayerCustomize"
+    },
+    "GenderMale": {
+        "message": "Male",
+        "description": "Panel.PlayerCustomize"
+    },
+    "Race": {
+        "message": "Race",
+        "description": "Panel.PlayerCustomize"
+    },
+    "Tribe": {
+        "message": "Tribe",
+        "description": "Panel.PlayerCustomize"
+    },
+    "Height": {
+        "message": "Height",
+        "description": "Panel.PlayerCustomize"
+    },
+    "PlayerHeightValue": {
+        "message": "{0} in",
+        "description": "Panel.PlayerCustomize"
+    },
+    "Copy": {
+        "message": "Copy",
+        "description": "Panel.PlayerCustomize"
+    },
+    "NoAppearance": {
+        "message": "No appearance data found for this player.",
+        "description": "Panel.PlayerCustomize"
+    },
+    "NoAppearanceExplanation": {
+        "message": "This can happen for characters manually added or if the player was migrated from an earlier version of the plugin. Next time you encounter this player, the appearance data will be refreshed.",
+        "description": "Panel.PlayerCustomize"
+    },
+    "PlayerCategory": {
+        "message": "Category",
+        "description": "Panel.PlayerDisplay"
+    },
+    "OverrideNote": {
+        "message": "These config will override category config.",
+        "description": "Panel.PlayerDisplay"
+    },
+    "Title": {
+        "message": "Title",
+        "description": "Panel.PlayerDisplay"
+    },
+    "Icon": {
+        "message": "Icon",
+        "description": "Panel.PlayerDisplay"
+    },
+    "List": {
+        "message": "List",
+        "description": "Panel.PlayerDisplay"
+    },
+    "Nameplate": {
+        "message": "Nameplate",
+        "description": "Panel.PlayerDisplay"
+    },
+    "Alerts": {
+        "message": "Alerts",
+        "description": "Panel.PlayerDisplay"
+    },
+    "Time": {
+        "message": "Time",
+        "description": "Panel.PlayerEncounters"
+    },
+    "Duration": {
+        "message": "Duration",
+        "description": "Panel.PlayerEncounters"
+    },
+    "Job": {
+        "message": "Job",
+        "description": "Panel.PlayerEncounters"
+    },
+    "Lvl": {
+        "message": "Lvl",
+        "description": "Panel.PlayerEncounters"
+    },
+    "Location": {
+        "message": "Location",
+        "description": "Panel.PlayerEncounters"
+    },
+    "NoEncounters": {
+        "message": "No encounters found for this player.",
+        "description": "Panel.PlayerEncounters"
+    },
+    "NoEncountersExplanation": {
+        "message": "This can happen for characters manually added or if all the encounters have been deleted.",
+        "description": "Panel.PlayerEncounters"
+    },
+    "PlayerInfo": {
+        "message": "Player Info",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerStats": {
+        "message": "Player Stats",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerName": {
+        "message": "Name",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerPreviousNames": {
+        "message": "Previously known as {0}",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerFirstSeen": {
+        "message": "First Seen",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerHomeworld": {
+        "message": "Homeworld",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerPreviousWorlds": {
+        "message": "Previously on {0}",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerLastSeen": {
+        "message": "Last Seen",
+        "description": "Panel.PlayerSummary"
+    },
+    "FreeCompany": {
+        "message": "Free Company",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerLastLocation": {
+        "message": "Last Location",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerLodestone": {
+        "message": "Lodestone",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerSeenCount": {
+        "message": "Seen Count",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerNotes": {
+        "message": "Notes",
+        "description": "Panel.PlayerSummary"
+    },
+    "NoPlayerSelected": {
+        "message": "No player selected.",
+        "description": "PlayerDetailWindow.Draw"
     }
 }

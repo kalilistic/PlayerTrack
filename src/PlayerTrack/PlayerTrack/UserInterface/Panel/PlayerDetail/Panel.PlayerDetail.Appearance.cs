@@ -22,8 +22,8 @@ namespace PlayerTrack
                 ImGui.Text(Loc.Localize("Gender", "Gender"));
                 ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
                 ImGui.Text(this.SelectedPlayer.CharaCustomizeData.Gender == 0
-                               ? Loc.Localize("GenderValue", "Male")
-                               : Loc.Localize("GenderValue", "Female"));
+                               ? Loc.Localize("GenderMale", "Male")
+                               : Loc.Localize("GenderFemale", "Female"));
 
                 ImGui.Text(Loc.Localize("Race", "Race"));
                 ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);

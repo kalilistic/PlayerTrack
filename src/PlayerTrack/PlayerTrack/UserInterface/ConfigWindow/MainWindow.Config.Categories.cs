@@ -23,7 +23,7 @@ namespace PlayerTrack
             if (!categories.Any()) return;
 
             // add category
-            if (ImGui.SmallButton(Loc.Localize("Add", "Add Category") + "###PlayerTrack_CategoryAdd_Button"))
+            if (ImGui.SmallButton(Loc.Localize("AddCategory", "Add Category") + "###PlayerTrack_CategoryAdd_Button"))
             {
                 this.Plugin.CategoryService.AddCategory();
             }
@@ -106,7 +106,7 @@ namespace PlayerTrack
                 {
                     ImGui.BeginTooltip();
                     ImGui.PushTextWrapPos(ImGui.GetFontSize() * 35f);
-                    ImGui.TextUnformatted(Loc.Localize("CategoryNamePlateTitleEnabled", "send alert with when and where you last saw the player"));
+                    ImGui.TextUnformatted(Loc.Localize("CategorySendLastSeenAlert", "send alert with when and where you last saw the player"));
                     ImGui.PopTextWrapPos();
                     ImGui.EndTooltip();
                 }

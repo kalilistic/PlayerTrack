@@ -91,7 +91,7 @@ namespace PlayerTrack
             if (ImGui.BeginPopup("###PlayerTrack_Menu_Popup"))
             {
                 if (ImGui.MenuItem(
-                    Loc.Localize("AddPlayer", "Add Player")))
+                    Loc.Localize("AddPlayerMenuItem", "Add Player")))
                 {
                     this.plugin.WindowManager.Panel!.TogglePanel(View.AddPlayer);
                 }
