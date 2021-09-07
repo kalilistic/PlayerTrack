@@ -1,8 +1,4 @@
 {
-    "Add": {
-        "message": "追加",
-        "description": "ConfigWindow.CategoryConfig"
-    },
     "Reset": {
         "message": "リセット",
         "description": "ConfigWindow.IconConfig"

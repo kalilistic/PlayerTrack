@@ -55,10 +55,6 @@
         "message": "分类",
         "description": "ConfigWindow.Draw"
     },
-    "Add": {
-        "message": "添加分类",
-        "description": "ConfigWindow.CategoryConfig"
-    },
     "CategoryName": {
         "message": "名称",
         "description": "ConfigWindow.CategoryConfig"
@@ -79,10 +75,6 @@
         "message": "默认",
         "description": "ConfigWindow.CategoryConfig"
     },
-    "ShowContextMenu_HelpMarker": {
-        "message": "在玩家上显示 PlayerTrack 子菜单",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
     "ShowSearchBox": {
         "message": "显示搜索框",
         "description": "ConfigWindow.DisplayConfig"
@@ -95,12 +87,12 @@
         "message": "锁定窗口",
         "description": "ConfigWindow.DisplayConfig"
     },
-    "SearchType_HelpMarker": {
-        "message": "固定主窗口的尺寸及位置",
-        "description": "ConfigWindow.DisplayConfig"
-    },
     "SearchType": {
         "message": "搜索类型",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchType_HelpMarker": {
+        "message": "固定主窗口的尺寸及位置",
         "description": "ConfigWindow.DisplayConfig"
     },
     "Icons": {
@@ -175,20 +167,20 @@
         "message": "选择何时处理玩家",
         "description": "ConfigWindow.ProcessingConfig"
     },
-    "Location": {
-        "message": "位置",
-        "description": "MainWindow.PlayerEncounters"
-    },
-    "PlayerInfo": {
-        "message": "玩家信息",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerName": {
-        "message": "名称",
-        "description": "MainWindow.PlayerSummary"
-    },
     "Cancel": {
         "message": "取消",
         "description": "ModalWindow.Draw"
+    },
+    "Location": {
+        "message": "位置",
+        "description": "Panel.PlayerEncounters"
+    },
+    "PlayerInfo": {
+        "message": "玩家信息",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerName": {
+        "message": "名称",
+        "description": "Panel.PlayerSummary"
     }
 }
