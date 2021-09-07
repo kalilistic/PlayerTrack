@@ -98,13 +98,13 @@ namespace PlayerTrack
         /// <summary>
         /// Get sorted players.
         /// </summary>
-        /// <param name="nameFilter">name to filter by.</param>
+        /// <param name="filter">filter to search by.</param>
         /// <returns>list of players.</returns>
-        public Player[] GetSortedPlayers(string nameFilter = "")
+        public Player[] GetSortedPlayers(string filter = "")
         {
             try
             {
-                Player[] playersList = { };
+                Player[] playersList = Array.Empty<Player>();
                 if (!this.plugin.Configuration.ShowWindow) return playersList;
                 lock (this.locker)
                 {
@@ -113,21 +113,40 @@ namespace PlayerTrack
                 }
 
                 // filter by search
-                if (!string.IsNullOrEmpty(nameFilter))
+                if (!string.IsNullOrEmpty(filter))
                 {
-                    playersList = this.plugin.Configuration.SearchType switch
+                    if (this.plugin.Configuration.SearchTags)
                     {
-                        PlayerSearchType.startsWith => playersList
-                                                       .Where(
-                                                           player => player.Names.First().ToLower().StartsWith(nameFilter.ToLower())).ToArray(),
-                        PlayerSearchType.contains => playersList
-                                                     .Where(player => player.Names.First().ToLower().Contains(nameFilter.ToLower()))
-                                                     .ToArray(),
-                        PlayerSearchType.exact => playersList
-                                                  .Where(player => player.Names.First().ToLower().Equals(nameFilter.ToLower()))
-                                                  .ToArray(),
-                        _ => throw new ArgumentOutOfRangeException(),
-                    };
+                        playersList = this.plugin.Configuration.SearchType switch
+                        {
+                            PlayerSearchType.startsWith => playersList
+                                                           .Where(
+                                                               player => player.Names.First().ToLower().StartsWith(filter.ToLower()) || player.Tags.Contains(filter)).ToArray(),
+                            PlayerSearchType.contains => playersList
+                                                         .Where(player => player.Names.First().ToLower().Contains(filter.ToLower()) || player.Tags.Contains(filter))
+                                                         .ToArray(),
+                            PlayerSearchType.exact => playersList
+                                                      .Where(player => player.Names.First().ToLower().Equals(filter.ToLower()) || player.Tags.Contains(filter))
+                                                      .ToArray(),
+                            _ => throw new ArgumentOutOfRangeException(),
+                        };
+                    }
+                    else
+                    {
+                        playersList = this.plugin.Configuration.SearchType switch
+                        {
+                            PlayerSearchType.startsWith => playersList
+                                                           .Where(
+                                                               player => player.Names.First().ToLower().StartsWith(filter.ToLower())).ToArray(),
+                            PlayerSearchType.contains => playersList
+                                                         .Where(player => player.Names.First().ToLower().Contains(filter.ToLower()))
+                                                         .ToArray(),
+                            PlayerSearchType.exact => playersList
+                                                      .Where(player => player.Names.First().ToLower().Equals(filter.ToLower()))
+                                                      .ToArray(),
+                            _ => throw new ArgumentOutOfRangeException(),
+                        };
+                    }
                 }
 
                 return playersList;
@@ -135,7 +154,7 @@ namespace PlayerTrack
             catch (Exception)
             {
                 Logger.LogDebug("Failed to retrieve players to display so trying again.");
-                return this.GetSortedPlayers(nameFilter);
+                return this.GetSortedPlayers(filter);
             }
         }
 
@@ -440,6 +459,24 @@ namespace PlayerTrack
                 lock (this.locker)
                 {
                     this.players[player.Key].Notes = player.Notes;
+                    this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
+                }
+
+                this.UpdateItem(this.players[player.Key]);
+            }
+        }
+
+        /// <summary>
+        /// Update player tags.
+        /// </summary>
+        /// <param name="player">player to update.</param>
+        public void UpdatePlayerTags(Player player)
+        {
+            if (this.players.ContainsKey(player.Key))
+            {
+                lock (this.locker)
+                {
+                    this.players[player.Key].Tags = player.Tags;
                     this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
                 }
 

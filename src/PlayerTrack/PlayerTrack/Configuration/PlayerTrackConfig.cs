@@ -250,6 +250,16 @@ namespace PlayerTrack
         /// </summary>
         public bool CombinedPlayerDetailWindow { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to show tags.
+        /// </summary>
+        public bool ShowPlayerTags { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to search tags.
+        /// </summary>
+        public bool SearchTags { get; set; } = true;
+
         /// <inheritdoc />
         public int Version { get; set; }
     }

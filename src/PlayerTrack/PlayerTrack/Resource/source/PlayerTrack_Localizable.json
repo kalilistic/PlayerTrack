@@ -211,6 +211,22 @@
         "message": "show combined or separate windows like original version",
         "description": "ConfigWindow.DisplayConfig"
     },
+    "ShowTags": {
+        "message": "Show player tags",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowPlayerTags_HelpMarker": {
+        "message": "show player tags on detail screen",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchTags": {
+        "message": "Check tags on search",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchTags_HelpMarker": {
+        "message": "search player tags with search",
+        "description": "ConfigWindow.DisplayConfig"
+    },
     "SearchType": {
         "message": "Search Type",
         "description": "ConfigWindow.DisplayConfig"
@@ -617,6 +633,10 @@
     },
     "PlayerSeenCount": {
         "message": "Seen Count",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerTags": {
+        "message": "Tags",
         "description": "Panel.PlayerSummary"
     },
     "PlayerNotes": {

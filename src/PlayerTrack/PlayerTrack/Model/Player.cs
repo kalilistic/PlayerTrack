@@ -163,6 +163,11 @@ namespace PlayerTrack
         public int CategoryId { get; set; }
 
         /// <summary>
+        /// Gets or sets tags.
+        /// </summary>
+        public List<string> Tags { get; set; } = new ();
+
+        /// <summary>
         /// Gets or sets player category rank for sorting.
         /// </summary>
         [BsonIgnore]

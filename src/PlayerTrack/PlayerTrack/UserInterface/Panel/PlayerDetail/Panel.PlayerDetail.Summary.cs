@@ -14,6 +14,8 @@ namespace PlayerTrack
     /// </summary>
     public partial class Panel
     {
+        private string newTag = string.Empty;
+
         private void PlayerSummary()
         {
             if (this.SelectedPlayer == null) return;
@@ -128,13 +130,54 @@ namespace PlayerTrack
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset3);
             ImGui.Text(this.SelectedPlayer.SeenCount != 0 ? this.SelectedPlayer.SeenCount + "x" : "N/A");
 
+            // add tag
+            if (this.plugin.Configuration.ShowPlayerTags)
+            {
+                ImGui.Spacing();
+                ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("PlayerTags", "Tags"));
+                ImGui.SetNextItemWidth(150f * ImGuiHelpers.GlobalScale);
+                ImGui.InputText(
+                    "###PlayerTrack_PlayerNotes_InputText",
+                    ref this.newTag,
+                    20);
+
+                ImGui.SameLine();
+                if (ImGui.Button("Add"))
+                {
+                    if (!string.IsNullOrEmpty(this.newTag))
+                    {
+                        this.SelectedPlayer.Tags.Add(this.newTag);
+                        this.plugin.PlayerService.UpdatePlayerTags(this.SelectedPlayer);
+                        this.newTag = string.Empty;
+                    }
+                }
+
+                // tags
+                ImGui.Spacing();
+                for (var i = 0; i < this.SelectedPlayer.Tags.Count; i++)
+                {
+                    if (ImGui.SmallButton(this.SelectedPlayer.Tags[i] + " ×"))
+                    {
+                        this.SelectedPlayer.Tags.RemoveAt(i);
+                        this.plugin.PlayerService.UpdatePlayerTags(this.SelectedPlayer);
+                    }
+
+                    ImGui.SameLine();
+                }
+
+                if (this.SelectedPlayer.Tags.Count > 0)
+                {
+                    ImGuiHelpers.ScaledDummy(5f);
+                }
+            }
+
             ImGui.Spacing();
             ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("PlayerNotes", "Notes"));
             var notes = this.SelectedPlayer.Notes;
             if (ImGui.InputTextMultiline(
-                "###PlayerTrack_PlayerNotes_InputText",
+                "###PlayerTrack_PlayerNotes_MultiText",
                 ref notes,
-                2000,
+                30,
                 new Vector2(
                     x: ImGui.GetWindowSize().X - (5f * ImGuiHelpers.GlobalScale),
                     y: -1 - (5f * ImGuiHelpers.GlobalScale))))

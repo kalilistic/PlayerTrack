@@ -91,6 +91,36 @@ namespace PlayerTrack
                                            "show combined or separate windows like original version"));
             ImGui.Spacing();
 
+            // show player tags
+            var showPlayerTags = this.plugin.Configuration.ShowPlayerTags;
+            if (ImGui.Checkbox(
+                Loc.Localize("ShowTags", "Show player tags") + "###PlayerTrack_ShowPlayerTags_Checkbox",
+                ref showPlayerTags))
+            {
+                this.plugin.Configuration.ShowPlayerTags = showPlayerTags;
+                this.plugin.SaveConfig();
+            }
+
+            ImGuiComponents.HelpMarker(Loc.Localize(
+                                           "ShowPlayerTags_HelpMarker",
+                                           "show player tags on detail screen"));
+            ImGui.Spacing();
+
+            // show player tags
+            var searchTags = this.plugin.Configuration.SearchTags;
+            if (ImGui.Checkbox(
+                Loc.Localize("SearchTags", "Check tags on search") + "###PlayerTrack_SearchTags_Checkbox",
+                ref searchTags))
+            {
+                this.plugin.Configuration.SearchTags = searchTags;
+                this.plugin.SaveConfig();
+            }
+
+            ImGuiComponents.HelpMarker(Loc.Localize(
+                                           "SearchTags_HelpMarker",
+                                           "search player tags with search"));
+            ImGui.Spacing();
+
             // search type
             ImGui.Text(Loc.Localize("SearchType", "Search Type"));
             var searchType = (int)this.plugin.Configuration.SearchType;
