@@ -1,11 +1,35 @@
 {
+    "SubMenuShowPlayerItem": {
+        "message": "Aggiungi/Mostra Informazioni",
+        "description": "ContextMenuManager..ctor"
+    },
+    "SubMenuOpenLodestoneItem": {
+        "message": "Apri Lodestone",
+        "description": "ContextMenuManager..ctor"
+    },
+    "SetCategoryContextMenu": {
+        "message": "Imposta categoria",
+        "description": "ContextMenuManager..ctor"
+    },
     "InstallThankYou": {
         "message": "Grazie per aver installato PlayerTrack!",
         "description": "PlayerTrackPlugin.HandleFreshInstall"
     },
-    "Add": {
-        "message": "Aggiungi",
-        "description": "ConfigWindow.CategoryConfig"
+    "PlayerNameChangeAlert": {
+        "message": "ha cambiato il suo nome da {0}.",
+        "description": "PlayerService.UpdateLodestone"
+    },
+    "PlayerWorldTransferAlert": {
+        "message": "trasferito da {0} a {1}.",
+        "description": "PlayerService.UpdateLodestone"
+    },
+    "DisplayConfig": {
+        "message": "Mostra",
+        "description": "ConfigWindow.Draw"
+    },
+    "IconConfig": {
+        "message": "Icone",
+        "description": "ConfigWindow.Draw"
     },
     "Reset": {
         "message": "Resetta",
@@ -15,57 +39,9 @@
         "message": "Non processare in combattimento",
         "description": "ConfigWindow.ProcessingConfig"
     },
-    "PlayerNameAddHint": {
-        "message": "Nome del Giocatore",
-        "description": "MainWindow.AddPlayer"
-    },
     "Lodestone": {
         "message": "Lodestone",
-        "description": "MainWindow.Lodestone"
-    },
-    "Encounters": {
-        "message": "Incontri",
-        "description": "MainWindow.PlayerDetail"
-    },
-    "PlayerHeightValue": {
-        "message": "{0} in",
-        "description": "MainWindow.PlayerCustomize"
-    },
-    "PlayerInfo": {
-        "message": "Info Giocatore",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerStats": {
-        "message": "Statistiche Giocatore",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerName": {
-        "message": "Nome",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerPreviousNames": {
-        "message": "Precedentemente conosciuto come {0}",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerFirstSeen": {
-        "message": "Visto la prima volta",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerPreviousWorlds": {
-        "message": "Precedentemente su {0}",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerLastSeen": {
-        "message": "Visto per l'ultima volta",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerSeenCount": {
-        "message": "Conteggio Visto",
-        "description": "MainWindow.PlayerSummary"
-    },
-    "PlayerNotes": {
-        "message": "Note",
-        "description": "MainWindow.PlayerSummary"
+        "description": "MainWindow.PlayerList"
     },
     "OK": {
         "message": "OK",
@@ -74,5 +50,53 @@
     "Cancel": {
         "message": "Annulla",
         "description": "ModalWindow.Draw"
+    },
+    "PlayerNameAddHint": {
+        "message": "Nome del Giocatore",
+        "description": "Panel.AddPlayer"
+    },
+    "Encounters": {
+        "message": "Incontri",
+        "description": "Panel.PlayerDetail"
+    },
+    "PlayerHeightValue": {
+        "message": "{0} in",
+        "description": "Panel.PlayerCustomize"
+    },
+    "PlayerInfo": {
+        "message": "Info Giocatore",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerStats": {
+        "message": "Statistiche Giocatore",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerName": {
+        "message": "Nome",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerPreviousNames": {
+        "message": "Precedentemente conosciuto come {0}",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerFirstSeen": {
+        "message": "Visto la prima volta",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerPreviousWorlds": {
+        "message": "Precedentemente su {0}",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerLastSeen": {
+        "message": "Visto per l'ultima volta",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerSeenCount": {
+        "message": "Conteggio Visto",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerNotes": {
+        "message": "Note",
+        "description": "Panel.PlayerSummary"
     }
 }
