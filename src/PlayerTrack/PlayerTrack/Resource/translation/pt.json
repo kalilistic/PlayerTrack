@@ -211,6 +211,22 @@
         "message": "exibir janelas combinadas ou separadas como na versão original",
         "description": "ConfigWindow.DisplayConfig"
     },
+    "ShowTags": {
+        "message": "Exibir tags dos jogadores",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowPlayerTags_HelpMarker": {
+        "message": "mostrar tags do player na tela de detalhes",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchTags": {
+        "message": "Verificar tags na busca",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchTags_HelpMarker": {
+        "message": "pesquisar por tags de jogadores com busca",
+        "description": "ConfigWindow.DisplayConfig"
+    },
     "SearchType": {
         "message": "Tipo de pesquisa",
         "description": "ConfigWindow.DisplayConfig"
@@ -617,6 +633,10 @@
     },
     "PlayerSeenCount": {
         "message": "Contagem de Visualizações",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerTags": {
+        "message": "Tags",
         "description": "Panel.PlayerSummary"
     },
     "PlayerNotes": {

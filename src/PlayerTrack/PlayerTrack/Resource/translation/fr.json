@@ -87,6 +87,10 @@
         "message": "Alertes",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "CategoryList": {
+        "message": "Couleur de la liste / de l'icône",
+        "description": "ConfigWindow.CategoryConfig"
+    },
     "CategoryNamePlates": {
         "message": "Plaques de nom",
         "description": "ConfigWindow.CategoryConfig"
@@ -95,9 +99,61 @@
         "message": "Actions",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "CategorySendLastSeenAlert": {
+        "message": "envoyer une alerte de quand et où vous avez vu le personnage pour la dernière fois",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategorySendNameChangeAlert": {
+        "message": "envoyer une alerte de changement de nom dans le chat lorsque détecté à partir d'une recherche via le Lodestone",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategorySendWorldTransferAlert": {
+        "message": "envoyer une alerte de transfert de monde dans le chat lorsque détecté à partir d'une recherche via le Lodestone",
+        "description": "ConfigWindow.CategoryConfig"
+    },
     "Default": {
         "message": "Défaut",
         "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryNamePlateTitleEnabled": {
+        "message": "Activer les titres dans les plaques de nom",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryNamePlateColor": {
+        "message": "Définir la couleur de la plaque de nom",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "ShowAddShowInfoContextMenu": {
+        "message": "Afficher l'option \"Ajouter/Afficher les Informations\"",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowAddShowInfoContextMenu_HelpMarker": {
+        "message": "affiche \"Ajouter/Afficher des Informations\" dans le menu contextuel des personnages",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowOpenLodestoneContextMenu": {
+        "message": "Afficher l'option \"Ouvrir le profil Lodestone\"",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowOpenLodestoneContextMenu_HelpMarker": {
+        "message": "affiche \"Ouvrir le profil Lodestone\" dans le menu contextuel des personnages",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowSetCategoryContextMenu": {
+        "message": "Afficher l'option \"Définir une catégorie\"",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowSetCategoryContextMenu_HelpMarker": {
+        "message": "affiche \"Définir une catégorie\" dans le menu contextuel des personnages",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowContextPosition": {
+        "message": "Définir la position de l'élément dans le menu contextuel",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowContextPosition_HelpMarker": {
+        "message": "afficher au-dessus ou en dessous du premier élément correspondant dans le menu.",
+        "description": "ConfigWindow.ContextMenuConfig"
     },
     "ShowAbove": {
         "message": "Afficher au dessus",
@@ -117,6 +173,10 @@
     },
     "ShowBelowList": {
         "message": "Afficher en dessous",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "DupeContextBelow": {
+        "message": "Cet élément contextuel est déjà utilisé !",
         "description": "ConfigWindow.ContextMenuConfig"
     },
     "ShowFilterType": {
@@ -139,12 +199,32 @@
         "message": "Verrouiller la fenêtre",
         "description": "ConfigWindow.DisplayConfig"
     },
+    "LockWindow_HelpMarker": {
+        "message": "garde la taille/position de la fenêtre principale verrouillée",
+        "description": "ConfigWindow.DisplayConfig"
+    },
     "CombinedPlayerDetailWindow": {
         "message": "Combiner les fenêtres",
         "description": "ConfigWindow.DisplayConfig"
     },
     "CombinedPlayerDetailWindow_HelpMarker": {
         "message": "affiche les fenêtres combinées ou séparées comme la version originale",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowTags": {
+        "message": "Afficher les étiquettes des personnages",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowPlayerTags_HelpMarker": {
+        "message": "affiche les étiquettes des personnages dans l'écran de détail",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchTags": {
+        "message": "Vérifier les étiquettes lors d'une recherche",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchTags_HelpMarker": {
+        "message": "inclure les étiquettes des personnages durant la recherche",
         "description": "ConfigWindow.DisplayConfig"
     },
     "SearchType": {
@@ -195,6 +275,10 @@
         "message": "définir la locale des liens menant aux profils sur le Lodestone",
         "description": "ConfigWindow.LodestoneConfig"
     },
+    "NamePlateCompatabilityWarning": {
+        "message": "Attention : Aucun de ces paramètres ne fonctionneront si vous utilisez d'autres plugins qui modifient les plaques de noms.",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
     "ShowNamePlates": {
         "message": "Montrer les plaques de nom",
         "description": "ConfigWindow.NamePlateConfig"
@@ -217,6 +301,22 @@
     },
     "UseNamePlateColors_HelpMarker": {
         "message": "supplanter la couleur normale de la plaque de nom avec les couleurs des catégories/personnages",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "DisableNamePlateColorIfDead": {
+        "message": "Désactiver la couleur de la plaque de nom si le personnage est mort",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "DisableNamePlateColorIfDead_HelpMarker": {
+        "message": "ne pas mettre à jour la plaque de nom des joueurs décédés afin de mieux voir qu'ils sont morts",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "DefaultNamePlateColorToListColor": {
+        "message": "Définir la couleur de liste comme couleur par défaut de la plaque de nom",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "DefaultNamePlateColorToListColor_HelpMarker": {
+        "message": "applique par défaut la couleur de liste comme couleur de plaque de nom à moins que celle-ci ne soit supplantée",
         "description": "ConfigWindow.NamePlateConfig"
     },
     "ChangeNamePlateTitle": {
@@ -257,6 +357,14 @@
     },
     "RestrictAddEncounters_HelpMarker": {
         "message": "quand traiter les nouvelles rencontres (n'utilisez pas toujours)",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "NewEncounterThreshold": {
+        "message": "Seuil de Nouvelle Rencontre (en minutes)",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "NewEncounterThreshold_HelpMarker": {
+        "message": "seuil de création d'une nouvelle rencontre pour un personnage dans la même instance",
         "description": "ConfigWindow.ProcessingConfig"
     },
     "TargetPlayer": {
@@ -525,6 +633,10 @@
     },
     "PlayerSeenCount": {
         "message": "Nombre de rencontres",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerTags": {
+        "message": "Étiquettes",
         "description": "Panel.PlayerSummary"
     },
     "PlayerNotes": {
