@@ -1,4 +1,140 @@
 {
+    "SubMenuShowPlayerItem": {
+        "message": "情報の追加/表示",
+        "description": "ContextMenuManager..ctor"
+    },
+    "SubMenuOpenLodestoneItem": {
+        "message": "Lodestoneを開く",
+        "description": "ContextMenuManager..ctor"
+    },
+    "SetCategoryContextMenu": {
+        "message": "カテゴリの設定",
+        "description": "ContextMenuManager..ctor"
+    },
+    "None": {
+        "message": "なし",
+        "description": "PlayerTrackPlugin.IconListNames"
+    },
+    "HelpMessage1": {
+        "message": "PlayerTrackはあなたが会った相手と一緒にプレイしたコンテンツの記録を保持するのに役立ちます。 デフォルトではインスタンス化されたコンテンツのみですが、設定で拡張または制限できます。 オーバーレイの名前をクリックするとプレイヤーの詳細を確認できます。 メモを保存し、パーソナライズされたアイコン/色を設定することもできます。",
+        "description": "PlayerTrackPlugin.PrintHelpMessage"
+    },
+    "HelpMessage2": {
+        "message": "PlayerTrackはデータを最新の状態(ワールド転送など)に保つためにLodestoneを使用します。 ホームワールドの横にインジケーターが表示され、マウスオーバーすると以前の居住地を見ることができます。",
+        "description": "PlayerTrackPlugin.PrintHelpMessage"
+    },
+    "HelpMessage3": {
+        "message": "ヘルプが必要な場合はdiscordに連絡するか、GitHubで問題を開きます。 翻訳を追加する手助けをしたい場合はCrowdinでアップデートを送信できます。",
+        "description": "PlayerTrackPlugin.PrintHelpMessage"
+    },
+    "InstallThankYou": {
+        "message": "PlayerTrackをインストールしていただきありがとうございます！",
+        "description": "PlayerTrackPlugin.HandleFreshInstall"
+    },
+    "PlayerAlert": {
+        "message": "最後に {0} を {1} で見ました。",
+        "description": "PlayerService.AddOrUpdatePlayer"
+    },
+    "PlayerNameChangeAlert": {
+        "message": "名前を {0} から変更しました。",
+        "description": "PlayerService.UpdateLodestone"
+    },
+    "PlayerWorldTransferAlert": {
+        "message": "{0} から {1} に転送されました。",
+        "description": "PlayerService.UpdateLodestone"
+    },
+    "DisplayConfig": {
+        "message": "表示",
+        "description": "ConfigWindow.Draw"
+    },
+    "ProcessingConfig": {
+        "message": "処理中",
+        "description": "ConfigWindow.Draw"
+    },
+    "IconConfig": {
+        "message": "アイコン",
+        "description": "ConfigWindow.Draw"
+    },
+    "NamePlateConfig": {
+        "message": "ネームプレート",
+        "description": "ConfigWindow.Draw"
+    },
+    "ContextMenuConfig": {
+        "message": "コンテキストメニュー",
+        "description": "ConfigWindow.Draw"
+    },
+    "LodestoneConfig": {
+        "message": "Lodestone",
+        "description": "ConfigWindow.Draw"
+    },
+    "CategoryConfig": {
+        "message": "カテゴリ",
+        "description": "ConfigWindow.Draw"
+    },
+    "AddCategory": {
+        "message": "カテゴリを追加",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryName": {
+        "message": "Name",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryDefault": {
+        "message": "デフォルト",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryAlerts": {
+        "message": "通知",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryList": {
+        "message": "リストの色/アイコン",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryNamePlates": {
+        "message": "ネームプレート",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryAction": {
+        "message": "アクション",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategorySendLastSeenAlert": {
+        "message": "最後にプレイヤーを見た時間と場所をアラートする",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategorySendNameChangeAlert": {
+        "message": "lodestoneの検索結果から名前の変更が検出された場合、チャットでアラートを送信する",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategorySendWorldTransferAlert": {
+        "message": "lodestoneの検索結果からワールド転送が検出された場合、チャットでアラートを送信する",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "Default": {
+        "message": "デフォルト",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryNamePlateTitleEnabled": {
+        "message": "ネームプレートタイトルを有効化",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryNamePlateColor": {
+        "message": "ネームプレートの色を設定",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "ShowAddShowInfoContextMenu": {
+        "message": "追加/表示オプションを表示",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowAddShowInfoContextMenu_HelpMarker": {
+        "message": "プレイヤーに追加/情報コンテキストメニューを表示",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowOpenLodestoneContextMenu": {
+        "message": "開いているlodestoneプロファイルオプションを表示",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
     "Reset": {
         "message": "リセット",
         "description": "ConfigWindow.IconConfig"
@@ -10,5 +146,85 @@
     "RestrictInCombat_HelpMarker": {
         "message": "戦闘中のデータ処理は停止します",
         "description": "ConfigWindow.ProcessingConfig"
+    },
+    "List": {
+        "message": "リスト",
+        "description": "Panel.PlayerDisplay"
+    },
+    "Nameplate": {
+        "message": "ネームプレート",
+        "description": "Panel.PlayerDisplay"
+    },
+    "Alerts": {
+        "message": "通知",
+        "description": "Panel.PlayerDisplay"
+    },
+    "Job": {
+        "message": "ジョブ",
+        "description": "Panel.PlayerEncounters"
+    },
+    "Lvl": {
+        "message": "Lv.",
+        "description": "Panel.PlayerEncounters"
+    },
+    "Location": {
+        "message": "現在地",
+        "description": "Panel.PlayerEncounters"
+    },
+    "NoEncounters": {
+        "message": "このプレイヤーは見つかりませんでした。",
+        "description": "Panel.PlayerEncounters"
+    },
+    "PlayerInfo": {
+        "message": "プレイヤー情報",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerStats": {
+        "message": "プレイヤー統計",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerName": {
+        "message": "名前",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerFirstSeen": {
+        "message": "最初に見た",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerHomeworld": {
+        "message": "ホームワールド",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerLastSeen": {
+        "message": "最後に見た",
+        "description": "Panel.PlayerSummary"
+    },
+    "FreeCompany": {
+        "message": "フリーカンパニー",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerLastLocation": {
+        "message": "最終位置",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerLodestone": {
+        "message": "Lodestone",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerSeenCount": {
+        "message": "表示回数",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerTags": {
+        "message": "タグ",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerNotes": {
+        "message": "注意事項など",
+        "description": "Panel.PlayerSummary"
+    },
+    "NoPlayerSelected": {
+        "message": "プレイヤーが選択されていません。",
+        "description": "PlayerDetailWindow.Draw"
     }
 }

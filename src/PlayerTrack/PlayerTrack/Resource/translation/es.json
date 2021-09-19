@@ -7,6 +7,10 @@
         "message": "Abrir Lodestone",
         "description": "ContextMenuManager..ctor"
     },
+    "SetCategoryContextMenu": {
+        "message": "Establecer Categoría",
+        "description": "ContextMenuManager..ctor"
+    },
     "None": {
         "message": "Ninguno",
         "description": "PlayerTrackPlugin.IconListNames"
@@ -67,6 +71,10 @@
         "message": "Categorías",
         "description": "ConfigWindow.Draw"
     },
+    "AddCategory": {
+        "message": "Añadir Categoría",
+        "description": "ConfigWindow.CategoryConfig"
+    },
     "CategoryName": {
         "message": "Nombre",
         "description": "ConfigWindow.CategoryConfig"
@@ -91,6 +99,10 @@
         "message": "Acciones",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "CategorySendLastSeenAlert": {
+        "message": "manda una alerta con el cuándo y el dónde viste por última vez al jugador",
+        "description": "ConfigWindow.CategoryConfig"
+    },
     "CategorySendNameChangeAlert": {
         "message": "manda una alerta avisando de un cambio de nombre cuando se detecte el cambio en la lodestone",
         "description": "ConfigWindow.CategoryConfig"
@@ -102,6 +114,70 @@
     "Default": {
         "message": "Predeterminado",
         "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryNamePlateTitleEnabled": {
+        "message": "Habilitar títulos en la placa de nombre",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryNamePlateColor": {
+        "message": "Establecer color de la placa de nombre",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "ShowAddShowInfoContextMenu": {
+        "message": "Mostrar opción de añadir/mostrar información",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowAddShowInfoContextMenu_HelpMarker": {
+        "message": "muestra una opción para añadir/mostrar información en el menú contextual de los jugadores",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowOpenLodestoneContextMenu": {
+        "message": "Mostrar opción de abrir perfil de la Lodestone",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowOpenLodestoneContextMenu_HelpMarker": {
+        "message": "muestra una opción para abrir la lodestone en el menú contextual de los jugadores",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowSetCategoryContextMenu": {
+        "message": "Mostrar opción de establecer categoría",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowSetCategoryContextMenu_HelpMarker": {
+        "message": "muestra una opción para establecer categoría en el menú contextual de los jugadores",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowContextPosition": {
+        "message": "Establecer posición de las opciones del menú contextual",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowContextPosition_HelpMarker": {
+        "message": "mostrar sobre o debajo de la opción marcada en el menú.",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowAbove": {
+        "message": "Mostrar sobre",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowBelow": {
+        "message": "Mostrar debajo",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowAboveList": {
+        "message": "Mostrar sobre",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "NoContextItems": {
+        "message": "Ninguno",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "ShowBelowList": {
+        "message": "Mostrar debajo",
+        "description": "ConfigWindow.ContextMenuConfig"
+    },
+    "DupeContextBelow": {
+        "message": "¡Este elemento contextual ya está añadido!",
+        "description": "ConfigWindow.ContextMenuConfig"
     },
     "ShowFilterType": {
         "message": "Mostrar tipo de filtro",
@@ -123,8 +199,40 @@
         "message": "Bloquear ventana",
         "description": "ConfigWindow.DisplayConfig"
     },
+    "LockWindow_HelpMarker": {
+        "message": "mantener bloqueados el tamaño y posición de la ventana principal",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "CombinedPlayerDetailWindow": {
+        "message": "Combinar ventanas",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "CombinedPlayerDetailWindow_HelpMarker": {
+        "message": "mostrar las ventanas combinadas o separadas como en la versión original",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowTags": {
+        "message": "Mostrar etiquetas de jugador",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowPlayerTags_HelpMarker": {
+        "message": "muestra etiquetas de jugador en la pantalla de detalles",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchTags": {
+        "message": "Comprobar etiquetas al realizar una búsqueda",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchTags_HelpMarker": {
+        "message": "incluye las etiquetas de jugador en la búsqueda",
+        "description": "ConfigWindow.DisplayConfig"
+    },
     "SearchType": {
         "message": "Tipo de Búsqueda",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "SearchType_HelpMarker": {
+        "message": "tipo de búsqueda a realizar",
         "description": "ConfigWindow.DisplayConfig"
     },
     "IconGlossary": {
@@ -141,6 +249,14 @@
     },
     "AddRemoveIcons": {
         "message": "añade nuevos iconos usando una lista desplegable o elimínalos haciendo click en ellos",
+        "description": "ConfigWindow.IconConfig"
+    },
+    "AddIcon": {
+        "message": "Añadir",
+        "description": "ConfigWindow.IconConfig"
+    },
+    "DupeIcon": {
+        "message": "¡Este icono ya está añadido!",
         "description": "ConfigWindow.IconConfig"
     },
     "SyncToLodestone": {
@@ -243,6 +359,14 @@
         "message": "cuándo añadir nuevos encuentros (nueva fila en la pestaña encuentros). No se recomienda usar \"siempre\" pues hará mucho más pesado el archivo.",
         "description": "ConfigWindow.ProcessingConfig"
     },
+    "NewEncounterThreshold": {
+        "message": "Umbral de Nuevos Encuentros (minutos)",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "NewEncounterThreshold_HelpMarker": {
+        "message": "umbral para registrar un nuevo encuentro con un jugador en el mismo lugar",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
     "TargetPlayer": {
         "message": "Objetivo",
         "description": "MainWindow.PlayerList"
@@ -269,6 +393,10 @@
     },
     "SearchHint": {
         "message": "búsqueda",
+        "description": "MainWindow.PlayerListControls"
+    },
+    "AddPlayerMenuItem": {
+        "message": "Añadir Jugador",
         "description": "MainWindow.PlayerListControls"
     },
     "OpenLodestoneService": {
@@ -309,6 +437,18 @@
     },
     "PlayerNameAddHint": {
         "message": "nombre del jugador",
+        "description": "Panel.AddPlayer"
+    },
+    "AddPlayerModalButton": {
+        "message": "Añadir",
+        "description": "Panel.AddPlayer"
+    },
+    "InvalidPlayerName": {
+        "message": "Ese no es un nombre de jugador válido. Prueba de nuevo.",
+        "description": "Panel.AddPlayer"
+    },
+    "DuplicatePlayer": {
+        "message": "¡Este jugador ya existe en tu lista!",
         "description": "Panel.AddPlayer"
     },
     "LodestoneStatus": {
@@ -353,6 +493,14 @@
     },
     "Gender": {
         "message": "Género",
+        "description": "Panel.PlayerCustomize"
+    },
+    "GenderFemale": {
+        "message": "Mujer",
+        "description": "Panel.PlayerCustomize"
+    },
+    "GenderMale": {
+        "message": "Hombre",
         "description": "Panel.PlayerCustomize"
     },
     "Race": {
@@ -487,8 +635,16 @@
         "message": "Contador de encuentros",
         "description": "Panel.PlayerSummary"
     },
+    "PlayerTags": {
+        "message": "Etiquetas",
+        "description": "Panel.PlayerSummary"
+    },
     "PlayerNotes": {
         "message": "Comentarios",
         "description": "Panel.PlayerSummary"
+    },
+    "NoPlayerSelected": {
+        "message": "No se ha seleccionado ningún jugador.",
+        "description": "PlayerDetailWindow.Draw"
     }
 }
