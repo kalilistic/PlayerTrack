@@ -177,7 +177,7 @@ namespace PlayerTrack
             if (ImGui.InputTextMultiline(
                 "###PlayerTrack_PlayerNotes_MultiText",
                 ref notes,
-                30,
+                2000,
                 new Vector2(
                     x: ImGui.GetWindowSize().X - (5f * ImGuiHelpers.GlobalScale),
                     y: -1 - (5f * ImGuiHelpers.GlobalScale))))

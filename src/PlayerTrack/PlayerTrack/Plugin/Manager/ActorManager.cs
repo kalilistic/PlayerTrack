@@ -99,7 +99,7 @@ namespace PlayerTrack
             var restrict =
                 ContentRestrictionType.GetContentRestrictionTypeByIndex(
                     this.plugin.Configuration.RestrictAddUpdatePlayers);
-            if (restrict == ContentRestrictionType.ContentOnly && !PlayerTrackPlugin.Condition.InCombat()) return false;
+            if (restrict == ContentRestrictionType.ContentOnly && !PlayerTrackPlugin.DataManager.InContent(PlayerTrackPlugin.ClientState.TerritoryType)) return false;
             if (restrict == ContentRestrictionType.HighEndDutyOnly &&
                 !PlayerTrackPlugin.DataManager.InHighEndDuty(PlayerTrackPlugin.ClientState.TerritoryType)) return false;
             return true;
