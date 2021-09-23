@@ -12,7 +12,7 @@ tags:
 repo_url: https://github.com/kalilistic/PlayerTrack
 icon_url: https://github.com/goatcorp/DalamudPlugins/blob/api4/plugins/PlayerTrack/images/icon.png
 image_urls:
-    - https://github.com/goatcorp/DalamudPlugins/blob/api4/plugins/PlayerTrack/images/image1.png
-    - https://github.com/goatcorp/DalamudPlugins/blob/api4/plugins/PlayerTrack/images/image2.png
-    - https://github.com/goatcorp/DalamudPlugins/blob/api4/plugins/PlayerTrack/images/image3.png
+    - https://raw.githubusercontent.com/goatcorp/DalamudPlugins/api4/plugins/PlayerTrack/images/image1.png
+    - https://raw.githubusercontent.com/goatcorp/DalamudPlugins/api4/plugins/PlayerTrack/images/image2.png
+    - https://raw.githubusercontent.com/goatcorp/DalamudPlugins/api4/plugins/PlayerTrack/images/image3.png
 dalamud_api_level: 4
