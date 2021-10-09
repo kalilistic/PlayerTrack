@@ -18,7 +18,7 @@ namespace PlayerTrack
             : base(windowName, flags)
         {
             this.Plugin = plugin;
-            this.RespectCloseHotkey = false;
+            this.RespectCloseHotkey = this.Plugin.Configuration.RespectCloseHotkey;
         }
 
         /// <summary>

@@ -24,8 +24,9 @@ namespace PlayerTrack
             var sameLineOffset2 = 260f;
             var sameLineOffset3 = 360f;
 
-            // FR override for more spacing
-            if (PlayerTrackPlugin.PluginInterface.UiLanguage == "fr")
+            // Override for more spacing
+            string[] overrideLangCodes = { "fr", "it", "es" };
+            if (overrideLangCodes.Contains(PlayerTrackPlugin.PluginInterface.UiLanguage))
             {
                 sameLineOffset1 = 120f;
                 sameLineOffset2 = 280f;

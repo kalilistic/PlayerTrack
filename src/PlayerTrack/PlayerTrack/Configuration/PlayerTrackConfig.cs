@@ -256,6 +256,11 @@ namespace PlayerTrack
         public bool ShowPlayerTags { get; set; } = true;
 
         /// <summary>
+        /// Gets or sets a value indicating whether to respect close key.
+        /// </summary>
+        public bool RespectCloseHotkey { get; set; } = false;
+
+        /// <summary>
         /// Gets or sets a value indicating whether to search tags.
         /// </summary>
         public bool SearchTags { get; set; } = true;
