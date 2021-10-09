@@ -2,7 +2,6 @@ using System.Linq;
 using System.Numerics;
 
 using CheapLoc;
-using Dalamud.DrunkenToad;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using ImGuiNET;
@@ -22,7 +21,7 @@ namespace PlayerTrack
 
             // heading
             WindowManager.SpacerNoTabs();
-            ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("Lodestone", "Lodestone"));
+            ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("Lodestone", "Lodestone"));
 
             // lodestone state
             ImGui.Text(Loc.Localize("LodestoneStatus", "Status"));
@@ -43,7 +42,7 @@ namespace PlayerTrack
 
             // requests
             ImGuiHelpers.ScaledDummy(new Vector2(0, 5f));
-            ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("LodestoneRequestsInQueue", "Requests In Queue"));
+            ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("LodestoneRequestsInQueue", "Requests In Queue"));
             if (requests.Any())
             {
                 foreach (var request in requests)

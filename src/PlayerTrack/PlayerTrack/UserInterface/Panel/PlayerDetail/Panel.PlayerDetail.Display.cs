@@ -43,7 +43,7 @@ namespace PlayerTrack
 
             ImGuiHelpers.ScaledDummy(0.5f);
             ImGui.Separator();
-            ImGui.TextColored(ImGuiColors2.ToadYellow, Loc.Localize(
+            ImGui.TextColored(ImGuiColors.DalamudYellow, Loc.Localize(
                                   "OverrideNote",
                                   "These config will override category config."));
             ImGuiHelpers.ScaledDummy(1f);

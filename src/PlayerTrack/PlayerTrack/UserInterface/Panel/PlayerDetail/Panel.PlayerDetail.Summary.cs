@@ -32,9 +32,9 @@ namespace PlayerTrack
                 sameLineOffset3 = 450f;
             }
 
-            ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("PlayerInfo", "Player Info"));
+            ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("PlayerInfo", "Player Info"));
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset2);
-            ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("PlayerStats", "Player Stats"));
+            ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("PlayerStats", "Player Stats"));
 
             ImGui.Text(Loc.Localize("PlayerName", "Name"));
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset1);
@@ -44,7 +44,7 @@ namespace PlayerTrack
                 ImGui.Text(this.SelectedPlayer.Names.First());
                 ImGui.SameLine();
                 ImGui.PushFont(UiBuilder.IconFont);
-                ImGui.TextColored(ImGuiColors2.ToadYellow, FontAwesomeIcon.InfoCircle.ToIconString());
+                ImGui.TextColored(ImGuiColors.DalamudYellow, FontAwesomeIcon.InfoCircle.ToIconString());
                 ImGui.PopFont();
                 ImGui.EndGroup();
                 if (ImGui.IsItemHovered())
@@ -72,7 +72,7 @@ namespace PlayerTrack
                 ImGui.Text(this.SelectedPlayer.HomeWorlds!.First().Value);
                 ImGui.SameLine();
                 ImGui.PushFont(UiBuilder.IconFont);
-                ImGui.TextColored(ImGuiColors2.ToadYellow, FontAwesomeIcon.InfoCircle.ToIconString());
+                ImGui.TextColored(ImGuiColors.DalamudYellow, FontAwesomeIcon.InfoCircle.ToIconString());
                 ImGui.PopFont();
                 ImGui.EndGroup();
                 if (ImGui.IsItemHovered())
@@ -134,7 +134,7 @@ namespace PlayerTrack
             if (this.plugin.Configuration.ShowPlayerTags)
             {
                 ImGui.Spacing();
-                ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("PlayerTags", "Tags"));
+                ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("PlayerTags", "Tags"));
                 ImGui.SetNextItemWidth(150f * ImGuiHelpers.GlobalScale);
                 ImGui.InputText(
                     "###PlayerTrack_PlayerNotes_InputText",
@@ -172,7 +172,7 @@ namespace PlayerTrack
             }
 
             ImGui.Spacing();
-            ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("PlayerNotes", "Notes"));
+            ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("PlayerNotes", "Notes"));
             var notes = this.SelectedPlayer.Notes;
             if (ImGui.InputTextMultiline(
                 "###PlayerTrack_PlayerNotes_MultiText",

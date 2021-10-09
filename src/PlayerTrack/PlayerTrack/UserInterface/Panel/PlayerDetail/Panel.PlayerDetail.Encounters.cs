@@ -3,6 +3,7 @@ using System.Linq;
 using CheapLoc;
 using Dalamud.DrunkenToad;
 using Dalamud.Interface;
+using Dalamud.Interface.Colors;
 using ImGuiNET;
 
 namespace PlayerTrack
@@ -22,15 +23,15 @@ namespace PlayerTrack
 
             if (this.SelectedEncounters != null && this.SelectedEncounters.Any())
             {
-                ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("Time", "Time"));
+                ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("Time", "Time"));
                 ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset1);
-                ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("Duration", "Duration"));
+                ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("Duration", "Duration"));
                 ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset2);
-                ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("Job", "Job"));
+                ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("Job", "Job"));
                 ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset3);
-                ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("Lvl", "Lvl"));
+                ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("Lvl", "Lvl"));
                 ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset4);
-                ImGui.TextColored(ImGuiColors2.ToadViolet, Loc.Localize("Location", "Location"));
+                ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("Location", "Location"));
 
                 foreach (var encounter in this.SelectedEncounters)
                 {
@@ -65,7 +66,7 @@ namespace PlayerTrack
             }
             else
             {
-                ImGui.TextColored(ImGuiColors2.ToadYellow, Loc.Localize("NoEncounters", "No encounters found for this player."));
+                ImGui.TextColored(ImGuiColors.DalamudYellow, Loc.Localize("NoEncounters", "No encounters found for this player."));
                 ImGui.TextWrapped(Loc.Localize(
                                       "NoEncountersExplanation",
                                       "This can happen for characters manually added or if all the encounters have been deleted."));

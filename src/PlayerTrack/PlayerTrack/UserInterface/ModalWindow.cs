@@ -3,6 +3,7 @@ using System;
 using CheapLoc;
 using Dalamud.DrunkenToad;
 using Dalamud.Interface;
+using Dalamud.Interface.Colors;
 using ImGuiNET;
 
 namespace PlayerTrack
@@ -112,7 +113,7 @@ namespace PlayerTrack
                         ImGui.BeginGroup();
                         if (this.Plugin.Configuration.EnabledIcons.Contains(icons[i]))
                         {
-                            ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors2.ToadViolet);
+                            ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudViolet);
                         }
 
                         ImGui.PushFont(UiBuilder.IconFont);

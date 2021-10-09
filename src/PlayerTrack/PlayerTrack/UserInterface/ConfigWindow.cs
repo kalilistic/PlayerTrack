@@ -25,6 +25,7 @@ namespace PlayerTrack
             this.plugin = plugin;
             this.Size = new Vector2(800f, 400f);
             this.SizeCondition = ImGuiCond.Appearing;
+            this.RespectCloseHotkey = true;
         }
 
         /// <inheritdoc/>

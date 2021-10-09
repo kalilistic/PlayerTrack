@@ -3,6 +3,7 @@ using System;
 using CheapLoc;
 using Dalamud.DrunkenToad;
 using Dalamud.Interface;
+using Dalamud.Interface.Colors;
 using ImGuiNET;
 
 namespace PlayerTrack
@@ -50,7 +51,7 @@ namespace PlayerTrack
             }
             else
             {
-                ImGui.TextColored(ImGuiColors2.ToadYellow, Loc.Localize("NoAppearance", "No appearance data found for this player."));
+                ImGui.TextColored(ImGuiColors.DalamudYellow, Loc.Localize("NoAppearance", "No appearance data found for this player."));
                 ImGui.TextWrapped(Loc.Localize(
                                       "NoAppearanceExplanation",
                                       "This can happen for characters manually added or if the player was migrated from an earlier version of the plugin. " +

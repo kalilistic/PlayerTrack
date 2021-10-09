@@ -1,6 +1,6 @@
 using CheapLoc;
-using Dalamud.DrunkenToad;
 using Dalamud.Interface;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
 using ImGuiNET;
 
@@ -14,7 +14,7 @@ namespace PlayerTrack
         private void NamePlateConfig()
         {
             // warning about compatability
-            ImGui.TextColored(ImGuiColors2.ToadYellow, Loc.Localize(
+            ImGui.TextColored(ImGuiColors.DalamudYellow, Loc.Localize(
                                   "NamePlateCompatabilityWarning",
                                   "Warning: Not all of these settings will work if you are using other plugins that modify nameplates."));
             ImGui.Spacing();
