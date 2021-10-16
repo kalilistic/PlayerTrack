@@ -63,10 +63,6 @@
         "message": "コンテキストメニュー",
         "description": "ConfigWindow.Draw"
     },
-    "LodestoneConfig": {
-        "message": "Lodestone",
-        "description": "ConfigWindow.Draw"
-    },
     "CategoryConfig": {
         "message": "カテゴリ",
         "description": "ConfigWindow.Draw"

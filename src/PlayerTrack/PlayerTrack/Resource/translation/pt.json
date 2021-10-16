@@ -63,10 +63,6 @@
         "message": "Menu de contexto",
         "description": "ConfigWindow.Draw"
     },
-    "LodestoneConfig": {
-        "message": "Lodestone",
-        "description": "ConfigWindow.Draw"
-    },
     "CategoryConfig": {
         "message": "Categorias",
         "description": "ConfigWindow.Draw"
@@ -259,21 +255,25 @@
         "message": "Este ícone já foi adicionado!",
         "description": "ConfigWindow.IconConfig"
     },
+    "Lodestone": {
+        "message": "Lodestone",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
     "SyncToLodestone": {
         "message": "Sincronizar com Lodestone",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "SyncToLodestone_HelpMarker": {
         "message": "puxar os dados do jogador do lodestone para acompanhar mudanças de nome/mundo",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "LodestoneLocale": {
         "message": "Lodestone - Idioma",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "LodestoneLocale_HelpMarker": {
         "message": "definir localidade para link do perfil na Lodestone",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "NamePlateCompatabilityWarning": {
         "message": "Aviso: Nem todas estas configurações funcionarão se você estiver usando outros plugins que modificam as nameplates.",
@@ -377,10 +377,6 @@
     },
     "ExaminePlayer": {
         "message": "Examinar",
-        "description": "MainWindow.PlayerList"
-    },
-    "Lodestone": {
-        "message": "Lodestone",
         "description": "MainWindow.PlayerList"
     },
     "Category": {

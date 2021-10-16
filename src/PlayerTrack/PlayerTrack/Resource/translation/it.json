@@ -55,10 +55,6 @@
         "message": "Menu Contestuale",
         "description": "ConfigWindow.Draw"
     },
-    "LodestoneConfig": {
-        "message": "Lodestone",
-        "description": "ConfigWindow.Draw"
-    },
     "CategoryConfig": {
         "message": "Categorie",
         "description": "ConfigWindow.Draw"
@@ -87,13 +83,13 @@
         "message": "Resetta",
         "description": "ConfigWindow.IconConfig"
     },
+    "Lodestone": {
+        "message": "Lodestone",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
     "RestrictInCombat": {
         "message": "Non processare in combattimento",
         "description": "ConfigWindow.ProcessingConfig"
-    },
-    "Lodestone": {
-        "message": "Lodestone",
-        "description": "MainWindow.PlayerList"
     },
     "OK": {
         "message": "OK",
