@@ -63,10 +63,6 @@
         "message": "Menu Contextuel",
         "description": "ConfigWindow.Draw"
     },
-    "LodestoneConfig": {
-        "message": "Lodestone",
-        "description": "ConfigWindow.Draw"
-    },
     "CategoryConfig": {
         "message": "Catégories",
         "description": "ConfigWindow.Draw"
@@ -259,21 +255,25 @@
         "message": "Cette icône a déjà été ajoutée !",
         "description": "ConfigWindow.IconConfig"
     },
+    "Lodestone": {
+        "message": "Lodestone",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
     "SyncToLodestone": {
         "message": "Synchroniser avec le Lodestone",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "SyncToLodestone_HelpMarker": {
         "message": "extrait les données du personnage depuis le Lodestone pour suivre les changements de nom/de monde",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "LodestoneLocale": {
         "message": "Locale du Lodestone",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "LodestoneLocale_HelpMarker": {
         "message": "définir la locale des liens menant aux profils sur le Lodestone",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "NamePlateCompatabilityWarning": {
         "message": "Attention : Aucun de ces paramètres ne fonctionneront si vous utilisez d'autres plugins qui modifient les plaques de noms.",
@@ -377,10 +377,6 @@
     },
     "ExaminePlayer": {
         "message": "Examiner",
-        "description": "MainWindow.PlayerList"
-    },
-    "Lodestone": {
-        "message": "Lodestone",
         "description": "MainWindow.PlayerList"
     },
     "Category": {

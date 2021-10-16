@@ -47,10 +47,6 @@
         "message": "右键菜单",
         "description": "ConfigWindow.Draw"
     },
-    "LodestoneConfig": {
-        "message": "Lodestone",
-        "description": "ConfigWindow.Draw"
-    },
     "CategoryConfig": {
         "message": "分类",
         "description": "ConfigWindow.Draw"
@@ -105,19 +101,19 @@
     },
     "SyncToLodestone": {
         "message": "与 Lodestone 同步",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "SyncToLodestone_HelpMarker": {
         "message": "从 Lodestone 获取玩家信息以追踪改名 / 转服情况",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "LodestoneLocale": {
         "message": "Lodestone 地区",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "LodestoneLocale_HelpMarker": {
         "message": "设置 Lodestone 个人主页所用的地区",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "ShowNamePlates": {
         "message": "显示名牌",
