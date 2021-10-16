@@ -23,7 +23,7 @@ namespace PlayerTrack
             : base(plugin, "PlayerTrack Config")
         {
             this.plugin = plugin;
-            this.Size = new Vector2(800f, 400f);
+            this.Size = new Vector2(880f, 400f);
             this.SizeCondition = ImGuiCond.Appearing;
             this.RespectCloseHotkey = true;
         }
@@ -61,17 +61,17 @@ namespace PlayerTrack
                     ImGui.EndTabItem();
                 }
 
+                if (ImGui.BeginTabItem(Loc.Localize("IntegrationConfig", "Integrations")))
+                {
+                    WindowManager.SpacerWithTabs();
+                    this.IntegrationsConfig();
+                    ImGui.EndTabItem();
+                }
+
                 if (ImGui.BeginTabItem(Loc.Localize("ContextMenuConfig", "ContextMenu")))
                 {
                     WindowManager.SpacerWithTabs();
                     this.ContextMenuConfig();
-                    ImGui.EndTabItem();
-                }
-
-                if (ImGui.BeginTabItem(Loc.Localize("LodestoneConfig", "Lodestone")))
-                {
-                    WindowManager.SpacerWithTabs();
-                    this.LodestoneConfig();
                     ImGui.EndTabItem();
                 }
 

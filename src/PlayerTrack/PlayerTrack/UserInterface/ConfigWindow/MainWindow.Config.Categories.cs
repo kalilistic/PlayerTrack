@@ -30,14 +30,15 @@ namespace PlayerTrack
 
             // setup category table
             ImGui.Separator();
-            ImGui.Columns(6, "###PlayerTrack_CategoryTable_Columns", true);
+            ImGui.Columns(7, "###PlayerTrack_CategoryTable_Columns", true);
             var baseWidth = ImGui.GetWindowSize().X / 6 * ImGuiHelpers.GlobalScale;
             ImGui.SetColumnWidth(0, baseWidth + 20f);                 // name
             ImGui.SetColumnWidth(1, ImGuiHelpers.GlobalScale * 70f);  // isDefault
-            ImGui.SetColumnWidth(2, ImGuiHelpers.GlobalScale * 100f);  // alerts
+            ImGui.SetColumnWidth(2, ImGuiHelpers.GlobalScale * 100f); // alerts
             ImGui.SetColumnWidth(3, baseWidth + 80f);                 // list
             ImGui.SetColumnWidth(4, ImGuiHelpers.GlobalScale * 110f); // nameplates
-            ImGui.SetColumnWidth(5, baseWidth + 80f);                 // controls
+            ImGui.SetColumnWidth(5, ImGuiHelpers.GlobalScale * 100f); // visibility
+            ImGui.SetColumnWidth(6, baseWidth + 80f);                 // controls
 
             // add table headings
             ImGui.Text(Loc.Localize("CategoryName", "Name"));
@@ -49,6 +50,8 @@ namespace PlayerTrack
             ImGui.Text(Loc.Localize("CategoryList", "List Color/Icon"));
             ImGui.NextColumn();
             ImGui.Text(Loc.Localize("CategoryNamePlates", "NamePlate"));
+            ImGui.NextColumn();
+            ImGui.Text(Loc.Localize("CategoryVisibility", "Visibility"));
             ImGui.NextColumn();
             ImGui.Text(Loc.Localize("CategoryAction", "Actions"));
             ImGui.NextColumn();
@@ -202,7 +205,7 @@ namespace PlayerTrack
                                : FontAwesomeIcon.User.ToIconString());
                 ImGui.PopFont();
 
-                   // category color nameplates
+                // category color nameplates
                 ImGui.NextColumn();
                 var enableNamePlatesTitle = category.IsNamePlateTitleEnabled;
                 if (ImGui.Checkbox(
@@ -261,6 +264,33 @@ namespace PlayerTrack
                     this.CategoryNamePlateColorSwatchRow(category, category.Id, 16, 24);
                     this.CategoryNamePlateColorSwatchRow(category, category.Id, 24, 32);
                     ImGui.EndPopup();
+                }
+
+                // visibility
+                ImGui.NextColumn();
+                if (!category.IsDefault)
+                {
+                    var visibilityType = (int)category.VisibilityType;
+                    ImGui.SetNextItemWidth(-1);
+                    if (ImGui.Combo(
+                        "###PlayerTrack_SelectCategoryVisibilityType_Combo" + i,
+                        ref visibilityType,
+                        Enum.GetNames(typeof(VisibilityType)),
+                        Enum.GetNames(typeof(VisibilityType)).Length))
+                    {
+                        category.VisibilityType = (VisibilityType)visibilityType;
+                        this.Plugin.CategoryService.SaveCategory(category);
+                        this.plugin.VisibilityService.SyncWithVisibility();
+                    }
+
+                    if (ImGui.IsItemHovered())
+                    {
+                        ImGui.BeginTooltip();
+                        ImGui.PushTextWrapPos(ImGui.GetFontSize() * 35f);
+                        ImGui.TextUnformatted(Loc.Localize("IsHiddenInVisibility", "void or whitelist players with visibility"));
+                        ImGui.PopTextWrapPos();
+                        ImGui.EndTooltip();
+                    }
                 }
 
                 // category actions

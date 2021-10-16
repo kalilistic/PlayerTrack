@@ -149,6 +149,14 @@ namespace PlayerTrack
                     }
                 }
 
+                // filter players hidden with visibility
+                if (this.plugin.Configuration.SyncWithVisibility &&
+                    !this.plugin.Configuration.ShowVoidedPlayersInList &&
+                    this.plugin.VisibilityService.IsVisibilityAvailable)
+                {
+                    playersList = playersList.Where(player => this.GetPlayerVisibilityType(player) != VisibilityType.voidlist).ToArray();
+                }
+
                 return playersList;
             }
             catch (Exception)
@@ -197,6 +205,41 @@ namespace PlayerTrack
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Get player keys by visibility.
+        /// </summary>
+        /// <param name="visibilityType">player visibility state.</param>
+        /// <returns>player list filtered by visibility state.</returns>
+        public Dictionary<string, Player> GetPlayers(VisibilityType visibilityType)
+        {
+            var playersByVisibility = new Dictionary<string, Player>();
+            var categoriesByVisibility = this.plugin.CategoryService.GetCategoryIdsByVisibilityType(visibilityType);
+            try
+            {
+                lock (this.locker)
+                {
+                    foreach (var (key, value) in this.players)
+                    {
+                        if (value.VisibilityType == visibilityType)
+                        {
+                            playersByVisibility.Add(key, value);
+                        }
+                        else if (value.VisibilityType == VisibilityType.none && categoriesByVisibility.Contains(value.CategoryId))
+                        {
+                            playersByVisibility.Add(key, value);
+                        }
+                    }
+
+                    return playersByVisibility;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Failed to get players by visibility type.");
+                return playersByVisibility;
             }
         }
 
@@ -333,6 +376,7 @@ namespace PlayerTrack
 
                 this.UpdateItem(this.players[player.Key]);
                 this.plugin.NamePlateManager.ForceRedraw();
+                this.plugin.VisibilityService.SyncWithVisibility();
             }
         }
 
@@ -408,6 +452,29 @@ namespace PlayerTrack
                 }
 
                 this.UpdateItem(this.players[player.Key]);
+            }
+        }
+
+        /// <summary>
+        /// Update player hidden state.
+        /// </summary>
+        /// <param name="player">player to update.</param>
+        /// <param name="sync">sync with visibility after update.</param>
+        public void UpdatePlayerVisibilityType(Player player, bool sync = true)
+        {
+            if (this.players.ContainsKey(player.Key))
+            {
+                lock (this.locker)
+                {
+                    this.players[player.Key].VisibilityType = player.VisibilityType;
+                    this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
+                }
+
+                this.UpdateItem(this.players[player.Key]);
+                if (sync)
+                {
+                    this.plugin.VisibilityService.SyncPlayerWithVisibility(player);
+                }
             }
         }
 
@@ -633,8 +700,9 @@ namespace PlayerTrack
         /// </summary>
         /// <param name="playerName">player name to add.</param>
         /// <param name="worldId">player world id to add.</param>
+        /// <param name="visibilityType">visibility type.</param>
         /// <returns>returns new player.</returns>
-        public Player AddPlayer(string playerName, ushort worldId)
+        public Player AddPlayer(string playerName, ushort worldId, VisibilityType visibilityType = VisibilityType.none)
         {
             var worldName = PlayerTrackPlugin.DataManager.WorldName(worldId);
             var currentTime = DateUtil.CurrentTime();
@@ -649,6 +717,7 @@ namespace PlayerTrack
                 LastLocationName = "Never Seen",
                 CategoryId = this.plugin.CategoryService.GetDefaultCategory().Id,
                 SeenCount = 0,
+                VisibilityType = visibilityType,
             };
             this.SetDerivedFields(player);
             lock (this.locker)
@@ -887,6 +956,19 @@ namespace PlayerTrack
             var category = this.categoryService.GetCategory(player.CategoryId);
             if (category is { IsAlertEnabled: true }) return true;
             return false;
+        }
+
+        /// <summary>
+        /// Get effective player visibility state based on category and overrides.
+        /// </summary>
+        /// <param name="player">player to get visibility hidden state for.</param>
+        /// <returns>player visibility state.</returns>
+        public VisibilityType GetPlayerVisibilityType(Player player)
+        {
+            if (player.VisibilityType != VisibilityType.none) return player.VisibilityType;
+            var category = this.categoryService.GetCategory(player.CategoryId);
+            if (category.VisibilityType != VisibilityType.none && !category.IsDefault) return category.VisibilityType;
+            return VisibilityType.none;
         }
 
         /// <summary>

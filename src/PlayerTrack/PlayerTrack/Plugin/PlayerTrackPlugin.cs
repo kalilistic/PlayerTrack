@@ -73,6 +73,7 @@ namespace PlayerTrack
                     this.CategoryService = new CategoryService(this);
                     this.EncounterService = new EncounterService(this);
                     this.PlayerService = new PlayerService(this);
+                    this.VisibilityService = new VisibilityService(this);
                     this.WindowManager = new WindowManager(this);
                     this.PluginCommandManager = new PluginCommandManager(this);
                     this.ContextMenuManager = new ContextMenuManager(this);
@@ -110,6 +111,7 @@ namespace PlayerTrack
                         // start plugin
                         this.IsDoneLoading = true;
                         this.backupTimer.Enabled = true;
+                        this.VisibilityService.Start();
                         this.ActorManager.Start();
                         this.WindowManager.AddWindows();
                     }
@@ -186,6 +188,11 @@ namespace PlayerTrack
 
         /// <inheritdoc/>
         public string Name => "PlayerTrack";
+
+        /// <summary>
+        /// Gets or sets visibility service to get data from visibility plugin.
+        /// </summary>
+        public VisibilityService VisibilityService { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets a value indicating whether plugin is done loading.
@@ -277,6 +284,7 @@ namespace PlayerTrack
                 this.NamePlateManager.Dispose();
                 this.ContextMenuManager.Dispose();
                 this.XivCommon.Dispose();
+                this.VisibilityService.Dispose();
                 this.LodestoneService.Dispose();
                 this.ActorManager.Dispose();
                 this.WindowManager.Dispose();

@@ -106,6 +106,21 @@ namespace PlayerTrack
         public bool SyncToLodestone = true;
 
         /// <summary>
+        /// Toggle to disable sync with visibility.
+        /// </summary>
+        public bool SyncWithVisibility = true;
+
+        /// <summary>
+        /// Toggle to hide players voided in visibility in list.
+        /// </summary>
+        public bool ShowVoidedPlayersInList = true;
+
+        /// <summary>
+        /// Visibility sync frequency in ms.
+        /// </summary>
+        public long SyncWithVisibilityFrequency = 30000;
+
+        /// <summary>
         /// Indicator if fresh install to perform one-time setup actions.
         /// </summary>
         public bool FreshInstall = true;

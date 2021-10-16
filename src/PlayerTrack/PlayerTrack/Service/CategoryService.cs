@@ -85,6 +85,19 @@ namespace PlayerTrack
         }
 
         /// <summary>
+        /// Get category IDs by visibility type.
+        /// </summary>
+        /// <param name="visibilityType">visibility type to filter by.</param>
+        /// <returns>hidden categories.</returns>
+        public int[] GetCategoryIdsByVisibilityType(VisibilityType visibilityType)
+        {
+            lock (this.locker)
+            {
+                return this.categories.Where(pair => pair.Value.VisibilityType == visibilityType).Select(pair => pair.Key).ToArray();
+            }
+        }
+
+        /// <summary>
         /// Get default category.
         /// </summary>
         /// <returns>default category.</returns>
@@ -217,6 +230,7 @@ namespace PlayerTrack
             this.plugin.PlayerService.RemoveDeletedCategory(categoryId, this.GetDefaultCategory().Id);
             this.DeleteItem<Category>(deletedCategory.Id);
             this.plugin.PlayerService.SetDerivedFieldsForAllPlayers();
+            this.plugin.VisibilityService.SyncWithVisibility();
         }
 
         /// <summary>
@@ -254,6 +268,7 @@ namespace PlayerTrack
             }
 
             this.plugin.NamePlateManager.ForceRedraw();
+            this.plugin.VisibilityService.SyncWithVisibility();
         }
 
         /// <summary>

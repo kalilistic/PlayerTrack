@@ -1,6 +1,7 @@
 using System;
 
 using CheapLoc;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
 using ImGuiNET;
 
@@ -11,8 +12,9 @@ namespace PlayerTrack
     /// </summary>
     public partial class ConfigWindow
     {
-        private void LodestoneConfig()
+        private void IntegrationsConfig()
         {
+            ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("Lodestone", "Lodestone"));
             var syncToLodestone = this.Plugin.Configuration.SyncToLodestone;
             if (ImGui.Checkbox(
                 Loc.Localize($"SyncToLodestone", "Sync to Lodestone"),
@@ -43,6 +45,34 @@ namespace PlayerTrack
                 this.Plugin.SaveConfig();
             }
 
+            ImGui.Spacing();
+            ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("Visibility", "Visibility"));
+            var syncWithVisibility = this.Plugin.Configuration.SyncWithVisibility;
+            if (ImGui.Checkbox(
+                Loc.Localize($"SyncWithVisibility", "Sync with Visibility"),
+                ref syncWithVisibility))
+            {
+                this.Plugin.Configuration.SyncWithVisibility = syncWithVisibility;
+                this.Plugin.SaveConfig();
+            }
+
+            ImGuiComponents.HelpMarker(Loc.Localize(
+                                           "SyncWithVisibility_HelpMarker",
+                                           "synchronize with visibility plugin"));
+            ImGui.Spacing();
+
+            var showHiddenPlayersInList = this.Plugin.Configuration.ShowVoidedPlayersInList;
+            if (ImGui.Checkbox(
+                Loc.Localize($"ShowHiddenPlayersInList", "Show hidden players in list"),
+                ref showHiddenPlayersInList))
+            {
+                this.Plugin.Configuration.ShowVoidedPlayersInList = showHiddenPlayersInList;
+                this.Plugin.SaveConfig();
+            }
+
+            ImGuiComponents.HelpMarker(Loc.Localize(
+                                           "ShowHiddenPlayersInList_HelpMarker",
+                                           "toggle showing players hidden with visibility in list"));
             ImGui.Spacing();
         }
     }

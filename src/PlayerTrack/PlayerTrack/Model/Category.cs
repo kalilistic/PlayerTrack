@@ -87,6 +87,11 @@ namespace PlayerTrack
         public bool IsDefault { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to hide these players using Visibility.
+        /// </summary>
+        public VisibilityType VisibilityType { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating category priority for force ranking.
         /// </summary>
         public int Rank { get; set; }

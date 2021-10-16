@@ -59,12 +59,12 @@
         "message": "NamePlates",
         "description": "ConfigWindow.Draw"
     },
-    "ContextMenuConfig": {
-        "message": "ContextMenu",
+    "IntegrationConfig": {
+        "message": "Integrations",
         "description": "ConfigWindow.Draw"
     },
-    "LodestoneConfig": {
-        "message": "Lodestone",
+    "ContextMenuConfig": {
+        "message": "ContextMenu",
         "description": "ConfigWindow.Draw"
     },
     "CategoryConfig": {
@@ -95,6 +95,10 @@
         "message": "NamePlate",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "CategoryVisibility": {
+        "message": "Visibility",
+        "description": "ConfigWindow.CategoryConfig"
+    },
     "CategoryAction": {
         "message": "Actions",
         "description": "ConfigWindow.CategoryConfig"
@@ -121,6 +125,10 @@
     },
     "CategoryNamePlateColor": {
         "message": "Set nameplate color",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "IsHiddenInVisibility": {
+        "message": "void or whitelist players with visibility",
         "description": "ConfigWindow.CategoryConfig"
     },
     "ShowAddShowInfoContextMenu": {
@@ -259,21 +267,45 @@
         "message": "This icon is already added!",
         "description": "ConfigWindow.IconConfig"
     },
+    "Lodestone": {
+        "message": "Lodestone",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
     "SyncToLodestone": {
         "message": "Sync to Lodestone",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "SyncToLodestone_HelpMarker": {
         "message": "pull player data from lodestone to track name/world changes",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "LodestoneLocale": {
         "message": "Lodestone Locale",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "LodestoneLocale_HelpMarker": {
         "message": "set locale for lodestone profile link",
-        "description": "ConfigWindow.LodestoneConfig"
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "Visibility": {
+        "message": "Visibility",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "SyncWithVisibility": {
+        "message": "Sync with Visibility",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "SyncWithVisibility_HelpMarker": {
+        "message": "synchronize with visibility plugin",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "ShowHiddenPlayersInList": {
+        "message": "Show hidden players in list",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "ShowHiddenPlayersInList_HelpMarker": {
+        "message": "toggle showing players hidden with visibility in list",
+        "description": "ConfigWindow.IntegrationsConfig"
     },
     "NamePlateCompatabilityWarning": {
         "message": "Warning: Not all of these settings will work if you are using other plugins that modify nameplates.",
@@ -377,10 +409,6 @@
     },
     "ExaminePlayer": {
         "message": "Examine",
-        "description": "MainWindow.PlayerList"
-    },
-    "Lodestone": {
-        "message": "Lodestone",
         "description": "MainWindow.PlayerList"
     },
     "Category": {
@@ -545,6 +573,10 @@
     },
     "Icon": {
         "message": "Icon",
+        "description": "Panel.PlayerDisplay"
+    },
+    "VisibilityType": {
+        "message": "Visibility",
         "description": "Panel.PlayerDisplay"
     },
     "List": {

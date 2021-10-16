@@ -21,7 +21,7 @@ namespace PlayerTrack
         private void PlayerDisplay()
         {
             if (this.SelectedPlayer == null) return;
-            const float sameLineOffset = 100f;
+            const float sameLineOffset = 110f;
 
             ImGui.Text(Loc.Localize("PlayerCategory", "Category"));
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
@@ -48,6 +48,7 @@ namespace PlayerTrack
                                   "These config will override category config."));
             ImGuiHelpers.ScaledDummy(1f);
 
+            // title
             ImGui.Text(Loc.Localize("Title", "Title"));
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
 
@@ -61,6 +62,7 @@ namespace PlayerTrack
 
             ImGui.Spacing();
 
+            // icon
             ImGui.Text(Loc.Localize("Icon", "Icon"));
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
 
@@ -82,6 +84,23 @@ namespace PlayerTrack
                 ImGuiColors.DalamudWhite,
                 ((FontAwesomeIcon)this.SelectedPlayer.Icon).ToIconString());
             ImGui.PopFont();
+            ImGui.Spacing();
+
+            // visibility
+            ImGui.Text(Loc.Localize("VisibilityType", "Visibility"));
+            ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
+
+            ImGui.SetNextItemWidth(150f * ImGuiHelpers.GlobalScale);
+            var visibilityType = (int)this.SelectedPlayer.VisibilityType;
+            if (ImGui.Combo(
+                "###PlayerTrack_VisibilityType_Combo",
+                ref visibilityType,
+                Enum.GetNames(typeof(VisibilityType)),
+                Enum.GetNames(typeof(VisibilityType)).Length))
+            {
+                this.SelectedPlayer.VisibilityType = (VisibilityType)visibilityType;
+                this.plugin.PlayerService.UpdatePlayerVisibilityType(this.SelectedPlayer);
+            }
 
             ImGui.Spacing();
             ImGui.Text(Loc.Localize("List", "List"));

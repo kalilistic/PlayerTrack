@@ -90,6 +90,11 @@ namespace PlayerTrack
         public ushort LastTerritoryType { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to hide these players using Visibility.
+        /// </summary>
+        public VisibilityType VisibilityType { get; set; }
+
+        /// <summary>
         /// Gets or sets the last seen content id.
         /// </summary>
         [BsonIgnore]
