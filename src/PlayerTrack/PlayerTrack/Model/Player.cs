@@ -227,6 +227,15 @@ namespace PlayerTrack
         }
 
         /// <summary>
+        /// Get homeworld id array.
+        /// </summary>
+        /// <returns>array of homeworld ids.</returns>
+        public IEnumerable<uint> GetWorldIds()
+        {
+            return this.HomeWorlds.Select(pair => pair.Key);
+        }
+
+        /// <summary>
         /// Reset player overrides to defaults.
         /// </summary>
         public void Reset()
