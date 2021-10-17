@@ -8,7 +8,7 @@ using Dalamud.DrunkenToad;
 namespace PlayerTrack
 {
     /// <summary>
-    /// Lodestone Service.
+    /// Visibility Service.
     /// </summary>
     public class VisibilityService
     {

@@ -88,12 +88,48 @@ namespace PlayerTrack
         /// Get category IDs by visibility type.
         /// </summary>
         /// <param name="visibilityType">visibility type to filter by.</param>
-        /// <returns>hidden categories.</returns>
+        /// <returns>categories with visibility type.</returns>
         public int[] GetCategoryIdsByVisibilityType(VisibilityType visibilityType)
         {
             lock (this.locker)
             {
                 return this.categories.Where(pair => pair.Value.VisibilityType == visibilityType).Select(pair => pair.Key).ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Get category IDs by OverrideFCNameColor state.
+        /// </summary>
+        /// <param name="isOverriden">isOverriden by FCNameColor.</param>
+        /// <returns>categories with visibility type.</returns>
+        public int[] GetCategoryIdsByOverrideFCNameColor(bool isOverriden)
+        {
+            lock (this.locker)
+            {
+                return this.categories.Where(pair => pair.Value.OverrideFCNameColor == isOverriden).Select(pair => pair.Key).ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Get category ID by lodestone id.
+        /// </summary>
+        /// <param name="lodestoneId">lodestone id to filter by.</param>
+        /// <returns>category with matching lodestone id.</returns>
+        public int? GetCategoryIdByFCLodestoneId(string lodestoneId)
+        {
+            lock (this.locker)
+            {
+                try
+                {
+                    lock (this.locker)
+                    {
+                        return this.categories.FirstOrDefault(pair => pair.Value.FCLodestoneId == lodestoneId).Key;
+                    }
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
         }
 
@@ -172,7 +208,8 @@ namespace PlayerTrack
         /// <summary>
         /// Add category.
         /// </summary>
-        public void AddCategory()
+        /// <returns>category id.</returns>
+        public int AddCategory()
         {
             var id = this.NextID();
             var rank = this.MaxRank() + 1;
@@ -187,6 +224,8 @@ namespace PlayerTrack
             }
 
             this.InsertItem(newCategory);
+
+            return id;
         }
 
         /// <summary>
@@ -269,6 +308,7 @@ namespace PlayerTrack
 
             this.plugin.NamePlateManager.ForceRedraw();
             this.plugin.VisibilityService.SyncWithVisibility();
+            this.plugin.FCNameColorService.SyncWithFCNameColor();
         }
 
         /// <summary>

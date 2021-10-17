@@ -21,8 +21,9 @@ namespace PlayerTrack
         private void PlayerDisplay()
         {
             if (this.SelectedPlayer == null) return;
-            const float sameLineOffset = 110f;
+            const float sameLineOffset = 150f;
 
+            // category
             ImGui.Text(Loc.Localize("PlayerCategory", "Category"));
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
             var categoryNames = this.plugin.CategoryService.GetCategoryNames().ToArray();
@@ -43,6 +44,8 @@ namespace PlayerTrack
 
             ImGuiHelpers.ScaledDummy(0.5f);
             ImGui.Separator();
+
+            // override warning
             ImGui.TextColored(ImGuiColors.DalamudYellow, Loc.Localize(
                                   "OverrideNote",
                                   "These config will override category config."));
@@ -102,6 +105,7 @@ namespace PlayerTrack
                 this.plugin.PlayerService.UpdatePlayerVisibilityType(this.SelectedPlayer);
             }
 
+            // list color
             ImGui.Spacing();
             ImGui.Text(Loc.Localize("List", "List"));
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
@@ -131,6 +135,7 @@ namespace PlayerTrack
                 ImGui.EndPopup();
             }
 
+            // nameplate color
             ImGui.Spacing();
             ImGui.Text(Loc.Localize("Nameplate", "Nameplate"));
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
@@ -155,6 +160,20 @@ namespace PlayerTrack
                 ImGui.EndPopup();
             }
 
+            // fc name color
+            ImGui.Spacing();
+            ImGui.Text(Loc.Localize("OverrideFCNameColor", "Override FCNameColor"));
+            ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
+            var overrideFCNameColor = this.SelectedPlayer.OverrideFCNameColor;
+            if (ImGui.Checkbox(
+                "###PlayerTrack_PlayerOverrideFCNameColor_Checkbox",
+                ref overrideFCNameColor))
+            {
+                this.SelectedPlayer.OverrideFCNameColor = overrideFCNameColor;
+                this.plugin.PlayerService.UpdatePlayerOverrideFCNameColor(this.SelectedPlayer);
+            }
+
+            // alerts
             ImGui.Spacing();
             ImGui.Text(Loc.Localize("Alerts", "Alerts"));
             ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
@@ -167,6 +186,7 @@ namespace PlayerTrack
                 this.plugin.PlayerService.UpdatePlayerAlert(this.SelectedPlayer);
             }
 
+            // reset
             ImGuiHelpers.ScaledDummy(5f);
             if (ImGui.Button(Loc.Localize("Reset", "Reset") + "###PlayerTrack_PlayerOverrideModalReset_Button"))
             {

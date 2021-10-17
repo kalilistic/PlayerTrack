@@ -108,17 +108,37 @@ namespace PlayerTrack
         /// <summary>
         /// Toggle to disable sync with visibility.
         /// </summary>
-        public bool SyncWithVisibility = true;
+        public bool SyncWithVisibility = false;
+
+        /// <summary>
+        /// Toggle to disable sync with FCNameColor.
+        /// </summary>
+        public bool SyncWithFCNameColor = false;
+
+        /// <summary>
+        /// Create dynamic FC categories with FCNameColor.
+        /// </summary>
+        public bool CreateDynamicFCCategories = false;
+
+        /// <summary>
+        /// Move players from existing categories and not just default.
+        /// </summary>
+        public bool ReassignPlayersFromExistingCategory = false;
 
         /// <summary>
         /// Toggle to hide players voided in visibility in list.
         /// </summary>
-        public bool ShowVoidedPlayersInList = true;
+        public bool ShowVoidedPlayersInList = false;
 
         /// <summary>
         /// Visibility sync frequency in ms.
         /// </summary>
         public long SyncWithVisibilityFrequency = 30000;
+
+        /// <summary>
+        /// FCNameColor sync frequency in ms.
+        /// </summary>
+        public long SyncWithFCNameColorFrequency = 30000;
 
         /// <summary>
         /// Indicator if fresh install to perform one-time setup actions.
