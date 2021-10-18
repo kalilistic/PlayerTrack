@@ -59,6 +59,10 @@
         "message": "Placas de Nombre",
         "description": "ConfigWindow.Draw"
     },
+    "IntegrationConfig": {
+        "message": "Integraciones",
+        "description": "ConfigWindow.Draw"
+    },
     "ContextMenuConfig": {
         "message": "Menú contextual",
         "description": "ConfigWindow.Draw"
@@ -89,6 +93,10 @@
     },
     "CategoryNamePlates": {
         "message": "Placa de Nombre",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryVisibility": {
+        "message": "Visibilidad",
         "description": "ConfigWindow.CategoryConfig"
     },
     "CategoryAction": {
@@ -273,6 +281,26 @@
     },
     "LodestoneLocale_HelpMarker": {
         "message": "establece la región que se usará para el enlace al perfil de la lodestone",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "Visibility": {
+        "message": "Visibilidad",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "SyncWithVisibility": {
+        "message": "Sincronizar con visibilidad",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "SyncWithVisibility_HelpMarker": {
+        "message": "sincronizar con el plugin de visibilidad",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "ShowHiddenPlayersInList": {
+        "message": "Mostrar jugadores ocultos en la lista",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "ShowHiddenPlayersInList_HelpMarker": {
+        "message": "mostrar jugadores ocultos con visibilidad en la lista",
         "description": "ConfigWindow.IntegrationsConfig"
     },
     "NamePlateCompatabilityWarning": {
@@ -541,6 +569,10 @@
     },
     "Icon": {
         "message": "Icono",
+        "description": "Panel.PlayerDisplay"
+    },
+    "VisibilityType": {
+        "message": "Visibilidad",
         "description": "Panel.PlayerDisplay"
     },
     "List": {
