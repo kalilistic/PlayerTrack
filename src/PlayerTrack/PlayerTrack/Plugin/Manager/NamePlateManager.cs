@@ -55,9 +55,10 @@ namespace PlayerTrack
 
                 var restrict =
                     ContentRestrictionType.GetContentRestrictionTypeByIndex(this.plugin.Configuration.ShowNamePlates);
-                if (!(restrict == ContentRestrictionType.Always ||
-                      (restrict == ContentRestrictionType.ContentOnly && PlayerTrackPlugin.DataManager.InContent(PlayerTrackPlugin.ClientState.TerritoryType)) ||
-                      (restrict == ContentRestrictionType.HighEndDutyOnly && PlayerTrackPlugin.DataManager.InHighEndDuty(PlayerTrackPlugin.ClientState.TerritoryType))))
+                if (restrict == ContentRestrictionType.Never ||
+                    !(restrict == ContentRestrictionType.Always ||
+                    (restrict == ContentRestrictionType.ContentOnly && PlayerTrackPlugin.DataManager.InContent(PlayerTrackPlugin.ClientState.TerritoryType)) ||
+                    (restrict == ContentRestrictionType.HighEndDutyOnly && PlayerTrackPlugin.DataManager.InHighEndDuty(PlayerTrackPlugin.ClientState.TerritoryType))))
                 {
                     return;
                 }
