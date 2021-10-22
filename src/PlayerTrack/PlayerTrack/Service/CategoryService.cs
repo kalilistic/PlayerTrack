@@ -85,55 +85,6 @@ namespace PlayerTrack
         }
 
         /// <summary>
-        /// Get category IDs by visibility type.
-        /// </summary>
-        /// <param name="visibilityType">visibility type to filter by.</param>
-        /// <returns>categories with visibility type.</returns>
-        public int[] GetCategoryIdsByVisibilityType(VisibilityType visibilityType)
-        {
-            lock (this.locker)
-            {
-                return this.categories.Where(pair => pair.Value.VisibilityType == visibilityType).Select(pair => pair.Key).ToArray();
-            }
-        }
-
-        /// <summary>
-        /// Get category IDs by OverrideFCNameColor state.
-        /// </summary>
-        /// <param name="isOverriden">isOverriden by FCNameColor.</param>
-        /// <returns>categories with visibility type.</returns>
-        public int[] GetCategoryIdsByOverrideFCNameColor(bool isOverriden)
-        {
-            lock (this.locker)
-            {
-                return this.categories.Where(pair => pair.Value.OverrideFCNameColor == isOverriden).Select(pair => pair.Key).ToArray();
-            }
-        }
-
-        /// <summary>
-        /// Get category ID by lodestone id.
-        /// </summary>
-        /// <param name="lodestoneId">lodestone id to filter by.</param>
-        /// <returns>category with matching lodestone id.</returns>
-        public int? GetCategoryIdByFCLodestoneId(string lodestoneId)
-        {
-            lock (this.locker)
-            {
-                try
-                {
-                    lock (this.locker)
-                    {
-                        return this.categories.FirstOrDefault(pair => pair.Value.FCLodestoneId == lodestoneId).Key;
-                    }
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-            }
-        }
-
-        /// <summary>
         /// Get default category.
         /// </summary>
         /// <returns>default category.</returns>
@@ -269,7 +220,6 @@ namespace PlayerTrack
             this.plugin.PlayerService.RemoveDeletedCategory(categoryId, this.GetDefaultCategory().Id);
             this.DeleteItem<Category>(deletedCategory.Id);
             this.plugin.PlayerService.SetDerivedFieldsForAllPlayers();
-            this.plugin.VisibilityService.SyncWithVisibility();
         }
 
         /// <summary>
@@ -307,8 +257,6 @@ namespace PlayerTrack
             }
 
             this.plugin.NamePlateManager.ForceRedraw();
-            this.plugin.VisibilityService.SyncWithVisibility();
-            this.plugin.FCNameColorService.SyncWithFCNameColor();
         }
 
         /// <summary>

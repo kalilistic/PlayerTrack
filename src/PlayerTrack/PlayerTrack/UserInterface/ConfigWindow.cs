@@ -23,7 +23,7 @@ namespace PlayerTrack
             : base(plugin, "PlayerTrack Config")
         {
             this.plugin = plugin;
-            this.Size = new Vector2(1100f, 400f);
+            this.Size = new Vector2(800f, 400f);
             this.SizeCondition = ImGuiCond.Appearing;
             this.RespectCloseHotkey = true;
         }
