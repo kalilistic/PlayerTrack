@@ -95,14 +95,6 @@
         "message": "Namensschild",
         "description": "ConfigWindow.CategoryConfig"
     },
-    "CategoryVisibility": {
-        "message": "Visibility",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryFCNameColor": {
-        "message": "FCNameColor",
-        "description": "ConfigWindow.CategoryConfig"
-    },
     "CategoryAction": {
         "message": "Aktionen",
         "description": "ConfigWindow.CategoryConfig"
@@ -129,14 +121,6 @@
     },
     "CategoryNamePlateColor": {
         "message": "Farbe des Namenschildes festlegen",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "IsHiddenInVisibility": {
-        "message": "setze Spieler mit Visibility auf die VoidList oder WhiteList",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryFCNameColorOverride": {
-        "message": "die FG Farbeinstellungen für diese Kategorie übergehen, indem du Spieler zur Ingnorieren-Liste hinzufügst",
         "description": "ConfigWindow.CategoryConfig"
     },
     "ShowAddShowInfoContextMenu": {
@@ -293,54 +277,6 @@
     },
     "LodestoneLocale_HelpMarker": {
         "message": "Sprache für Lodestone-Profillink festlegen",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "Visibility": {
-        "message": "Visibility",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "SyncWithVisibility": {
-        "message": "Mit Visibility synchronisieren",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "SyncWithVisibility_HelpMarker": {
-        "message": "mit dem Visibility Plugin snychronisieren",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "ShowHiddenPlayersInList": {
-        "message": "Versteckte Spieler in Liste anzeigen",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "ShowHiddenPlayersInList_HelpMarker": {
-        "message": "zeige Spieler in der Liste an, die mit Visibility ausgeblendet werden",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "FCNameColor": {
-        "message": "FCNameColor",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "SyncWithFCNameColor": {
-        "message": "Mit FCNameColor synchronisieren",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "SyncWithFCNameColor_HelpMarker": {
-        "message": "mit FCNameColor Plugin synchronisieren",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "CreateDynamicFCCategories": {
-        "message": "Erstelle dynamische FC Kategorien",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "CreateDynamicFCCategories_HelpMarker": {
-        "message": "Kategorien erstellen, die Spieler basierend auf der aktuellen FC Liste automatisch hinzufügen/entfernen",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "ReassignPlayersFromExistingCategory": {
-        "message": "Spieler aus bestehenden Kategorien neu zuweisen",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "ReassignPlayersFromExistingCategory_HelpMarker": {
-        "message": "Spieler von existierenden Kategoriezuordnungen in FG-Kategorie zuweisen und nicht nur zur Standardkategorie",
         "description": "ConfigWindow.IntegrationsConfig"
     },
     "NamePlateCompatabilityWarning": {
@@ -611,20 +547,12 @@
         "message": "Symbol",
         "description": "Panel.PlayerDisplay"
     },
-    "VisibilityType": {
-        "message": "Sichtbarkeit",
-        "description": "Panel.PlayerDisplay"
-    },
     "List": {
         "message": "Liste",
         "description": "Panel.PlayerDisplay"
     },
     "Nameplate": {
         "message": "Namensschild",
-        "description": "Panel.PlayerDisplay"
-    },
-    "OverrideFCNameColor": {
-        "message": "FCNameColor überschreiben",
         "description": "Panel.PlayerDisplay"
     },
     "Alerts": {
