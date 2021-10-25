@@ -87,9 +87,24 @@ namespace PlayerTrack
         public bool IsDefault { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to hide these players using Visibility.
+        /// </summary>
+        public VisibilityType VisibilityType { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to override FCNameColor nameplate.
+        /// </summary>
+        public bool OverrideFCNameColor { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating category priority for force ranking.
         /// </summary>
         public int Rank { get; set; }
+
+        /// <summary>
+        /// Gets or sets free company lodestone id.
+        /// </summary>
+        public string FCLodestoneId { get; set; } = null!;
 
         /// <summary>
         /// Reset category settings to default.
@@ -102,6 +117,8 @@ namespace PlayerTrack
             this.IsNamePlateColorEnabled = false;
             this.IsNamePlateTitleEnabled = false;
             this.IsAlertEnabled = false;
+            this.OverrideFCNameColor = false;
+            this.VisibilityType = VisibilityType.none;
         }
 
         /// <summary>

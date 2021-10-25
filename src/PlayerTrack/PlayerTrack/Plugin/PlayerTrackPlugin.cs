@@ -73,6 +73,8 @@ namespace PlayerTrack
                     this.CategoryService = new CategoryService(this);
                     this.EncounterService = new EncounterService(this);
                     this.PlayerService = new PlayerService(this);
+                    this.VisibilityService = new VisibilityService(this);
+                    this.FCNameColorService = new FCNameColorService(this);
                     this.PlayerTrackProvider = new PlayerTrackProvider(PluginInterface, new PlayerTrackAPI(this));
                     this.WindowManager = new WindowManager(this);
                     this.PluginCommandManager = new PluginCommandManager(this);
@@ -111,6 +113,8 @@ namespace PlayerTrack
                         // start plugin
                         this.IsDoneLoading = true;
                         this.backupTimer.Enabled = true;
+                        this.VisibilityService.Start();
+                        this.FCNameColorService.Start();
                         this.ActorManager.Start();
                         this.WindowManager.AddWindows();
                     }
@@ -192,6 +196,16 @@ namespace PlayerTrack
         /// Gets or sets playerTrack API for other plugins.
         /// </summary>
         public PlayerTrackProvider PlayerTrackProvider { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets visibility service to get data from visibility plugin.
+        /// </summary>
+        public VisibilityService VisibilityService { get; set; } = null!;
+
+        /// <summary>
+        /// Gets or sets FCNameColor service to get data from FCNameColor plugin.
+        /// </summary>
+        public FCNameColorService FCNameColorService { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets a value indicating whether plugin is done loading.
@@ -284,6 +298,8 @@ namespace PlayerTrack
                 this.ContextMenuManager.Dispose();
                 this.XivCommon.Dispose();
                 this.PlayerTrackProvider.Dispose();
+                this.VisibilityService.Dispose();
+                this.FCNameColorService.Dispose();
                 this.LodestoneService.Dispose();
                 this.ActorManager.Dispose();
                 this.WindowManager.Dispose();

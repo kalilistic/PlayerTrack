@@ -90,6 +90,16 @@ namespace PlayerTrack
         public ushort LastTerritoryType { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to hide these players using Visibility.
+        /// </summary>
+        public VisibilityType VisibilityType { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to override FCNameColor nameplate.
+        /// </summary>
+        public bool OverrideFCNameColor { get; set; }
+
+        /// <summary>
         /// Gets or sets the last seen content id.
         /// </summary>
         [BsonIgnore]
@@ -241,6 +251,8 @@ namespace PlayerTrack
             this.IsAlertEnabled = false;
             this.Title = string.Empty;
             this.SeTitle = null;
+            this.OverrideFCNameColor = false;
+            this.VisibilityType = VisibilityType.none;
         }
 
         /// <summary>
