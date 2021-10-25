@@ -39,7 +39,6 @@ namespace PlayerTrack
         /// </summary>
         public static readonly ContentRestrictionType Never = new (3, 3, "Never");
 
-
         private ContentRestrictionType(int index, int code, string name)
         {
             this.Index = index;
