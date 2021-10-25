@@ -19,7 +19,6 @@ namespace PlayerTrack
         private ICallGateSubscriber<IEnumerable<string>> consumerGetIgnoredPlayers = null!;
         private ICallGateSubscriber<string, string, object> consumerAddPlayerToIgnoredPlayers = null!;
         private ICallGateSubscriber<string, object> consumerRemovePlayerFromIgnoredPlayers = null!;
-        private ICallGateSubscriber<bool, object> consumerSetEnabledState = null!;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FCNameColorConsumer"/> class.
@@ -54,9 +53,6 @@ namespace PlayerTrack
                 this.consumerRemovePlayerFromIgnoredPlayers =
                     PlayerTrackPlugin.PluginInterface.GetIpcSubscriber<string, object>(
                         "FCNameColor.RemovePlayerFromIgnoredPlayers");
-                this.consumerSetEnabledState =
-                    PlayerTrackPlugin.PluginInterface.GetIpcSubscriber<bool, object>(
-                        "FCNameColor.SetEnabledState");
             }
             catch (Exception ex)
             {
@@ -135,15 +131,6 @@ namespace PlayerTrack
         public void RemovePlayerFromIgnoredPlayers(string id)
         {
             this.consumerRemovePlayerFromIgnoredPlayers.InvokeAction(id);
-        }
-
-        /// <summary>
-        /// Update enabled state.
-        /// </summary>
-        /// <param name="state">new enabled state of nameplate updates.</param>
-        public void SetEnabledState(bool state)
-        {
-            this.consumerSetEnabledState.InvokeAction(state);
         }
     }
 }
