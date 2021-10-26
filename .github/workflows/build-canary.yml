@@ -1,7 +1,10 @@
-name: Build & deploy
+name: Build & deploy to canary
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+    - master
 
 env:
   PLUGIN_NAME: PlayerTrack
@@ -60,20 +63,3 @@ jobs:
         author_name: GitHub Action
         author_email: github-actions[bot]@users.noreply.github.com
         message: Update ${{env.PLUGIN_NAME}}
-        
-  pull_request:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v2
-      id: download-artifact
-      with:
-        name: PluginRepoZip
-        path: PluginArtifact
-    - uses: kalilistic/DalamudPluginPR@master
-      with:
-        enabled: true
-        testing: false
-        token: ${{secrets.PAT}}
-        artifact_path: ${{steps.download-artifact.outputs.download-path}}

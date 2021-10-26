@@ -1,4 +1,4 @@
-name: Build & deploy
+name: Deploy to testing
 
 on:
   workflow_dispatch:
@@ -74,6 +74,6 @@ jobs:
     - uses: kalilistic/DalamudPluginPR@master
       with:
         enabled: true
-        testing: false
+        testing: true
         token: ${{secrets.PAT}}
         artifact_path: ${{steps.download-artifact.outputs.download-path}}
