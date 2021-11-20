@@ -101,7 +101,7 @@
 			<PackageReference Include="DalamudPackager" Version="2.1.2" />
 			<PackageReference Include="LiteDB" Version="5.0.11" />
 			<PackageReference Include="XivCommon" Version="3.1.0" />
-      <PackageReference Include="Dalamud.DrunkenToad" Version="1.1.6" />
+      <PackageReference Include="Dalamud.DrunkenToad" Version="1.1.8" />
       <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
