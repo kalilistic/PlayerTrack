@@ -368,18 +368,19 @@ namespace PlayerTrack
             {
                 lock (this.locker)
                 {
+                    var sortKey = BuildPlayerSortKey(this.players[player.Key]);
                     this.players[player.Key].IsCurrent = player.IsCurrent;
                     this.players[player.Key].Updated = player.Updated;
-                    if (this.plugin.Configuration.ShowWindow && this.viewPlayers.ContainsKey(player.SortKey))
+                    if (this.plugin.Configuration.ShowWindow && this.viewPlayers.ContainsKey(sortKey))
                     {
                         if (PlayerFilterType.GetPlayerFilterTypeByIndex(this.plugin.Configuration.PlayerFilterType) ==
                             PlayerFilterType.CurrentPlayers)
                         {
-                            this.viewPlayers.Remove(player.SortKey);
+                            this.viewPlayers.Remove(sortKey);
                         }
                         else
                         {
-                            this.UpdateViewPlayer(player.SortKey, player);
+                            this.UpdateViewPlayer(sortKey, player);
                         }
                     }
                 }
