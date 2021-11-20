@@ -198,16 +198,16 @@ namespace PlayerTrack
 
         private void SyncTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
-            if (!this.plugin.Configuration.SyncWithVisibility) return;
-            var newStatus = this.fCNameColorConsumer.IsAvailable();
-
-            // do full sync if previously off
-            if (!this.IsFCNameColorAvailable && newStatus)
-            {
-                this.SyncWithFCNameColor();
-            }
-
-            this.IsFCNameColorAvailable = newStatus;
+            // if (!this.plugin.Configuration.SyncWithVisibility) return;
+            // var newStatus = this.fCNameColorConsumer.IsAvailable();
+            //
+            // // do full sync if previously off
+            // if (!this.IsFCNameColorAvailable && newStatus)
+            // {
+            //     this.SyncWithFCNameColor();
+            // }
+            //
+            // this.IsFCNameColorAvailable = newStatus;
         }
 
         private List<FreeCompany> GetFreeCompanies()

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Numerics;
 
 using CheapLoc;
-using Dalamud.DrunkenToad;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using ImGuiNET;
@@ -162,17 +161,17 @@ namespace PlayerTrack
             }
 
             // fc name color
-            ImGui.Spacing();
-            ImGui.Text(Loc.Localize("OverrideFCNameColor", "Override FCNameColor"));
-            ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
-            var overrideFCNameColor = this.SelectedPlayer.OverrideFCNameColor;
-            if (ImGui.Checkbox(
-                "###PlayerTrack_PlayerOverrideFCNameColor_Checkbox",
-                ref overrideFCNameColor))
-            {
-                this.SelectedPlayer.OverrideFCNameColor = overrideFCNameColor;
-                this.plugin.PlayerService.UpdatePlayerOverrideFCNameColor(this.SelectedPlayer);
-            }
+            // ImGui.Spacing();
+            // ImGui.Text(Loc.Localize("OverrideFCNameColor", "Override FCNameColor"));
+            // ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
+            // var overrideFCNameColor = this.SelectedPlayer.OverrideFCNameColor;
+            // if (ImGui.Checkbox(
+            //     "###PlayerTrack_PlayerOverrideFCNameColor_Checkbox",
+            //     ref overrideFCNameColor))
+            // {
+            //     this.SelectedPlayer.OverrideFCNameColor = overrideFCNameColor;
+            //     this.plugin.PlayerService.UpdatePlayerOverrideFCNameColor(this.SelectedPlayer);
+            // }
 
             // alerts
             ImGui.Spacing();

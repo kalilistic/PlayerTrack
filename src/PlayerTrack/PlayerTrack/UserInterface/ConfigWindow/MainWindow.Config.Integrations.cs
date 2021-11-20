@@ -77,61 +77,62 @@ namespace PlayerTrack
             // ImGuiComponents.HelpMarker(Loc.Localize(
             //                                "ShowHiddenPlayersInList_HelpMarker",
             //                                "toggle showing players hidden with visibility in list"));
-            ImGui.Spacing();
-            ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("FCNameColor", "FCNameColor"));
-            var syncWithFCNameColor = this.Plugin.Configuration.SyncWithFCNameColor;
-            if (ImGui.Checkbox(
-                Loc.Localize($"SyncWithFCNameColor", "Sync with FCNameColor"),
-                ref syncWithFCNameColor))
-            {
-                this.Plugin.Configuration.SyncWithFCNameColor = syncWithFCNameColor;
-                this.Plugin.SaveConfig();
-                if (syncWithFCNameColor)
-                {
-                    this.plugin.FCNameColorService.SyncWithFCNameColor();
-                }
-            }
 
-            ImGuiComponents.HelpMarker(Loc.Localize(
-                                           "SyncWithFCNameColor_HelpMarker",
-                                           "synchronize with FCNameColor plugin"));
-            ImGui.Spacing();
-
-            var createDynamicFCCategories = this.Plugin.Configuration.CreateDynamicFCCategories;
-            if (ImGui.Checkbox(
-                Loc.Localize($"CreateDynamicFCCategories", "Create dynamic FC categories"),
-                ref createDynamicFCCategories))
-            {
-                this.Plugin.Configuration.CreateDynamicFCCategories = createDynamicFCCategories;
-                this.Plugin.SaveConfig();
-                if (syncWithFCNameColor && createDynamicFCCategories)
-                {
-                    this.plugin.FCNameColorService.SyncWithFCNameColor();
-                }
-            }
-
-            ImGuiComponents.HelpMarker(Loc.Localize(
-                                           "CreateDynamicFCCategories_HelpMarker",
-                                           "create categories that automatically add/remove players based on current FC roster"));
-
-            ImGui.Spacing();
-
-            var reassignPlayersFromExistingCategory = this.Plugin.Configuration.ReassignPlayersFromExistingCategory;
-            if (ImGui.Checkbox(
-                Loc.Localize($"ReassignPlayersFromExistingCategory", "Reassign players from existing categories"),
-                ref reassignPlayersFromExistingCategory))
-            {
-                this.Plugin.Configuration.ReassignPlayersFromExistingCategory = reassignPlayersFromExistingCategory;
-                this.Plugin.SaveConfig();
-                if (syncWithFCNameColor && createDynamicFCCategories && reassignPlayersFromExistingCategory)
-                {
-                    this.plugin.FCNameColorService.SyncWithFCNameColor();
-                }
-            }
-
-            ImGuiComponents.HelpMarker(Loc.Localize(
-                                           "ReassignPlayersFromExistingCategory_HelpMarker",
-                                           "reassign players from existing category assignments into fc category and not just default category"));
+            // ImGui.Spacing();
+            // ImGui.TextColored(ImGuiColors.DalamudViolet, Loc.Localize("FCNameColor", "FCNameColor"));
+            // var syncWithFCNameColor = this.Plugin.Configuration.SyncWithFCNameColor;
+            // if (ImGui.Checkbox(
+            //     Loc.Localize($"SyncWithFCNameColor", "Sync with FCNameColor"),
+            //     ref syncWithFCNameColor))
+            // {
+            //     this.Plugin.Configuration.SyncWithFCNameColor = syncWithFCNameColor;
+            //     this.Plugin.SaveConfig();
+            //     if (syncWithFCNameColor)
+            //     {
+            //         this.plugin.FCNameColorService.SyncWithFCNameColor();
+            //     }
+            // }
+            //
+            // ImGuiComponents.HelpMarker(Loc.Localize(
+            //                                "SyncWithFCNameColor_HelpMarker",
+            //                                "synchronize with FCNameColor plugin"));
+            // ImGui.Spacing();
+            //
+            // var createDynamicFCCategories = this.Plugin.Configuration.CreateDynamicFCCategories;
+            // if (ImGui.Checkbox(
+            //     Loc.Localize($"CreateDynamicFCCategories", "Create dynamic FC categories"),
+            //     ref createDynamicFCCategories))
+            // {
+            //     this.Plugin.Configuration.CreateDynamicFCCategories = createDynamicFCCategories;
+            //     this.Plugin.SaveConfig();
+            //     if (syncWithFCNameColor && createDynamicFCCategories)
+            //     {
+            //         this.plugin.FCNameColorService.SyncWithFCNameColor();
+            //     }
+            // }
+            //
+            // ImGuiComponents.HelpMarker(Loc.Localize(
+            //                                "CreateDynamicFCCategories_HelpMarker",
+            //                                "create categories that automatically add/remove players based on current FC roster"));
+            //
+            // ImGui.Spacing();
+            //
+            // var reassignPlayersFromExistingCategory = this.Plugin.Configuration.ReassignPlayersFromExistingCategory;
+            // if (ImGui.Checkbox(
+            //     Loc.Localize($"ReassignPlayersFromExistingCategory", "Reassign players from existing categories"),
+            //     ref reassignPlayersFromExistingCategory))
+            // {
+            //     this.Plugin.Configuration.ReassignPlayersFromExistingCategory = reassignPlayersFromExistingCategory;
+            //     this.Plugin.SaveConfig();
+            //     if (syncWithFCNameColor && createDynamicFCCategories && reassignPlayersFromExistingCategory)
+            //     {
+            //         this.plugin.FCNameColorService.SyncWithFCNameColor();
+            //     }
+            // }
+            //
+            // ImGuiComponents.HelpMarker(Loc.Localize(
+            //                                "ReassignPlayersFromExistingCategory_HelpMarker",
+            //                                "reassign players from existing category assignments into fc category and not just default category"));
         }
     }
 }
