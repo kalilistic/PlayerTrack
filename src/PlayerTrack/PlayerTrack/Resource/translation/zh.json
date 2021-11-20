@@ -71,6 +71,14 @@
         "message": "默认",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "ShowFilterType": {
+        "message": "显示过滤器类型",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowFilterType_HelpMarker": {
+        "message": "切换以在玩家列表中显示过滤器类型",
+        "description": "ConfigWindow.DisplayConfig"
+    },
     "ShowSearchBox": {
         "message": "显示搜索框",
         "description": "ConfigWindow.DisplayConfig"
@@ -83,6 +91,18 @@
         "message": "锁定窗口",
         "description": "ConfigWindow.DisplayConfig"
     },
+    "CombinedPlayerDetailWindow": {
+        "message": "合并窗口",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowTags": {
+        "message": "显示玩家称号",
+        "description": "ConfigWindow.DisplayConfig"
+    },
+    "ShowPlayerTags_HelpMarker": {
+        "message": "在详细窗口上显示玩家称号",
+        "description": "ConfigWindow.DisplayConfig"
+    },
     "SearchType": {
         "message": "搜索类型",
         "description": "ConfigWindow.DisplayConfig"
@@ -91,12 +111,20 @@
         "message": "固定主窗口的尺寸及位置",
         "description": "ConfigWindow.DisplayConfig"
     },
+    "Reset": {
+        "message": "重置",
+        "description": "ConfigWindow.IconConfig"
+    },
     "Icons": {
         "message": "添加 / 移除图标",
         "description": "ConfigWindow.IconConfig"
     },
     "AddRemoveIcons": {
         "message": "使用下拉框添加图标 或 点击图标以移除",
+        "description": "ConfigWindow.IconConfig"
+    },
+    "AddIcon": {
+        "message": "添加",
         "description": "ConfigWindow.IconConfig"
     },
     "SyncToLodestone": {
@@ -114,6 +142,10 @@
     "LodestoneLocale_HelpMarker": {
         "message": "设置 Lodestone 个人主页所用的地区",
         "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "NamePlateCompatabilityWarning": {
+        "message": "警告：如果您正在使用其他修改名称牌的插件，设置不会全部生效。",
+        "description": "ConfigWindow.NamePlateConfig"
     },
     "ShowNamePlates": {
         "message": "显示名牌",
@@ -139,6 +171,22 @@
         "message": "使用分类/玩家特定颜色覆盖原有的名牌颜色",
         "description": "ConfigWindow.NamePlateConfig"
     },
+    "DisableNamePlateColorIfDead": {
+        "message": "当玩家死亡时禁用名牌颜色",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "DisableNamePlateColorIfDead_HelpMarker": {
+        "message": "不刷新死亡玩家的名字牌，以便察觉死亡",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "DefaultNamePlateColorToListColor": {
+        "message": "默认设置姓名牌颜色为列表颜色",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
+    "DefaultNamePlateColorToListColor_HelpMarker": {
+        "message": "除非设置更改，否则默认设置姓名牌颜色为列表颜色，",
+        "description": "ConfigWindow.NamePlateConfig"
+    },
     "ChangeNamePlateTitle": {
         "message": "更改名牌称号",
         "description": "ConfigWindow.NamePlateConfig"
@@ -155,6 +203,14 @@
         "message": "在名牌中隐藏部队名称以让名牌更加规整，但与其他插件存在兼容性问题",
         "description": "ConfigWindow.NamePlateConfig"
     },
+    "RestrictInCombat": {
+        "message": "战斗中不生效",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
+    "RestrictInCombat_HelpMarker": {
+        "message": "战斗中停止处理玩家",
+        "description": "ConfigWindow.ProcessingConfig"
+    },
     "RestrictAddUpdatePlayers": {
         "message": "添加 / 更新玩家",
         "description": "ConfigWindow.ProcessingConfig"
@@ -163,20 +219,204 @@
         "message": "选择何时处理玩家",
         "description": "ConfigWindow.ProcessingConfig"
     },
+    "TargetPlayer": {
+        "message": "目标",
+        "description": "MainWindow.PlayerList"
+    },
+    "FocusTargetPlayer": {
+        "message": "焦点目标",
+        "description": "MainWindow.PlayerList"
+    },
+    "ExaminePlayer": {
+        "message": "检查",
+        "description": "MainWindow.PlayerList"
+    },
+    "Category": {
+        "message": "分类",
+        "description": "MainWindow.PlayerList"
+    },
+    "Delete": {
+        "message": "删除",
+        "description": "MainWindow.PlayerList"
+    },
+    "SearchHint": {
+        "message": "搜索",
+        "description": "MainWindow.PlayerListControls"
+    },
+    "AddPlayerMenuItem": {
+        "message": "添加玩家",
+        "description": "MainWindow.PlayerListControls"
+    },
+    "OpenLodestoneService": {
+        "message": "打开Lodestone",
+        "description": "MainWindow.PlayerListControls"
+    },
+    "OpenSettings": {
+        "message": "打开设置",
+        "description": "MainWindow.PlayerListControls"
+    },
+    "MigrationInfo": {
+        "message": "感谢您更新PlayerTrack！新版本需要将您的数据转换到新格式。 这只运行一次，但可能需要一些时间，取决于您数据的大小。 请耐心，不要中断迁移否则您将面临数据丢失风险。 您可以继续玩游戏，完成后此窗口将自动关闭。",
+        "description": "MigrationWindow.Draw"
+    },
+    "DeleteConfirmationModalTitle": {
+        "message": "删除",
+        "description": "ModalWindow.Draw"
+    },
+    "DeleteConfirmationModalContent": {
+        "message": "确定要删除吗？",
+        "description": "ModalWindow.Draw"
+    },
+    "OK": {
+        "message": "确定",
+        "description": "ModalWindow.Draw"
+    },
     "Cancel": {
         "message": "取消",
         "description": "ModalWindow.Draw"
     },
+    "LodestoneTotalRequests": {
+        "message": "请求计数",
+        "description": "Panel.Lodestone"
+    },
+    "LodestoneRequestsInQueue": {
+        "message": "队列中的请求",
+        "description": "Panel.Lodestone"
+    },
+    "Summary": {
+        "message": "概要",
+        "description": "Panel.PlayerDetail"
+    },
+    "Encounters": {
+        "message": "遭遇",
+        "description": "Panel.PlayerDetail"
+    },
+    "Appearance": {
+        "message": "外观",
+        "description": "Panel.PlayerDetail"
+    },
+    "Display": {
+        "message": "显示",
+        "description": "Panel.PlayerDetail"
+    },
+    "Gender": {
+        "message": "性别",
+        "description": "Panel.PlayerCustomize"
+    },
+    "GenderFemale": {
+        "message": "女性",
+        "description": "Panel.PlayerCustomize"
+    },
+    "GenderMale": {
+        "message": "男性",
+        "description": "Panel.PlayerCustomize"
+    },
+    "Tribe": {
+        "message": "种族",
+        "description": "Panel.PlayerCustomize"
+    },
+    "Height": {
+        "message": "身高",
+        "description": "Panel.PlayerCustomize"
+    },
+    "Copy": {
+        "message": "复制",
+        "description": "Panel.PlayerCustomize"
+    },
+    "NoAppearance": {
+        "message": "没有找到此玩家的外观数据。",
+        "description": "Panel.PlayerCustomize"
+    },
+    "NoAppearanceExplanation": {
+        "message": "这可能发生在手动添加的玩家或删除所有遭遇的情况下。下次遇到此玩家时外观数据将更新。",
+        "description": "Panel.PlayerCustomize"
+    },
+    "PlayerCategory": {
+        "message": "类别",
+        "description": "Panel.PlayerDisplay"
+    },
+    "OverrideNote": {
+        "message": "这些配置将覆盖类别配置。",
+        "description": "Panel.PlayerDisplay"
+    },
+    "Icon": {
+        "message": "图标",
+        "description": "Panel.PlayerDisplay"
+    },
+    "Nameplate": {
+        "message": "姓名牌",
+        "description": "Panel.PlayerDisplay"
+    },
+    "Time": {
+        "message": "时间",
+        "description": "Panel.PlayerEncounters"
+    },
+    "Duration": {
+        "message": "持续时间",
+        "description": "Panel.PlayerEncounters"
+    },
+    "Job": {
+        "message": "职业",
+        "description": "Panel.PlayerEncounters"
+    },
     "Location": {
         "message": "位置",
+        "description": "Panel.PlayerEncounters"
+    },
+    "NoEncounters": {
+        "message": "没有遇到过该玩家。",
+        "description": "Panel.PlayerEncounters"
+    },
+    "NoEncountersExplanation": {
+        "message": "这可能发生在手动添加的玩家或删除所有遭遇的情况下。",
         "description": "Panel.PlayerEncounters"
     },
     "PlayerInfo": {
         "message": "玩家信息",
         "description": "Panel.PlayerSummary"
     },
+    "PlayerStats": {
+        "message": "玩家数据",
+        "description": "Panel.PlayerSummary"
+    },
     "PlayerName": {
         "message": "名称",
         "description": "Panel.PlayerSummary"
+    },
+    "PlayerFirstSeen": {
+        "message": "第一次看见",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerHomeworld": {
+        "message": "主世界",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerLastSeen": {
+        "message": "最后一次看到",
+        "description": "Panel.PlayerSummary"
+    },
+    "FreeCompany": {
+        "message": "部队",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerLastLocation": {
+        "message": "最后地点",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerLodestone": {
+        "message": "Lodestone",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerSeenCount": {
+        "message": "看见次数",
+        "description": "Panel.PlayerSummary"
+    },
+    "PlayerTags": {
+        "message": "标签",
+        "description": "Panel.PlayerSummary"
+    },
+    "NoPlayerSelected": {
+        "message": "没有选中玩家。",
+        "description": "PlayerDetailWindow.Draw"
     }
 }
