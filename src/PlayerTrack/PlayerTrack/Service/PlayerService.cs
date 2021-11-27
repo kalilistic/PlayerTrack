@@ -1146,7 +1146,7 @@ namespace PlayerTrack
             if (player.LodestoneStatus == LodestoneStatus.Failed)
             {
                 if (player.LodestoneFailureCount >= this.plugin.Configuration.LodestoneMaxFailure) return;
-                if (DateUtil.CurrentTime() >
+                if (DateUtil.CurrentTime() <
                     player.LodestoneLastUpdated + this.plugin.Configuration.LodestoneFailureDelay) return;
             }
 
