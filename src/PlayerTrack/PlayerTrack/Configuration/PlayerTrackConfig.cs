@@ -300,6 +300,11 @@ namespace PlayerTrack
         /// </summary>
         public bool SearchTags { get; set; } = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating data fix version.
+        /// </summary>
+        public uint DataFixVersion { get; set; }
+
         /// <inheritdoc />
         public int Version { get; set; }
     }

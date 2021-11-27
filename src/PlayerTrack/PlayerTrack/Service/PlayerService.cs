@@ -1288,8 +1288,23 @@ namespace PlayerTrack
                     }
                 }
 
+                if (this.plugin.Configuration.DataFixVersion == 0 &&
+                    player.LodestoneStatus == LodestoneStatus.Verified &&
+                    player.LodestoneLastUpdated is > 1636171200000 and < 1637989200000)
+                {
+                    Logger.LogInfo("Resetting lodestone status for " + player.Key);
+                    player.LodestoneStatus = LodestoneStatus.Unverified;
+                    player.LodestoneId = 0;
+                    player.LodestoneLastUpdated = 0;
+                    player.LodestoneFailureCount = 0;
+                    this.UpdateItem(player);
+                }
+
                 this.SubmitLodestoneRequest(player);
             }
+
+            this.plugin.Configuration.DataFixVersion = 1;
+            this.plugin.SaveConfig();
         }
 
         private void MergeKeyDuplicates()
