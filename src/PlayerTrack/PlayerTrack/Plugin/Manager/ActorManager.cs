@@ -21,6 +21,7 @@ namespace PlayerTrack
         private readonly Timer timer;
         private readonly PlayerTrackPlugin plugin;
         private readonly object locker = new ();
+        private long eventId;
         private ushort territoryType;
         private ushort nextTerritoryType;
         private uint contentId;
@@ -206,6 +207,7 @@ namespace PlayerTrack
                                     PlayerKey = playerKey,
                                     Created = currentTime,
                                     Updated = currentTime,
+                                    EventId = this.eventId,
                                     TerritoryType = this.territoryType,
                                     JobId = character.ClassJob.Id,
                                     JobLvl = character.Level,
@@ -287,6 +289,7 @@ namespace PlayerTrack
         {
             this.territoryType = newTerritoryType;
             this.contentId = PlayerTrackPlugin.DataManager.ContentId(this.territoryType);
+            this.eventId = DateUtil.CurrentTime();
         }
 
         private void Update(Framework framework1)

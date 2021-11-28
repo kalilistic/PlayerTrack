@@ -13,6 +13,11 @@ namespace PlayerTrack
         public int Id { get; set; }
 
         /// <summary>
+        /// Gets or sets common id to unite encounter event across players.
+        /// </summary>
+        public long EventId { get; set; }
+
+        /// <summary>
         /// Gets or sets foreign key reference to player.
         /// </summary>
         public string PlayerKey { get; set; } = null!;
@@ -65,6 +70,7 @@ namespace PlayerTrack
                 PlayerKey = playerKey,
                 Created = this.Created,
                 Updated = this.Updated,
+                EventId = this.EventId,
                 TerritoryType = this.TerritoryType,
                 JobId = this.JobId,
                 JobLvl = this.JobLvl,
