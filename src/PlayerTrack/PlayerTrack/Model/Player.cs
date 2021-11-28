@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -115,6 +116,11 @@ namespace PlayerTrack
         /// Gets or sets customize byte array.
         /// </summary>
         public byte[]? Customize { get; set; }
+
+        /// <summary>
+        /// Gets or sets customize history byte array.
+        /// </summary>
+        public List<byte[]?>? CustomizeHistory { get; set; }
 
         /// <summary>
         /// Gets or sets get customize data as struct.
@@ -266,10 +272,21 @@ namespace PlayerTrack
             this.LastTerritoryType = player.LastTerritoryType;
             this.LastContentId = player.LastContentId;
             this.LastLocationName = player.LastLocationName;
-            this.Customize = player.Customize;
-            this.CharaCustomizeData = player.CharaCustomizeData;
             this.Updated = player.Updated;
 
+            // customize
+            if (this.Customize != null &&
+                player.Customize != null &&
+                     !StructuralComparisons.StructuralEqualityComparer.Equals(this.Customize, player.Customize))
+            {
+                this.CustomizeHistory ??= new List<byte[]?>();
+                this.CustomizeHistory.Insert(0, this.Customize);
+            }
+
+            this.Customize = player.Customize;
+            this.CharaCustomizeData = player.CharaCustomizeData;
+
+            // free company
             if (player.LastContentId == 0)
             {
                 this.FreeCompany = player.FreeCompany;
@@ -305,12 +322,25 @@ namespace PlayerTrack
                 // insert newest
                 this.Names.InsertRange(0, player.Names);
                 this.HomeWorlds.InsertRange(0, player.HomeWorlds);
+
+                // insert newest customize if populated
+                if (player.CustomizeHistory != null)
+                {
+                    this.CustomizeHistory ??= new List<byte[]?>();
+                    this.CustomizeHistory.InsertRange(0, player.CustomizeHistory);
+                }
             }
             else
             {
                 // append oldest
                 this.Names.AddRange(player.Names);
                 this.HomeWorlds.AddRange(player.HomeWorlds);
+
+                if (player.CustomizeHistory != null)
+                {
+                    this.CustomizeHistory ??= new List<byte[]?>();
+                    this.CustomizeHistory.AddRange(player.CustomizeHistory);
+                }
             }
 
             // remove duplicates
