@@ -1292,7 +1292,19 @@ namespace PlayerTrack
                     player.LodestoneStatus == LodestoneStatus.Verified &&
                     player.LodestoneLastUpdated is > 1636171200000 and < 1637989200000)
                 {
-                    Logger.LogInfo("Resetting lodestone status for " + player.Key);
+                    Logger.LogInfo("V1: Resetting lodestone status for " + player.Key);
+                    player.LodestoneStatus = LodestoneStatus.Unverified;
+                    player.LodestoneId = 0;
+                    player.LodestoneLastUpdated = 0;
+                    player.LodestoneFailureCount = 0;
+                    this.UpdateItem(player);
+                }
+                else if (this.plugin.Configuration.DataFixVersion == 1 &&
+                         player.Names.First().Contains("'") &&
+                         player.LodestoneStatus == LodestoneStatus.Failed &&
+                         player.LodestoneLastUpdated is > 1638111600000 and < 1638228600000)
+                {
+                    Logger.LogInfo("V2: Resetting lodestone status for " + player.Key);
                     player.LodestoneStatus = LodestoneStatus.Unverified;
                     player.LodestoneId = 0;
                     player.LodestoneLastUpdated = 0;
@@ -1303,7 +1315,7 @@ namespace PlayerTrack
                 this.SubmitLodestoneRequest(player);
             }
 
-            this.plugin.Configuration.DataFixVersion = 1;
+            this.plugin.Configuration.DataFixVersion = 2;
             this.plugin.SaveConfig();
         }
 
