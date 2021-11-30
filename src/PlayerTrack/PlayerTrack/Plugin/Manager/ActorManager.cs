@@ -238,9 +238,12 @@ namespace PlayerTrack
                                 IsCurrent = true,
                                 IsRecent = true,
                             };
-                            this.plugin.PlayerService.SetDerivedFields(newPlayer);
-                            this.playerList.Add(character.ObjectId, newPlayer);
-                            this.plugin.PlayerService.AddOrUpdatePlayer(newPlayer);
+                            if (newPlayer.IsValidPlayer())
+                            {
+                                this.plugin.PlayerService.SetDerivedFields(newPlayer);
+                                this.playerList.Add(character.ObjectId, newPlayer);
+                                this.plugin.PlayerService.AddOrUpdatePlayer(newPlayer);
+                            }
                         }
                     }
                 }

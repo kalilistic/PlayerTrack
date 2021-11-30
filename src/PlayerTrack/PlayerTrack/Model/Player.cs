@@ -372,6 +372,16 @@ namespace PlayerTrack
             }
         }
 
+        /// <summary>
+        /// Validate player.
+        /// </summary>
+        /// <returns>indicator if player is valid.</returns>
+        public bool IsValidPlayer()
+        {
+            return this.Names.First().IsValidCharacterName() && this.HomeWorlds.First().Key != 0 &&
+                   this.HomeWorlds.First().Key < 10000;
+        }
+
         /// <inheritdoc />
         public override string ToString()
         {
