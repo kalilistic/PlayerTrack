@@ -870,7 +870,8 @@ namespace PlayerTrack
         /// Update lodestone details.
         /// </summary>
         /// <param name="response">lodestone response.</param>
-        public void UpdateLodestone(LodestoneResponse response)
+        /// <param name="allowRetry">if should allow subsequent retries.</param>
+        public void UpdateLodestone(LodestoneResponse response, bool allowRetry = true)
         {
             lock (this.locker)
             {
@@ -981,7 +982,14 @@ namespace PlayerTrack
                     currentPlayer.LodestoneLastUpdated = DateUtil.CurrentTime();
                     if (currentPlayer.LodestoneStatus == LodestoneStatus.Failed)
                     {
-                        currentPlayer.LodestoneFailureCount++;
+                        if (allowRetry)
+                        {
+                            currentPlayer.LodestoneFailureCount++;
+                        }
+                        else
+                        {
+                            currentPlayer.LodestoneFailureCount = 99;
+                        }
                     }
 
                     this.UpdateItem(currentPlayer);

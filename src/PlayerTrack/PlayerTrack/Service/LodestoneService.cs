@@ -156,18 +156,27 @@ namespace PlayerTrack
                             requestFailureCount = 0;
                             requestedFinished = true;
                         }
-                        else if (result.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.BadRequest)
+                        else if (result.StatusCode == HttpStatusCode.NotFound)
                         {
-                            Logger.LogInfo(request.PlayerName + "/" + request.WorldName + " not found on lodestone.");
+                            Logger.LogDebug(request.PlayerName + "/" + request.WorldName + " was an invalid player.");
                             response.PlayerKey = request.PlayerKey;
                             response.Status = LodestoneStatus.Failed;
                             this.plugin.PlayerService.UpdateLodestone(response);
                             requestFailureCount = 0;
                             requestedFinished = true;
                         }
+                        else if (result.StatusCode == HttpStatusCode.BadRequest)
+                        {
+                            Logger.LogDebug(request.PlayerName + "/" + request.WorldName + " not found on lodestone.");
+                            response.PlayerKey = request.PlayerKey;
+                            response.Status = LodestoneStatus.Failed;
+                            this.plugin.PlayerService.UpdateLodestone(response, false);
+                            requestFailureCount = 0;
+                            requestedFinished = true;
+                        }
                         else
                         {
-                            Logger.LogInfo(request.PlayerName + "/" + request.WorldName + " failed to lookup.");
+                            Logger.LogDebug(request.PlayerName + "/" + request.WorldName + " failed to lookup.");
                             requestFailureCount++;
                         }
                     }
