@@ -15,4 +15,4 @@ image_urls:
     - https://raw.githubusercontent.com/goatcorp/DalamudPlugins/api4/plugins/PlayerTrack/images/image1.png
     - https://raw.githubusercontent.com/goatcorp/DalamudPlugins/api4/plugins/PlayerTrack/images/image2.png
     - https://raw.githubusercontent.com/goatcorp/DalamudPlugins/api4/plugins/PlayerTrack/images/image3.png
-dalamud_api_level: 4
+dalamud_api_level: 5
