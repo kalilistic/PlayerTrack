@@ -98,9 +98,9 @@
 		
     <ItemGroup>
 			<PackageReference Include="ILRepack" Version="2.0.18" />
-			<PackageReference Include="DalamudPackager" Version="2.1.2" />
+			<PackageReference Include="DalamudPackager" Version="2.1.5" />
 			<PackageReference Include="LiteDB" Version="5.0.11" />
-			<PackageReference Include="XivCommon" Version="3.1.0" />
+			<PackageReference Include="XivCommon" Version="4.0.0-alpha.1" />
       <PackageReference Include="Dalamud.DrunkenToad" Version="1.1.8" />
       <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
         <PrivateAssets>all</PrivateAssets>
