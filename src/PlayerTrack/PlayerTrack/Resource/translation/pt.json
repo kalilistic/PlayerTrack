@@ -59,6 +59,10 @@
         "message": "NamePlates",
         "description": "ConfigWindow.Draw"
     },
+    "IntegrationConfig": {
+        "message": "Integrações",
+        "description": "ConfigWindow.Draw"
+    },
     "ContextMenuConfig": {
         "message": "Menu de contexto",
         "description": "ConfigWindow.Draw"
@@ -91,6 +95,14 @@
         "message": "NamePlate",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "CategoryVisibility": {
+        "message": "Visibilidade",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryFCNameColor": {
+        "message": "CorNomeDaFC",
+        "description": "ConfigWindow.CategoryConfig"
+    },
     "CategoryAction": {
         "message": "Ações",
         "description": "ConfigWindow.CategoryConfig"
@@ -117,6 +129,14 @@
     },
     "CategoryNamePlateColor": {
         "message": "Definir cor da nameplate",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "IsHiddenInVisibility": {
+        "message": "ignorar ou permitir jogadores com visibilidade",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryFCNameColorOverride": {
+        "message": "substituir as configurações de CorNomeDaFC para esta categoria adicionando jogadores na lista para ignorar",
         "description": "ConfigWindow.CategoryConfig"
     },
     "ShowAddShowInfoContextMenu": {
@@ -273,6 +293,54 @@
     },
     "LodestoneLocale_HelpMarker": {
         "message": "definir localidade para link do perfil na Lodestone",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "Visibility": {
+        "message": "Visibilidade",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "SyncWithVisibility": {
+        "message": "Sincronizar com Visibilidade",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "SyncWithVisibility_HelpMarker": {
+        "message": "sincronizar com plugin de visibilidade",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "ShowHiddenPlayersInList": {
+        "message": "Mostrar jogadores ocultos na lista",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "ShowHiddenPlayersInList_HelpMarker": {
+        "message": "ativar/desativar mostrar jogadores ocultos com visibilidade na lista",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "FCNameColor": {
+        "message": "CorNomeDaFC",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "SyncWithFCNameColor": {
+        "message": "Sincronizar com CorNomeDaFC",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "SyncWithFCNameColor_HelpMarker": {
+        "message": "sincronizar com o plugin CorNomeDaFC",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "CreateDynamicFCCategories": {
+        "message": "Criar categorias de FC dinâmicas",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "CreateDynamicFCCategories_HelpMarker": {
+        "message": "criar categorias que adicionam/removem automaticamente os jogadores com base na lista atual de membros da FC",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "ReassignPlayersFromExistingCategory": {
+        "message": "Reatribuir jogadores de categorias existentes",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "ReassignPlayersFromExistingCategory_HelpMarker": {
+        "message": "reatribuir jogadores de categorias existentes para a categoria fc e não apenas a categoria padrão",
         "description": "ConfigWindow.IntegrationsConfig"
     },
     "NamePlateCompatabilityWarning": {
@@ -543,12 +611,20 @@
         "message": "Ícone",
         "description": "Panel.PlayerDisplay"
     },
+    "VisibilityType": {
+        "message": "Visibilidade",
+        "description": "Panel.PlayerDisplay"
+    },
     "List": {
         "message": "Lista",
         "description": "Panel.PlayerDisplay"
     },
     "Nameplate": {
         "message": "Nameplate",
+        "description": "Panel.PlayerDisplay"
+    },
+    "OverrideFCNameColor": {
+        "message": "Substituir CorNomeDaFC",
         "description": "Panel.PlayerDisplay"
     },
     "Alerts": {
