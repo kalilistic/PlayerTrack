@@ -59,6 +59,10 @@
         "message": "Plaques de nom",
         "description": "ConfigWindow.Draw"
     },
+    "IntegrationConfig": {
+        "message": "Integrations",
+        "description": "ConfigWindow.Draw"
+    },
     "ContextMenuConfig": {
         "message": "Menu Contextuel",
         "description": "ConfigWindow.Draw"
@@ -91,6 +95,10 @@
         "message": "Plaques de nom",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "CategoryVisibility": {
+        "message": "Visibilité",
+        "description": "ConfigWindow.CategoryConfig"
+    },
     "CategoryAction": {
         "message": "Actions",
         "description": "ConfigWindow.CategoryConfig"
@@ -117,6 +125,14 @@
     },
     "CategoryNamePlateColor": {
         "message": "Définir la couleur de la plaque de nom",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "IsHiddenInVisibility": {
+        "message": "annuler ou ajouter des joueurs à la liste blanche avec visibilité",
+        "description": "ConfigWindow.CategoryConfig"
+    },
+    "CategoryFCNameColorOverride": {
+        "message": "remplacer les paramètres de plaque signalétique fcnamecolor pour cette catégorie en ajoutant des joueurs à la liste des ignorés",
         "description": "ConfigWindow.CategoryConfig"
     },
     "ShowAddShowInfoContextMenu": {
@@ -273,6 +289,50 @@
     },
     "LodestoneLocale_HelpMarker": {
         "message": "définir la locale des liens menant aux profils sur le Lodestone",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "Visibility": {
+        "message": "Visibilité",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "SyncWithVisibility": {
+        "message": "Sync avec la visibilité",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "SyncWithVisibility_HelpMarker": {
+        "message": "synchroniser avec le plugin de visibilité",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "ShowHiddenPlayersInList": {
+        "message": "Afficher les joueurs cachés dans la liste",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "ShowHiddenPlayersInList_HelpMarker": {
+        "message": "basculer l'affichage des joueurs masqués avec visibilité dans la liste",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "SyncWithFCNameColor": {
+        "message": "Synchroniser avec FCNameColor",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "SyncWithFCNameColor_HelpMarker": {
+        "message": "synchroniser avec le plugin FCNameColor",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "CreateDynamicFCCategories": {
+        "message": "Créer des catégories FC dynamiques",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "CreateDynamicFCCategories_HelpMarker": {
+        "message": "créer des catégories qui ajoutent/suppriment automatiquement des joueurs en fonction de la liste actuelle du FC",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "ReassignPlayersFromExistingCategory": {
+        "message": "Réaffecter les joueurs des catégories existantes",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "ReassignPlayersFromExistingCategory_HelpMarker": {
+        "message": "réaffecter les joueurs des affectations de catégories existantes dans la catégorie fc et pas seulement dans la catégorie par défaut",
         "description": "ConfigWindow.IntegrationsConfig"
     },
     "NamePlateCompatabilityWarning": {
@@ -543,12 +603,20 @@
         "message": "Icône",
         "description": "Panel.PlayerDisplay"
     },
+    "VisibilityType": {
+        "message": "Visibilité",
+        "description": "Panel.PlayerDisplay"
+    },
     "List": {
         "message": "Liste",
         "description": "Panel.PlayerDisplay"
     },
     "Nameplate": {
         "message": "Plaque de nom",
+        "description": "Panel.PlayerDisplay"
+    },
+    "OverrideFCNameColor": {
+        "message": "Remplacer FCNameColor",
         "description": "Panel.PlayerDisplay"
     },
     "Alerts": {
