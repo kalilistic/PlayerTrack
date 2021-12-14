@@ -239,16 +239,16 @@ namespace PlayerTrack
 
         private void SyncTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
-            // if (!this.plugin.Configuration.SyncWithVisibility) return;
-            // var newStatus = this.visibilityConsumer.IsAvailable();
-            //
-            // // do full sync if previously off
-            // if (!this.IsVisibilityAvailable && newStatus)
-            // {
-            //     this.SyncWithVisibility();
-            // }
-            //
-            // this.IsVisibilityAvailable = newStatus;
+            if (!this.plugin.Configuration.SyncWithVisibility) return;
+            var newStatus = this.visibilityConsumer.IsAvailable();
+
+            // do full sync if previously off
+            if (!this.IsVisibilityAvailable && newStatus)
+            {
+                this.SyncWithVisibility();
+            }
+
+            this.IsVisibilityAvailable = newStatus;
         }
 
         private Dictionary<string, VisibilityEntry> GetVisibilityPlayers(VisibilityType visibilityType)

@@ -89,22 +89,22 @@ namespace PlayerTrack
             ImGui.Spacing();
 
             // visibility
-            // ImGui.Text(Loc.Localize("VisibilityType", "Visibility"));
-            // ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
-            //
-            // ImGui.SetNextItemWidth(150f * ImGuiHelpers.GlobalScale);
-            // var visibilityType = (int)this.SelectedPlayer.VisibilityType;
-            // if (ImGui.Combo(
-            //     "###PlayerTrack_VisibilityType_Combo",
-            //     ref visibilityType,
-            //     Enum.GetNames(typeof(VisibilityType)),
-            //     Enum.GetNames(typeof(VisibilityType)).Length))
-            // {
-            //     this.SelectedPlayer.VisibilityType = (VisibilityType)visibilityType;
-            //     this.plugin.PlayerService.UpdatePlayerVisibilityType(this.SelectedPlayer);
-            // }
-            //
-            // ImGui.Spacing();
+            ImGui.Text(Loc.Localize("VisibilityType", "Visibility"));
+            ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
+
+            ImGui.SetNextItemWidth(150f * ImGuiHelpers.GlobalScale);
+            var visibilityType = (int)this.SelectedPlayer.VisibilityType;
+            if (ImGui.Combo(
+                "###PlayerTrack_VisibilityType_Combo",
+                ref visibilityType,
+                Enum.GetNames(typeof(VisibilityType)),
+                Enum.GetNames(typeof(VisibilityType)).Length))
+            {
+                this.SelectedPlayer.VisibilityType = (VisibilityType)visibilityType;
+                this.plugin.PlayerService.UpdatePlayerVisibilityType(this.SelectedPlayer);
+            }
+
+            ImGui.Spacing();
 
             // list color
             ImGui.Text(Loc.Localize("List", "List"));
@@ -161,17 +161,17 @@ namespace PlayerTrack
             }
 
             // fc name color
-            // ImGui.Spacing();
-            // ImGui.Text(Loc.Localize("OverrideFCNameColor", "Override FCNameColor"));
-            // ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
-            // var overrideFCNameColor = this.SelectedPlayer.OverrideFCNameColor;
-            // if (ImGui.Checkbox(
-            //     "###PlayerTrack_PlayerOverrideFCNameColor_Checkbox",
-            //     ref overrideFCNameColor))
-            // {
-            //     this.SelectedPlayer.OverrideFCNameColor = overrideFCNameColor;
-            //     this.plugin.PlayerService.UpdatePlayerOverrideFCNameColor(this.SelectedPlayer);
-            // }
+            ImGui.Spacing();
+            ImGui.Text(Loc.Localize("OverrideFCNameColor", "Override FCNameColor"));
+            ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
+            var overrideFCNameColor = this.SelectedPlayer.OverrideFCNameColor;
+            if (ImGui.Checkbox(
+                "###PlayerTrack_PlayerOverrideFCNameColor_Checkbox",
+                ref overrideFCNameColor))
+            {
+                this.SelectedPlayer.OverrideFCNameColor = overrideFCNameColor;
+                this.plugin.PlayerService.UpdatePlayerOverrideFCNameColor(this.SelectedPlayer);
+            }
 
             // alerts
             ImGui.Spacing();
