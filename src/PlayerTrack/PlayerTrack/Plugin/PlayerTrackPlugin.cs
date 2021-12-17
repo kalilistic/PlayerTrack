@@ -494,7 +494,7 @@ namespace PlayerTrack
             Chat.PluginPrintNotice(Loc.Localize("InstallThankYou", "Thank you for installing PlayerTrack!"));
             this.PrintHelpMessage();
             this.Configuration.FreshInstall = false;
-            this.Configuration.DataFixVersion = 2;
+            this.Configuration.DataFixVersion = 3;
             this.SaveConfig();
         }
     }

@@ -1319,11 +1319,35 @@ namespace PlayerTrack
                     player.LodestoneFailureCount = 0;
                     this.UpdateItem(player);
                 }
+                else if (this.plugin.Configuration.DataFixVersion == 2)
+                {
+                    if (player.LodestoneStatus == LodestoneStatus.Unverified &&
+                        (string.IsNullOrEmpty(player.Names.First()) || player.HomeWorlds.First().Key is 0 or 65534 or 65535))
+                    {
+                        Logger.LogInfo("V3: Pre-emptively failing lodestone check for " + player.Key);
+                        player.LodestoneStatus = LodestoneStatus.Failed;
+                        player.LodestoneLastUpdated = DateUtil.CurrentTime();
+                        player.LodestoneFailureCount = 99;
+                        this.UpdateItem(player);
+                    }
+                    else if (player.LodestoneStatus == LodestoneStatus.Failed &&
+                             player.Names.First().Length <= 7 &&
+                             player.LodestoneLastUpdated is > 1638111600000 and < 1639712229280)
+                    {
+                        Logger.LogInfo("V3: Resetting lodestone status for " + player.Key);
+                        player.LodestoneStatus = LodestoneStatus.Unverified;
+                        player.LodestoneId = 0;
+                        player.LodestoneLastUpdated = 0;
+                        player.LodestoneFailureCount = 0;
+                        this.UpdateItem(player);
+                    }
+                }
+
 
                 this.SubmitLodestoneRequest(player);
             }
 
-            this.plugin.Configuration.DataFixVersion = 2;
+            this.plugin.Configuration.DataFixVersion = 3;
             this.plugin.SaveConfig();
         }
 
