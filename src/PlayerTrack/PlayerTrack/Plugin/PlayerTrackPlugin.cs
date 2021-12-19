@@ -486,6 +486,12 @@ namespace PlayerTrack
         {
             if (!this.Configuration.FreshInstall)
             {
+                if (this.Configuration.LodestoneFailureDelay < 259200000)
+                {
+                    this.Configuration.LodestoneFailureDelay = 259200000;
+                    this.SaveConfig();
+                }
+
                 return;
             }
 

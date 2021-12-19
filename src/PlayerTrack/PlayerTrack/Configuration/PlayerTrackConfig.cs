@@ -28,7 +28,7 @@ namespace PlayerTrack
         /// <summary>
         /// Delay period for lodestone lookup for a particular character after failure.
         /// </summary>
-        public int LodestoneFailureDelay = 86400000;
+        public int LodestoneFailureDelay = 259200000;
 
         /// <summary>
         /// Delay period for reprocessing players for lodestone requests.

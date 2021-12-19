@@ -1343,7 +1343,6 @@ namespace PlayerTrack
                     }
                 }
 
-
                 this.SubmitLodestoneRequest(player);
             }
 
