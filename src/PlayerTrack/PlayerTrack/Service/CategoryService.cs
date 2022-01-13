@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Dalamud.DrunkenToad;
+
 namespace PlayerTrack
 {
     /// <summary>
@@ -22,6 +24,7 @@ namespace PlayerTrack
         {
             this.plugin = plugin;
             this.LoadCategories();
+            this.GetDefaultCategory();
         }
 
         /// <summary>
@@ -141,7 +144,18 @@ namespace PlayerTrack
         {
             lock (this.locker)
             {
-                return this.categories.First(pair => pair.Value.IsDefault).Value;
+                try
+                {
+                    return this.categories.First(pair => pair.Value.IsDefault).Value;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError(ex, "Failed to find default category so making one");
+                    var defaultCategory = new Category(this.NextID()) { Name = "Default", IsDefault = true };
+                    defaultCategory.SetSeName();
+                    this.AddCategory(defaultCategory);
+                    return defaultCategory;
+                }
             }
         }
 
