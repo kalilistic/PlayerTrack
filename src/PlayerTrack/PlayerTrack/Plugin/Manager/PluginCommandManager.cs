@@ -1,3 +1,4 @@
+using System.Runtime.Versioning;
 using Dalamud.Game.Command;
 
 namespace PlayerTrack
@@ -52,6 +53,11 @@ namespace PlayerTrack
         private void TogglePlayerTrack(string command, string arguments)
         {
             this.plugin.WindowManager.MainWindow!.IsOpen = !this.plugin.WindowManager.MainWindow!.IsOpen;
+            if (!this.plugin.Configuration.CombinedPlayerDetailWindow)
+            {
+                this.plugin.WindowManager.PlayerDetailWindow!.IsOpen = this.plugin.WindowManager.MainWindow!.IsOpen;
+            }
+
             if (this.plugin.WindowManager.MainWindow!.IsOpen)
             {
                 this.plugin.PlayerService.ResetViewPlayers();
