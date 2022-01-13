@@ -99,6 +99,10 @@
         "message": "Visibilité",
         "description": "ConfigWindow.CategoryConfig"
     },
+    "CategoryFCNameColor": {
+        "message": "FCNameColor",
+        "description": "ConfigWindow.CategoryConfig"
+    },
     "CategoryAction": {
         "message": "Actions",
         "description": "ConfigWindow.CategoryConfig"
@@ -309,6 +313,10 @@
     },
     "ShowHiddenPlayersInList_HelpMarker": {
         "message": "basculer l'affichage des joueurs masqués avec visibilité dans la liste",
+        "description": "ConfigWindow.IntegrationsConfig"
+    },
+    "FCNameColor": {
+        "message": "FCNameColor",
         "description": "ConfigWindow.IntegrationsConfig"
     },
     "SyncWithFCNameColor": {
