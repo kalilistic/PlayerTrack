@@ -1,4 +1,3 @@
-using System.Runtime.Versioning;
 using Dalamud.Game.Command;
 
 namespace PlayerTrack
