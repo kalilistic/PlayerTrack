@@ -310,7 +310,6 @@ namespace PlayerTrack
                 Logger.LogError(ex, "Failed to dispose plugin properly.");
             }
 
-            PluginInterface.Dispose();
             GC.SuppressFinalize(this);
         }
 
