@@ -24,7 +24,6 @@ namespace PlayerTrack
         {
             this.plugin = plugin;
             this.LoadCategories();
-            this.GetDefaultCategory();
         }
 
         /// <summary>
@@ -345,7 +344,15 @@ namespace PlayerTrack
         {
             lock (this.locker)
             {
-                return this.categories.Max(category => category.Value.Id) + 1;
+                try
+                {
+                    return this.categories.Max(category => category.Value.Id) + 1;
+                }
+                catch (Exception err)
+                {
+                    Logger.LogError(err, "Failed to get next ID so using 1.");
+                    return 1;
+                }
             }
         }
 

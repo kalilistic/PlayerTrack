@@ -227,7 +227,7 @@ namespace PlayerTrack
                                 },
                                 HomeWorlds = new List<KeyValuePair<uint, string>>
                                 {
-                                    new (character.HomeWorld.Id, character.HomeWorld.GameData.Name.ToString()),
+                                    new (character.HomeWorld.Id, character.HomeWorld.GameData?.Name.ToString() !),
                                 },
                                 FreeCompany = Player.DetermineFreeCompany(this.contentId, character.CompanyTag.ToString()),
                                 Customize = character.Customize,
