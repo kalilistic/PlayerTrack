@@ -1,722 +1,722 @@
 {
-    "SubMenuShowPlayerItem": {
-        "message": "Añadir/Mostrar Información",
-        "description": "ContextMenuManager..ctor"
-    },
-    "SubMenuOpenLodestoneItem": {
-        "message": "Abrir Lodestone",
-        "description": "ContextMenuManager..ctor"
-    },
-    "SetCategoryContextMenu": {
-        "message": "Establecer Categoría",
-        "description": "ContextMenuManager..ctor"
-    },
-    "None": {
-        "message": "Ninguno",
-        "description": "PlayerTrackPlugin.IconListNames"
-    },
-    "HelpMessage1": {
-        "message": "PlayerTrack te ayuda a mantener un registro de los jugadores con los que te encuentras y con los que haces contenido. Por defecto, sólo cubre contenido instanciado, pero puedes expandir o restringir ésto en los ajustes. Puedes ver todos los detalles de un jugador clicando en su nombre en el overlay. Aquí tambien puedes redactar notas y ponerle un icono/color personalizado.",
-        "description": "PlayerTrackPlugin.PrintHelpMessage"
-    },
-    "HelpMessage2": {
-        "message": "PlayerTrack utiliza la Lodestone para mantener los datos actualizados (por ejemplo, las transferencias de mundo). Si ésto ocurre, verás un indicador junto a su mundo hogar y podrás pasar el ratón por encima para ver su anterior residencia.",
-        "description": "PlayerTrackPlugin.PrintHelpMessage"
-    },
-    "HelpMessage3": {
-        "message": "Si necesitas ayuda, contacta en discord o abre una issue en GitHub. Si quieres colaborar traduciendo, puedes enviar actualizaciones en Crowdin.",
-        "description": "PlayerTrackPlugin.PrintHelpMessage"
-    },
-    "InstallThankYou": {
-        "message": "¡Gracias por instalar PlayerTrack!",
-        "description": "PlayerTrackPlugin.HandleFreshInstall"
-    },
-    "PlayerAlert": {
-        "message": "visto por última vez hace {0} días en {1}.",
-        "description": "PlayerService.AddOrUpdatePlayer"
-    },
-    "PlayerNameChangeAlert": {
-        "message": "ha cambiado su nombre, antes era {0}.",
-        "description": "PlayerService.UpdateLodestone"
-    },
-    "PlayerWorldTransferAlert": {
-        "message": "se ha transferido desde {0} a {1}.",
-        "description": "PlayerService.UpdateLodestone"
-    },
-    "DisplayConfig": {
-        "message": "Mostrar",
-        "description": "ConfigWindow.Draw"
-    },
-    "ProcessingConfig": {
-        "message": "Procesando",
-        "description": "ConfigWindow.Draw"
-    },
-    "IconConfig": {
-        "message": "Iconos",
-        "description": "ConfigWindow.Draw"
-    },
-    "NamePlateConfig": {
-        "message": "Placas de Nombre",
-        "description": "ConfigWindow.Draw"
-    },
-    "IntegrationConfig": {
-        "message": "Integraciones",
-        "description": "ConfigWindow.Draw"
-    },
-    "ContextMenuConfig": {
-        "message": "Menú contextual",
-        "description": "ConfigWindow.Draw"
-    },
-    "CategoryConfig": {
-        "message": "Categorías",
-        "description": "ConfigWindow.Draw"
-    },
-    "AddCategory": {
-        "message": "Añadir Categoría",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryName": {
-        "message": "Nombre",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryDefault": {
-        "message": "Por Defecto",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryAlerts": {
-        "message": "Alertas",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryList": {
-        "message": "Color en Lista/Icono",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryNamePlates": {
-        "message": "Placa de Nombre",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryVisibility": {
-        "message": "Visibilidad",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryFCNameColor": {
-        "message": "FCNameColor",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryAction": {
-        "message": "Acciones",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategorySendLastSeenAlert": {
-        "message": "manda una alerta con el cuándo y el dónde viste por última vez al jugador",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategorySendNameChangeAlert": {
-        "message": "manda una alerta avisando de un cambio de nombre cuando se detecte el cambio en la lodestone",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategorySendWorldTransferAlert": {
-        "message": "manda una alerta avisando de una transferencia de servidor cuando se detecte el cambio en la lodestone",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "Default": {
-        "message": "Predeterminado",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryNamePlateTitleEnabled": {
-        "message": "Habilitar títulos en la placa de nombre",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryNamePlateColor": {
-        "message": "Establecer color de la placa de nombre",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "IsHiddenInVisibility": {
-        "message": "anular o poner en lista blanca a los jugadores con visibilidad",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryFCNameColorOverride": {
-        "message": "anular la configuración de FCNameColor sobre la placa nombre para esta categoría añadiendo jugadores a la lista de ignorados",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "ShowAddShowInfoContextMenu": {
-        "message": "Mostrar opción de añadir/mostrar información",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "ShowAddShowInfoContextMenu_HelpMarker": {
-        "message": "muestra una opción para añadir/mostrar información en el menú contextual de los jugadores",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "ShowOpenLodestoneContextMenu": {
-        "message": "Mostrar opción de abrir perfil de la Lodestone",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "ShowOpenLodestoneContextMenu_HelpMarker": {
-        "message": "muestra una opción para abrir la lodestone en el menú contextual de los jugadores",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "ShowSetCategoryContextMenu": {
-        "message": "Mostrar opción de establecer categoría",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "ShowSetCategoryContextMenu_HelpMarker": {
-        "message": "muestra una opción para establecer categoría en el menú contextual de los jugadores",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "ShowContextPosition": {
-        "message": "Establecer posición de las opciones del menú contextual",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "ShowContextPosition_HelpMarker": {
-        "message": "mostrar sobre o debajo de la opción marcada en el menú.",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "ShowAbove": {
-        "message": "Mostrar sobre",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "ShowBelow": {
-        "message": "Mostrar debajo",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "ShowAboveList": {
-        "message": "Mostrar sobre",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "NoContextItems": {
-        "message": "Ninguno",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "ShowBelowList": {
-        "message": "Mostrar debajo",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "DupeContextBelow": {
-        "message": "¡Este elemento contextual ya está añadido!",
-        "description": "ConfigWindow.ContextMenuConfig"
-    },
-    "ShowFilterType": {
-        "message": "Mostrar tipo de filtro",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "ShowFilterType_HelpMarker": {
-        "message": "activa/desactiva el mostrar el tipo de filtro en la lista de jugadores",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "ShowSearchBox": {
-        "message": "Mostrar caja de búsqueda",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "ShowSearchBox_HelpMarker": {
-        "message": "activa/desactiva el mostrar la caja de búsqueda en la lista de jugadores",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "LockWindow": {
-        "message": "Bloquear ventana",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "LockWindow_HelpMarker": {
-        "message": "mantener bloqueados el tamaño y posición de la ventana principal",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "CombinedPlayerDetailWindow": {
-        "message": "Combinar ventanas",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "CombinedPlayerDetailWindow_HelpMarker": {
-        "message": "mostrar las ventanas combinadas o separadas como en la versión original",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "ShowTags": {
-        "message": "Mostrar etiquetas de jugador",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "ShowPlayerTags_HelpMarker": {
-        "message": "muestra etiquetas de jugador en la pantalla de detalles",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "SearchTags": {
-        "message": "Comprobar etiquetas al realizar una búsqueda",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "SearchTags_HelpMarker": {
-        "message": "incluye las etiquetas de jugador en la búsqueda",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "SearchType": {
-        "message": "Tipo de Búsqueda",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "SearchType_HelpMarker": {
-        "message": "tipo de búsqueda a realizar",
-        "description": "ConfigWindow.DisplayConfig"
-    },
-    "IconGlossary": {
-        "message": "Glosario",
-        "description": "ConfigWindow.IconConfig"
-    },
-    "Reset": {
-        "message": "Restablecer",
-        "description": "ConfigWindow.IconConfig"
-    },
-    "Icons": {
-        "message": "Añadir / Eliminar Iconos",
-        "description": "ConfigWindow.IconConfig"
-    },
-    "AddRemoveIcons": {
-        "message": "añade nuevos iconos usando una lista desplegable o elimínalos haciendo click en ellos",
-        "description": "ConfigWindow.IconConfig"
-    },
-    "AddIcon": {
-        "message": "Añadir",
-        "description": "ConfigWindow.IconConfig"
-    },
-    "DupeIcon": {
-        "message": "¡Este icono ya está añadido!",
-        "description": "ConfigWindow.IconConfig"
-    },
-    "Lodestone": {
-        "message": "Lodestone",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "SyncToLodestone": {
-        "message": "Sincronizar con Lodestone",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "SyncToLodestone_HelpMarker": {
-        "message": "extrae datos de la lodestone para llevar un registro de cambios de nombre o mundo",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "LodestoneLocale": {
-        "message": "Región de Lodestone",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "LodestoneLocale_HelpMarker": {
-        "message": "establece la región que se usará para el enlace al perfil de la lodestone",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "Visibility": {
-        "message": "Visibilidad",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "SyncWithVisibility": {
-        "message": "Sincronizar con visibilidad",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "SyncWithVisibility_HelpMarker": {
-        "message": "sincronizar con el plugin de visibilidad",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "ShowHiddenPlayersInList": {
-        "message": "Mostrar jugadores ocultos en la lista",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "ShowHiddenPlayersInList_HelpMarker": {
-        "message": "activar/desactivar mostrar jugadores ocultos con visibilidad en la lista",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "FCNameColor": {
-        "message": "FCNameColor",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "SyncWithFCNameColor": {
-        "message": "Sincronizar con FCNameColor",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "SyncWithFCNameColor_HelpMarker": {
-        "message": "sincronizar con el plugin FCNameColor",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "CreateDynamicFCCategories": {
-        "message": "Crear categorias FC dinamicas",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "CreateDynamicFCCategories_HelpMarker": {
-        "message": "crear categorías que añadan/eliminen automáticamente a los jugadores basandose en la lista actual del FC",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "ReassignPlayersFromExistingCategory": {
-        "message": "Reasignar jugadores de las categorías existentes",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "ReassignPlayersFromExistingCategory_HelpMarker": {
-        "message": "reasignar jugadores de las asignaciones de la categoria existente a la categoria FC y no solo a la categoria por defecto",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "NamePlateCompatabilityWarning": {
-        "message": "Advertencia: Algunos ajustes pueden no funcionar si usas otros plugins que modifiquen las placas de nombre.",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "ShowNamePlates": {
-        "message": "Mostrar Placas de Nombre",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "ShowNamePlates_HelpMarker": {
-        "message": "cuándo mostrar las placas de nombre personalizadas",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "RestrictNamePlatesInCombat": {
-        "message": "No mostrar placas de nombre en combate",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "RestrictNamePlatesInCombat_HelpMarker": {
-        "message": "dejar de mostrar las placas de nombre durante el combate sin importar otros ajustes",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "UseNamePlateColors": {
-        "message": "Usar color de placa de nombre",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "UseNamePlateColors_HelpMarker": {
-        "message": "sobreescribir el color normal de la placa de nombre con el color de la categoría/jugador",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "DisableNamePlateColorIfDead": {
-        "message": "Desactivar color de la placa de nombre si el jugador está muerto",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "DisableNamePlateColorIfDead_HelpMarker": {
-        "message": "deja de actualizar la placa de nombre de jugadores muertos para que sean más fáciles de identificar",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "DefaultNamePlateColorToListColor": {
-        "message": "Usar por defecto el color de la lista como color de placa de nombre",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "DefaultNamePlateColorToListColor_HelpMarker": {
-        "message": "usar el color de la lista en las placas de nombre por defecto salvo que se cambie",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "ChangeNamePlateTitle": {
-        "message": "Cambiar título de placa de nombre",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "ChangeNamePlateTitle_HelpMarker": {
-        "message": "sobreescribe la placa de nombre normal para usar el título o nombre de categoría",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "ForceNamePlateStyle": {
-        "message": "Forzar estilo consistente de placa de nombre",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "ForceNamePlateStyle_HelpMarker": {
-        "message": "fuerza estilo de placa de nombre LowTitleNoFc el cual es más consistente\npero esconde la FC y no se lleva bien con otros plugins",
-        "description": "ConfigWindow.NamePlateConfig"
-    },
-    "RestrictInCombat": {
-        "message": "No procesar en combate",
-        "description": "ConfigWindow.ProcessingConfig"
-    },
-    "RestrictInCombat_HelpMarker": {
-        "message": "dejar de procesar datos mientras se está en combate",
-        "description": "ConfigWindow.ProcessingConfig"
-    },
-    "RestrictAddUpdatePlayers": {
-        "message": "Añadir / Actualizar Jugadores",
-        "description": "ConfigWindow.ProcessingConfig"
-    },
-    "RestrictAddUpdatePlayers_HelpMarker": {
-        "message": "cuándo añadir o actualizar jugadores en tu zona",
-        "description": "ConfigWindow.ProcessingConfig"
-    },
-    "RestrictAddEncounters": {
-        "message": "Añadir Nuevos Encuentros",
-        "description": "ConfigWindow.ProcessingConfig"
-    },
-    "RestrictAddEncounters_HelpMarker": {
-        "message": "cuándo añadir nuevos encuentros (nueva fila en la pestaña encuentros). No se recomienda usar \"siempre\" pues hará mucho más pesado el archivo.",
-        "description": "ConfigWindow.ProcessingConfig"
-    },
-    "NewEncounterThreshold": {
-        "message": "Umbral de Nuevos Encuentros (minutos)",
-        "description": "ConfigWindow.ProcessingConfig"
-    },
-    "NewEncounterThreshold_HelpMarker": {
-        "message": "umbral para registrar un nuevo encuentro con un jugador en el mismo lugar",
-        "description": "ConfigWindow.ProcessingConfig"
-    },
-    "TargetPlayer": {
-        "message": "Objetivo",
-        "description": "MainWindow.PlayerList"
-    },
-    "FocusTargetPlayer": {
-        "message": "Focus Target",
-        "description": "MainWindow.PlayerList"
-    },
-    "ExaminePlayer": {
-        "message": "Examinar",
-        "description": "MainWindow.PlayerList"
-    },
-    "Category": {
-        "message": "Categoría",
-        "description": "MainWindow.PlayerList"
-    },
-    "Delete": {
-        "message": "Eliminar",
-        "description": "MainWindow.PlayerList"
-    },
-    "SearchHint": {
-        "message": "búsqueda",
-        "description": "MainWindow.PlayerListControls"
-    },
-    "AddPlayerMenuItem": {
-        "message": "Añadir Jugador",
-        "description": "MainWindow.PlayerListControls"
-    },
-    "OpenLodestoneService": {
-        "message": "Abrir Lodestone",
-        "description": "MainWindow.PlayerListControls"
-    },
-    "OpenSettings": {
-        "message": "Abrir Ajustes",
-        "description": "MainWindow.PlayerListControls"
-    },
-    "MigrationInfo": {
-        "message": "¡Gracias por actualizar PlayerTrack! Es necesario migrar tus datos al formato nuevo. Ésto sólo se realizará una vez pero puede tardar un tiempo dependiendo de cuántos datos tengas. Por favor, sé paciente y no interrumpas la migración o te arriesgas a perder datos. Puedes seguir jugando de manera normal, esta ventana se cerrará automáticamente cuando el proceso termine.",
-        "description": "MigrationWindow.Draw"
-    },
-    "DeleteConfirmationModalTitle": {
-        "message": "Borrar",
-        "description": "ModalWindow.Draw"
-    },
-    "DeleteConfirmationModalContent": {
-        "message": "¿Estás seguro de que deseas eliminarlo?",
-        "description": "ModalWindow.Draw"
-    },
-    "OK": {
-        "message": "Ok",
-        "description": "ModalWindow.Draw"
-    },
-    "Cancel": {
-        "message": "Cancelar",
-        "description": "ModalWindow.Draw"
-    },
-    "IconGlossaryModalTitle": {
-        "message": "Glosario de Iconos",
-        "description": "ModalWindow.Draw"
-    },
-    "AddPlayerModalContent": {
-        "message": "Añadir jugador manualmente a la lista.",
-        "description": "Panel.AddPlayer"
-    },
-    "PlayerNameAddHint": {
-        "message": "nombre del jugador",
-        "description": "Panel.AddPlayer"
-    },
-    "AddPlayerModalButton": {
-        "message": "Añadir",
-        "description": "Panel.AddPlayer"
-    },
-    "InvalidPlayerName": {
-        "message": "Ese no es un nombre de jugador válido. Prueba de nuevo.",
-        "description": "Panel.AddPlayer"
-    },
-    "DuplicatePlayer": {
-        "message": "¡Este jugador ya existe en tu lista!",
-        "description": "Panel.AddPlayer"
-    },
-    "LodestoneStatus": {
-        "message": "Estado",
-        "description": "Panel.Lodestone"
-    },
-    "LodestoneAvailable": {
-        "message": "Disponible",
-        "description": "Panel.Lodestone"
-    },
-    "LodestoneUnavailable": {
-        "message": "No disponible",
-        "description": "Panel.Lodestone"
-    },
-    "LodestoneTotalRequests": {
-        "message": "Número de Solicitudes",
-        "description": "Panel.Lodestone"
-    },
-    "LodestoneRequestsInQueue": {
-        "message": "Solicitudes en Cola",
-        "description": "Panel.Lodestone"
-    },
-    "LodestoneNoRequests": {
-        "message": "No hay solicitudes a la lodestone pendientes.",
-        "description": "Panel.Lodestone"
-    },
-    "Summary": {
-        "message": "Resumen",
-        "description": "Panel.PlayerDetail"
-    },
-    "Encounters": {
-        "message": "Encuentros",
-        "description": "Panel.PlayerDetail"
-    },
-    "Appearance": {
-        "message": "Apariencia",
-        "description": "Panel.PlayerDetail"
-    },
-    "Display": {
-        "message": "Visualización",
-        "description": "Panel.PlayerDetail"
-    },
-    "Gender": {
-        "message": "Género",
-        "description": "Panel.PlayerCustomize"
-    },
-    "GenderFemale": {
-        "message": "Mujer",
-        "description": "Panel.PlayerCustomize"
-    },
-    "GenderMale": {
-        "message": "Hombre",
-        "description": "Panel.PlayerCustomize"
-    },
-    "Race": {
-        "message": "Raza",
-        "description": "Panel.PlayerCustomize"
-    },
-    "Tribe": {
-        "message": "Tribu",
-        "description": "Panel.PlayerCustomize"
-    },
-    "Height": {
-        "message": "Altura",
-        "description": "Panel.PlayerCustomize"
-    },
-    "PlayerHeightValue": {
-        "message": "{0} pulgadas",
-        "description": "Panel.PlayerCustomize"
-    },
-    "Copy": {
-        "message": "Copiar",
-        "description": "Panel.PlayerCustomize"
-    },
-    "NoAppearance": {
-        "message": "No se han encontrado datos de apariencia para este jugador.",
-        "description": "Panel.PlayerCustomize"
-    },
-    "NoAppearanceExplanation": {
-        "message": "Ésto puede ocurrir para jugadores añadidos manualmente o si el jugador ha sido migrado desde una versión anterior del plugin. La próxima vez que encuentres a este jugador, sus datos de apariencia se actualizarán.",
-        "description": "Panel.PlayerCustomize"
-    },
-    "PlayerCategory": {
-        "message": "Categoría",
-        "description": "Panel.PlayerDisplay"
-    },
-    "OverrideNote": {
-        "message": "Esta configuración sobreescribirá la configuración de categoría.",
-        "description": "Panel.PlayerDisplay"
-    },
-    "Title": {
-        "message": "Título",
-        "description": "Panel.PlayerDisplay"
-    },
-    "Icon": {
-        "message": "Icono",
-        "description": "Panel.PlayerDisplay"
-    },
-    "VisibilityType": {
-        "message": "Visibilidad",
-        "description": "Panel.PlayerDisplay"
-    },
-    "List": {
-        "message": "Lista",
-        "description": "Panel.PlayerDisplay"
-    },
-    "Nameplate": {
-        "message": "Placa de Nombre",
-        "description": "Panel.PlayerDisplay"
-    },
-    "OverrideFCNameColor": {
-        "message": "Anular FCNameColor",
-        "description": "Panel.PlayerDisplay"
-    },
-    "Alerts": {
-        "message": "Alertas",
-        "description": "Panel.PlayerDisplay"
-    },
-    "Time": {
-        "message": "Hora",
-        "description": "Panel.PlayerEncounters"
-    },
-    "Duration": {
-        "message": "Duración",
-        "description": "Panel.PlayerEncounters"
-    },
-    "Job": {
-        "message": "Oficio",
-        "description": "Panel.PlayerEncounters"
-    },
-    "Lvl": {
-        "message": "Nvl",
-        "description": "Panel.PlayerEncounters"
-    },
-    "Location": {
-        "message": "Ubicación",
-        "description": "Panel.PlayerEncounters"
-    },
-    "NoEncounters": {
-        "message": "No hay encuentros con este jugador.",
-        "description": "Panel.PlayerEncounters"
-    },
-    "NoEncountersExplanation": {
-        "message": "Ésto puede ocurrir con personajes añadidos manualmente o si se han borrado todos los encuentros.",
-        "description": "Panel.PlayerEncounters"
-    },
-    "PlayerInfo": {
-        "message": "Información del jugador",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerStats": {
-        "message": "Estadísticas del jugador",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerName": {
-        "message": "Nombre",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerPreviousNames": {
-        "message": "Anteriormente conocido como {0}",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerFirstSeen": {
-        "message": "Visto por primera vez",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerHomeworld": {
-        "message": "Mundo principal",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerPreviousWorlds": {
-        "message": "Anteriormente en {0}",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerLastSeen": {
-        "message": "Visto por última vez",
-        "description": "Panel.PlayerSummary"
-    },
-    "FreeCompany": {
-        "message": "Free Company",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerLastLocation": {
-        "message": "Última Ubicación",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerLodestone": {
-        "message": "Lodestone",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerSeenCount": {
-        "message": "Contador de encuentros",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerTags": {
-        "message": "Etiquetas",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerNotes": {
-        "message": "Comentarios",
-        "description": "Panel.PlayerSummary"
-    },
-    "NoPlayerSelected": {
-        "message": "No se ha seleccionado ningún jugador.",
-        "description": "PlayerDetailWindow.Draw"
-    }
+  "SubMenuShowPlayerItem": {
+    "message": "Añadir/Mostrar Información",
+    "description": "ContextMenuManager..ctor"
+  },
+  "SubMenuOpenLodestoneItem": {
+    "message": "Abrir Lodestone",
+    "description": "ContextMenuManager..ctor"
+  },
+  "SetCategoryContextMenu": {
+    "message": "Establecer Categoría",
+    "description": "ContextMenuManager..ctor"
+  },
+  "None": {
+    "message": "Ninguno",
+    "description": "PlayerTrackPlugin.IconListNames"
+  },
+  "HelpMessage1": {
+    "message": "PlayerTrack te ayuda a mantener un registro de los jugadores con los que te encuentras y con los que haces contenido. Por defecto, sólo cubre contenido instanciado, pero puedes expandir o restringir ésto en los ajustes. Puedes ver todos los detalles de un jugador clicando en su nombre en el overlay. Aquí tambien puedes redactar notas y ponerle un icono/color personalizado.",
+    "description": "PlayerTrackPlugin.PrintHelpMessage"
+  },
+  "HelpMessage2": {
+    "message": "PlayerTrack utiliza la Lodestone para mantener los datos actualizados (por ejemplo, las transferencias de mundo). Si ésto ocurre, verás un indicador junto a su mundo hogar y podrás pasar el ratón por encima para ver su anterior residencia.",
+    "description": "PlayerTrackPlugin.PrintHelpMessage"
+  },
+  "HelpMessage3": {
+    "message": "Si necesitas ayuda, contacta en discord o abre una issue en GitHub. Si quieres colaborar traduciendo, puedes enviar actualizaciones en Crowdin.",
+    "description": "PlayerTrackPlugin.PrintHelpMessage"
+  },
+  "InstallThankYou": {
+    "message": "¡Gracias por instalar PlayerTrack!",
+    "description": "PlayerTrackPlugin.HandleFreshInstall"
+  },
+  "PlayerAlert": {
+    "message": "visto por última vez hace {0} días en {1}.",
+    "description": "PlayerService.AddOrUpdatePlayer"
+  },
+  "PlayerNameChangeAlert": {
+    "message": "ha cambiado su nombre, antes era {0}.",
+    "description": "PlayerService.UpdateLodestone"
+  },
+  "PlayerWorldTransferAlert": {
+    "message": "se ha transferido desde {0} a {1}.",
+    "description": "PlayerService.UpdateLodestone"
+  },
+  "DisplayConfig": {
+    "message": "Mostrar",
+    "description": "ConfigWindow.Draw"
+  },
+  "ProcessingConfig": {
+    "message": "Procesando",
+    "description": "ConfigWindow.Draw"
+  },
+  "IconConfig": {
+    "message": "Iconos",
+    "description": "ConfigWindow.Draw"
+  },
+  "NamePlateConfig": {
+    "message": "Placas de Nombre",
+    "description": "ConfigWindow.Draw"
+  },
+  "IntegrationConfig": {
+    "message": "Integraciones",
+    "description": "ConfigWindow.Draw"
+  },
+  "ContextMenuConfig": {
+    "message": "Menú contextual",
+    "description": "ConfigWindow.Draw"
+  },
+  "CategoryConfig": {
+    "message": "Categorías",
+    "description": "ConfigWindow.Draw"
+  },
+  "AddCategory": {
+    "message": "Añadir Categoría",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryName": {
+    "message": "Nombre",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryDefault": {
+    "message": "Por Defecto",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryAlerts": {
+    "message": "Alertas",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryList": {
+    "message": "Color en Lista/Icono",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryNamePlates": {
+    "message": "Placa de Nombre",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryVisibility": {
+    "message": "Visibilidad",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryFCNameColor": {
+    "message": "FCNameColor",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryAction": {
+    "message": "Acciones",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategorySendLastSeenAlert": {
+    "message": "manda una alerta con el cuándo y el dónde viste por última vez al jugador",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategorySendNameChangeAlert": {
+    "message": "manda una alerta avisando de un cambio de nombre cuando se detecte el cambio en la lodestone",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategorySendWorldTransferAlert": {
+    "message": "manda una alerta avisando de una transferencia de servidor cuando se detecte el cambio en la lodestone",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "Default": {
+    "message": "Predeterminado",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryNamePlateTitleEnabled": {
+    "message": "Habilitar títulos en la placa de nombre",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryNamePlateColor": {
+    "message": "Establecer color de la placa de nombre",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "IsHiddenInVisibility": {
+    "message": "anular o poner en lista blanca a los jugadores con visibilidad",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryFCNameColorOverride": {
+    "message": "anular la configuración de FCNameColor sobre la placa nombre para esta categoría añadiendo jugadores a la lista de ignorados",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "ShowAddShowInfoContextMenu": {
+    "message": "Mostrar opción de añadir/mostrar información",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "ShowAddShowInfoContextMenu_HelpMarker": {
+    "message": "muestra una opción para añadir/mostrar información en el menú contextual de los jugadores",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "ShowOpenLodestoneContextMenu": {
+    "message": "Mostrar opción de abrir perfil de la Lodestone",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "ShowOpenLodestoneContextMenu_HelpMarker": {
+    "message": "muestra una opción para abrir la lodestone en el menú contextual de los jugadores",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "ShowSetCategoryContextMenu": {
+    "message": "Mostrar opción de establecer categoría",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "ShowSetCategoryContextMenu_HelpMarker": {
+    "message": "muestra una opción para establecer categoría en el menú contextual de los jugadores",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "ShowContextPosition": {
+    "message": "Establecer posición de las opciones del menú contextual",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "ShowContextPosition_HelpMarker": {
+    "message": "mostrar sobre o debajo de la opción marcada en el menú.",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "ShowAbove": {
+    "message": "Mostrar sobre",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "ShowBelow": {
+    "message": "Mostrar debajo",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "ShowAboveList": {
+    "message": "Mostrar sobre",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "NoContextItems": {
+    "message": "Ninguno",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "ShowBelowList": {
+    "message": "Mostrar debajo",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "DupeContextBelow": {
+    "message": "¡Este elemento contextual ya está añadido!",
+    "description": "ConfigWindow.ContextMenuConfig"
+  },
+  "ShowFilterType": {
+    "message": "Mostrar tipo de filtro",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "ShowFilterType_HelpMarker": {
+    "message": "activa/desactiva el mostrar el tipo de filtro en la lista de jugadores",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "ShowSearchBox": {
+    "message": "Mostrar caja de búsqueda",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "ShowSearchBox_HelpMarker": {
+    "message": "activa/desactiva el mostrar la caja de búsqueda en la lista de jugadores",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "LockWindow": {
+    "message": "Bloquear ventana",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "LockWindow_HelpMarker": {
+    "message": "mantener bloqueados el tamaño y posición de la ventana principal",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "CombinedPlayerDetailWindow": {
+    "message": "Combinar ventanas",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "CombinedPlayerDetailWindow_HelpMarker": {
+    "message": "mostrar las ventanas combinadas o separadas como en la versión original",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "ShowTags": {
+    "message": "Mostrar etiquetas de jugador",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "ShowPlayerTags_HelpMarker": {
+    "message": "muestra etiquetas de jugador en la pantalla de detalles",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "SearchTags": {
+    "message": "Comprobar etiquetas al realizar una búsqueda",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "SearchTags_HelpMarker": {
+    "message": "incluye las etiquetas de jugador en la búsqueda",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "SearchType": {
+    "message": "Tipo de Búsqueda",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "SearchType_HelpMarker": {
+    "message": "tipo de búsqueda a realizar",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "IconGlossary": {
+    "message": "Glosario",
+    "description": "ConfigWindow.IconConfig"
+  },
+  "Reset": {
+    "message": "Restablecer",
+    "description": "ConfigWindow.IconConfig"
+  },
+  "Icons": {
+    "message": "Añadir / Eliminar Iconos",
+    "description": "ConfigWindow.IconConfig"
+  },
+  "AddRemoveIcons": {
+    "message": "añade nuevos iconos usando una lista desplegable o elimínalos haciendo click en ellos",
+    "description": "ConfigWindow.IconConfig"
+  },
+  "AddIcon": {
+    "message": "Añadir",
+    "description": "ConfigWindow.IconConfig"
+  },
+  "DupeIcon": {
+    "message": "¡Este icono ya está añadido!",
+    "description": "ConfigWindow.IconConfig"
+  },
+  "Lodestone": {
+    "message": "Lodestone",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "SyncToLodestone": {
+    "message": "Sincronizar con Lodestone",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "SyncToLodestone_HelpMarker": {
+    "message": "extrae datos de la lodestone para llevar un registro de cambios de nombre o mundo",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "LodestoneLocale": {
+    "message": "Región de Lodestone",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "LodestoneLocale_HelpMarker": {
+    "message": "establece la región que se usará para el enlace al perfil de la lodestone",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "Visibility": {
+    "message": "Visibilidad",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "SyncWithVisibility": {
+    "message": "Sincronizar con visibilidad",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "SyncWithVisibility_HelpMarker": {
+    "message": "sincronizar con el plugin de visibilidad",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "ShowHiddenPlayersInList": {
+    "message": "Mostrar jugadores ocultos en la lista",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "ShowHiddenPlayersInList_HelpMarker": {
+    "message": "activar/desactivar mostrar jugadores ocultos con visibilidad en la lista",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "FCNameColor": {
+    "message": "FCNameColor",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "SyncWithFCNameColor": {
+    "message": "Sincronizar con FCNameColor",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "SyncWithFCNameColor_HelpMarker": {
+    "message": "sincronizar con el plugin FCNameColor",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "CreateDynamicFCCategories": {
+    "message": "Crear categorias FC dinamicas",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "CreateDynamicFCCategories_HelpMarker": {
+    "message": "crear categorías que añadan/eliminen automáticamente a los jugadores basandose en la lista actual del FC",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "ReassignPlayersFromExistingCategory": {
+    "message": "Reasignar jugadores de las categorías existentes",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "ReassignPlayersFromExistingCategory_HelpMarker": {
+    "message": "reasignar jugadores de las asignaciones de la categoria existente a la categoria FC y no solo a la categoria por defecto",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "NamePlateCompatabilityWarning": {
+    "message": "Advertencia: Algunos ajustes pueden no funcionar si usas otros plugins que modifiquen las placas de nombre.",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "ShowNamePlates": {
+    "message": "Mostrar Placas de Nombre",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "ShowNamePlates_HelpMarker": {
+    "message": "cuándo mostrar las placas de nombre personalizadas",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "RestrictNamePlatesInCombat": {
+    "message": "No mostrar placas de nombre en combate",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "RestrictNamePlatesInCombat_HelpMarker": {
+    "message": "dejar de mostrar las placas de nombre durante el combate sin importar otros ajustes",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "UseNamePlateColors": {
+    "message": "Usar color de placa de nombre",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "UseNamePlateColors_HelpMarker": {
+    "message": "sobreescribir el color normal de la placa de nombre con el color de la categoría/jugador",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "DisableNamePlateColorIfDead": {
+    "message": "Desactivar color de la placa de nombre si el jugador está muerto",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "DisableNamePlateColorIfDead_HelpMarker": {
+    "message": "deja de actualizar la placa de nombre de jugadores muertos para que sean más fáciles de identificar",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "DefaultNamePlateColorToListColor": {
+    "message": "Usar por defecto el color de la lista como color de placa de nombre",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "DefaultNamePlateColorToListColor_HelpMarker": {
+    "message": "usar el color de la lista en las placas de nombre por defecto salvo que se cambie",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "ChangeNamePlateTitle": {
+    "message": "Cambiar título de placa de nombre",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "ChangeNamePlateTitle_HelpMarker": {
+    "message": "sobreescribe la placa de nombre normal para usar el título o nombre de categoría",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "ForceNamePlateStyle": {
+    "message": "Forzar estilo consistente de placa de nombre",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "ForceNamePlateStyle_HelpMarker": {
+    "message": "fuerza estilo de placa de nombre LowTitleNoFc el cual es más consistente\npero esconde la FC y no se lleva bien con otros plugins",
+    "description": "ConfigWindow.NamePlateConfig"
+  },
+  "RestrictInCombat": {
+    "message": "No procesar en combate",
+    "description": "ConfigWindow.ProcessingConfig"
+  },
+  "RestrictInCombat_HelpMarker": {
+    "message": "dejar de procesar datos mientras se está en combate",
+    "description": "ConfigWindow.ProcessingConfig"
+  },
+  "RestrictAddUpdatePlayers": {
+    "message": "Añadir / Actualizar Jugadores",
+    "description": "ConfigWindow.ProcessingConfig"
+  },
+  "RestrictAddUpdatePlayers_HelpMarker": {
+    "message": "cuándo añadir o actualizar jugadores en tu zona",
+    "description": "ConfigWindow.ProcessingConfig"
+  },
+  "RestrictAddEncounters": {
+    "message": "Añadir Nuevos Encuentros",
+    "description": "ConfigWindow.ProcessingConfig"
+  },
+  "RestrictAddEncounters_HelpMarker": {
+    "message": "cuándo añadir nuevos encuentros (nueva fila en la pestaña encuentros). No se recomienda usar \"siempre\" pues hará mucho más pesado el archivo.",
+    "description": "ConfigWindow.ProcessingConfig"
+  },
+  "NewEncounterThreshold": {
+    "message": "Umbral de Nuevos Encuentros (minutos)",
+    "description": "ConfigWindow.ProcessingConfig"
+  },
+  "NewEncounterThreshold_HelpMarker": {
+    "message": "umbral para registrar un nuevo encuentro con un jugador en el mismo lugar",
+    "description": "ConfigWindow.ProcessingConfig"
+  },
+  "TargetPlayer": {
+    "message": "Objetivo",
+    "description": "MainWindow.PlayerList"
+  },
+  "FocusTargetPlayer": {
+    "message": "Focus Target",
+    "description": "MainWindow.PlayerList"
+  },
+  "ExaminePlayer": {
+    "message": "Examinar",
+    "description": "MainWindow.PlayerList"
+  },
+  "Category": {
+    "message": "Categoría",
+    "description": "MainWindow.PlayerList"
+  },
+  "Delete": {
+    "message": "Eliminar",
+    "description": "MainWindow.PlayerList"
+  },
+  "SearchHint": {
+    "message": "búsqueda",
+    "description": "MainWindow.PlayerListControls"
+  },
+  "AddPlayerMenuItem": {
+    "message": "Añadir Jugador",
+    "description": "MainWindow.PlayerListControls"
+  },
+  "OpenLodestoneService": {
+    "message": "Abrir Lodestone",
+    "description": "MainWindow.PlayerListControls"
+  },
+  "OpenSettings": {
+    "message": "Abrir Ajustes",
+    "description": "MainWindow.PlayerListControls"
+  },
+  "MigrationInfo": {
+    "message": "¡Gracias por actualizar PlayerTrack! Es necesario migrar tus datos al formato nuevo. Ésto sólo se realizará una vez pero puede tardar un tiempo dependiendo de cuántos datos tengas. Por favor, sé paciente y no interrumpas la migración o te arriesgas a perder datos. Puedes seguir jugando de manera normal, esta ventana se cerrará automáticamente cuando el proceso termine.",
+    "description": "MigrationWindow.Draw"
+  },
+  "DeleteConfirmationModalTitle": {
+    "message": "Borrar",
+    "description": "ModalWindow.Draw"
+  },
+  "DeleteConfirmationModalContent": {
+    "message": "¿Estás seguro de que deseas eliminarlo?",
+    "description": "ModalWindow.Draw"
+  },
+  "OK": {
+    "message": "Ok",
+    "description": "ModalWindow.Draw"
+  },
+  "Cancel": {
+    "message": "Cancelar",
+    "description": "ModalWindow.Draw"
+  },
+  "IconGlossaryModalTitle": {
+    "message": "Glosario de Iconos",
+    "description": "ModalWindow.Draw"
+  },
+  "AddPlayerModalContent": {
+    "message": "Añadir jugador manualmente a la lista.",
+    "description": "Panel.AddPlayer"
+  },
+  "PlayerNameAddHint": {
+    "message": "nombre del jugador",
+    "description": "Panel.AddPlayer"
+  },
+  "AddPlayerModalButton": {
+    "message": "Añadir",
+    "description": "Panel.AddPlayer"
+  },
+  "InvalidPlayerName": {
+    "message": "Ese no es un nombre de jugador válido. Prueba de nuevo.",
+    "description": "Panel.AddPlayer"
+  },
+  "DuplicatePlayer": {
+    "message": "¡Este jugador ya existe en tu lista!",
+    "description": "Panel.AddPlayer"
+  },
+  "LodestoneStatus": {
+    "message": "Estado",
+    "description": "Panel.Lodestone"
+  },
+  "LodestoneAvailable": {
+    "message": "Disponible",
+    "description": "Panel.Lodestone"
+  },
+  "LodestoneUnavailable": {
+    "message": "No disponible",
+    "description": "Panel.Lodestone"
+  },
+  "LodestoneTotalRequests": {
+    "message": "Número de Solicitudes",
+    "description": "Panel.Lodestone"
+  },
+  "LodestoneRequestsInQueue": {
+    "message": "Solicitudes en Cola",
+    "description": "Panel.Lodestone"
+  },
+  "LodestoneNoRequests": {
+    "message": "No hay solicitudes a la lodestone pendientes.",
+    "description": "Panel.Lodestone"
+  },
+  "Summary": {
+    "message": "Resumen",
+    "description": "Panel.PlayerDetail"
+  },
+  "Encounters": {
+    "message": "Encuentros",
+    "description": "Panel.PlayerDetail"
+  },
+  "Appearance": {
+    "message": "Apariencia",
+    "description": "Panel.PlayerDetail"
+  },
+  "Display": {
+    "message": "Visualización",
+    "description": "Panel.PlayerDetail"
+  },
+  "Gender": {
+    "message": "Género",
+    "description": "Panel.PlayerCustomize"
+  },
+  "GenderFemale": {
+    "message": "Mujer",
+    "description": "Panel.PlayerCustomize"
+  },
+  "GenderMale": {
+    "message": "Hombre",
+    "description": "Panel.PlayerCustomize"
+  },
+  "Race": {
+    "message": "Raza",
+    "description": "Panel.PlayerCustomize"
+  },
+  "Tribe": {
+    "message": "Tribu",
+    "description": "Panel.PlayerCustomize"
+  },
+  "Height": {
+    "message": "Altura",
+    "description": "Panel.PlayerCustomize"
+  },
+  "PlayerHeightValue": {
+    "message": "{0} pulgadas",
+    "description": "Panel.PlayerCustomize"
+  },
+  "Copy": {
+    "message": "Copiar",
+    "description": "Panel.PlayerCustomize"
+  },
+  "NoAppearance": {
+    "message": "No se han encontrado datos de apariencia para este jugador.",
+    "description": "Panel.PlayerCustomize"
+  },
+  "NoAppearanceExplanation": {
+    "message": "Ésto puede ocurrir para jugadores añadidos manualmente o si el jugador ha sido migrado desde una versión anterior del plugin. La próxima vez que encuentres a este jugador, sus datos de apariencia se actualizarán.",
+    "description": "Panel.PlayerCustomize"
+  },
+  "PlayerCategory": {
+    "message": "Categoría",
+    "description": "Panel.PlayerDisplay"
+  },
+  "OverrideNote": {
+    "message": "Esta configuración sobreescribirá la configuración de categoría.",
+    "description": "Panel.PlayerDisplay"
+  },
+  "Title": {
+    "message": "Título",
+    "description": "Panel.PlayerDisplay"
+  },
+  "Icon": {
+    "message": "Icono",
+    "description": "Panel.PlayerDisplay"
+  },
+  "VisibilityType": {
+    "message": "Visibilidad",
+    "description": "Panel.PlayerDisplay"
+  },
+  "List": {
+    "message": "Lista",
+    "description": "Panel.PlayerDisplay"
+  },
+  "Nameplate": {
+    "message": "Placa de Nombre",
+    "description": "Panel.PlayerDisplay"
+  },
+  "OverrideFCNameColor": {
+    "message": "Anular FCNameColor",
+    "description": "Panel.PlayerDisplay"
+  },
+  "Alerts": {
+    "message": "Alertas",
+    "description": "Panel.PlayerDisplay"
+  },
+  "Time": {
+    "message": "Hora",
+    "description": "Panel.PlayerEncounters"
+  },
+  "Duration": {
+    "message": "Duración",
+    "description": "Panel.PlayerEncounters"
+  },
+  "Job": {
+    "message": "Oficio",
+    "description": "Panel.PlayerEncounters"
+  },
+  "Lvl": {
+    "message": "Nvl",
+    "description": "Panel.PlayerEncounters"
+  },
+  "Location": {
+    "message": "Ubicación",
+    "description": "Panel.PlayerEncounters"
+  },
+  "NoEncounters": {
+    "message": "No hay encuentros con este jugador.",
+    "description": "Panel.PlayerEncounters"
+  },
+  "NoEncountersExplanation": {
+    "message": "Ésto puede ocurrir con personajes añadidos manualmente o si se han borrado todos los encuentros.",
+    "description": "Panel.PlayerEncounters"
+  },
+  "PlayerInfo": {
+    "message": "Información del jugador",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerStats": {
+    "message": "Estadísticas del jugador",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerName": {
+    "message": "Nombre",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerPreviousNames": {
+    "message": "Anteriormente conocido como {0}",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerFirstSeen": {
+    "message": "Visto por primera vez",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerHomeworld": {
+    "message": "Mundo principal",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerPreviousWorlds": {
+    "message": "Anteriormente en {0}",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerLastSeen": {
+    "message": "Visto por última vez",
+    "description": "Panel.PlayerSummary"
+  },
+  "FreeCompany": {
+    "message": "Free Company",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerLastLocation": {
+    "message": "Última Ubicación",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerLodestone": {
+    "message": "Lodestone",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerSeenCount": {
+    "message": "Contador de encuentros",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerTags": {
+    "message": "Etiquetas",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerNotes": {
+    "message": "Comentarios",
+    "description": "Panel.PlayerSummary"
+  },
+  "NoPlayerSelected": {
+    "message": "No se ha seleccionado ningún jugador.",
+    "description": "PlayerDetailWindow.Draw"
+  }
 }
