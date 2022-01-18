@@ -87,9 +87,16 @@ namespace PlayerTrack
         {
             lock (this.locker)
             {
-                this.plugin.PlayerService.RemoveCurrentPlayers();
-                this.playerList.Clear();
-                this.actorTable = null;
+                try
+                {
+                    this.plugin.PlayerService.RemoveCurrentPlayers();
+                    this.playerList.Clear();
+                    this.actorTable = null;
+                }
+                catch (Exception err)
+                {
+                    Logger.LogError(err, "Failed to handle logout event.");
+                }
             }
         }
 
