@@ -1,150 +1,150 @@
 {
-    "SubMenuShowPlayerItem": {
-        "message": "Aggiungi/Mostra Informazioni",
-        "description": "ContextMenuManager..ctor"
-    },
-    "SubMenuOpenLodestoneItem": {
-        "message": "Apri Lodestone",
-        "description": "ContextMenuManager..ctor"
-    },
-    "SetCategoryContextMenu": {
-        "message": "Imposta categoria",
-        "description": "ContextMenuManager..ctor"
-    },
-    "HelpMessage1": {
-        "message": "PlayerTrack ti aiuta a tenere traccia di chi incontri e del contenuto che avete giocato insieme. Per default è solo il contenuto istanziato, ma si può espandere o restringere nelle impostazioni. Puoi vedere tutti i dettagli di un giocatore cliccando il suo nome nell'overlay. Qui puoi anche aggiungere delle note ed impostare un'icona ed un colore personalizzati.",
-        "description": "PlayerTrackPlugin.PrintHelpMessage"
-    },
-    "HelpMessage2": {
-        "message": "PlayerTrack utilizza Lodestone per mantenere aggiornati i dati (ad esempio cambi server). Se questo accade, vedrete un indicatore accanto al loro home world e con il mouseover si può vedere il loro server precedente.",
-        "description": "PlayerTrackPlugin.PrintHelpMessage"
-    },
-    "HelpMessage3": {
-        "message": "Se hai bisogno di aiuto, contattaci su Discord o apri un caso su GitHub. Se vuoi aiutare ad aggiungere traduzioni, puoi inviare aggiornamenti su Crowdin.",
-        "description": "PlayerTrackPlugin.PrintHelpMessage"
-    },
-    "InstallThankYou": {
-        "message": "Grazie per aver installato PlayerTrack!",
-        "description": "PlayerTrackPlugin.HandleFreshInstall"
-    },
-    "PlayerAlert": {
-        "message": "vista l'ultima volta {0} fa in {1}.",
-        "description": "PlayerService.AddOrUpdatePlayer"
-    },
-    "PlayerNameChangeAlert": {
-        "message": "ha cambiato il suo nome da {0}.",
-        "description": "PlayerService.UpdateLodestone"
-    },
-    "PlayerWorldTransferAlert": {
-        "message": "trasferito da {0} a {1}.",
-        "description": "PlayerService.UpdateLodestone"
-    },
-    "DisplayConfig": {
-        "message": "Mostra",
-        "description": "ConfigWindow.Draw"
-    },
-    "ProcessingConfig": {
-        "message": "Elaborazione in corso",
-        "description": "ConfigWindow.Draw"
-    },
-    "IconConfig": {
-        "message": "Icone",
-        "description": "ConfigWindow.Draw"
-    },
-    "ContextMenuConfig": {
-        "message": "Menu Contestuale",
-        "description": "ConfigWindow.Draw"
-    },
-    "CategoryConfig": {
-        "message": "Categorie",
-        "description": "ConfigWindow.Draw"
-    },
-    "AddCategory": {
-        "message": "Aggiungi categoria",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryName": {
-        "message": "Nome",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryAlerts": {
-        "message": "Avvisi",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "CategoryAction": {
-        "message": "Azioni",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "Default": {
-        "message": "Predefinito",
-        "description": "ConfigWindow.CategoryConfig"
-    },
-    "Reset": {
-        "message": "Resetta",
-        "description": "ConfigWindow.IconConfig"
-    },
-    "Lodestone": {
-        "message": "Lodestone",
-        "description": "ConfigWindow.IntegrationsConfig"
-    },
-    "RestrictInCombat": {
-        "message": "Non processare in combattimento",
-        "description": "ConfigWindow.ProcessingConfig"
-    },
-    "OK": {
-        "message": "OK",
-        "description": "ModalWindow.Draw"
-    },
-    "Cancel": {
-        "message": "Annulla",
-        "description": "ModalWindow.Draw"
-    },
-    "PlayerNameAddHint": {
-        "message": "Nome del Giocatore",
-        "description": "Panel.AddPlayer"
-    },
-    "Encounters": {
-        "message": "Incontri",
-        "description": "Panel.PlayerDetail"
-    },
-    "PlayerHeightValue": {
-        "message": "{0} in",
-        "description": "Panel.PlayerCustomize"
-    },
-    "PlayerInfo": {
-        "message": "Info Giocatore",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerStats": {
-        "message": "Statistiche Giocatore",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerName": {
-        "message": "Nome",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerPreviousNames": {
-        "message": "Precedentemente conosciuto come {0}",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerFirstSeen": {
-        "message": "Visto la prima volta",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerPreviousWorlds": {
-        "message": "Precedentemente su {0}",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerLastSeen": {
-        "message": "Visto per l'ultima volta",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerSeenCount": {
-        "message": "Conteggio Visto",
-        "description": "Panel.PlayerSummary"
-    },
-    "PlayerNotes": {
-        "message": "Note",
-        "description": "Panel.PlayerSummary"
-    }
+  "SubMenuShowPlayerItem": {
+    "message": "Aggiungi/Mostra Informazioni",
+    "description": "ContextMenuManager..ctor"
+  },
+  "SubMenuOpenLodestoneItem": {
+    "message": "Apri Lodestone",
+    "description": "ContextMenuManager..ctor"
+  },
+  "SetCategoryContextMenu": {
+    "message": "Imposta categoria",
+    "description": "ContextMenuManager..ctor"
+  },
+  "HelpMessage1": {
+    "message": "PlayerTrack ti aiuta a tenere traccia di chi incontri e del contenuto che avete giocato insieme. Per default è solo il contenuto istanziato, ma si può espandere o restringere nelle impostazioni. Puoi vedere tutti i dettagli di un giocatore cliccando il suo nome nell'overlay. Qui puoi anche aggiungere delle note ed impostare un'icona ed un colore personalizzati.",
+    "description": "PlayerTrackPlugin.PrintHelpMessage"
+  },
+  "HelpMessage2": {
+    "message": "PlayerTrack utilizza Lodestone per mantenere aggiornati i dati (ad esempio cambi server). Se questo accade, vedrete un indicatore accanto al loro home world e con il mouseover si può vedere il loro server precedente.",
+    "description": "PlayerTrackPlugin.PrintHelpMessage"
+  },
+  "HelpMessage3": {
+    "message": "Se hai bisogno di aiuto, contattaci su Discord o apri un caso su GitHub. Se vuoi aiutare ad aggiungere traduzioni, puoi inviare aggiornamenti su Crowdin.",
+    "description": "PlayerTrackPlugin.PrintHelpMessage"
+  },
+  "InstallThankYou": {
+    "message": "Grazie per aver installato PlayerTrack!",
+    "description": "PlayerTrackPlugin.HandleFreshInstall"
+  },
+  "PlayerAlert": {
+    "message": "vista l'ultima volta {0} fa in {1}.",
+    "description": "PlayerService.AddOrUpdatePlayer"
+  },
+  "PlayerNameChangeAlert": {
+    "message": "ha cambiato il suo nome da {0}.",
+    "description": "PlayerService.UpdateLodestone"
+  },
+  "PlayerWorldTransferAlert": {
+    "message": "trasferito da {0} a {1}.",
+    "description": "PlayerService.UpdateLodestone"
+  },
+  "DisplayConfig": {
+    "message": "Mostra",
+    "description": "ConfigWindow.Draw"
+  },
+  "ProcessingConfig": {
+    "message": "Elaborazione in corso",
+    "description": "ConfigWindow.Draw"
+  },
+  "IconConfig": {
+    "message": "Icone",
+    "description": "ConfigWindow.Draw"
+  },
+  "ContextMenuConfig": {
+    "message": "Menu Contestuale",
+    "description": "ConfigWindow.Draw"
+  },
+  "CategoryConfig": {
+    "message": "Categorie",
+    "description": "ConfigWindow.Draw"
+  },
+  "AddCategory": {
+    "message": "Aggiungi categoria",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryName": {
+    "message": "Nome",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryAlerts": {
+    "message": "Avvisi",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "CategoryAction": {
+    "message": "Azioni",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "Default": {
+    "message": "Predefinito",
+    "description": "ConfigWindow.CategoryConfig"
+  },
+  "Reset": {
+    "message": "Resetta",
+    "description": "ConfigWindow.IconConfig"
+  },
+  "Lodestone": {
+    "message": "Lodestone",
+    "description": "ConfigWindow.IntegrationsConfig"
+  },
+  "RestrictInCombat": {
+    "message": "Non processare in combattimento",
+    "description": "ConfigWindow.ProcessingConfig"
+  },
+  "OK": {
+    "message": "OK",
+    "description": "ModalWindow.Draw"
+  },
+  "Cancel": {
+    "message": "Annulla",
+    "description": "ModalWindow.Draw"
+  },
+  "PlayerNameAddHint": {
+    "message": "Nome del Giocatore",
+    "description": "Panel.AddPlayer"
+  },
+  "Encounters": {
+    "message": "Incontri",
+    "description": "Panel.PlayerDetail"
+  },
+  "PlayerHeightValue": {
+    "message": "{0} in",
+    "description": "Panel.PlayerCustomize"
+  },
+  "PlayerInfo": {
+    "message": "Info Giocatore",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerStats": {
+    "message": "Statistiche Giocatore",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerName": {
+    "message": "Nome",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerPreviousNames": {
+    "message": "Precedentemente conosciuto come {0}",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerFirstSeen": {
+    "message": "Visto la prima volta",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerPreviousWorlds": {
+    "message": "Precedentemente su {0}",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerLastSeen": {
+    "message": "Visto per l'ultima volta",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerSeenCount": {
+    "message": "Conteggio Visto",
+    "description": "Panel.PlayerSummary"
+  },
+  "PlayerNotes": {
+    "message": "Note",
+    "description": "Panel.PlayerSummary"
+  }
 }
