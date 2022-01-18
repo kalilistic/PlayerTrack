@@ -81,7 +81,14 @@ namespace PlayerTrack
                     }
 
                     // remove extra padding
-                    ImGuiHelpers.ScaledRelativeSameLine(-10f / ImGuiHelpers.GlobalScale);
+                    if (this.plugin.Configuration.PlayerListOffset)
+                    {
+                        ImGuiHelpers.ScaledRelativeSameLine(-10f / ImGuiHelpers.GlobalScale);
+                    }
+                    else
+                    {
+                        ImGuiHelpers.ScaledRelativeSameLine(ImGuiHelpers.GlobalScale);
+                    }
 
                     // player icon
                     ImGui.PushFont(UiBuilder.IconFont);

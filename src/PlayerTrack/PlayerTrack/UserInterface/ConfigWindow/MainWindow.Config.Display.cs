@@ -121,6 +121,21 @@ namespace PlayerTrack
                                            "search player tags with search"));
             ImGui.Spacing();
 
+            // player list offset
+            var playerListOffset = this.plugin.Configuration.PlayerListOffset;
+            if (ImGui.Checkbox(
+                Loc.Localize("PlayerListOffset", "Add offset to player list") + "###PlayerTrack_PlayerListOffset_Checkbox",
+                ref playerListOffset))
+            {
+                this.plugin.Configuration.PlayerListOffset = playerListOffset;
+                this.plugin.SaveConfig();
+            }
+
+            ImGuiComponents.HelpMarker(Loc.Localize(
+                                           "PlayerListOffset_HelpMarker",
+                                           "toggle offset with player list to work nicer with dalamud ui customizations like material ui"));
+            ImGui.Spacing();
+
             // search type
             ImGui.Text(Loc.Localize("SearchType", "Search Type"));
             var searchType = (int)this.plugin.Configuration.SearchType;

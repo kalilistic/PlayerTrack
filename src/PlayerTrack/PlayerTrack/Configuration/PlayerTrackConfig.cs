@@ -305,6 +305,11 @@ namespace PlayerTrack
         /// </summary>
         public uint DataFixVersion { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to use offset in player list.
+        /// </summary>
+        public bool PlayerListOffset { get; set; } = true;
+
         /// <inheritdoc />
         public int Version { get; set; }
     }
