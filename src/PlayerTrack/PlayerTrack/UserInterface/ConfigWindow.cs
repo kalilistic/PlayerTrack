@@ -68,13 +68,6 @@ namespace PlayerTrack
                     ImGui.EndTabItem();
                 }
 
-                if (ImGui.BeginTabItem(Loc.Localize("ContextMenuConfig", "ContextMenu")))
-                {
-                    WindowManager.SpacerWithTabs();
-                    this.ContextMenuConfig();
-                    ImGui.EndTabItem();
-                }
-
                 if (ImGui.BeginTabItem(Loc.Localize("CategoryConfig", "Categories")))
                 {
                     WindowManager.SpacerWithTabs();

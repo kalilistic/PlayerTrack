@@ -19,6 +19,7 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using XivCommon;
 
+// ReSharper disable MemberInitializerValueIgnored
 namespace PlayerTrack
 {
     /// <summary>
@@ -51,7 +52,7 @@ namespace PlayerTrack
                     // setup common libs
                     this.localization = new Localization(PluginInterface, CommandManager);
                     this.BackupManager = new BackupManager(PluginInterface.GetPluginConfigDirectory());
-                    this.XivCommon = new XivCommonBase(Hooks.NamePlates | Hooks.ContextMenu);
+                    this.XivCommon = new XivCommonBase(Hooks.NamePlates);
 
                     // load config
                     try
@@ -78,7 +79,6 @@ namespace PlayerTrack
                     this.PlayerTrackProvider = new PlayerTrackProvider(PluginInterface, new PlayerTrackAPI(this));
                     this.WindowManager = new WindowManager(this);
                     this.PluginCommandManager = new PluginCommandManager(this);
-                    this.ContextMenuManager = new ContextMenuManager(this);
                     this.NamePlateManager = new NamePlateManager(this);
 
                     // run backup
@@ -253,11 +253,6 @@ namespace PlayerTrack
         public WindowManager WindowManager { get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets context Menu manager to handle player context menu.
-        /// </summary>
-        public ContextMenuManager ContextMenuManager { get; set; } = null!;
-
-        /// <summary>
         /// Gets or sets name plate manager to handle custom nameplates.
         /// </summary>
         public NamePlateManager NamePlateManager { get; set; } = null!;
@@ -295,7 +290,6 @@ namespace PlayerTrack
                 this.backupTimer.Dispose();
                 this.PluginCommandManager.Dispose();
                 this.NamePlateManager.Dispose();
-                this.ContextMenuManager.Dispose();
                 this.XivCommon.Dispose();
                 this.PlayerTrackProvider.Dispose();
                 this.VisibilityService.Dispose();
