@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Timers;
 
 using CheapLoc;
+using Dalamud.ContextMenu;
 using Dalamud.Data;
 using Dalamud.DrunkenToad;
 using Dalamud.Game;
@@ -19,6 +20,8 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using XivCommon;
 
+using Hooks = XivCommon.Hooks;
+
 // ReSharper disable MemberInitializerValueIgnored
 namespace PlayerTrack
 {
@@ -31,6 +34,11 @@ namespace PlayerTrack
         /// XivCommon library instance.
         /// </summary>
         public XivCommonBase XivCommon = null!;
+
+        /// <summary>
+        /// Context Menu Lib.
+        /// </summary>
+        public DalamudContextMenuBase ContextMenuBase = null!;
 
         /// <summary>
         /// Backup manager.
@@ -53,6 +61,7 @@ namespace PlayerTrack
                     this.localization = new Localization(PluginInterface, CommandManager);
                     this.BackupManager = new BackupManager(PluginInterface.GetPluginConfigDirectory());
                     this.XivCommon = new XivCommonBase(Hooks.NamePlates);
+                    this.ContextMenuBase = new DalamudContextMenuBase();
 
                     // load config
                     try
@@ -79,6 +88,7 @@ namespace PlayerTrack
                     this.PlayerTrackProvider = new PlayerTrackProvider(PluginInterface, new PlayerTrackAPI(this));
                     this.WindowManager = new WindowManager(this);
                     this.PluginCommandManager = new PluginCommandManager(this);
+                    this.ContextMenuManager = new ContextMenuManager(this);
                     this.NamePlateManager = new NamePlateManager(this);
 
                     // run backup
@@ -248,6 +258,11 @@ namespace PlayerTrack
         public ActorManager ActorManager { get; set; } = null!;
 
         /// <summary>
+        /// Gets or sets context Menu manager to handle player context menu.
+        /// </summary>
+        public ContextMenuManager ContextMenuManager { get; set; } = null!;
+
+        /// <summary>
         /// Gets or sets window manager.
         /// </summary>
         public WindowManager WindowManager { get; set; } = null!;
@@ -290,7 +305,9 @@ namespace PlayerTrack
                 this.backupTimer.Dispose();
                 this.PluginCommandManager.Dispose();
                 this.NamePlateManager.Dispose();
+                this.ContextMenuManager.Dispose();
                 this.XivCommon.Dispose();
+                this.ContextMenuBase.Dispose();
                 this.PlayerTrackProvider.Dispose();
                 this.VisibilityService.Dispose();
                 this.FCNameColorService.Dispose();
