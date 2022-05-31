@@ -1,66 +1,67 @@
-name: Build & deploy
+name: Build
 
-on:
+# Put your personal access token in a repository secret named PAT for cross-repository access
+
+on: 
   workflow_dispatch:
+  push:
+    branches:
+    - master
 
 env:
-  PLUGIN_NAME: PlayerTrack
+  PUBLIC_NAME: PlayerTrack
+  SOLUTION_NAME: PlayerTrack
+  INTERNAL_NAME: PlayerTrack
+  RELEASE_DIR: src\PlayerTrack\bin\Release\PlayerTrack
   PERSONAL_PLUGIN_REPO: kalilistic/DalamudPluginRepo
+  PR_PLUGIN_REPO: kalilistic/DalamudPlugins
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-    - name: Checkout source
+    - name: Checkout
       uses: actions/checkout@v2
       with:
-        fetch-depth: 0
-    - name: Setup .NET for Build
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.100
-    - name: Restore dependencies
-      run: dotnet restore ./src
+        submodules: recursive
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.0.2
     - name: Download Dalamud
       run: |
         Invoke-WebRequest -Uri https://goatcorp.github.io/dalamud-distrib/latest.zip -OutFile latest.zip
-        Expand-Archive -Force latest.zip "$env:AppData\XIVLauncher\addon\Hooks\dev\"
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0.9.11
-      with:
-        versionSpec: '5.x'
-    - name: Use GitVersion
-      id: gitversion
-      uses: gittools/actions/gitversion/execute@v0.9.11
+        Expand-Archive -Force latest.zip "$env:AppData\XIVLauncher\addon\Hooks\dev\"   
     - name: Build
       run: |
-        dotnet build ./src --no-restore --configuration Release --nologo /property:Version=${{steps.gitversion.outputs.MajorMinorPatch}}
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2.2.1
+        dotnet restore -r win ${{ env.SOLUTION_NAME }}.sln
+        dotnet build --configuration Release
+      env: 
+        DOTNET_CLI_TELEMETRY_OPTOUT: true
+    - uses: actions/upload-artifact@v2
       with:
         name: PluginRepoZip
-        path: ./src/${{env.PLUGIN_NAME}}/bin/Release/${{env.PLUGIN_NAME}}
+        path: ${{ env.RELEASE_DIR }}
         if-no-files-found: error
-          
+
   deploy:
     needs: build
+    if: "contains(toJSON(github.event.commits.*.message), '[PUSH]')"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
-        repository: ${{env.PERSONAL_PLUGIN_REPO}}
-        token: ${{secrets.PAT}}
+        repository: ${{ env.PERSONAL_PLUGIN_REPO }}
+        token: ${{ secrets.PAT }}
     - uses: actions/download-artifact@v2
       with:
         name: PluginRepoZip
-        path: plugins/${{env.PLUGIN_NAME}}
+        path: plugins/${{ env.INTERNAL_NAME }}
     - uses: EndBug/add-and-commit@v7
       with:
         add: --all
         author_name: GitHub Action
         author_email: github-actions[bot]@users.noreply.github.com
-        message: Update ${{env.PLUGIN_NAME}}
-        
+        message: Update ${{ env.INTERNAL_NAME }}
+
   pull_request:
     needs: build
     runs-on: ubuntu-latest
@@ -71,9 +72,7 @@ jobs:
       with:
         name: PluginRepoZip
         path: PluginArtifact
-    - uses: kalilistic/DalamudPluginPR@master
-      with:
-        enabled: true
-        testing: false
-        token: ${{secrets.PAT}}
-        artifact_path: ${{steps.download-artifact.outputs.download-path}}
+    - uses: daemitus/DalamudPluginPR@master
+      with: 
+        token: ${{ secrets.PAT }}
+        artifact_path: ${{ steps.download-artifact.outputs.download-path }}
