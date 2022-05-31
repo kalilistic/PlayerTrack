@@ -243,6 +243,14 @@
     "message": "incluye las etiquetas de jugador en la búsqueda",
     "description": "ConfigWindow.DisplayConfig"
   },
+  "PlayerListOffset": {
+    "message": "Añadir compensación a la lista de jugadores",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "PlayerListOffset_HelpMarker": {
+    "message": "alternar compensación en la lista de jugadores para que funcione mejor con personalizaciones de la interfaz de dalamud tales como material ui",
+    "description": "ConfigWindow.DisplayConfig"
+  },
   "SearchType": {
     "message": "Tipo de Búsqueda",
     "description": "ConfigWindow.DisplayConfig"

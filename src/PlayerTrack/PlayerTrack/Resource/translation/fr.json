@@ -243,6 +243,14 @@
     "message": "inclure les étiquettes des personnages durant la recherche",
     "description": "ConfigWindow.DisplayConfig"
   },
+  "PlayerListOffset": {
+    "message": "Ajouter un décalage à la liste des joueurs",
+    "description": "ConfigWindow.DisplayConfig"
+  },
+  "PlayerListOffset_HelpMarker": {
+    "message": "activer/désactiver le décalage dans la liste des joueurs afin de mieux fonctionner avec des customisations d'interface de Dalamud, telles que Material UI",
+    "description": "ConfigWindow.DisplayConfig"
+  },
   "SearchType": {
     "message": "Type de recherche",
     "description": "ConfigWindow.DisplayConfig"
