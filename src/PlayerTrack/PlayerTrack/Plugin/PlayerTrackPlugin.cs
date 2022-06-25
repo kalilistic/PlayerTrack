@@ -413,30 +413,20 @@ namespace PlayerTrack
         unsafe public void OpenPlateWindow(uint actorId)
         {
             var player = this.PlayerService.GetPlayer(actorId);
-            GameObject* toget = null;
             if (player is not { IsCurrent: true }) return;
+            GameObject* toget = null;
 
-            foreach(var actor in ObjectTable)
-            {
-                if(actor.ObjectId == actorId)
-                {
-                    toget = (GameObject*)actor.Address;
-                    break;
-                }
-            }
-            if(toget == null)
-            {
+            toget = (GameObject*)ObjectTable.Where(i => i.ObjectId == actorId).FirstOrDefault().Address;
+
+            if(toget == null){
                 return;
             }
 
-            try
-            {
-                
+            try{
                 AgentCharaCard.Instance()->OpenCharaCard(toget);
             }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, "Failed to open examine window");
+            catch (Exception ex){
+                Logger.LogError(ex, "Failed to open Adventure plate window");
             }
         }
 
