@@ -1342,11 +1342,23 @@ namespace PlayerTrack
                         this.UpdateItem(player);
                     }
                 }
+                else if (this.plugin.Configuration.DataFixVersion == 3)
+                {
+                    if (player.LodestoneId == 27492995 && player.LodestoneLastUpdated > 1657339200000)
+                    {
+                        Logger.LogInfo("V4: Resetting lodestone status for " + player.Key);
+                        player.LodestoneStatus = LodestoneStatus.Unverified;
+                        player.LodestoneId = 0;
+                        player.LodestoneLastUpdated = 0;
+                        player.LodestoneFailureCount = 0;
+                        this.UpdateItem(player);
+                    }
+                }
 
                 this.SubmitLodestoneRequest(player);
             }
 
-            this.plugin.Configuration.DataFixVersion = 3;
+            this.plugin.Configuration.DataFixVersion = 4;
             this.plugin.SaveConfig();
         }
 
