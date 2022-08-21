@@ -409,23 +409,26 @@ namespace PlayerTrack
         /// <summary>
         /// Open Adventure plate for actor.
         /// </summary>
-        /// <param name="actorId"></param>
-        unsafe public void OpenPlateWindow(uint actorId)
+        /// <param name="actorId">actor id.</param>
+        public unsafe void OpenPlateWindow(uint actorId)
         {
             var player = this.PlayerService.GetPlayer(actorId);
             if (player is not { IsCurrent: true }) return;
-            GameObject* toget = null;
 
-            toget = (GameObject*)ObjectTable.Where(i => i.ObjectId == actorId).FirstOrDefault().Address;
+            var gameObject = (GameObject*)ObjectTable.FirstOrDefault(i => i.ObjectId == actorId)!.Address;
 
-            if(toget == null){
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (gameObject == null)
+            {
                 return;
             }
 
-            try{
-                AgentCharaCard.Instance()->OpenCharaCard(toget);
+            try
+            {
+                AgentCharaCard.Instance()->OpenCharaCard(gameObject);
             }
-            catch (Exception ex){
+            catch (Exception ex)
+            {
                 Logger.LogError(ex, "Failed to open Adventure plate window");
             }
         }

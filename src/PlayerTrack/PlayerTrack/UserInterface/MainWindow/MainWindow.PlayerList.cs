@@ -131,6 +131,7 @@ namespace PlayerTrack
                         {
                             this.plugin.OpenExamineWindow(menuPlayer.ActorId);
                         }
+
                         if (ImGui.MenuItem(Loc.Localize("ADPlatePlayer", "Show Plate"), menuPlayer.IsCurrent))
                         {
                             this.plugin.OpenPlateWindow(menuPlayer.ActorId);
