@@ -11,9 +11,9 @@ namespace PlayerTrack
     /// </summary>
     public class CategoryService : BaseRepository
     {
-        private readonly object locker = new ();
+        private readonly object locker = new();
         private readonly PlayerTrackPlugin plugin;
-        private SortedList<int, Category> categories = new ();
+        private SortedList<int, Category> categories = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CategoryService"/> class.

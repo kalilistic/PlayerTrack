@@ -30,6 +30,6 @@ namespace PlayerTrack
         /// <summary>
         /// Gets free company members.
         /// </summary>
-        public List<FreeCompanyMember> FreeCompanyMembers { get; init; } = new ();
+        public List<FreeCompanyMember> FreeCompanyMembers { get; init; } = new();
     }
 }

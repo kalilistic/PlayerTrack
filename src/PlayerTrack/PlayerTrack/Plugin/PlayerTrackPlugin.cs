@@ -38,7 +38,7 @@ namespace PlayerTrack
         /// <summary>
         /// Context Menu Lib.
         /// </summary>
-        public DalamudContextMenuBase ContextMenuBase = null!;
+        public DalamudContextMenu ContextMenu = null!;
 
         /// <summary>
         /// Backup manager.
@@ -61,7 +61,7 @@ namespace PlayerTrack
                     this.localization = new Localization(PluginInterface, CommandManager);
                     this.BackupManager = new BackupManager(PluginInterface.GetPluginConfigDirectory());
                     this.XivCommon = new XivCommonBase(Hooks.NamePlates);
-                    this.ContextMenuBase = new DalamudContextMenuBase();
+                    this.ContextMenu = new DalamudContextMenu();
 
                     // load config
                     try
@@ -225,7 +225,7 @@ namespace PlayerTrack
         /// <summary>
         /// Gets or sets plugin configuration.
         /// </summary>
-        public PlayerTrackConfig Configuration { get; set; } = new ();
+        public PlayerTrackConfig Configuration { get; set; } = new();
 
         /// <summary>
         /// Gets or sets base repository.
@@ -307,7 +307,7 @@ namespace PlayerTrack
                 this.NamePlateManager.Dispose();
                 this.ContextMenuManager.Dispose();
                 this.XivCommon.Dispose();
-                this.ContextMenuBase.Dispose();
+                this.ContextMenu.Dispose();
                 this.PlayerTrackProvider.Dispose();
                 this.VisibilityService.Dispose();
                 this.FCNameColorService.Dispose();
@@ -438,7 +438,7 @@ namespace PlayerTrack
             }
 
             // delete orphan encounters
-            var playerKeys = this.PlayerService.GetPlayers()?.Select(pair => pair.Key).ToList() !;
+            var playerKeys = this.PlayerService.GetPlayers()?.Select(pair => pair.Key).ToList()!;
             var encounters = this.EncounterService.GetEncounters().ToList();
             foreach (var encounter in encounters)
             {
@@ -474,7 +474,7 @@ namespace PlayerTrack
             this.SaveConfig();
         }
 
-        private void BackupTimerOnElapsed(object sender, ElapsedEventArgs? e)
+        private void BackupTimerOnElapsed(object? sender, ElapsedEventArgs? e)
         {
             if (DateUtil.CurrentTime() > this.Configuration.LastBackup + this.Configuration.BackupFrequency)
             {

@@ -237,7 +237,7 @@ namespace PlayerTrack
             return reason.Equals(Reason, StringComparison.OrdinalIgnoreCase);
         }
 
-        private void SyncTimerOnElapsed(object sender, ElapsedEventArgs e)
+        private void SyncTimerOnElapsed(object? sender, ElapsedEventArgs e)
         {
             if (!this.plugin.Configuration.SyncWithVisibility) return;
             var newStatus = this.visibilityConsumer.IsAvailable();
@@ -268,7 +268,7 @@ namespace PlayerTrack
                     throw new ArgumentOutOfRangeException(nameof(visibilityType), visibilityType, null);
             }
 
-            Dictionary<string, VisibilityEntry> visibilityEntries = new ();
+            Dictionary<string, VisibilityEntry> visibilityEntries = new();
             if (!rawVisibilityEntries.Any()) return visibilityEntries;
             foreach (var voidListEntry in rawVisibilityEntries)
             {

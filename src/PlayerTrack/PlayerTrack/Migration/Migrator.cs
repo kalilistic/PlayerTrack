@@ -20,7 +20,7 @@ namespace PlayerTrack
         /// Current messages from migration.
         /// </summary>
         // ReSharper disable once CollectionNeverQueried.Global
-        public static List<string> Messages = new ();
+        public static List<string> Messages = new();
 
         private static PlayerTrackPlugin plugin = null!;
         private static bool isJSONCompressed;
@@ -77,7 +77,7 @@ namespace PlayerTrack
                 var metaData = JsonConvert.DeserializeObject<TrackMetaData>(metaDataStr);
                 isJSONCompressed = metaData!.Compressed;
                 Logger.LogInfo("JSON compressed: " + isJSONCompressed);
-                Dictionary<string, TrackPlayer> trackPlayers = new ();
+                Dictionary<string, TrackPlayer> trackPlayers = new();
                 switch (metaData.SchemaVersion)
                 {
                     case 1:
@@ -238,10 +238,11 @@ namespace PlayerTrack
             var data = new List<string> { string.Empty };
             using (var sr = new StreamReader(PlayerTrackPlugin.GetPluginFolder() + "/data/players.dat"))
             {
+                // ReSharper disable once MoveVariableDeclarationInsideLoopCondition
                 string line;
 
                 // ReSharper disable once AssignNullToNotNullAttribute
-                while ((line = sr.ReadLine() !) != null) data.Add(line);
+                while ((line = sr.ReadLine()!) != null) data.Add(line);
             }
 
             data = data.Where(s => !string.IsNullOrEmpty(s)).ToList();

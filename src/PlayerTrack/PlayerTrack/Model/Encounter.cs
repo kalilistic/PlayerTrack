@@ -65,7 +65,7 @@ namespace PlayerTrack
         /// <param name="playerKey">player id.</param>
         /// <returns>new copy of encounter.</returns>
         public Encounter Copy(string playerKey) =>
-            new ()
+            new()
             {
                 PlayerKey = playerKey,
                 Created = this.Created,

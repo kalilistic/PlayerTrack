@@ -18,10 +18,10 @@ namespace PlayerTrack
     {
         private readonly EncounterService encounterService;
         private readonly CategoryService categoryService;
-        private readonly object locker = new ();
-        private readonly SortedList<string, Player> players = new ();
+        private readonly object locker = new();
+        private readonly SortedList<string, Player> players = new();
         private readonly PlayerTrackPlugin plugin;
-        private SortedList<string, Player> viewPlayers = new ();
+        private SortedList<string, Player> viewPlayers = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PlayerService"/> class.
@@ -747,7 +747,7 @@ namespace PlayerTrack
             {
                 Key = BuildPlayerKey(playerName, worldId),
                 Names = new List<string> { playerName },
-                HomeWorlds = new List<KeyValuePair<uint, string>> { new (worldId, worldName) },
+                HomeWorlds = new List<KeyValuePair<uint, string>> { new(worldId, worldName) },
                 FreeCompany = "N/A",
                 Created = currentTime,
                 Updated = currentTime,
@@ -786,7 +786,7 @@ namespace PlayerTrack
             {
                 Key = BuildPlayerKey(playerName, worldId),
                 Names = new List<string> { playerName },
-                HomeWorlds = new List<KeyValuePair<uint, string>> { new (worldId, worldName) },
+                HomeWorlds = new List<KeyValuePair<uint, string>> { new(worldId, worldName) },
                 FreeCompany = "N/A",
                 Created = currentTime,
                 Updated = currentTime,
@@ -839,7 +839,7 @@ namespace PlayerTrack
             {
                 Key = BuildPlayerKey(playerName, worldId),
                 Names = new List<string> { playerName },
-                HomeWorlds = new List<KeyValuePair<uint, string>> { new (worldId, worldName) },
+                HomeWorlds = new List<KeyValuePair<uint, string>> { new(worldId, worldName) },
                 FreeCompany = freeCompany,
                 Created = currentTime,
                 Updated = currentTime,
@@ -1034,7 +1034,7 @@ namespace PlayerTrack
             lock (this.locker)
             {
                 IEnumerable<KeyValuePair<string, Player>> playersWithCategory = this.players.Where(kvp => kvp.Value.CategoryId == deletedCategoryId);
-                List<Player> playersWithCategoryList = new ();
+                List<Player> playersWithCategoryList = new();
                 foreach (var player in playersWithCategory)
                 {
                     this.players[player.Key].CategoryId = defaultCategoryId;

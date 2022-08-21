@@ -12,32 +12,32 @@ namespace PlayerTrack
         /// <summary>
         /// List of available restriction types.
         /// </summary>
-        public static readonly List<ContentRestrictionType> RestrictionTypes = new ();
+        public static readonly List<ContentRestrictionType> RestrictionTypes = new();
 
         /// <summary>
         /// List of available restriction type names.
         /// </summary>
-        public static readonly List<string> RestrictionTypeNames = new ();
+        public static readonly List<string> RestrictionTypeNames = new();
 
         /// <summary>
         /// Restriction Type: Always (no restriction).
         /// </summary>
-        public static readonly ContentRestrictionType Always = new (0, 0, "Always");
+        public static readonly ContentRestrictionType Always = new(0, 0, "Always");
 
         /// <summary>
         /// Restriction Type: Content Only.
         /// </summary>
-        public static readonly ContentRestrictionType ContentOnly = new (1, 1, "Content Only");
+        public static readonly ContentRestrictionType ContentOnly = new(1, 1, "Content Only");
 
         /// <summary>
         /// Restriction Type: High-End Duty Only.
         /// </summary>
-        public static readonly ContentRestrictionType HighEndDutyOnly = new (2, 2, "High-End Duty Only");
+        public static readonly ContentRestrictionType HighEndDutyOnly = new(2, 2, "High-End Duty Only");
 
         /// <summary>
         /// Restriction Type: Never.
         /// </summary>
-        public static readonly ContentRestrictionType Never = new (3, 3, "Never");
+        public static readonly ContentRestrictionType Never = new(3, 3, "Never");
 
         private ContentRestrictionType(int index, int code, string name)
         {
@@ -70,7 +70,7 @@ namespace PlayerTrack
         /// <returns>restriction type.</returns>
         public static ContentRestrictionType GetContentRestrictionTypeByIndex(int index)
         {
-            return RestrictionTypes.FirstOrDefault(view => view.Index == index) !;
+            return RestrictionTypes.FirstOrDefault(view => view.Index == index)!;
         }
 
         /// <summary>

@@ -18,7 +18,7 @@ namespace PlayerTrack
         /// <summary>
         /// Show icons for players in list view.
         /// </summary>
-        public List<FontAwesomeIcon> EnabledIcons = new ();
+        public List<FontAwesomeIcon> EnabledIcons = new();
 
         /// <summary>
         /// Delay period for lodestone lookups after max failures reached.
@@ -233,12 +233,12 @@ namespace PlayerTrack
         /// <summary>
         /// Gets or sets list of items to show above.
         /// </summary>
-        public List<byte> ShowContextAboveThis { get; set; } = new ();
+        public List<byte> ShowContextAboveThis { get; set; } = new();
 
         /// <summary>
         /// Gets or sets list of items to show below.
         /// </summary>
-        public List<byte> ShowContextBelowThis { get; set; } = new ();
+        public List<byte> ShowContextBelowThis { get; set; } = new();
 
         /// <summary>
         /// Gets or sets a value indicating whether show main window.

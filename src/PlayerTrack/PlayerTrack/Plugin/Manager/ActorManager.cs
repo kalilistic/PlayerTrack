@@ -17,10 +17,10 @@ namespace PlayerTrack
     /// </summary>
     public class ActorManager
     {
-        private readonly Dictionary<uint, Player> playerList = new ();
+        private readonly Dictionary<uint, Player> playerList = new();
         private readonly Timer timer;
         private readonly PlayerTrackPlugin plugin;
-        private readonly object locker = new ();
+        private readonly object locker = new();
         private long eventId;
         private ushort territoryType;
         private ushort nextTerritoryType;
@@ -234,7 +234,7 @@ namespace PlayerTrack
                                 },
                                 HomeWorlds = new List<KeyValuePair<uint, string>>
                                 {
-                                    new (character.HomeWorld.Id, character.HomeWorld.GameData?.Name.ToString() !),
+                                    new(character.HomeWorld.Id, character.HomeWorld.GameData?.Name.ToString()!),
                                 },
                                 FreeCompany = Player.DetermineFreeCompany(this.contentId, character.CompanyTag.ToString()),
                                 Customize = character.Customize,
@@ -263,7 +263,7 @@ namespace PlayerTrack
             }
         }
 
-        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        private void OnTimerElapsed(object? sender, ElapsedEventArgs e)
         {
             // check if should continue or is already in-progress
             if (this.isProcessing) return;

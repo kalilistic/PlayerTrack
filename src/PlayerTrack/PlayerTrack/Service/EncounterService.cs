@@ -11,8 +11,8 @@ namespace PlayerTrack
     /// </summary>
     public class EncounterService : BaseRepository
     {
-        private readonly object locker = new ();
-        private readonly SortedList<string, Encounter> currentEncounters = new ();
+        private readonly object locker = new();
+        private readonly SortedList<string, Encounter> currentEncounters = new();
         private readonly PlayerTrackPlugin plugin;
 
         /// <summary>

@@ -196,7 +196,7 @@ namespace PlayerTrack
             this.syncTimer.Enabled = true;
         }
 
-        private void SyncTimerOnElapsed(object sender, ElapsedEventArgs e)
+        private void SyncTimerOnElapsed(object? sender, ElapsedEventArgs e)
         {
             if (!this.plugin.Configuration.SyncWithVisibility) return;
             var newStatus = this.fCNameColorConsumer.IsAvailable();

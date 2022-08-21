@@ -181,7 +181,7 @@ namespace PlayerTrack
         /// <summary>
         /// Gets or sets tags.
         /// </summary>
-        public List<string> Tags { get; set; } = new ();
+        public List<string> Tags { get; set; } = new();
 
         /// <summary>
         /// Gets or sets player category rank for sorting.
@@ -385,7 +385,7 @@ namespace PlayerTrack
         /// <inheritdoc />
         public override string ToString()
         {
-            StringBuilder sb = new ();
+            StringBuilder sb = new();
             sb.Append(System.Environment.NewLine);
             sb.Append("Key: " + this.Key);
             sb.Append(System.Environment.NewLine);

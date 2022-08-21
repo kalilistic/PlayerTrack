@@ -26,7 +26,7 @@ namespace PlayerTrack
         private readonly HttpClient httpClient;
         private readonly Timer onRequestTimer;
         private readonly PlayerTrackPlugin plugin;
-        private readonly Queue<LodestoneRequest> requestQueue = new ();
+        private readonly Queue<LodestoneRequest> requestQueue = new();
         private bool isProcessing;
         private long lodestoneCooldown;
 
@@ -115,7 +115,7 @@ namespace PlayerTrack
             return this.LodestoneCooldown < DateUtil.CurrentTime();
         }
 
-        private void ProcessRequests(object source, ElapsedEventArgs e)
+        private void ProcessRequests(object? source, ElapsedEventArgs e)
         {
             if (!this.plugin.IsDoneLoading) return;
             if (!this.ShouldProcess()) return;

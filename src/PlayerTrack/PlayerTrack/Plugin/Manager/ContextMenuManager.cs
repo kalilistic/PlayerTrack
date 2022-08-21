@@ -25,7 +25,7 @@ namespace PlayerTrack
         public ContextMenuManager(PlayerTrackPlugin plugin)
         {
             this.plugin = plugin;
-            this.plugin.ContextMenuBase.Functions.ContextMenu.OnOpenGameObjectContextMenu += this.OpenGameObjectContextMenu;
+            this.plugin.ContextMenu.OnOpenGameObjectContextMenu += this.OpenGameObjectContextMenu;
             this.addShowMenuItem = new GameObjectContextMenuItem(
                 new SeString(new TextPayload(Loc.Localize("SubMenuShowPlayerItem", "Add/Show Info"))), this.OnOpenPlayerInfo);
             this.openLodestoneMenuItem = new GameObjectContextMenuItem(
@@ -37,7 +37,7 @@ namespace PlayerTrack
         /// </summary>
         public void Dispose()
         {
-            this.plugin.ContextMenuBase.Functions.ContextMenu.OnOpenGameObjectContextMenu -= this.OpenGameObjectContextMenu;
+            this.plugin.ContextMenu.OnOpenGameObjectContextMenu -= this.OpenGameObjectContextMenu;
         }
 
         private static bool IsMenuValid(BaseContextMenuArgs args)
