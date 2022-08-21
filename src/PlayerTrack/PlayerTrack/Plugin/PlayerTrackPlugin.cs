@@ -18,6 +18,8 @@ using Dalamud.Game.Gui;
 using Dalamud.Interface;
 using Dalamud.IoC;
 using Dalamud.Plugin;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using XivCommon;
 
 using Hooks = XivCommon.Hooks;
@@ -401,6 +403,30 @@ namespace PlayerTrack
             catch (Exception ex)
             {
                 Logger.LogError(ex, "Failed to open examine window");
+            }
+        }
+
+        /// <summary>
+        /// Open Adventure plate for actor.
+        /// </summary>
+        /// <param name="actorId"></param>
+        unsafe public void OpenPlateWindow(uint actorId)
+        {
+            var player = this.PlayerService.GetPlayer(actorId);
+            if (player is not { IsCurrent: true }) return;
+            GameObject* toget = null;
+
+            toget = (GameObject*)ObjectTable.Where(i => i.ObjectId == actorId).FirstOrDefault().Address;
+
+            if(toget == null){
+                return;
+            }
+
+            try{
+                AgentCharaCard.Instance()->OpenCharaCard(toget);
+            }
+            catch (Exception ex){
+                Logger.LogError(ex, "Failed to open Adventure plate window");
             }
         }
 
