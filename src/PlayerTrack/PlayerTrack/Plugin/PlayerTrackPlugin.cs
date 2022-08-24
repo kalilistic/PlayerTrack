@@ -20,9 +20,6 @@ using Dalamud.IoC;
 using Dalamud.Plugin;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
-using XivCommon;
-
-using Hooks = XivCommon.Hooks;
 
 // ReSharper disable MemberInitializerValueIgnored
 namespace PlayerTrack
@@ -32,11 +29,6 @@ namespace PlayerTrack
     /// </summary>
     public class PlayerTrackPlugin : IDalamudPlugin
     {
-        /// <summary>
-        /// XivCommon library instance.
-        /// </summary>
-        public XivCommonBase XivCommon = null!;
-
         /// <summary>
         /// Context Menu Lib.
         /// </summary>
@@ -62,7 +54,6 @@ namespace PlayerTrack
                     // setup common libs
                     this.localization = new Localization(PluginInterface, CommandManager);
                     this.BackupManager = new BackupManager(PluginInterface.GetPluginConfigDirectory());
-                    this.XivCommon = new XivCommonBase(Hooks.NamePlates);
                     this.ContextMenu = new DalamudContextMenu();
 
                     // load config
@@ -308,7 +299,6 @@ namespace PlayerTrack
                 this.PluginCommandManager.Dispose();
                 this.NamePlateManager.Dispose();
                 this.ContextMenuManager.Dispose();
-                this.XivCommon.Dispose();
                 this.ContextMenu.Dispose();
                 this.PlayerTrackProvider.Dispose();
                 this.VisibilityService.Dispose();
@@ -394,16 +384,6 @@ namespace PlayerTrack
         /// <param name="actorId">actor id.</param>
         public void OpenExamineWindow(uint actorId)
         {
-            var player = this.PlayerService.GetPlayer(actorId);
-            if (player is not { IsCurrent: true }) return;
-            try
-            {
-                this.XivCommon.Functions.Examine.OpenExamineWindow(actorId);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, "Failed to open examine window");
-            }
         }
 
         /// <summary>
