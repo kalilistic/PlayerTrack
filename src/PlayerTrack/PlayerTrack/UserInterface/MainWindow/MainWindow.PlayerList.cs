@@ -127,11 +127,6 @@ namespace PlayerTrack
                             PlayerTrackPlugin.TargetManager.SetFocusTarget(PlayerTrackPlugin.ObjectTable.SearchById(menuPlayer.ActorId));
                         }
 
-                        if (ImGui.MenuItem(Loc.Localize("ExaminePlayer", "Examine"), menuPlayer.IsCurrent))
-                        {
-                            this.plugin.OpenExamineWindow(menuPlayer.ActorId);
-                        }
-
                         if (ImGui.MenuItem(Loc.Localize("ADPlatePlayer", "Show Plate"), menuPlayer.IsCurrent))
                         {
                             this.plugin.OpenPlateWindow(menuPlayer.ActorId);

@@ -294,9 +294,6 @@ namespace PlayerTrack
             category.SetSeName();
             this.categories[category.Id] = category;
             this.UpdateItem(category);
-
-            // ReSharper disable once ConstantConditionalAccessQualifier
-            this.plugin.NamePlateManager?.ForceRedraw();
         }
 
         /// <summary>
@@ -319,7 +316,6 @@ namespace PlayerTrack
                 this.categories = cats;
             }
 
-            this.plugin.NamePlateManager.ForceRedraw();
             this.plugin.VisibilityService.SyncWithVisibility();
             this.plugin.FCNameColorService.SyncWithFCNameColor();
         }

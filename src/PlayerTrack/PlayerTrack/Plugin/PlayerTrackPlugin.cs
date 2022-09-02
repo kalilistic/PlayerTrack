@@ -379,14 +379,6 @@ namespace PlayerTrack
         }
 
         /// <summary>
-        /// Open examine window for actor.
-        /// </summary>
-        /// <param name="actorId">actor id.</param>
-        public void OpenExamineWindow(uint actorId)
-        {
-        }
-
-        /// <summary>
         /// Open Adventure plate for actor.
         /// </summary>
         /// <param name="actorId">actor id.</param>

@@ -54,13 +54,6 @@ namespace PlayerTrack
                     ImGui.EndTabItem();
                 }
 
-                if (ImGui.BeginTabItem(Loc.Localize("NamePlateConfig", "NamePlates")))
-                {
-                    WindowManager.SpacerWithTabs();
-                    this.NamePlateConfig();
-                    ImGui.EndTabItem();
-                }
-
                 if (ImGui.BeginTabItem(Loc.Localize("IntegrationConfig", "Integrations")))
                 {
                     WindowManager.SpacerWithTabs();

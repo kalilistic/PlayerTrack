@@ -409,7 +409,6 @@ namespace PlayerTrack
                 }
 
                 this.UpdateItem(this.players[player.Key]);
-                if (forceRedraw) this.plugin.NamePlateManager.ForceRedraw();
                 this.plugin.VisibilityService.SyncWithVisibility();
             }
         }
@@ -428,7 +427,6 @@ namespace PlayerTrack
                 }
 
                 this.UpdateItem(this.players[player.Key]);
-                this.plugin.NamePlateManager.ForceRedraw();
             }
         }
 
@@ -448,7 +446,6 @@ namespace PlayerTrack
                 }
 
                 this.UpdateItem(this.players[player.Key]);
-                this.plugin.NamePlateManager.ForceRedraw();
             }
         }
 
@@ -467,25 +464,6 @@ namespace PlayerTrack
                 }
 
                 this.UpdateItem(this.players[player.Key]);
-            }
-        }
-
-        /// <summary>
-        /// Update player nameplate color.
-        /// </summary>
-        /// <param name="player">player to update.</param>
-        public void UpdatePlayerNamePlateColor(Player player)
-        {
-            if (this.players.ContainsKey(player.Key))
-            {
-                lock (this.locker)
-                {
-                    this.players[player.Key].NamePlateColor = player.NamePlateColor;
-                    this.UpdateViewPlayer(this.players[player.Key].SortKey, this.players[player.Key]);
-                }
-
-                this.UpdateItem(this.players[player.Key]);
-                this.plugin.NamePlateManager.ForceRedraw();
             }
         }
 
@@ -568,7 +546,6 @@ namespace PlayerTrack
                 }
 
                 this.UpdateItem(this.players[player.Key]);
-                this.plugin.NamePlateManager.ForceRedraw();
             }
         }
 

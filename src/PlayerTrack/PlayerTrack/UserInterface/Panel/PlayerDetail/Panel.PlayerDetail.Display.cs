@@ -38,7 +38,6 @@ namespace PlayerTrack
             {
                 this.SelectedPlayer.CategoryId = categoryIds[categoryIndex];
                 this.plugin.PlayerService.UpdatePlayerCategory(this.SelectedPlayer);
-                this.plugin.NamePlateManager.ForceRedraw();
             }
 
             ImGuiHelpers.ScaledDummy(0.5f);
@@ -120,11 +119,6 @@ namespace PlayerTrack
                 if (ImGui.ColorPicker4("List Color###PlayerTrack_PlayerListColor_ColorPicker", ref listColor))
                 {
                     this.SelectedPlayer.ListColor = listColor;
-                    if (this.plugin.Configuration.DefaultNamePlateColorToListColor)
-                    {
-                        this.SelectedPlayer.NamePlateColor = listColor;
-                    }
-
                     this.plugin.PlayerService.UpdatePlayerListColor(this.SelectedPlayer);
                 }
 
@@ -132,31 +126,6 @@ namespace PlayerTrack
                 this.PlayerOverride_ListColorSwatchRow(8, 16);
                 this.PlayerOverride_ListColorSwatchRow(16, 24);
                 this.PlayerOverride_ListColorSwatchRow(24, 32);
-                ImGui.EndPopup();
-            }
-
-            // nameplate color
-            ImGui.Spacing();
-            ImGui.Text(Loc.Localize("Nameplate", "Nameplate"));
-            ImGuiHelpers.ScaledRelativeSameLine(sameLineOffset);
-            var namePlateColor = this.SelectedPlayer.EffectiveNamePlateColor();
-            if (ImGui.ColorButton("NamePlate Color###PlayerTrack_PlayerNamePlateColor_Button", namePlateColor))
-            {
-                ImGui.OpenPopup("###PlayerTrack_PlayerNamePlateColor_Popup");
-            }
-
-            if (ImGui.BeginPopup("###PlayerTrack_PlayerNamePlateColor_Popup"))
-            {
-                if (ImGui.ColorPicker4("NamePlate Color###PlayerTrack_PlayerNamePlateColor_ColorPicker", ref namePlateColor))
-                {
-                    this.SelectedPlayer.NamePlateColor = namePlateColor;
-                    this.plugin.PlayerService.UpdatePlayerNamePlateColor(this.SelectedPlayer);
-                }
-
-                this.PlayerOverride_NamePlateColorSwatchRow(0, 8);
-                this.PlayerOverride_NamePlateColorSwatchRow(8, 16);
-                this.PlayerOverride_NamePlateColorSwatchRow(16, 24);
-                this.PlayerOverride_NamePlateColorSwatchRow(24, 32);
                 ImGui.EndPopup();
             }
 
@@ -204,21 +173,6 @@ namespace PlayerTrack
                 {
                     this.SelectedPlayer!.ListColor = this.colorPalette[i];
                     this.plugin.PlayerService.UpdatePlayerListColor(this.SelectedPlayer);
-                }
-
-                ImGui.SameLine();
-            }
-        }
-
-        private void PlayerOverride_NamePlateColorSwatchRow(int min, int max)
-        {
-            ImGui.Spacing();
-            for (var i = min; i < max; i++)
-            {
-                if (ImGui.ColorButton("###PlayerTrack_PlayerNamePlateColor_Swatch_" + i, this.colorPalette[i]))
-                {
-                    this.SelectedPlayer!.NamePlateColor = this.colorPalette[i];
-                    this.plugin.PlayerService.UpdatePlayerNamePlateColor(this.SelectedPlayer);
                 }
 
                 ImGui.SameLine();
