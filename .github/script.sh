@@ -33,21 +33,17 @@ else
 fi
 cd ..
 
-echo "> Deleting old plugin manifest files"
-rm -rf repo/stable/${INTERNAL_NAME}
-rm -rf repo/testing/live/${INTERNAL_NAME}
-rm -rf repo/testing/net6/${INTERNAL_NAME}
-
 echo "> Creating new plugin manifest directory"
 commitMessage="${PUBLIC_NAME} ${version}"
 if [[ ${MESSAGE} =~ .*"[TEST]".* ]]; then
+	rm -rf repo/testing/live/${INTERNAL_NAME}
+	rm -rf repo/testing/net6/${INTERNAL_NAME}
     mkdir repo/testing/live/${INTERNAL_NAME}
-    cp -r images repo/testing/live/${INTERNAL_NAME}
     cd repo/testing/live/${INTERNAL_NAME}
     commitMessage="[Testing] ${commitMessage}"
 else
+	rm -rf repo/stable/${INTERNAL_NAME}
     mkdir repo/stable/${INTERNAL_NAME}
-    cp -r images repo/stable/${INTERNAL_NAME}
     cd repo/stable/${INTERNAL_NAME}
 fi
 

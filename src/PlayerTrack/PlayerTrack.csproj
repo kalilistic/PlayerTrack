@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<Version>2.6.4.0</Version>
+		<Version>2.6.5.0</Version>
 		<Title>PlayerTrack</Title>
 		<Authors>kalilistic</Authors>
 		<TargetFramework>net6.0-windows</TargetFramework>
