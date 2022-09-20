@@ -244,7 +244,7 @@ namespace PlayerTrack
                     {
                         this.LodestoneCooldown =
                             DateUtil.CurrentTime() + this.plugin.Configuration.LodestoneCooldownDuration;
-                        PluginLog.Debug($"Lodestone is unavailable so setting cooldown for all requests.");
+                        PluginLog.Debug($"LODESTONE REQUEST: API unavailable so setting cooldown for all requests.");
                     }
                 }
             }
