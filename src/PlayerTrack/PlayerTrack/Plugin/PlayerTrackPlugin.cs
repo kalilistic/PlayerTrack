@@ -503,6 +503,11 @@ namespace PlayerTrack
                     this.SaveConfig();
                 }
 
+                if (this.Configuration.LodestoneBatchDelay < 60000)
+                {
+                    this.Configuration.LodestoneBatchDelay = 300000;
+                }
+
                 return;
             }
 

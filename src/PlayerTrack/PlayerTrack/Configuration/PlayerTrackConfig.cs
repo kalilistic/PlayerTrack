@@ -36,6 +36,11 @@ namespace PlayerTrack
         public int LodestoneReprocessDelay = 3600000;
 
         /// <summary>
+        /// Delay period for batching requests for lodestone requests.
+        /// </summary>
+        public int LodestoneBatchDelay = 300000;
+
+        /// <summary>
         /// Lodestone locale to open player profile with.
         /// </summary>
         public LodestoneLocale LodestoneLocale = LodestoneLocale.na;

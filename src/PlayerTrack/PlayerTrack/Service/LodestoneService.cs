@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Timers;
 
 using Dalamud.DrunkenToad;
+using Dalamud.Logging;
 using Newtonsoft.Json;
 
 using Timer = System.Timers.Timer;
@@ -27,8 +28,10 @@ namespace PlayerTrack
         private readonly Timer onRequestTimer;
         private readonly PlayerTrackPlugin plugin;
         private readonly Queue<LodestoneRequest> requestQueue = new();
+        private readonly int maxRequestCount = 60;
         private bool isProcessing;
         private long lodestoneCooldown;
+        private long lodestoneLastRequest;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LodestoneService"/> class.
@@ -119,81 +122,138 @@ namespace PlayerTrack
         {
             if (!this.plugin.IsDoneLoading) return;
             if (!this.ShouldProcess()) return;
+            if (DateUtil.CurrentTime() < this.lodestoneLastRequest + this.plugin.Configuration.LodestoneBatchDelay) return;
             if (this.isProcessing) return;
             this.isProcessing = true;
+
+            // check if should reprocess
+            if (DateUtil.CurrentTime() > this.lodestoneCooldown)
+            {
+                this.lodestoneCooldown =
+                    DateUtil.CurrentTime() + this.plugin.Configuration.LodestoneReprocessDelay;
+                this.plugin.PlayerService.ReprocessPlayersForLodestone();
+                this.isProcessing = false;
+                return;
+            }
+
             try
             {
-                // check if should reprocess
-                if (DateUtil.CurrentTime() > this.lodestoneCooldown)
+                PluginLog.Debug("LODESTONE REQUEST: START");
+
+                // set time for batching requests
+                this.lodestoneLastRequest = DateUtil.CurrentTime();
+
+                // build list of requests
+                var lodestoneRequests = new List<LodestoneRequest>();
+                while (this.requestQueue.Count > 0 && lodestoneRequests.Count < this.maxRequestCount)
                 {
-                    this.lodestoneCooldown =
-                        DateUtil.CurrentTime() + this.plugin.Configuration.LodestoneReprocessDelay;
-                    this.plugin.PlayerService.ReprocessPlayersForLodestone();
-                    this.isProcessing = false;
-                    return;
+                    lodestoneRequests.Add(this.requestQueue.Dequeue());
                 }
 
-                // process requests
+                var requestedFinished = false;
                 var requestFailureCount = 0;
-                while (this.requestQueue.Count > 0 &&
-                       DateUtil.CurrentTime() > this.LodestoneCooldown &&
-                       this.plugin.Configuration.SyncToLodestone &&
-                       this.ShouldProcess())
+                while (!requestedFinished && requestFailureCount < this.plugin.Configuration.LodestoneMaxRetry)
                 {
-                    var request = this.requestQueue.Dequeue();
-                    var requestedFinished = false;
-                    while (!requestedFinished && requestFailureCount < this.plugin.Configuration.LodestoneMaxRetry)
+                    // call lodestone API
+                    var result = this.GetCharacterIdsAsync(lodestoneRequests).Result;
+                    PluginLog.Debug($"LODESTONE RESPONSE: STATUS CODE: {result.StatusCode}.");
+
+                    // handle full request success
+                    if (result.StatusCode == HttpStatusCode.OK)
                     {
-                        var response = new LodestoneResponse();
-                        var result = this.GetCharacterIdAsync(request.PlayerName, request.WorldName).Result;
-                        if (result.StatusCode == HttpStatusCode.OK)
+                        // mark as complete and reset failure count
+                        requestFailureCount = 0;
+                        requestedFinished = true;
+
+                        // deserialize player list response
+                        var responseList = JsonConvert.DeserializeObject<LodestoneResponse[]>(result.Content.ReadAsStringAsync().Result);
+                        PluginLog.Debug($"LODESTONE RESPONSE: RESPONSE COUNT: {responseList?.Length}.");
+
+                        // handle empty response
+                        if (responseList == null)
                         {
-                            var json = JsonConvert.DeserializeObject<dynamic>(result.Content.ReadAsStringAsync().Result);
-                            response.Status = LodestoneStatus.Verified;
-                            response.LodestoneId = (uint)json!.lodestoneId;
-                            response.PlayerKey = request.PlayerKey;
-                            this.plugin.PlayerService.UpdateLodestone(response);
-                            requestFailureCount = 0;
-                            requestedFinished = true;
-                        }
-                        else if (result.StatusCode == HttpStatusCode.NotFound)
-                        {
-                            Logger.LogDebug(request.PlayerName + "/" + request.WorldName + " was an invalid player.");
-                            response.PlayerKey = request.PlayerKey;
-                            response.Status = LodestoneStatus.Failed;
-                            this.plugin.PlayerService.UpdateLodestone(response);
-                            requestFailureCount = 0;
-                            requestedFinished = true;
-                        }
-                        else if (result.StatusCode == HttpStatusCode.BadRequest)
-                        {
-                            Logger.LogDebug(request.PlayerName + "/" + request.WorldName + " not found on lodestone.");
-                            response.PlayerKey = request.PlayerKey;
-                            response.Status = LodestoneStatus.Failed;
-                            this.plugin.PlayerService.UpdateLodestone(response, false);
-                            requestFailureCount = 0;
-                            requestedFinished = true;
-                        }
-                        else
-                        {
-                            Logger.LogDebug(request.PlayerName + "/" + request.WorldName + " failed to lookup.");
+                            PluginLog.Debug($"LODESTONE REQUEST: ATTEMPT#{requestFailureCount + 1} FAILED.");
                             requestFailureCount++;
+                            continue;
+                        }
+
+                        // loop through each player lookup
+                        foreach (var request in lodestoneRequests)
+                        {
+                            // find corresponding response
+                            LodestoneResponse? response = null;
+                            foreach (var responseIn in responseList)
+                            {
+                                if (responseIn.PlayerName.Equals(request.PlayerName) &&
+                                    responseIn.WorldName.Equals(request.WorldName))
+                                {
+                                    response = responseIn;
+                                }
+                            }
+
+                            // handle individual lookup status codes
+                            if (response == null)
+                            {
+                                response = new LodestoneResponse();
+                                Logger.LogVerbose(request.PlayerName + "/" + request.WorldName + " couldn't find matching response.");
+                                response.PlayerKey = request.PlayerKey;
+                                response.Status = LodestoneStatus.Failed;
+                                this.plugin.PlayerService.UpdateLodestone(response);
+                            }
+                            else if (response.StatusCode == 200)
+                            {
+                                Logger.LogDebug(request.PlayerName + "/" + request.WorldName + " found successfully!");
+                                response.Status = LodestoneStatus.Verified;
+                                response.LodestoneId = response.LodestoneId;
+                                response.PlayerKey = request.PlayerKey;
+                                this.plugin.PlayerService.UpdateLodestone(response);
+                            }
+                            else if (response.StatusCode == 404)
+                            {
+                                PluginLog.LogDebug(request.PlayerName + "/" + request.WorldName + " was not found.");
+                                response.PlayerKey = request.PlayerKey;
+                                response.Status = LodestoneStatus.Failed;
+                                this.plugin.PlayerService.UpdateLodestone(response);
+                            }
+                            else if (response.StatusCode == 400)
+                            {
+                                Logger.LogDebug(request.PlayerName + "/" + request.WorldName + " was invalid.");
+                                response.PlayerKey = request.PlayerKey;
+                                response.Status = LodestoneStatus.Failed;
+                                this.plugin.PlayerService.UpdateLodestone(response, false);
+                            }
+                            else
+                            {
+                                Logger.LogDebug(request.PlayerName + "/" + request.WorldName + " lookup went wrong.");
+                                response.PlayerKey = request.PlayerKey;
+                                response.Status = LodestoneStatus.Failed;
+                                this.plugin.PlayerService.UpdateLodestone(response);
+                            }
                         }
                     }
 
+                    // handle full request failure
+                    else
+                    {
+                        PluginLog.Debug($"LODESTONE REQUEST: ATTEMPT#{requestFailureCount + 1} FAILED.");
+                        requestFailureCount++;
+                    }
+
+                    // activate cooldown if failed out
                     if (requestFailureCount >= this.plugin.Configuration.LodestoneMaxRetry)
                     {
                         this.LodestoneCooldown =
                             DateUtil.CurrentTime() + this.plugin.Configuration.LodestoneCooldownDuration;
-                        Logger.LogDebug($"Lodestone is unavailable so setting cooldown for all requests.");
+                        PluginLog.Debug($"Lodestone is unavailable so setting cooldown for all requests.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Failed to process lodestone requests.");
+                Logger.LogError(ex, "LODESTONE REQUEST: FAILURE");
             }
 
+            PluginLog.Debug("LODESTONE REQUEST: FINISHED");
             this.isProcessing = false;
         }
 
@@ -204,11 +264,10 @@ namespace PlayerTrack
             return true;
         }
 
-        private async Task<HttpResponseMessage> GetCharacterIdAsync(string characterName, string worldName)
+        private async Task<HttpResponseMessage> GetCharacterIdsAsync(List<LodestoneRequest> requests)
         {
-            var url = "https://api.kalilistic.io/lodestone/player-id?playerName=" + characterName +
-                      "&worldName=" + worldName;
-            return await this.httpClient.GetAsync(new Uri(url));
+            var content = new StringContent(JsonConvert.SerializeObject(requests));
+            return await this.httpClient.PostAsync(new Uri("https://api.kalilistic.io/v1/lodestone/players"), content);
         }
     }
 }
