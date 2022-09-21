@@ -292,6 +292,8 @@ namespace PlayerTrack
         {
             this.territoryIsChanged = true;
             this.nextTerritoryType = newTerritoryType;
+            this.plugin.LodestoneService.LodestoneLastRequest =
+                DateUtil.CurrentTime() - this.plugin.Configuration.LodestoneBatchDelay + 15000;
             this.needsUpdate = true;
         }
 

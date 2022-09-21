@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Timers;
 
 using Dalamud.DrunkenToad;
-using Dalamud.Logging;
 using Newtonsoft.Json;
 
 using Timer = System.Timers.Timer;
@@ -24,14 +23,19 @@ namespace PlayerTrack
         /// Lodestone cooldown (unix ms).
         /// </summary>
         public long LodestoneCooldown = DateUtil.CurrentTime();
+
+        /// <summary>
+        /// Lodestone last request.
+        /// </summary>
+        public long LodestoneLastRequest;
+
+        private const int MaxRequestCount = 50;
         private readonly HttpClient httpClient;
         private readonly Timer onRequestTimer;
         private readonly PlayerTrackPlugin plugin;
         private readonly Queue<LodestoneRequest> requestQueue = new();
-        private readonly int maxRequestCount = 60;
         private bool isProcessing;
         private long lodestoneCooldown;
-        private long lodestoneLastRequest;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LodestoneService"/> class.
@@ -118,11 +122,19 @@ namespace PlayerTrack
             return this.LodestoneCooldown < DateUtil.CurrentTime();
         }
 
+        private bool ShouldBatchProcess()
+        {
+            if (this.requestQueue.Count == MaxRequestCount) return true;
+            if (DateUtil.CurrentTime() > this.LodestoneLastRequest + this.plugin.Configuration.LodestoneBatchDelay) return true;
+            return false;
+        }
+
         private void ProcessRequests(object? source, ElapsedEventArgs e)
         {
             if (!this.plugin.IsDoneLoading) return;
+            if (this.requestQueue.Count == 0) return;
             if (!this.ShouldProcess()) return;
-            if (DateUtil.CurrentTime() < this.lodestoneLastRequest + this.plugin.Configuration.LodestoneBatchDelay) return;
+            if (!this.ShouldBatchProcess()) return;
             if (this.isProcessing) return;
             this.isProcessing = true;
 
@@ -138,14 +150,14 @@ namespace PlayerTrack
 
             try
             {
-                PluginLog.Debug("LODESTONE REQUEST: START");
+                Logger.LogVerbose("LODESTONE REQUEST: START");
 
                 // set time for batching requests
-                this.lodestoneLastRequest = DateUtil.CurrentTime();
+                this.LodestoneLastRequest = DateUtil.CurrentTime();
 
                 // build list of requests
                 var lodestoneRequests = new List<LodestoneRequest>();
-                while (this.requestQueue.Count > 0 && lodestoneRequests.Count < this.maxRequestCount)
+                while (this.requestQueue.Count > 0 && lodestoneRequests.Count < MaxRequestCount)
                 {
                     lodestoneRequests.Add(this.requestQueue.Dequeue());
                 }
@@ -156,7 +168,7 @@ namespace PlayerTrack
                 {
                     // call lodestone API
                     var result = this.GetCharacterIdsAsync(lodestoneRequests).Result;
-                    PluginLog.Debug($"LODESTONE RESPONSE: STATUS CODE: {result.StatusCode}.");
+                    Logger.LogDebug($"LODESTONE RESPONSE: STATUS CODE: {result.StatusCode}.");
 
                     // handle full request success
                     if (result.StatusCode == HttpStatusCode.OK)
@@ -167,12 +179,12 @@ namespace PlayerTrack
 
                         // deserialize player list response
                         var responseList = JsonConvert.DeserializeObject<LodestoneResponse[]>(result.Content.ReadAsStringAsync().Result);
-                        PluginLog.Debug($"LODESTONE RESPONSE: RESPONSE COUNT: {responseList?.Length}.");
+                        Logger.LogVerbose($"LODESTONE RESPONSE: RESPONSE COUNT: {responseList?.Length}.");
 
                         // handle empty response
                         if (responseList == null)
                         {
-                            PluginLog.Debug($"LODESTONE REQUEST: ATTEMPT#{requestFailureCount + 1} FAILED.");
+                            Logger.LogDebug($"LODESTONE REQUEST: ATTEMPT#{requestFailureCount + 1} FAILED.");
                             requestFailureCount++;
                             continue;
                         }
@@ -195,14 +207,14 @@ namespace PlayerTrack
                             if (response == null)
                             {
                                 response = new LodestoneResponse();
-                                Logger.LogVerbose(request.PlayerName + "/" + request.WorldName + " couldn't find matching response.");
+                                Logger.LogDebug(request.PlayerName + "/" + request.WorldName + " couldn't find matching response.");
                                 response.PlayerKey = request.PlayerKey;
                                 response.Status = LodestoneStatus.Failed;
                                 this.plugin.PlayerService.UpdateLodestone(response);
                             }
                             else if (response.StatusCode == 200)
                             {
-                                Logger.LogDebug(request.PlayerName + "/" + request.WorldName + " found successfully!");
+                                Logger.LogVerbose(request.PlayerName + "/" + request.WorldName + " found successfully!");
                                 response.Status = LodestoneStatus.Verified;
                                 response.LodestoneId = response.LodestoneId;
                                 response.PlayerKey = request.PlayerKey;
@@ -210,7 +222,7 @@ namespace PlayerTrack
                             }
                             else if (response.StatusCode == 404)
                             {
-                                PluginLog.LogDebug(request.PlayerName + "/" + request.WorldName + " was not found.");
+                                Logger.LogVerbose(request.PlayerName + "/" + request.WorldName + " was not found.");
                                 response.PlayerKey = request.PlayerKey;
                                 response.Status = LodestoneStatus.Failed;
                                 this.plugin.PlayerService.UpdateLodestone(response);
@@ -235,7 +247,7 @@ namespace PlayerTrack
                     // handle full request failure
                     else
                     {
-                        PluginLog.Debug($"LODESTONE REQUEST: ATTEMPT#{requestFailureCount + 1} FAILED.");
+                        Logger.LogVerbose($"LODESTONE REQUEST: ATTEMPT#{requestFailureCount + 1} FAILED.");
                         requestFailureCount++;
                     }
 
@@ -244,7 +256,7 @@ namespace PlayerTrack
                     {
                         this.LodestoneCooldown =
                             DateUtil.CurrentTime() + this.plugin.Configuration.LodestoneCooldownDuration;
-                        PluginLog.Debug($"LODESTONE REQUEST: API unavailable so setting cooldown for all requests.");
+                        Logger.LogDebug($"LODESTONE REQUEST: API unavailable so setting cooldown for all requests.");
                     }
                 }
             }
@@ -253,7 +265,7 @@ namespace PlayerTrack
                 Logger.LogError(ex, "LODESTONE REQUEST: FAILURE");
             }
 
-            PluginLog.Debug("LODESTONE REQUEST: FINISHED");
+            Logger.LogVerbose("LODESTONE REQUEST: FINISHED");
             this.isProcessing = false;
         }
 
