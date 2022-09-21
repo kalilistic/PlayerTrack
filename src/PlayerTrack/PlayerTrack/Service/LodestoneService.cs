@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -50,6 +51,8 @@ namespace PlayerTrack
             {
                 Timeout = TimeSpan.FromMilliseconds(this.plugin.Configuration.LodestoneTimeout),
             };
+            this.httpClient.DefaultRequestHeaders.Add("Application-Name", "PlayerTrack");
+            this.httpClient.DefaultRequestHeaders.Add("Application-Version", Assembly.GetExecutingAssembly().Version());
             this.onRequestTimer = new Timer
                 { Interval = this.plugin.Configuration.LodestoneQueueFrequency, Enabled = true };
             this.onRequestTimer.Elapsed += this.ProcessRequests;
