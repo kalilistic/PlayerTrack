@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<Version>2.6.7.0</Version>
+		<Version>2.7.0.0</Version>
 		<Title>PlayerTrack</Title>
 		<Authors>kalilistic</Authors>
-		<TargetFramework>net6.0-windows</TargetFramework>
+		<TargetFramework>net7.0-windows</TargetFramework>
 		<Platforms>x64</Platforms>
-		<LangVersion>9</LangVersion>
+		<LangVersion>latest</LangVersion>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<Nullable>enable</Nullable>
 		<Deterministic>true</Deterministic>
@@ -92,7 +92,7 @@
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="DalamudPackager" Version="2.1.8" />
+		<PackageReference Include="DalamudPackager" Version="2.1.10" />
 		<PackageReference Include="LiteDB" Version="5.0.12" />
 		<PackageReference Include="Dalamud.DrunkenToad" Version="1.2.0" />
 		<PackageReference Include="Dalamud.ContextMenu" Version="1.2.1" />
