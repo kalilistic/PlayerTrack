@@ -1,6 +1,25 @@
 # PlayerTrack
-[![Build plugin](https://github.com/kalilistic/PlayerTrack/actions/workflows/build.yml/badge.svg)](https://github.com/kalilistic/PlayerTrack/actions/workflows/build.yml)
+Keep track of players you meet.
 
-Dalamud plugin to keep track of players you meet in FFXIV.
+## Description
+PlayerTrack helps you keep a record of who you meet and the content you played together. 
+Organize players into categories, keep notes, and track them across name/world changes. 
+Customization options include colors, icons, nameplates, and alerts.
 
-PlayerTrack helps you keep a record of who you meet and the content you played together. By default, this is instanced content only - but you can expand or restrict this in settings. You can see all the details on a player by clicking on their name in the overlay. Here you can also record notes and set a personalized icon/color. PlayerTrack uses Lodestone to keep the data updated (e.g. world transfers). If this happens, you'll see an indicator next to their home world and can mouse-over to see their previous residence.
+## How to Use
+- Install through XIVLauncher/Dalamud.
+- Use `/ptrack` to open the main window.
+- Use `/ptrackconfig` to open settings.
+
+## Libraries Used
+- [AutoMapper](https://github.com/AutoMapper/AutoMapper)
+- [Dalamud.ContextMenu](https://github.com/kalilistic/Dalamud.ContextMenu)
+- [Dalamud.DrunkenToad](https://github.com/kalilistic/Dalamud.DrunkenToad)
+- [Dalamud.Loc](https://github.com/kalilistic/Dalamud.Loc)
+- [Dapper](https://github.com/DapperLib/Dapper)
+- [FlexConfig](https://github.com/kalilistic/FlexConfig)
+- [FluentDapperLite](https://github.com/kalilistic/FluentDapperLite)
+- [FluentMigrator](https://github.com/fluentmigrator/fluentmigrator)
+- [LiteHelper](https://github.com/kalilistic/LiteHelper)
+- [Pilz.Dalamud](https://github.com/Pilzinsel64/Pilz.Dalamud)
+- [SQLite](https://github.com/sqlite/sqlite)

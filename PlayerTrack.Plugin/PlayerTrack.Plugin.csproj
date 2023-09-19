@@ -1,0 +1,96 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<Title>PlayerTrack.Plugin</Title>
+		<Authors>kalilistic</Authors>
+		<TargetFramework>net7.0-windows</TargetFramework>
+		<Platforms>x64</Platforms>
+		<LangVersion>10</LangVersion>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Nullable>enable</Nullable>
+		<Deterministic>true</Deterministic>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+		<Configurations>Debug;Release</Configurations>
+		<AssemblyName>PlayerTrack</AssemblyName>
+		<RootNamespace>PlayerTrack</RootNamespace>
+		<PackageVersion>3.0.0</PackageVersion>
+		<AssemblyVersion>3.0.0.0</AssemblyVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<OutputPath>bin\Debug\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DebugType>pdbonly</DebugType>
+		<Optimize>true</Optimize>
+		<OutputPath>bin\Release\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Remove="stylecop.json" />
+		<AdditionalFiles Include="..\stylecop.json">
+			<Link>stylecop.json</Link>
+		</AdditionalFiles>
+		<PackageReference Include="Dalamud.ContextMenu" Version="1.2.3" />
+		<PackageReference Include="Dalamud.DrunkenToad" Version="1.6.1" />
+		<PackageReference Include="Dalamud.Loc" Version="1.0.4" />
+		<PackageReference Include="DalamudPackager" Version="2.1.8" />
+		<PackageReference Include="LiteHelper" Version="0.0.6" />
+		<PackageReference Include="Pilz.Dalamud" Version="0.4.0" />
+		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="Dalamud">
+			<HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="FFXIVClientStructs">
+			<HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="ImGui.NET">
+			<HintPath>$(DalamudLibPath)ImGui.NET.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Lumina">
+			<HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Lumina.Excel">
+			<HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Include="Resource\Loc\en.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\PlayerTrack.Domain\PlayerTrack.Domain.csproj" />
+	  <ProjectReference Include="..\PlayerTrack.Infrastructure\PlayerTrack.Infrastructure.csproj" />
+	  <ProjectReference Include="..\PlayerTrack.Models\PlayerTrack.Models.csproj" />
+	  <ProjectReference Include="..\PlayerTrack.UserInterface\PlayerTrack.UserInterface.csproj" />
+	</ItemGroup>
+</Project>

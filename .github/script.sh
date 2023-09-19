@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-version=$(grep "<Version>" < src/${INTERNAL_NAME}/${INTERNAL_NAME}.csproj | sed "s/.*<Version>\(.*\)<\/Version>/\1/")
+version=$(grep "<Version>" < ${INTERNAL_NAME}.Plugin/${INTERNAL_NAME}.Plugin.csproj | sed "s/.*<Version>\(.*\)<\/Version>/\1/")
 echo "> Version detected: ${version}"
 
 echo "> Logging into GitHub"
@@ -33,11 +33,6 @@ else
 fi
 cd ..
 
-echo "> Deleting old plugin manifest files"
-rm -rf repo/stable/${INTERNAL_NAME}
-rm -rf repo/testing/live/${INTERNAL_NAME}
-rm -rf repo/testing/net6/${INTERNAL_NAME}
-
 echo "> Creating new plugin manifest directory"
 commitMessage="${PUBLIC_NAME} ${version}"
 if [[ ${MESSAGE} =~ .*"[TEST]".* ]]; then
@@ -55,7 +50,7 @@ echo "> Creating new plugin toml manifest"
 echo "[plugin]" >>manifest.toml
 echo "repository = \"${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git\"" >>manifest.toml
 echo "owners = [ \"${GITHUB_REPOSITORY_OWNER}\" ]" >>manifest.toml
-echo "project_path = \"src/${INTERNAL_NAME}\"" >>manifest.toml
+echo "project_path = \"${INTERNAL_NAME}.Plugin\"" >>manifest.toml
 echo "commit = \"${GITHUB_SHA}\"" >>manifest.toml
 cat manifest.toml
 
