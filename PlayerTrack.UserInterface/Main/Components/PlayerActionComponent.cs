@@ -9,6 +9,7 @@ using PlayerTrack.UserInterface.Main.Presenters;
 namespace PlayerTrack.UserInterface.Main.Components;
 
 using Dalamud.Interface.Colors;
+using Models;
 
 public class PlayerActionComponent : ViewComponent
 {
@@ -40,6 +41,8 @@ public class PlayerActionComponent : ViewComponent
         if (LocGui.Button("Reset", buttonSize))
         {
             PlayerConfigService.ResetPlayerConfig(player.Id);
+            PlayerCategoryService.UnassignCategoriesFromPlayer(player.Id);
+            PlayerTagService.UnassignTagsFromPlayer(player.Id);
             this.presenter.ClosePlayer();
         }
 

@@ -22,9 +22,24 @@ public class PlayerTagService
         ServiceContext.PlayerDataService.UpdatePlayer(player);
     }
 
-    public static void RemoveTag(int playerId, int tagId)
+    public static void UnassignTagsFromPlayer(int playerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerTagService.RemoveTag(), playerId: {playerId}, tagId: {tagId}");
+        PluginLog.LogVerbose($"Entering PlayerTagService.UnassignTagsFromPlayer(), playerId: {playerId}");
+        var tags = ServiceContext.PlayerDataService.GetPlayer(playerId)?.AssignedTags;
+        if (tags == null || tags.Count == 0)
+        {
+            PluginLog.LogWarning("Player not found, cannot remove tag.");
+            return;
+        }
+
+        tags = new List<Tag>();
+        UpdateTags(playerId, tags);
+        RepositoryContext.PlayerTagRepository.DeletePlayerTagByPlayerId(playerId);
+    }
+
+    public static void UnassignTagFromPlayer(int playerId, int tagId)
+    {
+        PluginLog.LogVerbose($"Entering PlayerTagService.UnassignTagFromPlayer(), playerId: {playerId}, tagId: {tagId}");
         var tags = ServiceContext.PlayerDataService.GetPlayer(playerId)?.AssignedTags;
         if (tags == null || tags.Count == 0)
         {

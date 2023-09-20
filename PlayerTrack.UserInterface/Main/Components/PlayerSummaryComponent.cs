@@ -376,7 +376,7 @@ public class PlayerSummaryComponent : ViewComponent
 
             if (ImGui.SmallButton($"{tag.Name} x"))
             {
-                PlayerTagService.RemoveTag(player.Id, tag.Id);
+                PlayerTagService.UnassignTagFromPlayer(player.Id, tag.Id);
                 player.AssignedTags.RemoveAll(assignedTag => assignedTag.Id == tag.Id);
                 player.UnassignedTags.Add(tag);
             }

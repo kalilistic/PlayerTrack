@@ -42,6 +42,30 @@ public class PlayerCategoryService
         ServiceContext.PlayerDataService.RecalculatePlayerRankings();
     });
 
+    public static void UnassignCategoriesFromPlayer(int playerId) => Task.Run(() =>
+    {
+        PluginLog.LogVerbose($"Entering PlayerCategoryService.UnassignCategoriesFromPlayer(): {playerId}");
+        var player = ServiceContext.PlayerDataService.GetPlayer(playerId);
+        if (player == null)
+        {
+            PluginLog.LogWarning($"Player not found, playerId: {playerId}");
+            return;
+        }
+
+        var assignedCategories = player.AssignedCategories;
+        if (!assignedCategories.Any())
+        {
+            PluginLog.LogWarning($"No categories assigned to player, playerId: {playerId}");
+            return;
+        }
+
+        player.AssignedCategories = new List<Category>();
+        player.PrimaryCategoryId = 0;
+        ServiceContext.PlayerDataService.UpdatePlayer(player);
+        RepositoryContext.PlayerCategoryRepository.DeletePlayerCategoryByPlayerId(playerId);
+        ServiceContext.PlayerDataService.RecalculatePlayerRankings();
+    });
+
     public static void UnassignCategoryFromPlayer(int playerId, int categoryId) => Task.Run(() =>
     {
         PluginLog.LogVerbose($"Entering PlayerCategoryService.UnassignCategoryFromPlayer(): {playerId}, {categoryId}");

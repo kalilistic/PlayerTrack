@@ -242,7 +242,7 @@ public class PlayerConfigService
             return;
         }
 
-        player.PlayerConfig = new PlayerConfig
+        player.PlayerConfig = new PlayerConfig(PlayerConfigType.Player)
         {
             PlayerId = playerId,
         };
