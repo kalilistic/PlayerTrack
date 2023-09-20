@@ -11,8 +11,6 @@ using PlayerTrack.UserInterface.Components;
 
 namespace PlayerTrack.UserInterface.Config.Components;
 
-using Dalamud.Logging;
-
 public class CategoryComponent : ConfigViewComponent
 {
     private string categoryInput = string.Empty;
@@ -35,7 +33,7 @@ public class CategoryComponent : ConfigViewComponent
 
     private void DrawCategoryTab(Category category)
     {
-        if (LocGui.BeginTabItem(category.Name))
+        if (ImGui.BeginTabItem($"{category.Name}###{category.Id}"))
         {
             this.DrawTabBar(category);
             ImGui.EndTabItem();
