@@ -119,7 +119,7 @@ public static class NameplateHandler
             return;
         }
 
-        if (nameplate.DisableColorIfDead && pc.IsDead)
+        if (!nameplate.NameplateUseColorIfDead && pc.IsDead)
         {
             PluginLog.LogVerbose("Player is dead, disabling.");
             return;

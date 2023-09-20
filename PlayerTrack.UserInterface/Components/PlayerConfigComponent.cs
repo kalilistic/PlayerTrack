@@ -91,25 +91,32 @@ public static class PlayerConfigComponent
         if (LocGui.BeginTabItem("Nameplate"))
         {
             ImGuiHelpers.ScaledDummy(1f);
-            ToadGui.Section("Conditions", () =>
+
+            ToadGui.Section("NameplateColors", () =>
+            {
+                DrawCheckbox("NameplateUseColor", playerConfigSet, pc => pc.NameplateUseColor, ref playerConfigSet.CurrentPlayerConfig.NameplateUseColor, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
+                DrawCheckbox("NameplateUseColorIfDead", playerConfigSet, pc => pc.NameplateUseColorIfDead, ref playerConfigSet.CurrentPlayerConfig.NameplateUseColorIfDead, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
+
+                if (playerConfigSet.CurrentPlayerConfig.NameplateUseColor.Value)
+                {
+                    DrawColorPicker("NameplateColor", playerConfigSet, pc => pc.NameplateColor, ref playerConfigSet.CurrentPlayerConfig.NameplateColor, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
+                }
+            });
+
+            ToadGui.Section("NameplateTitle", () =>
+            {
+                DrawCombo("NameplateTitle", playerConfigSet, pc => pc.NameplateTitleType, ref playerConfigSet.CurrentPlayerConfig.NameplateTitleType, ref playerConfigSet.CurrentPlayerConfig.IsChanged, true);
+                if (playerConfigSet.CurrentPlayerConfig.NameplateTitleType.Value == NameplateTitleType.CustomTitle)
+                {
+                    DrawTextConfig("CustomTitle", playerConfigSet, pc => pc.NameplateCustomTitle, ref playerConfigSet.CurrentPlayerConfig.NameplateCustomTitle, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
+                }
+            });
+
+            ToadGui.Section("NameplateConditions", () =>
             {
                 DrawCheckbox("ShowInOverworld", playerConfigSet, pc => pc.NameplateShowInOverworld, ref playerConfigSet.CurrentPlayerConfig.NameplateShowInOverworld, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
                 DrawCheckbox("ShowInContent", playerConfigSet, pc => pc.NameplateShowInContent, ref playerConfigSet.CurrentPlayerConfig.NameplateShowInContent, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
                 DrawCheckbox("ShowInHighEndContent", playerConfigSet, pc => pc.NameplateShowInHighEndContent, ref playerConfigSet.CurrentPlayerConfig.NameplateShowInHighEndContent, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-            });
-
-            ToadGui.Section("Colors", () =>
-            {
-                DrawColorPicker("NameplateColor", playerConfigSet, pc => pc.NameplateColor, ref playerConfigSet.CurrentPlayerConfig.NameplateColor, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-                DrawCheckbox("NameplateShowColor", playerConfigSet, pc => pc.NameplateShowColor, ref playerConfigSet.CurrentPlayerConfig.NameplateShowColor, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-                DrawCheckbox("DisableColorIfDead", playerConfigSet, pc => pc.NameplateDisableColorIfDead, ref playerConfigSet.CurrentPlayerConfig.NameplateDisableColorIfDead, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-            });
-
-            ToadGui.Section("Text", () =>
-            {
-                DrawCheckbox("ReplaceGameTitleWithCategoryName", playerConfigSet, pc => pc.NameplateUseCategoryName, ref playerConfigSet.CurrentPlayerConfig.NameplateUseCategoryName, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-                DrawCheckbox("ReplaceGameTitleWithCustomTitle", playerConfigSet, pc => pc.NameplateUseCustomTitle, ref playerConfigSet.CurrentPlayerConfig.NameplateUseCustomTitle, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-                DrawTextConfig("CustomTitle", playerConfigSet, pc => pc.NameplateCustomTitle, ref playerConfigSet.CurrentPlayerConfig.NameplateCustomTitle, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
             });
 
             ImGui.EndTabItem();
@@ -179,8 +186,8 @@ public static class PlayerConfigComponent
         DrawSourceIndicator(playerConfigSet.PlayerConfigType, extractedProperty.PlayerConfigType, extractedProperty.CategoryId);
         DrawInheritOverrideCombo(key, playerConfigSet.PlayerConfigType, ref config.InheritOverride, ref isChanged);
 
-        ImGui.SetNextItemWidth(ImGuiUtil.CalcScaledComboWidth(100f));
-        if (ToadGui.InputText(key, ref stringValue, 100))
+        ImGui.SetNextItemWidth(ImGuiUtil.CalcScaledComboWidth(150f));
+        if (ToadGui.InputText(key, ref stringValue, 150))
         {
             config.InheritOverride = playerConfigSet.PlayerConfigType == PlayerConfigType.Default ? InheritOverride.None : InheritOverride.Override;
             config.Value = stringValue;
@@ -247,7 +254,7 @@ public static class PlayerConfigComponent
     {
         var extractedProperty = PlayerConfigService.ExtractProperty(playerConfigSet, propertySelector);
         object displayValue = config.InheritOverride == InheritOverride.Inherit ? extractedProperty.PropertyValue : config.Value;
-        if (extractedProperty.PlayerConfigType == PlayerConfigType.Default)
+        if (!isAvailableForDefault && extractedProperty.PlayerConfigType == PlayerConfigType.Default)
         {
             extractedProperty.PlayerConfigType = PlayerConfigType.Category;
         }
@@ -267,8 +274,8 @@ public static class PlayerConfigComponent
         var enumNames = Enum.GetNames(typeof(TEnum));
         var selectedIndex = Array.IndexOf(enumNames, enumValue.ToString());
 
-        ImGui.SetNextItemWidth(ImGuiUtil.CalcScaledComboWidth(90f));
-        if (ToadGui.Combo(key, ref selectedIndex, enumNames, 100, false))
+        ImGui.SetNextItemWidth(ImGuiUtil.CalcScaledComboWidth(150f));
+        if (ToadGui.Combo(key, ref selectedIndex, enumNames, 150, false))
         {
             var selectedEnum = (TEnum)Enum.Parse(typeof(TEnum), enumNames[selectedIndex]);
             config.Value = selectedEnum;

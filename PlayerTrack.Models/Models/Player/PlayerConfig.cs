@@ -15,10 +15,9 @@ public class PlayerConfig
     public ConfigValue<bool> NameplateShowInContent;
     public ConfigValue<bool> NameplateShowInHighEndContent;
     public ConfigValue<uint> NameplateColor;
-    public ConfigValue<bool> NameplateShowColor;
-    public ConfigValue<bool> NameplateDisableColorIfDead;
-    public ConfigValue<bool> NameplateUseCategoryName;
-    public ConfigValue<bool> NameplateUseCustomTitle;
+    public ConfigValue<bool> NameplateUseColor;
+    public ConfigValue<bool> NameplateUseColorIfDead;
+    public ConfigValue<NameplateTitleType> NameplateTitleType;
     public ConfigValue<bool> AlertNameChange;
     public ConfigValue<bool> AlertWorldTransfer;
     public ConfigValue<bool> AlertProximity;
@@ -41,10 +40,9 @@ public class PlayerConfig
         this.NameplateShowInContent = new ConfigValue<bool>(inheritOverride, true);
         this.NameplateShowInHighEndContent = new ConfigValue<bool>(inheritOverride, true);
         this.NameplateColor = new ConfigValue<uint>(inheritOverride, 1);
-        this.NameplateShowColor = new ConfigValue<bool>(inheritOverride, false);
-        this.NameplateDisableColorIfDead = new ConfigValue<bool>(inheritOverride, false);
-        this.NameplateUseCategoryName = new ConfigValue<bool>(inheritOverride, false);
-        this.NameplateUseCustomTitle = new ConfigValue<bool>(inheritOverride, false);
+        this.NameplateUseColor = new ConfigValue<bool>(inheritOverride, false);
+        this.NameplateUseColorIfDead = new ConfigValue<bool>(inheritOverride, false);
+        this.NameplateTitleType = new ConfigValue<NameplateTitleType>(inheritOverride, Models.NameplateTitleType.NoChange);
         this.AlertNameChange = new ConfigValue<bool>(inheritOverride, true);
         this.AlertWorldTransfer = new ConfigValue<bool>(inheritOverride, true);
         this.AlertProximity = new ConfigValue<bool>(inheritOverride, false);

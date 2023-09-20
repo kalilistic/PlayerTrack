@@ -144,7 +144,7 @@ public static class LiteDBMigrator
             defaultConfig.AlertProximity = defaultCategoryConfig.AlertProximity;
             defaultConfig.AlertNameChange = defaultCategoryConfig.AlertNameChange;
             defaultConfig.AlertWorldTransfer = defaultCategoryConfig.AlertWorldTransfer;
-            defaultConfig.NameplateShowColor = defaultCategoryConfig.NameplateShowColor;
+            defaultConfig.NameplateUseColor = defaultCategoryConfig.NameplateUseColor;
 
             RepositoryContext.PlayerConfigRepository.UpdatePlayerConfig(defaultConfig);
             ServiceContext.CategoryService.DeleteCategory(defaultCategory);
@@ -293,10 +293,10 @@ public static class LiteDBMigrator
             }
 
             var useNamePlateColors = jsonObject.Value<bool>("UseNamePlateColors");
-            defaultConfig.NameplateShowColor = new ConfigValue<bool>(InheritOverride.None, useNamePlateColors);
+            defaultConfig.NameplateUseColor = new ConfigValue<bool>(InheritOverride.None, useNamePlateColors);
 
             var disableNamePlateColorIfDead = jsonObject.Value<bool>("DisableNamePlateColorIfDead");
-            defaultConfig.NameplateDisableColorIfDead = new ConfigValue<bool>(InheritOverride.None, disableNamePlateColorIfDead);
+            defaultConfig.NameplateUseColorIfDead = new ConfigValue<bool>(InheritOverride.None, disableNamePlateColorIfDead);
 
             RepositoryContext.PlayerConfigRepository.UpdatePlayerConfig(defaultConfig);
             PluginLog.Log($"Migrated default player config.");
@@ -382,7 +382,7 @@ public static class LiteDBMigrator
         if (nameplateColor != null)
         {
             var uiColor = DalamudContext.DataManager.FindClosestUIColor(nameplateColor.Value).Id;
-            playerConfig.NameplateShowColor = new ConfigValue<bool>(InheritOverride.Override, true);
+            playerConfig.NameplateUseColor = new ConfigValue<bool>(InheritOverride.Override, true);
             playerConfig.NameplateColor = new ConfigValue<uint>(InheritOverride.Override, uiColor);
             hasNonDefaultSetting = true;
         }
@@ -390,6 +390,7 @@ public static class LiteDBMigrator
         var title = oldestPlayer.GetValueOrDefault<string>("Title");
         if (!string.IsNullOrEmpty(title))
         {
+            playerConfig.NameplateTitleType = new ConfigValue<NameplateTitleType>(InheritOverride.Override, NameplateTitleType.CustomTitle);
             playerConfig.NameplateCustomTitle = new ConfigValue<string>(InheritOverride.Override, title);
             hasNonDefaultSetting = true;
         }
@@ -435,7 +436,7 @@ public static class LiteDBMigrator
         if (nameplateColor != null)
         {
             var uiColor = DalamudContext.DataManager.FindClosestUIColor(nameplateColor.Value).Id;
-            playerConfig.NameplateShowColor = new ConfigValue<bool>(InheritOverride.Override, true);
+            playerConfig.NameplateUseColor = new ConfigValue<bool>(InheritOverride.Override, true);
             playerConfig.NameplateColor = new ConfigValue<uint>(InheritOverride.Override, uiColor);
             hasNonDefaultSetting = true;
         }
@@ -464,7 +465,7 @@ public static class LiteDBMigrator
         var isNamePlateColorEnabled = originalCategory.GetValueOrDefault<bool>("IsNamePlateColorEnabled");
         if (isNamePlateColorEnabled)
         {
-            playerConfig.NameplateShowColor = new ConfigValue<bool>(InheritOverride.Override, true);
+            playerConfig.NameplateUseColor = new ConfigValue<bool>(InheritOverride.Override, true);
             hasNonDefaultSetting = true;
         }
 

@@ -27,36 +27,29 @@ public class PlayerNameplateService
             return nameplate;
         }
 
-        var isColorEnabled = PlayerConfigService.GetNameplateShowColor(player);
+        var isColorEnabled = PlayerConfigService.GetNameplateUseColor(player);
         if (isColorEnabled)
         {
             nameplate.Color = PlayerConfigService.GetNameplateColor(player);
         }
 
-        nameplate.DisableColorIfDead = PlayerConfigService.GetNameplateShowColorIfDead(player);
+        nameplate.NameplateUseColorIfDead = PlayerConfigService.GetNameplateUseColorIfDead(player);
 
-        var useCustomTitle = PlayerConfigService.GetNameplateUseCustomTitle(player);
-        var customTitle = string.Empty;
-        if (useCustomTitle)
+        var nameplateTitleType = PlayerConfigService.GetNameplateTitleType(player);
+        var title = string.Empty;
+
+        if (nameplateTitleType == NameplateTitleType.CustomTitle)
         {
-            customTitle = PlayerConfigService.GetNameplateCustomTitle(player);
-            if (string.IsNullOrEmpty(customTitle))
-            {
-                var useCategory = PlayerConfigService.GetNameplateUseCategory(player);
-                if (useCategory && player.PrimaryCategoryId != 0)
-                {
-                    var category = ServiceContext.CategoryService.GetCategory(player.PrimaryCategoryId);
-                    if (category != null)
-                    {
-                        customTitle = category.Name;
-                    }
-                }
-            }
+            title = PlayerConfigService.GetNameplateCustomTitle(player);
+        }
+        else if (nameplateTitleType == NameplateTitleType.CategoryName && player.PrimaryCategoryId != 0)
+        {
+            title = ServiceContext.CategoryService.GetCategory(player.PrimaryCategoryId)?.Name ?? string.Empty;
         }
 
-        if (useCustomTitle && !string.IsNullOrEmpty(customTitle))
+        if (nameplateTitleType != NameplateTitleType.NoChange && !string.IsNullOrEmpty(title))
         {
-            nameplate.CustomTitle = customTitle;
+            nameplate.CustomTitle = title;
             nameplate.HasCustomTitle = true;
         }
 

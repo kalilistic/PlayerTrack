@@ -121,14 +121,14 @@ public class PlayerConfigService
             x => x.NameplateShowInHighEndContent).PropertyValue;
     }
 
-    public static bool GetNameplateShowColor(Player player)
+    public static bool GetNameplateUseColor(Player player)
     {
         PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateColorShowColor(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
             player.GetCategoryPlayerConfigs(),
-            x => x.NameplateShowColor).PropertyValue;
+            x => x.NameplateUseColor).PropertyValue;
     }
 
     public static uint GetNameplateColor(Player player)
@@ -141,34 +141,24 @@ public class PlayerConfigService
             x => x.NameplateColor).PropertyValue;
     }
 
-    public static bool GetNameplateShowColorIfDead(Player player)
+    public static bool GetNameplateUseColorIfDead(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateShowColorIfDead(): {player.Name}");
+        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateUseColorIfDead(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
             player.GetCategoryPlayerConfigs(),
-            x => x.NameplateDisableColorIfDead).PropertyValue;
+            x => x.NameplateUseColorIfDead).PropertyValue;
     }
 
-    public static bool GetNameplateUseCategory(Player player)
+    public static NameplateTitleType GetNameplateTitleType(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateUseCategory(): {player.Name}");
+        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateTitleType(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
             player.GetCategoryPlayerConfigs(),
-            x => x.NameplateUseCategoryName).PropertyValue;
-    }
-
-    public static bool GetNameplateUseCustomTitle(Player player)
-    {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateUseCustomTitle(): {player.Name}");
-        return ExtractPlayerProperty(
-            GetDefaultConfig(),
-            player.PlayerConfig,
-            player.GetCategoryPlayerConfigs(),
-            x => x.NameplateUseCustomTitle).PropertyValue;
+            x => x.NameplateTitleType).PropertyValue;
     }
 
     public static string GetNameplateCustomTitle(Player player)

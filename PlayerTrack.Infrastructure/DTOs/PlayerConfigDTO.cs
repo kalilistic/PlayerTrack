@@ -24,13 +24,11 @@ public class PlayerConfigDTO : DTO
 
     public string nameplate_color { get; set; } = string.Empty;
 
-    public string nameplate_color_show_color { get; set; } = string.Empty;
+    public string nameplate_use_color { get; set; } = string.Empty;
 
-    public string nameplate_show_color_if_dead { get; set; } = string.Empty;
+    public string nameplate_use_color_if_dead { get; set; } = string.Empty;
 
-    public string nameplate_use_category { get; set; } = string.Empty;
-
-    public string nameplate_use_custom_title { get; set; } = string.Empty;
+    public string nameplate_title_type { get; set; } = string.Empty;
 
     public string alert_name_change { get; set; } = string.Empty;
 

@@ -6,7 +6,7 @@ public class PlayerNameplate
 
     public uint Color { get; set; }
 
-    public bool DisableColorIfDead { get; set; }
+    public bool NameplateUseColorIfDead { get; set; }
 
     public bool HasCustomTitle { get; set; }
 
