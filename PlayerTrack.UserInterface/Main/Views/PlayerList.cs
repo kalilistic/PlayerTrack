@@ -45,6 +45,11 @@ public class PlayerList : PlayerTrackView, IViewWithPanel
         this.minimizedWidth = minimizedWidthBase * globalScale;
         this.config.MainWindowHeight = ImGui.GetWindowSize().Y;
         this.Size = ImGui.GetWindowSize() with { X = this.minimizedWidth } / ImGuiHelpers.GlobalScale;
+        if (this.Size.Value.Y < 100)
+        {
+            this.Size = this.Size.Value with { Y = 400 };
+        }
+
         this.playerListComponent.Draw();
     }
 
