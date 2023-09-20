@@ -14,6 +14,7 @@ using PlayerTrack.Models.Structs;
 namespace PlayerTrack.UserInterface.Components;
 
 using System.Numerics;
+using Dalamud.Logging;
 using ViewModels;
 
 public static class PlayerConfigComponent
@@ -116,7 +117,7 @@ public static class PlayerConfigComponent
 
         if (LocGui.BeginTabItem("Alerts"))
         {
-            ImGuiHelpers.ScaledDummy(1f);
+            ImGuiHelpers.ScaledDummy(2f);
             DrawCheckbox("NameChangeAlert", playerConfigSet, pc => pc.AlertNameChange, ref playerConfigSet.CurrentPlayerConfig.AlertNameChange, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
             DrawCheckbox("WorldTransferAlert", playerConfigSet, pc => pc.AlertWorldTransfer, ref playerConfigSet.CurrentPlayerConfig.AlertWorldTransfer, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
             DrawCheckbox("ProximityAlert", playerConfigSet, pc => pc.AlertProximity, ref playerConfigSet.CurrentPlayerConfig.AlertProximity, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
@@ -128,8 +129,8 @@ public static class PlayerConfigComponent
         {
             if (LocGui.BeginTabItem("Integrations"))
             {
-                ImGuiHelpers.ScaledDummy(1f);
-                DrawCombo("VisibilityType", playerConfigSet, pc => pc.VisibilityType, ref playerConfigSet.CurrentPlayerConfig.VisibilityType, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
+                ImGuiHelpers.ScaledDummy(2f);
+                DrawCombo("VisibilityType", playerConfigSet, pc => pc.VisibilityType, ref playerConfigSet.CurrentPlayerConfig.VisibilityType, ref playerConfigSet.CurrentPlayerConfig.IsChanged, false);
 
                 ImGui.EndTabItem();
             }
@@ -241,16 +242,23 @@ public static class PlayerConfigComponent
         PlayerConfigSet playerConfigSet,
         Func<PlayerConfig, ConfigValue<TEnum>> propertySelector,
         ref ConfigValue<TEnum> config,
-        ref bool isChanged) where TEnum : Enum
+        ref bool isChanged,
+        bool isAvailableForDefault) where TEnum : Enum
     {
         var extractedProperty = PlayerConfigService.ExtractProperty(playerConfigSet, propertySelector);
-        object displayValue = config.InheritOverride == InheritOverride.Inherit ? extractedProperty : config.Value;
+        object displayValue = config.InheritOverride == InheritOverride.Inherit ? extractedProperty.PropertyValue : config.Value;
+        if (extractedProperty.PlayerConfigType == PlayerConfigType.Default)
+        {
+            extractedProperty.PlayerConfigType = PlayerConfigType.Category;
+        }
+
         if (displayValue is not TEnum enumValue)
         {
+            PluginLog.Error($"Failed to cast {displayValue} to {typeof(TEnum)}");
             return;
         }
 
-        if (playerConfigSet.PlayerConfigType == PlayerConfigType.Player)
+        if (isAvailableForDefault || !isAvailableForDefault && playerConfigSet.PlayerConfigType == PlayerConfigType.Player)
         {
             DrawSourceIndicator(playerConfigSet.PlayerConfigType, extractedProperty.PlayerConfigType, extractedProperty.CategoryId);
             DrawInheritOverrideCombo(key, playerConfigSet.PlayerConfigType, ref config.InheritOverride, ref isChanged);
@@ -295,7 +303,7 @@ public static class PlayerConfigComponent
         {
             case PlayerConfigType.Category:
                 var category = ServiceContext.CategoryService.GetCategoryById(categoryId);
-                var categoryName = category == null ? "N/A" : category.Name;
+                var categoryName = category == null ? string.Empty : category.Name;
                 DrawSourceIndicatorIcon(string.Format(ServiceContext.Localization.GetString("CategorySpecificSetting"), categoryName), FontAwesomeIcon.FolderOpen, iconOffset);
                 break;
             case PlayerConfigType.Default:
