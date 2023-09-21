@@ -3,8 +3,12 @@ using PlayerTrack.Domain;
 
 namespace PlayerTrack.UserInterface.Config.Components;
 
+using System;
+
 public class ContextMenuComponent : ConfigViewComponent
 {
+    public Action? UpdateContextMenu;
+
     public override void Draw() => this.DrawControls();
 
     private void DrawControls()
@@ -12,25 +16,23 @@ public class ContextMenuComponent : ConfigViewComponent
         var showOpenInPlayerTrack = this.config.ShowOpenInPlayerTrack;
         if (ToadGui.Checkbox("ShowOpenPlayerTracker", ref showOpenInPlayerTrack))
         {
-            this.UpdateShowOpenInPlayerTrack(showOpenInPlayerTrack);
+            this.config.ShowOpenInPlayerTrack = showOpenInPlayerTrack;
+            ServiceContext.ConfigService.SaveConfig(this.config);
         }
 
         var showOpenInLodestone = this.config.ShowOpenLodestone;
         if (ToadGui.Checkbox("ShowOpenLodestone", ref showOpenInLodestone))
         {
-            this.UpdateShowOpenLodestone(showOpenInLodestone);
+            this.config.ShowOpenLodestone = showOpenInLodestone;
+            ServiceContext.ConfigService.SaveConfig(this.config);
         }
-    }
 
-    private void UpdateShowOpenInPlayerTrack(bool showOpenInPlayerTrack)
-    {
-        this.config.ShowOpenInPlayerTrack = showOpenInPlayerTrack;
-        ServiceContext.ConfigService.SaveConfig(this.config);
-    }
-
-    private void UpdateShowOpenLodestone(bool showOpenLodestone)
-    {
-        this.config.ShowOpenLodestone = showOpenLodestone;
-        ServiceContext.ConfigService.SaveConfig(this.config);
+        var showContextMenuIndicator = this.config.ShowContextMenuIndicator;
+        if (ToadGui.Checkbox("ShowContextMenuIndicator", ref showContextMenuIndicator))
+        {
+            this.config.ShowContextMenuIndicator = showContextMenuIndicator;
+            ServiceContext.ConfigService.SaveConfig(this.config);
+            this.UpdateContextMenu?.Invoke();
+        }
     }
 }

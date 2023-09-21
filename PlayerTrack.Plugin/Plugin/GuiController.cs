@@ -30,6 +30,7 @@ public static class GuiController
         configView.WindowConfigChanged += WindowConfigChanged;
         configView.PlayerConfigChanged += presenter.ReloadPlayer;
         configView.PlayerConfigChanged += NameplateHandler.RefreshNameplates;
+        configView.ContextMenuUpdated += ContextMenuHandler.Restart;
         DalamudContext.WindowManager.AddWindows(configView);
         if (config.IsWindowCombined)
         {
@@ -67,6 +68,7 @@ public static class GuiController
                 configView.WindowConfigChanged -= WindowConfigChanged;
                 configView.PlayerConfigChanged -= presenter.ClearCache;
                 configView.PlayerConfigChanged -= NameplateHandler.RefreshNameplates;
+                configView.ContextMenuUpdated -= ContextMenuHandler.Restart;
             }
         }
         catch (Exception)

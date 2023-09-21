@@ -51,6 +51,8 @@ public class PluginConfig : IPluginConfig
 
     public bool ShowCategorySeparator { get; set; } = true;
 
+    public bool ShowContextMenuIndicator { get; set; } = true;
+
     public bool SyncWithVisibility { get; set; }
 
     public List<FontAwesomeIcon> Icons { get; set; } = new()

@@ -29,6 +29,7 @@ public class ConfigView : PlayerTrackView, IDisposable
         this.backupComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.categoryComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.contextMenuComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
+        this.contextMenuComponent.UpdateContextMenu += () => this.ContextMenuUpdated?.Invoke();
         this.iconComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.integrationComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.playerDefaultsComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
@@ -41,9 +42,13 @@ public class ConfigView : PlayerTrackView, IDisposable
 
     public delegate void PlayerConfigChangedDelegate();
 
+    public delegate void ContextMenuUpdatedDelegate();
+
     public event WindowConfigChangedDelegate? WindowConfigChanged;
 
     public event PlayerConfigChangedDelegate? PlayerConfigChanged;
+
+    public event ContextMenuUpdatedDelegate? ContextMenuUpdated;
 
     public ConfigMenuOption SelectedMenuOption { get; set; }
 

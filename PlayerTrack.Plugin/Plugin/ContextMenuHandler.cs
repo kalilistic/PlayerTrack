@@ -10,6 +10,7 @@ using PlayerTrack.Domain;
 
 namespace PlayerTrack.Plugin;
 
+using Dalamud.Game.Text;
 using Domain.Common;
 
 public static class ContextMenuHandler
@@ -28,13 +29,15 @@ public static class ContextMenuHandler
         PluginLog.LogVerbose("Entering ContextMenuHandler.Start()");
         contextMenu = new DalamudContextMenu();
         contextMenu.OnOpenGameObjectContextMenu += OpenGameObjectContextMenu;
-        openPlayerTrackMenuItem = new GameObjectContextMenuItem(
-            new SeString(new TextPayload(DalamudContext.LocManager.GetString("OpenPlayerTrack"))),
-            OnSelectPlayer);
-        openLodestoneItem = new GameObjectContextMenuItem(
-            new SeString(new TextPayload(DalamudContext.LocManager.GetString("OpenLodestone"))),
-            OnOpenLodestone);
+        BuildContentMenuItems();
         isStarted = true;
+    }
+
+    public static void Restart()
+    {
+        PluginLog.LogVerbose("Entering ContextMenuHandler.Restart()");
+        Dispose();
+        Start();
     }
 
     public static void Dispose()
@@ -45,12 +48,36 @@ public static class ContextMenuHandler
             if (contextMenu != null)
             {
                 contextMenu.OnOpenGameObjectContextMenu -= OpenGameObjectContextMenu;
+                contextMenu.Dispose();
             }
         }
         catch (Exception ex)
         {
             PluginLog.LogError(ex, "Failed to dispose ContextMenuHandler properly.");
         }
+    }
+
+    private static void BuildContentMenuItems()
+    {
+        PluginLog.LogVerbose("Entering ContextMenuHandler.BuildContentMenuItems()");
+        var showContextMenuIndicator = ServiceContext.ConfigService.GetConfig().ShowContextMenuIndicator;
+        SeString openPlayerTrackMenuItemName;
+        SeString openLodestoneItemName;
+        if (showContextMenuIndicator)
+        {
+            openPlayerTrackMenuItemName = new SeString().Append(new UIForegroundPayload(539)).Append($"{SeIconChar.BoxedLetterP.ToIconString()} ")
+                .Append(new UIForegroundPayload(0)).Append(DalamudContext.LocManager.GetString("OpenPlayerTrack"));
+            openLodestoneItemName = new SeString().Append(new UIForegroundPayload(539)).Append($"{SeIconChar.BoxedLetterP.ToIconString()} ")
+                .Append(new UIForegroundPayload(0)).Append(DalamudContext.LocManager.GetString("OpenLodestone"));
+        }
+        else
+        {
+            openPlayerTrackMenuItemName = new SeString(new TextPayload(DalamudContext.LocManager.GetString("OpenPlayerTrack")));
+            openLodestoneItemName = new SeString(new TextPayload(DalamudContext.LocManager.GetString("OpenLodestone")));
+        }
+
+        openPlayerTrackMenuItem = new GameObjectContextMenuItem(openPlayerTrackMenuItemName, OnSelectPlayer);
+        openLodestoneItem = new GameObjectContextMenuItem(openLodestoneItemName, OnOpenLodestone);
     }
 
     private static void OnOpenLodestone(BaseContextMenuArgs args)
