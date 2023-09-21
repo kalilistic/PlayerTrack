@@ -49,6 +49,8 @@ public class PluginConfig : IPluginConfig
 
     public bool ShowSearchBox { get; set; } = true;
 
+    public bool ShowCategorySeparator { get; set; } = true;
+
     public bool SyncWithVisibility { get; set; }
 
     public List<FontAwesomeIcon> Icons { get; set; } = new()

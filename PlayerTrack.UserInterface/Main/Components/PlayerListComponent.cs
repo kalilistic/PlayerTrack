@@ -51,6 +51,11 @@ public class PlayerListComponent : ViewComponent
                 var player = players.ElementAtOrDefault(i);
                 if (player != null)
                 {
+                    if (this.config.ShowCategorySeparator && i > 0 && i < players.Count && player.PrimaryCategoryId != players[i - 1].PrimaryCategoryId)
+                    {
+                        ImGui.Separator();
+                    }
+
                     this.DrawPlayer(player);
                 }
 

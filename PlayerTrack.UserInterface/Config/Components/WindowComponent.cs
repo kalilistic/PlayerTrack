@@ -89,6 +89,15 @@ public class WindowComponent : ConfigViewComponent
                 ServiceContext.ConfigService.SaveConfig(this.config);
             }
 
+            ImGuiHelpers.ScaledDummy(1f);
+
+            var showCategorySeparator = this.config.ShowCategorySeparator;
+            if (ToadGui.Checkbox("ShowCategorySeparator", ref showCategorySeparator))
+            {
+                this.config.ShowCategorySeparator = showCategorySeparator;
+                ServiceContext.ConfigService.SaveConfig(this.config);
+            }
+
             ImGui.EndTabItem();
         }
     }
