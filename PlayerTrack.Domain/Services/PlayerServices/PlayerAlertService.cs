@@ -19,8 +19,8 @@ public class PlayerAlertService
     {
         PluginLog.LogVerbose(
             $"Entering PlayerAlertService.SendPlayerNameWorldChangeAlert(): {nameChanged}, {worldChanged}, {oldestPlayer.Name}, {newPlayer.Name}");
-        var oldestPlayerWorldName = DalamudContext.DataManager.GetWorldNameById(newPlayer.WorldId);
-        var newPlayerWorldName = DalamudContext.DataManager.GetWorldNameById(oldestPlayer.WorldId);
+        var oldestPlayerWorldName = DalamudContext.DataManager.GetWorldNameById(oldestPlayer.WorldId);
+        var newPlayerWorldName = DalamudContext.DataManager.GetWorldNameById(newPlayer.WorldId);
 
         var shouldSendNameAlert = nameChanged && IsNameChangeAlertEnabled(oldestPlayer);
         var shouldSendWorldAlert = worldChanged && IsWorldTransferAlertEnabled(oldestPlayer);
