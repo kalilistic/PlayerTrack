@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Common;
+using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Core.Models;
 using Dalamud.DrunkenToad.Helpers;
 using Dalamud.Logging;
@@ -97,6 +98,19 @@ public class PlayerProcessService
         this.CurrentPlayerRemoved?.Invoke(player);
     }
 
+    public void SelectPlayer(string name, string worldName)
+    {
+        var worldId = DalamudContext.DataManager.GetWorldIdByName(worldName);
+        var player = ServiceContext.PlayerDataService.GetPlayer(name, worldId);
+        if (player == null)
+        {
+            PluginLog.LogVerbose("Player not found.");
+            return;
+        }
+
+        this.PlayerSelected?.Invoke(player);
+    }
+
     public void RegisterCurrentPlayer(Player player) => this.CurrentPlayerAdded?.Invoke(player);
 
     public void AddOrUpdatePlayer(ToadPlayer toadPlayer, bool isCurrent = true, bool forceLoad = false)
@@ -147,7 +161,7 @@ public class PlayerProcessService
         {
             PluginLog.LogVerbose("Player found, updating existing player.");
             player = this.UpdateExistingPlayer(player, toadPlayer, isCurrent, loc);
-            PlayerAlertService.SendProximityAlert(player);
+            ServiceContext.PlayerAlertService.SendProximityAlert(player);
             if (enc.SaveEncounter)
             {
                 PlayerEncounterService.CreatePlayerEncounter(toadPlayer, player);

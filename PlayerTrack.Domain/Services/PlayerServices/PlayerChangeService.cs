@@ -31,7 +31,6 @@ public class PlayerChangeService
                 PlayerName = oldestPlayer.Name,
                 WorldId = oldestPlayer.WorldId,
             });
-            PlayerAlertService.SendPlayerNameWorldChangeAlert(nameChanged, worldChanged, oldestPlayer, newPlayer);
         }
     }
 

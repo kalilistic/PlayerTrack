@@ -118,8 +118,9 @@ public class PlayerDataService : SortedCacheService<Player>
             return;
         }
 
-        // save isCurrent state
+        // save state before changing
         var isCurrent = newPlayer.IsCurrent;
+        var payloads = ServiceContext.PlayerAlertService.CreatePlayerNameWorldChangeAlert(oldestPlayer, newPlayer);
 
         // remove players from cache
         ServiceContext.PlayerProcessService.RemoveCurrentPlayer(newPlayer.ObjectId);
@@ -159,6 +160,9 @@ public class PlayerDataService : SortedCacheService<Player>
         {
             ServiceContext.PlayerProcessService.RegisterCurrentPlayer(oldestPlayer);
         }
+
+        // send alert
+        PlayerAlertService.SendNameWorldChangeAlert(payloads);
     }
 
     public int GetAllPlayersCount() => this.cache.Count;
