@@ -2,10 +2,14 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Common;
 using Dalamud.DrunkenToad.Core.Models;
 using Dalamud.DrunkenToad.Helpers;
 using Dalamud.Logging;
+using Infrastructure;
 using Models;
 
 public class PlayerProcessService
@@ -15,6 +19,50 @@ public class PlayerProcessService
     public event Action<Player>? CurrentPlayerAdded;
 
     public event Action<Player>? CurrentPlayerRemoved;
+
+    public static void HandleDuplicatePlayers(List<Player> players)
+    {
+        PluginLog.LogVerbose($"Entering PlayerMergeService.HandleDuplicatePlayers(): {players.Count}");
+        if (players.Count < 2)
+        {
+            return;
+        }
+
+        var sortedPlayers = new List<Player>(
+            players.OrderBy(p => p.LodestoneVerifiedOn)
+                .ThenBy(p => p.Created)
+                .ThenBy(p => p.Id));
+        var oldestPlayer = sortedPlayers[0];
+        var newestPlayers = sortedPlayers.Skip(1).ToList();
+
+        foreach (var newPlayer in newestPlayers)
+        {
+            ServiceContext.PlayerDataService.MergePlayers(oldestPlayer, newPlayer.Id);
+        }
+    }
+
+    public static void CheckForDuplicates() => Task.Run(() =>
+    {
+        PluginLog.LogVerbose("Entering PlayerMergeService.CheckForDuplicates()");
+        var allPlayers = ServiceContext.PlayerDataService.GetAllPlayers();
+        var groupedPlayers = allPlayers.Where(p => p.LodestoneId > 0)
+            .GroupBy(p => p.LodestoneId);
+
+        foreach (var group in groupedPlayers)
+        {
+            HandleDuplicatePlayers(group.ToList());
+        }
+    });
+
+    public static void CheckForDuplicates(Player player) => Task.Run(() =>
+    {
+        PluginLog.LogVerbose($"Entering PlayerMergeService.CheckForDuplicates(): {player.Id}");
+        if (player.LodestoneId > 0)
+        {
+            var players = RepositoryContext.PlayerRepository.GetPlayersByLodestoneId(player.LodestoneId) ?? new List<Player>();
+            HandleDuplicatePlayers(players);
+        }
+    });
 
     public static void CreateNewPlayer(string name, uint worldId)
     {
@@ -48,6 +96,8 @@ public class PlayerProcessService
         ServiceContext.PlayerDataService.UpdatePlayer(player);
         this.CurrentPlayerRemoved?.Invoke(player);
     }
+
+    public void RegisterCurrentPlayer(Player player) => this.CurrentPlayerAdded?.Invoke(player);
 
     public void AddOrUpdatePlayer(ToadPlayer toadPlayer, bool isCurrent = true, bool forceLoad = false)
     {

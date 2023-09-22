@@ -109,6 +109,58 @@ public class PlayerDataService : SortedCacheService<Player>
         });
     }
 
+    public void MergePlayers(Player oldestPlayer, int newPlayerId)
+    {
+        PluginLog.LogVerbose($"PlayerDataService.MergePlayer(): {oldestPlayer.Id} -> {newPlayerId}");
+        var newPlayer = this.cache.FindFirst(p => p.Id == newPlayerId);
+        if (newPlayer == null)
+        {
+            return;
+        }
+
+        // save isCurrent state
+        var isCurrent = newPlayer.IsCurrent;
+
+        // remove players from cache
+        ServiceContext.PlayerProcessService.RemoveCurrentPlayer(newPlayer.ObjectId);
+        this.cache.Remove(newPlayer);
+        this.cache.Remove(oldestPlayer);
+        this.OnCacheUpdated();
+
+        // create records
+        PlayerChangeService.HandleNameWorldChange(oldestPlayer, newPlayer);
+        PlayerChangeService.HandleCustomizeChange(oldestPlayer, newPlayer);
+
+        // re-parent records
+        PlayerChangeService.UpdatePlayerId(newPlayer.Id, oldestPlayer.Id);
+        PlayerEncounterService.UpdatePlayerId(newPlayer.Id, oldestPlayer.Id);
+
+        // delete records
+        PlayerConfigService.DeletePlayerConfig(newPlayer.Id);
+        PlayerCategoryService.DeletePlayerCategoryByPlayerId(newPlayer.Id);
+        PlayerTagService.DeletePlayerTagsByPlayerId(newPlayer.Id);
+        PlayerLodestoneService.DeleteLookupsByPlayer(newPlayer.Id);
+        RepositoryContext.PlayerRepository.DeletePlayer(newPlayer.Id);
+
+        // merge data into original
+        oldestPlayer.Merge(newPlayer);
+
+        // recalculate derived fields
+        PopulateDerivedFields(oldestPlayer, ServiceContext.CategoryService.GetCategoryRanks());
+
+        // update player in repo & cache
+        RepositoryContext.PlayerRepository.UpdatePlayer(oldestPlayer);
+        this.cache.Add(oldestPlayer);
+        this.OnCacheUpdated();
+
+        // add to current players if needed
+        oldestPlayer.IsCurrent = isCurrent;
+        if (oldestPlayer.IsCurrent)
+        {
+            ServiceContext.PlayerProcessService.RegisterCurrentPlayer(oldestPlayer);
+        }
+    }
+
     public int GetAllPlayersCount() => this.cache.Count;
 
     public int GetAllPlayersCount(string name, SearchType searchType) => this.cache.GetFilteredItemsCount(GetSearchFilter(name, searchType));

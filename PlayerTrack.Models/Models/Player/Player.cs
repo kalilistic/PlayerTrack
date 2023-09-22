@@ -95,7 +95,6 @@ public class Player
         this.LastTerritoryType = player.LastTerritoryType;
 
         this.PrimaryCategoryId = player.PrimaryCategoryId;
-        this.IsCurrent = this.IsCurrent || player.IsCurrent;
         this.PreviousNames = player.PreviousNames;
         this.PreviousWorlds = player.PreviousWorlds;
         this.PlayerConfig = player.PlayerConfig;

@@ -51,7 +51,7 @@ public class PlayerLodestoneService
         player.LodestoneStatus = lookup.LodestoneStatus;
         player.LodestoneVerifiedOn = lookup.Updated;
         ServiceContext.PlayerDataService.UpdatePlayer(player);
-        PlayerMergeService.CheckForDuplicates(player);
+        PlayerProcessService.CheckForDuplicates(player);
     }
 
     public static void ResetLodestone(int playerId)

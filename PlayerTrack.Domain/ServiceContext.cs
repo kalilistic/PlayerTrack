@@ -36,8 +36,6 @@ public static class ServiceContext
 
     public static PlayerAlertService PlayerAlertService { get; set; } = null!;
 
-    public static PlayerMergeService PlayerMergeService { get; set; } = null!;
-
     public static PlayerProcessService PlayerProcessService { get; set; } = null!;
 
     public static TagService TagService { get; set; } = null!;
@@ -63,7 +61,6 @@ public static class ServiceContext
         PlayerDataService = new PlayerDataService();
         PlayerEncounterService = new PlayerEncounterService();
         PlayerAlertService = new PlayerAlertService();
-        PlayerMergeService = new PlayerMergeService();
         PlayerProcessService = new PlayerProcessService();
         PlayerConfigService = new PlayerConfigService();
         LodestoneService = new LodestoneService();

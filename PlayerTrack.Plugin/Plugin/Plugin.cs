@@ -101,7 +101,7 @@ public class Plugin : IDalamudPlugin
         DalamudContext.PlayerLocationManager.Start();
         DalamudContext.PlayerEventDispatcher.Start();
         this.PlayerTrackProvider = new PlayerTrackProvider(DalamudContext.PluginInterface, new PlayerTrackAPI());
-        PlayerMergeService.CheckForDuplicates();
+        PlayerProcessService.CheckForDuplicates();
     });
 
     private bool LoadDatabase()
