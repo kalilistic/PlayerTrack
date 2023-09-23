@@ -10,6 +10,7 @@ using PlayerTrack.UserInterface.ViewModels.Mappers;
 
 namespace PlayerTrack.UserInterface.Main.Presenters;
 
+using System.Collections;
 using Dalamud.DrunkenToad.Helpers;
 using Dalamud.Logging;
 
@@ -28,7 +29,7 @@ public class MainPresenter : IMainPresenter
     private bool isPlayerCountCacheStale;
     private long playerCacheLastUpdated;
     private long playerCountCacheLastUpdated;
-    private string? lastValidSearchTerm;
+    private string lastSearchInput = string.Empty;
 
     public MainPresenter()
     {
@@ -58,13 +59,8 @@ public class MainPresenter : IMainPresenter
 
     public int GetPlayersCount()
     {
-        var currentTime = UnixTimestampHelper.CurrentTime();
-        if (this.isPlayerCountCacheStale && currentTime - this.playerCountCacheLastUpdated > CacheTtl)
-        {
-            this.playerCountCache.Clear();
-            this.playerCountCacheLastUpdated = currentTime;
-            this.isPlayerCountCacheStale = false;
-        }
+        InvalidateCacheIfStale(this.playerCountCache, ref this.playerCountCacheLastUpdated, ref this.isPlayerCountCacheStale);
+        this.InvalidateCacheIfSearchChanged();
 
         var filter = this.config.PlayerListFilter;
         var cacheKey = string.IsNullOrEmpty(this.config.SearchInput) ?
@@ -126,22 +122,10 @@ public class MainPresenter : IMainPresenter
 
     public List<Player> GetPlayers(int displayStart, int displayEnd)
     {
+        InvalidateCacheIfStale(this.playerCache, ref this.playerCacheLastUpdated, ref this.isPlayerCacheStale);
+        this.InvalidateCacheIfSearchChanged();
+
         var currentTime = UnixTimestampHelper.CurrentTime();
-        var currentSearchTerm = this.config.SearchInput;
-
-        if (!string.IsNullOrEmpty(currentSearchTerm) && currentSearchTerm == this.lastValidSearchTerm)
-        {
-            if (this.playerCache.TryGetValue(displayStart, out var playersOut))
-            {
-                return new List<Player>(playersOut);
-            }
-        }
-
-        if (!string.IsNullOrEmpty(currentSearchTerm))
-        {
-            this.ClearCache();
-            this.lastValidSearchTerm = currentSearchTerm;
-        }
 
         if (this.isPlayerCacheStale && currentTime - this.playerCacheLastUpdated > CacheTtl)
         {
@@ -186,13 +170,10 @@ public class MainPresenter : IMainPresenter
 
     public void ClearCache()
     {
-        if (string.IsNullOrEmpty(this.config.SearchInput) || this.config.SearchInput != this.lastValidSearchTerm)
-        {
-            this.isPlayerCountCacheStale = true;
-            this.isPlayerCacheStale = true;
-            this.playerCache.Clear();
-            this.playerCountCache.Clear();
-        }
+        this.isPlayerCountCacheStale = true;
+        this.isPlayerCacheStale = true;
+        this.playerCache.Clear();
+        this.playerCountCache.Clear();
     }
 
     public void SelectPlayer(Player player)
@@ -219,6 +200,26 @@ public class MainPresenter : IMainPresenter
         }
 
         this.LoadPlayer(player);
+    }
+
+    private static void InvalidateCacheIfStale(IDictionary cache, ref long lastUpdated, ref bool isStale)
+    {
+        var currentTime = UnixTimestampHelper.CurrentTime();
+        if (isStale && currentTime - lastUpdated > CacheTtl)
+        {
+            cache.Clear();
+            lastUpdated = currentTime;
+            isStale = false;
+        }
+    }
+
+    private void InvalidateCacheIfSearchChanged()
+    {
+        if (this.lastSearchInput != this.config.SearchInput)
+        {
+            this.ClearCache();
+            this.lastSearchInput = this.config.SearchInput;
+        }
     }
 
     private IViewWithPanel CurrentPanelView() => this.config.IsWindowCombined ? this.Combined : this.PlayerList;
