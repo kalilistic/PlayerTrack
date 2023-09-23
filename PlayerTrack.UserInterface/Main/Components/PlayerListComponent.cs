@@ -42,6 +42,7 @@ public class PlayerListComponent : ViewComponent
         this.SetupClipper();
         var playersCount = this.presenter.GetPlayersCount();
         this.clipper.Begin(playersCount);
+        var shouldShowSeparator = this.config.ShowCategorySeparator && string.IsNullOrEmpty(this.config.SearchInput);
         while (this.clipper.Step())
         {
             var players = this.presenter.GetPlayers(this.clipper.DisplayStart, this.clipper.DisplayEnd);
@@ -51,7 +52,7 @@ public class PlayerListComponent : ViewComponent
                 var player = players.ElementAtOrDefault(i);
                 if (player != null)
                 {
-                    if (this.config.ShowCategorySeparator && i > 0 && i < players.Count && player.PrimaryCategoryId != players[i - 1].PrimaryCategoryId)
+                    if (shouldShowSeparator && i > 0 && i < players.Count && player.PrimaryCategoryId != players[i - 1].PrimaryCategoryId)
                     {
                         ImGui.Separator();
                     }
