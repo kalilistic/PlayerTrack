@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 
 namespace PlayerTrack.Models;
 
+using Dalamud.DrunkenToad.Helpers;
+
 public class PluginConfig : IPluginConfig
 {
     public int FilterCategoryIndex { get; set; }
@@ -54,6 +56,8 @@ public class PluginConfig : IPluginConfig
     public bool ShowContextMenuIndicator { get; set; } = true;
 
     public bool SyncWithVisibility { get; set; }
+
+    public long MaintenanceLastRunOn { get; set; } = UnixTimestampHelper.CurrentTime();
 
     public List<FontAwesomeIcon> Icons { get; set; } = new()
     {

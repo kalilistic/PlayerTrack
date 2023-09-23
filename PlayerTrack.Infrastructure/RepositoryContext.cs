@@ -5,7 +5,9 @@ using FluentDapperLite.Extension;
 
 namespace PlayerTrack.Infrastructure;
 
+using Dalamud.DrunkenToad.Helpers;
 using Dalamud.Logging;
+using FluentDapperLite.Maintenance;
 
 public static class RepositoryContext
 {
@@ -59,6 +61,7 @@ public static class RepositoryContext
         PlayerTagRepository = new PlayerTagRepository(Database, Mapper);
         PlayerConfigRepository = new PlayerConfigRepository(Database, Mapper);
         ArchiveRecordRepository = new ArchiveRecordRepository(Database, Mapper);
+        RunMaintenanceChecks();
     }
 
     public static void Dispose()
@@ -93,5 +96,37 @@ public static class RepositoryContext
         });
 
         return mapperConfig.CreateMapper();
+    }
+
+    private static void RunMaintenanceChecks()
+    {
+        PluginLog.LogVerbose("Entering RepositoryContext.RunMaintenance()");
+        var currentTime = UnixTimestampHelper.CurrentTime();
+        var config = ConfigRepository.GetPluginConfig();
+
+        if (config == null)
+        {
+            PluginLog.LogWarning("Plugin config not found, skipping maintenance");
+            return;
+        }
+
+        const long weekInMillis = 604800000; // 7 days in milliseconds
+
+        if (currentTime - config.MaintenanceLastRunOn >= weekInMillis)
+        {
+            PluginLog.LogVerbose($"It's been a week since the last maintenance. Current time: {currentTime}, Last run: {config.MaintenanceLastRunOn}");
+            SQLiteDbMaintenance.Reindex(Database);
+            SQLiteDbMaintenance.Vacuum(Database);
+            SQLiteDbMaintenance.Analyze(Database);
+            SQLiteDbMaintenance.Optimize(Database);
+            config.MaintenanceLastRunOn = currentTime;
+            ConfigRepository.UpdatePluginConfig(config);
+        }
+        else
+        {
+            PluginLog.LogVerbose("It hasn't been a week since the last maintenance, skipping");
+        }
+
+        PluginLog.LogVerbose("Exiting RepositoryContext.RunMaintenance()");
     }
 }
