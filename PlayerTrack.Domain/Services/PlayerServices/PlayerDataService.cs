@@ -13,6 +13,7 @@ using Dalamud.DrunkenToad.Collections;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Core.Models;
 using Dalamud.DrunkenToad.Extensions;
+using Dalamud.DrunkenToad.Helpers;
 using Dalamud.Interface;
 using Dalamud.Logging;
 using Models.Comparers;
@@ -20,6 +21,8 @@ using Models.Comparers;
 public class PlayerDataService : SortedCacheService<Player>
 {
     public Action<Player>? PlayerUpdated;
+    private const long NinetyDaysInMilliseconds = 7776000000;
+    private const int MaxBatchSize = 500;
 
     public PlayerDataService() => this.ReloadPlayerCache();
 
@@ -195,6 +198,42 @@ public class PlayerDataService : SortedCacheService<Player>
     public List<Player> GetCategoryPlayers(int categoryId, int start, int count, string name, SearchType searchType) => this.cache.GetFilteredSortedItems(
         p => GetSearchFilter(name, searchType)(p) && p.PrimaryCategoryId == categoryId, start, count);
 
+    public int GetPlayerConfigCount() => this.cache.GetFilteredItemsCount(p => p.PlayerConfig.Id != 0);
+
+    public int GetPlayersForDeletionCount() => this.GetPlayersForDeletion().Count;
+
+    public int GetPlayerConfigsForDeletionCount() => this.GetPlayerConfigsForDeletion().Count;
+
+    public void DeletePlayers()
+    {
+        var players = this.GetPlayersForDeletion();
+        var playerIds = players.Select(p => p.Id).ToList();
+
+        for (var i = 0; i < playerIds.Count; i += MaxBatchSize)
+        {
+            var currentBatch = playerIds.Skip(i).Take(MaxBatchSize).ToList();
+            RepositoryContext.PlayerRepository.DeletePlayersWithRelations(currentBatch);
+        }
+
+        RepositoryContext.RunMaintenanceChecks(true);
+        this.RefreshAllPlayers();
+    }
+
+    public void DeletePlayerConfigs()
+    {
+        var playerConfigs = this.GetPlayerConfigsForDeletion();
+        var playerConfigIds = playerConfigs.Select(p => p.Id).ToList();
+
+        for (var i = 0; i < playerConfigIds.Count; i += MaxBatchSize)
+        {
+            var currentBatch = playerConfigIds.Skip(i).Take(MaxBatchSize).ToList();
+            RepositoryContext.PlayerConfigRepository.DeletePlayerConfigs(currentBatch);
+        }
+
+        RepositoryContext.RunMaintenanceChecks(true);
+        this.RefreshAllPlayers();
+    }
+
     private static void PopulateDerivedFields(Player player, Dictionary<int, int> categoryRanks)
     {
         PlayerCategoryService.SetPrimaryCategoryId(player, categoryRanks);
@@ -218,6 +257,35 @@ public class PlayerDataService : SortedCacheService<Player>
         }
 
         return Filter;
+    }
+
+    private List<Player> GetPlayersForDeletion()
+    {
+        var playersWithEncounters = RepositoryContext.PlayerEncounterRepository.GetPlayersWithEncounters();
+        var currentTimeUnix = UnixTimestampHelper.CurrentTime();
+        var options = ServiceContext.ConfigService.GetConfig().PlayerDataActionOptions;
+        return this.cache.GetFilteredSortedItems(p =>
+            (!options.KeepPlayersWithNotes || string.IsNullOrEmpty(p.Notes)) &&
+            (!options.KeepPlayersWithCategories || !p.AssignedCategories.Any()) &&
+            (!options.KeepPlayersWithAnySettings || p.PlayerConfig.Id == 0) &&
+            (!options.KeepPlayersWithEncounters || !playersWithEncounters.Contains(p.Id)) &&
+            (!options.KeepPlayersSeenInLast90Days || currentTimeUnix - p.LastSeen > NinetyDaysInMilliseconds) &&
+            (!options.KeepPlayersVerifiedOnLodestone || p.LodestoneStatus != LodestoneStatus.Verified));
+    }
+
+    private List<PlayerConfig> GetPlayerConfigsForDeletion()
+    {
+        var playersWithEncounters = RepositoryContext.PlayerEncounterRepository.GetPlayersWithEncounters();
+        var currentTimeUnix = UnixTimestampHelper.CurrentTime();
+        var options = ServiceContext.ConfigService.GetConfig().PlayerSettingsDataActionOptions;
+        return this.cache.GetFilteredSortedItems(p =>
+            p.PlayerConfig.Id != 0 &&
+            (!options.KeepSettingsForPlayersWithNotes || string.IsNullOrEmpty(p.Notes)) &&
+            (!options.KeepSettingsForPlayersWithCategories || !p.AssignedCategories.Any()) &&
+            (!options.KeepSettingsForPlayersWithAnySettings || p.PlayerConfig.Id == 0) &&
+            (!options.KeepSettingsForPlayersWithEncounters || !playersWithEncounters.Contains(p.Id)) &&
+            (!options.KeepSettingsForPlayersSeenInLast90Days || currentTimeUnix - p.LastSeen > NinetyDaysInMilliseconds) &&
+            (!options.KeepSettingsForPlayersVerifiedOnLodestone || p.LodestoneStatus != LodestoneStatus.Verified)).Select(p => p.PlayerConfig).ToList();
     }
 
     private void UpdatePlayerInCacheAndRepository(Player player)

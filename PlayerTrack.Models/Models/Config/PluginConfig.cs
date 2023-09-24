@@ -90,6 +90,14 @@ public class PluginConfig : IPluginConfig
         AddEncounters = true,
     };
 
+    public PlayerDataActionOptions PlayerDataActionOptions { get; set; } = new();
+
+    public PlayerSettingsDataActionOptions PlayerSettingsDataActionOptions { get; set; } = new();
+
+    public EncounterDataActionOptions EncounterDataActionOptions { get; set; } = new();
+
+    public bool RunBackupBeforeDataActions { get; set; } = true;
+
     public int Id { get; set; }
 
     public long Created { get; set; }

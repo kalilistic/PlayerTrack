@@ -172,6 +172,36 @@ public class PlayerRepository : BaseRepository
         }
     }
 
+    public bool DeletePlayersWithRelations(List<int> playerIds)
+    {
+        PluginLog.LogVerbose($"Entering PlayerRepository.DeletePlayersWithRelations(): {string.Join(", ", playerIds)}");
+        using var transaction = this.Connection.BeginTransaction();
+        try
+        {
+            const string sqlFormat = "DELETE FROM {0} WHERE player_id IN @player_ids";
+
+            this.Connection.Execute(string.Format(sqlFormat, "player_customize_histories"), new { player_ids = playerIds }, transaction);
+            this.Connection.Execute(string.Format(sqlFormat, "player_name_world_histories"), new { player_ids = playerIds }, transaction);
+            this.Connection.Execute(string.Format(sqlFormat, "player_categories"), new { player_ids = playerIds }, transaction);
+            this.Connection.Execute(string.Format(sqlFormat, "player_config"), new { player_ids = playerIds }, transaction);
+            this.Connection.Execute(string.Format(sqlFormat, "player_tags"), new { player_ids = playerIds }, transaction);
+            this.Connection.Execute(string.Format(sqlFormat, "lodestone_lookups"), new { player_ids = playerIds }, transaction);
+            this.Connection.Execute(string.Format(sqlFormat, "player_encounters"), new { player_ids = playerIds }, transaction);
+
+            const string deletePlayersSql = "DELETE FROM players WHERE id IN @player_ids";
+            this.Connection.Execute(deletePlayersSql, new { player_ids = playerIds }, transaction);
+
+            transaction.Commit();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            transaction.Rollback();
+            PluginLog.LogError(ex, $"Failed to delete players and their relations for PlayerIDs {string.Join(", ", playerIds)}.");
+            return false;
+        }
+    }
+
     public int CreatePlayer(Player player)
     {
         PluginLog.LogVerbose($"Entering PlayerRepository.CreatePlayer(): {player.Key}");

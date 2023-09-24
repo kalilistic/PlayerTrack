@@ -13,11 +13,11 @@
       },
       "Dalamud.DrunkenToad": {
         "type": "Direct",
-        "requested": "[1.6.1, )",
-        "resolved": "1.6.1",
-        "contentHash": "hGnen8gTTwvTvwnZ7vO4R1axSpDX887FoZiqSlWHKJKmyoC+f6dcryTdynAD+X/DPfMi5+WYWCjgax9TPx1Hdw==",
+        "requested": "[1.6.4, )",
+        "resolved": "1.6.4",
+        "contentHash": "yqWwXFOEpWiCcxzLRgp++Zmp6zhM9gAQZJ+dfz+/aVehNawSa/VxYelfYLzVYD3RUtJBWFy1Ztg1zSbTRT40iQ==",
         "dependencies": {
-          "Dalamud.Loc": "1.0.4",
+          "Dalamud.Loc": "1.0.5",
           "Microsoft.Extensions.DependencyInjection": "7.0.0"
         }
       },
@@ -114,8 +114,8 @@
       },
       "Dalamud.Loc": {
         "type": "Transitive",
-        "resolved": "1.0.4",
-        "contentHash": "GOfN2ArN6zZZS18XyADZR3TPGdW47hymh8ghsXNZRo8xIFjtRJJwY7YiP63lpxccfNaILARQWd1MDjGIXHZDOg=="
+        "resolved": "1.0.5",
+        "contentHash": "/3JJfX8BkiABT2Pg7E50NBb5dHAdxMeBtlN8csw52Yq3Pk4uHQpspCgxM21w5ci20ffXpfxQMBS0tn6NZtXLRA=="
       },
       "Dapper.Contrib": {
         "type": "Transitive",
@@ -534,7 +534,7 @@
       "playertrack.models": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.6.1, )",
+          "Dalamud.DrunkenToad": "[1.6.4, )",
           "Dapper.Contrib": "[2.0.78, )"
         }
       }

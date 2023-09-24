@@ -46,8 +46,8 @@
 			<Link>stylecop.json</Link>
 		</AdditionalFiles>
 		<PackageReference Include="Dalamud.ContextMenu" Version="1.2.3" />
-		<PackageReference Include="Dalamud.DrunkenToad" Version="1.6.1" />
-		<PackageReference Include="Dalamud.Loc" Version="1.0.4" />
+		<PackageReference Include="Dalamud.DrunkenToad" Version="1.6.4" />
+		<PackageReference Include="Dalamud.Loc" Version="1.0.5" />
 		<PackageReference Include="DalamudPackager" Version="2.1.8" />
 		<PackageReference Include="LiteHelper" Version="0.0.6" />
 		<PackageReference Include="Pilz.Dalamud" Version="0.4.0" />

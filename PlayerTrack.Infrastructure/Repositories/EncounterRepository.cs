@@ -38,6 +38,25 @@ public class EncounterRepository : BaseRepository
         }
     }
 
+    public List<Encounter>? GetAllEncounters()
+    {
+        PluginLog.LogVerbose("Entering EncounterRepository.GetAllEncounters()");
+        try
+        {
+            const string sql = @"
+                                    SELECT *
+                                    FROM encounters
+                                    ORDER BY created DESC";
+            var encounterDTOs = this.Connection.Query<EncounterDTO>(sql).AsList();
+            return this.Mapper.Map<List<Encounter>>(encounterDTOs);
+        }
+        catch (Exception ex)
+        {
+            PluginLog.LogError(ex, "Failed to get all encounters.");
+            return null;
+        }
+    }
+
     public List<Encounter>? GetAllOpenEncounters()
     {
         PluginLog.LogVerbose("Entering EncounterRepository.GetAllOpenEncounters()");
@@ -173,6 +192,27 @@ public class EncounterRepository : BaseRepository
             PluginLog.LogError(ex, "Failed to insert encounters batch.");
             transaction.Rollback();
             return false;
+        }
+    }
+
+    public void DeleteEncountersWithRelations(List<int> currentBatch)
+    {
+        PluginLog.LogVerbose($"Entering EncounterRepository.DeleteEncountersWithRelations(): {string.Join(", ", currentBatch)}");
+        using var transaction = this.Connection.BeginTransaction();
+        try
+        {
+            const string deletePlayerEncountersSql = "DELETE FROM player_encounters WHERE encounter_id IN @encounter_ids";
+            this.Connection.Execute(deletePlayerEncountersSql, new { encounter_ids = currentBatch }, transaction);
+
+            const string deleteEncountersSql = "DELETE FROM encounters WHERE id IN @encounter_ids";
+            this.Connection.Execute(deleteEncountersSql, new { encounter_ids = currentBatch }, transaction);
+
+            transaction.Commit();
+        }
+        catch (Exception ex)
+        {
+            transaction.Rollback();
+            PluginLog.LogError(ex, $"Failed to delete encounters and their relations for EncounterIDs {string.Join(", ", currentBatch)}.");
         }
     }
 }

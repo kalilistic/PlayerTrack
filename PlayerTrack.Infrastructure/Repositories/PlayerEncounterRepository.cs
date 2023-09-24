@@ -17,6 +17,20 @@ public class PlayerEncounterRepository : BaseRepository
     {
     }
 
+    public List<int> GetPlayersWithEncounters()
+    {
+        try
+        {
+            const string sql = "SELECT DISTINCT player_id FROM player_encounters";
+            return this.Connection.Query<int>(sql).ToList();
+        }
+        catch (Exception ex)
+        {
+            PluginLog.LogError(ex, "Failed to get list of players with encounters.");
+            return new List<int>();
+        }
+    }
+
     public List<PlayerEncounter>? GetAllByPlayerId(int playerId)
     {
         PluginLog.LogVerbose($"Entering PlayerEncounterRepository.GetAllByPlayerId(): {playerId}");

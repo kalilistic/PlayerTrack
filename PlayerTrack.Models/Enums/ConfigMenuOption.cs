@@ -11,4 +11,5 @@ public enum ConfigMenuOption
     Locations,
     Integrations,
     Backups,
+    Data,
 }

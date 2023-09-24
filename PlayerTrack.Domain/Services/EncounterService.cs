@@ -6,10 +6,16 @@ using PlayerTrack.Models;
 
 namespace PlayerTrack.Domain;
 
+using System.Collections.Generic;
+using System.Linq;
+using Dalamud.DrunkenToad.Core.Enums;
 using Dalamud.DrunkenToad.Helpers;
 
 public class EncounterService
 {
+    private const long NinetyDaysInMilliseconds = 7776000000;
+    private const int MaxBatchSize = 500;
+
     public Encounter? CurrentEncounter { get; private set;  }
 
     public Encounter? CurrentEncounterSnapshot { get; private set;  }
@@ -38,6 +44,10 @@ public class EncounterService
     public static Encounter? GetEncounter(int id) => RepositoryContext.EncounterRepository.GetEncounter(id);
 
     public static void CreateEncounter(Encounter encounter) => RepositoryContext.EncounterRepository.CreateEncounter(encounter);
+
+    public static int GetEncountersCount() => RepositoryContext.EncounterRepository.GetAllEncounters()?.Count ?? 0;
+
+    public int GetEncountersForDeletionCount() => this.GetEncountersForDeletion().Count;
 
     public void Dispose() => this.EndCurrentEncounter();
 
@@ -88,6 +98,20 @@ public class EncounterService
         this.CurrentEncounter = null;
     }
 
+    public void DeleteEncounters()
+    {
+        var encounters = this.GetEncountersForDeletion();
+        var encounterIds = encounters.Select(e => e.Id).ToList();
+
+        for (var i = 0; i < encounterIds.Count; i += MaxBatchSize)
+        {
+            var currentBatch = encounterIds.Skip(i).Take(MaxBatchSize).ToList();
+            RepositoryContext.EncounterRepository.DeleteEncountersWithRelations(currentBatch);
+        }
+
+        RepositoryContext.RunMaintenanceChecks(true);
+    }
+
     private static bool ShouldSaveEncounter(ToadLocation loc)
     {
         PluginLog.LogVerbose($"Entering EncounterService.ShouldSaveEncounter(): {loc.LocationType}");
@@ -100,5 +124,41 @@ public class EncounterService
         PluginLog.LogVerbose($"Entering EncounterService.ShouldSavePlayers(): {loc.LocationType}");
         var config = ServiceContext.ConfigService.GetConfig().GetTrackingLocationConfig(loc.LocationType);
         return config.AddPlayers;
+    }
+
+    private List<Encounter> GetEncountersForDeletion()
+    {
+        var allEncounters = RepositoryContext.EncounterRepository.GetAllEncounters();
+        if (allEncounters == null)
+        {
+            return new List<Encounter>();
+        }
+
+        var currentTimeUnix = UnixTimestampHelper.CurrentTime();
+        var options = ServiceContext.ConfigService.GetConfig().EncounterDataActionOptions;
+        var encountersForDeletion = new List<Encounter>();
+
+        foreach (var encounter in allEncounters)
+        {
+            var location = DalamudContext.DataManager.Locations[encounter.TerritoryTypeId];
+
+            var shouldDelete =
+                !(options.KeepEncountersInOverworld && location.LocationType == ToadLocationType.Overworld) &&
+                !(options.KeepEncountersInNormalContent && location.LocationType == ToadLocationType.Content) &&
+                !(options.KeepEncountersInHighEndContent && location.LocationType == ToadLocationType.HighEndContent) &&
+                !(options.KeepEncountersFromLast90Days && currentTimeUnix - encounter.Created <= NinetyDaysInMilliseconds);
+
+            if (shouldDelete)
+            {
+                encountersForDeletion.Add(encounter);
+            }
+        }
+
+        if (this.CurrentEncounter != null && encountersForDeletion.Any(encounter => encounter.Id == this.CurrentEncounter?.Id))
+        {
+            encountersForDeletion.Remove(this.CurrentEncounter);
+        }
+
+        return encountersForDeletion;
     }
 }

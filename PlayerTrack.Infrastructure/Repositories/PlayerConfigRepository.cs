@@ -211,6 +211,20 @@ public class PlayerConfigRepository : BaseRepository
         }
     }
 
+    public void DeletePlayerConfigs(List<int> configIds)
+    {
+        PluginLog.LogVerbose($"Entering PlayerConfigRepository.DeletePlayerConfigs(): {string.Join(", ", configIds)}");
+        try
+        {
+            const string sql = "DELETE FROM player_config WHERE id IN @configIds";
+            this.Connection.Execute(sql, new { configIds });
+        }
+        catch (Exception ex)
+        {
+            PluginLog.LogError(ex, $"Failed to delete player configs for player config ids {string.Join(", ", configIds)}.");
+        }
+    }
+
     public bool CreatePlayerConfigs(List<PlayerConfig> playerConfigs)
     {
         PluginLog.LogVerbose($"Entering PlayerConfigRepository.CreatePlayerConfigs(): {playerConfigs.Count}");
