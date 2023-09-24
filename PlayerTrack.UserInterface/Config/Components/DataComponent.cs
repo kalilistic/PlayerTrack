@@ -83,6 +83,7 @@ public class DataComponent : ConfigViewComponent
                 {
                     DataActionType.DeletePlayers => Task.Run(() =>
                         {
+                            this.RunBackup();
                             ServiceContext.PlayerDataService.DeletePlayers();
                             this.HandleTaskSuccess();
                         })
@@ -94,6 +95,7 @@ public class DataComponent : ConfigViewComponent
                         }),
                     DataActionType.DeletePlayerSettings => Task.Run(() =>
                         {
+                            this.RunBackup();
                             ServiceContext.PlayerDataService.DeletePlayerConfigs();
                             this.HandleTaskSuccess();
                         })
@@ -105,6 +107,7 @@ public class DataComponent : ConfigViewComponent
                         }),
                     DataActionType.DeleteEncounters => Task.Run(() =>
                         {
+                            this.RunBackup();
                             ServiceContext.EncounterService.DeleteEncounters();
                             this.HandleTaskSuccess();
                         })
@@ -125,6 +128,14 @@ public class DataComponent : ConfigViewComponent
             }
 
             ImGui.EndPopup();
+        }
+    }
+
+    private void RunBackup()
+    {
+        if (this.config.RunBackupBeforeDataActions)
+        {
+            ServiceContext.BackupService.RunBackup(BackupType.Automatic);
         }
     }
 
