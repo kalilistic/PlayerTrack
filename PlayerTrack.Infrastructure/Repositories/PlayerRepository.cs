@@ -135,7 +135,7 @@ public class PlayerRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogVerbose(ex, $"Failed to update player with PlayerID {player.Id}.", player);
+            PluginLog.LogError(ex, $"Failed to update player with PlayerID {player.Id}.", player);
             return false;
         }
     }

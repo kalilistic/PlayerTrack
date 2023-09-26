@@ -54,7 +54,7 @@ public class PlayerEncounterService
 
     public static void UpdatePlayerId(int oldestPlayerId, int newPlayerId) => RepositoryContext.PlayerEncounterRepository.UpdatePlayerId(oldestPlayerId, newPlayerId);
 
-    public static void EndPlayerEncounters(int encounterId, long ended)
+    public static void EndPlayerEncounters(int encounterId)
     {
         PluginLog.LogVerbose($"Entering PlayerEncounterService.EndPlayerEncounters(): {encounterId}");
         var playerEncounters = RepositoryContext.PlayerEncounterRepository.GetAllByEncounterId(encounterId);
@@ -63,6 +63,7 @@ public class PlayerEncounterService
             return;
         }
 
+        var ended = UnixTimestampHelper.CurrentTime();
         foreach (var playerEncounter in playerEncounters)
         {
             playerEncounter.Ended = ended;
@@ -75,7 +76,7 @@ public class PlayerEncounterService
         PluginLog.LogVerbose($"Entering PlayerEncounterService.EndPlayerEncounter(): {player.Id}, {encounter?.Id}");
         if (encounter == null || encounter.Id == 0)
         {
-            PluginLog.LogVerbose("Encounter Id is 0, cannot end player encounter.");
+            PluginLog.LogWarning("Encounter Id is 0, cannot end player encounter.");
             return;
         }
 

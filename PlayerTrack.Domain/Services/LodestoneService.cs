@@ -119,7 +119,7 @@ public class LodestoneService : IDisposable
         }
         catch (Exception ex)
         {
-            PluginLog.LogVerbose(ex, "Failed to process lodestone requests.");
+            PluginLog.LogError(ex, "Failed to process lodestone requests.");
         }
         finally
         {
