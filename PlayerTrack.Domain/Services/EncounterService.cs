@@ -37,7 +37,7 @@ public class EncounterService
             PluginLog.LogVerbose($"Ending encounter: {encounter.Id}");
             encounter.Ended = encounter.Updated;
             UpdateEncounter(encounter);
-            PlayerEncounterService.EndPlayerEncounters(encounter.Id);
+            PlayerEncounterService.EndPlayerEncounters(encounter.Id, encounter.Ended);
         }
     }
 
