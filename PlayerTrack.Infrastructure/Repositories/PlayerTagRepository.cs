@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
+
+using Dalamud.DrunkenToad.Core;
 
 public class PlayerTagRepository : BaseRepository
 {
@@ -19,7 +21,7 @@ public class PlayerTagRepository : BaseRepository
 
     public bool DeletePlayerTag(int tagId)
     {
-        PluginLog.LogVerbose($"Entering PlayerTagRepository.DeletePlayerTag(): {tagId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTagRepository.DeletePlayerTag(): {tagId}");
         try
         {
             const string sql = @"
@@ -30,14 +32,14 @@ public class PlayerTagRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete tags with TagID {tagId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete tags with TagID {tagId}.");
             return false;
         }
     }
 
     public bool DeletePlayerTag(int playerId, int tagId)
     {
-        PluginLog.LogVerbose($"Entering PlayerTagRepository.DeletePlayerTag(): {playerId}, {tagId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTagRepository.DeletePlayerTag(): {playerId}, {tagId}");
         try
         {
             const string sql = "DELETE FROM player_tags WHERE player_id = @player_id AND tag_id = @tag_id";
@@ -46,14 +48,14 @@ public class PlayerTagRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete tag with PlayerID {playerId} and TagID {tagId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete tag with PlayerID {playerId} and TagID {tagId}.");
             return false;
         }
     }
 
     public int CreatePlayerTag(int playerId, int tagId)
     {
-        PluginLog.LogVerbose($"Entering PlayerTagRepository.CreatePlayerTag(): {playerId}, {tagId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTagRepository.CreatePlayerTag(): {playerId}, {tagId}");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -73,7 +75,7 @@ public class PlayerTagRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to create new tag with PlayerID {playerId} and TagID {tagId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to create new tag with PlayerID {playerId} and TagID {tagId}.");
             transaction.Rollback();
             return 0;
         }
@@ -81,7 +83,7 @@ public class PlayerTagRepository : BaseRepository
 
     public bool DeletePlayerTagByPlayerId(int playerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerTagRepository.DeletePlayerTagByPlayerId(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTagRepository.DeletePlayerTagByPlayerId(): {playerId}");
         try
         {
             const string sql = "DELETE FROM player_tags WHERE player_id = @player_id";
@@ -90,14 +92,14 @@ public class PlayerTagRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete tag with PlayerID {playerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete tag with PlayerID {playerId}.");
             return false;
         }
     }
 
     public bool CreatePlayerTags(List<PlayerTag> playerTags)
     {
-        PluginLog.LogVerbose($"Entering PlayerTagRepository.CreatePlayerTags(): {playerTags.Count}.");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTagRepository.CreatePlayerTags(): {playerTags.Count}.");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -119,7 +121,7 @@ public class PlayerTagRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to create player tags.");
+            DalamudContext.PluginLog.Error(ex, "Failed to create player tags.");
             transaction.Rollback();
             return false;
         }

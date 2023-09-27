@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
+
+using Dalamud.DrunkenToad.Core;
 
 public class EncounterRepository : BaseRepository
 {
@@ -19,7 +21,7 @@ public class EncounterRepository : BaseRepository
 
     public Encounter? GetOpenEncounter()
     {
-        PluginLog.LogVerbose("Entering EncounterRepository.GetOpenEncounter()");
+        DalamudContext.PluginLog.Verbose("Entering EncounterRepository.GetOpenEncounter()");
         try
         {
             const string sql = @"
@@ -33,14 +35,14 @@ public class EncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to get open encounter where ended is 0.");
+            DalamudContext.PluginLog.Error(ex, "Failed to get open encounter where ended is 0.");
             return null;
         }
     }
 
     public List<Encounter>? GetAllEncounters()
     {
-        PluginLog.LogVerbose("Entering EncounterRepository.GetAllEncounters()");
+        DalamudContext.PluginLog.Verbose("Entering EncounterRepository.GetAllEncounters()");
         try
         {
             const string sql = @"
@@ -52,14 +54,14 @@ public class EncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to get all encounters.");
+            DalamudContext.PluginLog.Error(ex, "Failed to get all encounters.");
             return null;
         }
     }
 
     public List<Encounter>? GetAllOpenEncounters()
     {
-        PluginLog.LogVerbose("Entering EncounterRepository.GetAllOpenEncounters()");
+        DalamudContext.PluginLog.Verbose("Entering EncounterRepository.GetAllOpenEncounters()");
         try
         {
             const string sql = @"
@@ -72,14 +74,14 @@ public class EncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to get all open encounters where ended is 0.");
+            DalamudContext.PluginLog.Error(ex, "Failed to get all open encounters where ended is 0.");
             return null;
         }
     }
 
     public bool UpdateEncounter(Encounter encounter)
     {
-        PluginLog.LogVerbose($"Entering EncounterRepository.UpdateEncounter(), encounter: {encounter.Id}");
+        DalamudContext.PluginLog.Verbose($"Entering EncounterRepository.UpdateEncounter(), encounter: {encounter.Id}");
         try
         {
             var encounterDTO = this.Mapper.Map<EncounterDTO>(encounter);
@@ -96,14 +98,14 @@ public class EncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to update encounter.", encounter);
+            DalamudContext.PluginLog.Error(ex, "Failed to update encounter.", encounter);
             return false;
         }
     }
 
     public Encounter? GetEncounter(int encounterId)
     {
-        PluginLog.LogVerbose($"Entering EncounterRepository.GetEncounter(), encounterId: {encounterId}");
+        DalamudContext.PluginLog.Verbose($"Entering EncounterRepository.GetEncounter(), encounterId: {encounterId}");
         try
         {
             const string sql = @"
@@ -115,14 +117,14 @@ public class EncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to get encounter by id {encounterId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to get encounter by id {encounterId}.");
             return null;
         }
     }
 
     public int CreateEncounter(Encounter encounter)
     {
-        PluginLog.LogVerbose("Entering EncounterRepository.CreateEncounter()");
+        DalamudContext.PluginLog.Verbose("Entering EncounterRepository.CreateEncounter()");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -154,14 +156,14 @@ public class EncounterRepository : BaseRepository
         catch (Exception ex)
         {
             transaction.Rollback();
-            PluginLog.LogError(ex, "Failed to create and retrieve encounter based on created date.", encounter);
+            DalamudContext.PluginLog.Error(ex, "Failed to create and retrieve encounter based on created date.", encounter);
             return 0;
         }
     }
 
     public bool CreateEncounters(IEnumerable<Encounter> encounters)
     {
-        PluginLog.LogVerbose("Entering EncounterRepository.CreateEncounters()");
+        DalamudContext.PluginLog.Verbose("Entering EncounterRepository.CreateEncounters()");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -188,7 +190,7 @@ public class EncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to insert encounters batch.");
+            DalamudContext.PluginLog.Error(ex, "Failed to insert encounters batch.");
             transaction.Rollback();
             return false;
         }
@@ -196,7 +198,7 @@ public class EncounterRepository : BaseRepository
 
     public void DeleteEncountersWithRelations(List<int> currentBatch)
     {
-        PluginLog.LogVerbose($"Entering EncounterRepository.DeleteEncountersWithRelations(): {string.Join(", ", currentBatch)}");
+        DalamudContext.PluginLog.Verbose($"Entering EncounterRepository.DeleteEncountersWithRelations(): {string.Join(", ", currentBatch)}");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -211,7 +213,7 @@ public class EncounterRepository : BaseRepository
         catch (Exception ex)
         {
             transaction.Rollback();
-            PluginLog.LogError(ex, $"Failed to delete encounters and their relations for EncounterIDs {string.Join(", ", currentBatch)}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete encounters and their relations for EncounterIDs {string.Join(", ", currentBatch)}.");
         }
     }
 }

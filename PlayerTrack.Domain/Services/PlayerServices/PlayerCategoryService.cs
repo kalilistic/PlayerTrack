@@ -6,31 +6,31 @@ using PlayerTrack.Models;
 namespace PlayerTrack.Domain;
 
 using System.Threading.Tasks;
-using Dalamud.Logging;
+using Dalamud.DrunkenToad.Core;
 
 public class PlayerCategoryService
 {
     public static void AssignCategoryToPlayer(int playerId, int categoryId) => Task.Run(() =>
     {
-        PluginLog.LogVerbose($"Entering PlayerCategoryService.AssignCategoryToPlayer(): {playerId}, {categoryId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryService.AssignCategoryToPlayer(): {playerId}, {categoryId}");
         var category = ServiceContext.CategoryService.GetCategoryById(categoryId);
         if (category == null)
         {
-            PluginLog.LogWarning($"Category not found, categoryId: {categoryId}");
+            DalamudContext.PluginLog.Warning($"Category not found, categoryId: {categoryId}");
             return;
         }
 
         var player = ServiceContext.PlayerDataService.GetPlayer(playerId);
         if (player == null)
         {
-            PluginLog.LogWarning($"Player not found, playerId: {playerId}");
+            DalamudContext.PluginLog.Warning($"Player not found, playerId: {playerId}");
             return;
         }
 
         var assignedCategories = player.AssignedCategories;
         if (assignedCategories.Any(c => c.Id == categoryId))
         {
-            PluginLog.LogWarning($"Category already assigned to player, playerId: {playerId}, categoryId: {categoryId}");
+            DalamudContext.PluginLog.Warning($"Category already assigned to player, playerId: {playerId}, categoryId: {categoryId}");
             return;
         }
 
@@ -44,18 +44,18 @@ public class PlayerCategoryService
 
     public static void UnassignCategoriesFromPlayer(int playerId) => Task.Run(() =>
     {
-        PluginLog.LogVerbose($"Entering PlayerCategoryService.UnassignCategoriesFromPlayer(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryService.UnassignCategoriesFromPlayer(): {playerId}");
         var player = ServiceContext.PlayerDataService.GetPlayer(playerId);
         if (player == null)
         {
-            PluginLog.LogWarning($"Player not found, playerId: {playerId}");
+            DalamudContext.PluginLog.Warning($"Player not found, playerId: {playerId}");
             return;
         }
 
         var assignedCategories = player.AssignedCategories;
         if (!assignedCategories.Any())
         {
-            PluginLog.LogWarning($"No categories assigned to player, playerId: {playerId}");
+            DalamudContext.PluginLog.Warning($"No categories assigned to player, playerId: {playerId}");
             return;
         }
 
@@ -68,25 +68,25 @@ public class PlayerCategoryService
 
     public static void UnassignCategoryFromPlayer(int playerId, int categoryId) => Task.Run(() =>
     {
-        PluginLog.LogVerbose($"Entering PlayerCategoryService.UnassignCategoryFromPlayer(): {playerId}, {categoryId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryService.UnassignCategoryFromPlayer(): {playerId}, {categoryId}");
         var category = ServiceContext.CategoryService.GetCategoryById(categoryId);
         if (category == null)
         {
-            PluginLog.LogWarning($"Category not found, categoryId: {categoryId}");
+            DalamudContext.PluginLog.Warning($"Category not found, categoryId: {categoryId}");
             return;
         }
 
         var player = ServiceContext.PlayerDataService.GetPlayer(playerId);
         if (player == null)
         {
-            PluginLog.LogWarning($"Player not found, playerId: {playerId}");
+            DalamudContext.PluginLog.Warning($"Player not found, playerId: {playerId}");
             return;
         }
 
         var assignedCategories = player.AssignedCategories;
         if (assignedCategories.All(c => c.Id != categoryId))
         {
-            PluginLog.LogWarning($"Category not assigned to player, playerId: {playerId}, categoryId: {categoryId}");
+            DalamudContext.PluginLog.Warning($"Category not assigned to player, playerId: {playerId}, categoryId: {categoryId}");
             return;
         }
 

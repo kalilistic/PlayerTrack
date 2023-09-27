@@ -14,8 +14,8 @@ using PlayerTrack.Models;
 
 namespace PlayerTrack.Domain;
 
+using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Helpers;
-using Dalamud.Logging;
 
 public class LodestoneService : IDisposable
 {
@@ -39,14 +39,14 @@ public class LodestoneService : IDisposable
 
     public void Stop()
     {
-        PluginLog.LogVerbose("Entering LodestoneService.Stop()");
+        DalamudContext.PluginLog.Verbose("Entering LodestoneService.Stop()");
         this.processTimer.Elapsed -= this.ProcessRequests;
         this.processTimer.Stop();
     }
 
     public void Dispose()
     {
-        PluginLog.LogVerbose("Entering LodestoneService.Dispose()");
+        DalamudContext.PluginLog.Verbose("Entering LodestoneService.Dispose()");
         this.lodestoneQueue.Clear();
         this.httpClient.Dispose();
         GC.SuppressFinalize(this);
@@ -54,7 +54,7 @@ public class LodestoneService : IDisposable
 
     private void SetupHttpClient()
     {
-        PluginLog.LogVerbose("Entering LodestoneService.SetupHttpClient()");
+        DalamudContext.PluginLog.Verbose("Entering LodestoneService.SetupHttpClient()");
         var httpClientHandler = new HttpClientHandler();
         this.httpClient = new HttpClient(httpClientHandler, true)
         {
@@ -66,25 +66,25 @@ public class LodestoneService : IDisposable
 
     private void SetupTimer()
     {
-        PluginLog.LogVerbose("Entering LodestoneService.SetupTimer()");
+        DalamudContext.PluginLog.Verbose("Entering LodestoneService.SetupTimer()");
         this.processTimer = new Timer { Interval = 15000, Enabled = true };
         this.processTimer.Elapsed += this.ProcessRequests;
     }
 
     private void ProcessRequests(object? sender, ElapsedEventArgs e)
     {
-        PluginLog.LogVerbose("Entering LodestoneService.ProcessRequests()");
+        DalamudContext.PluginLog.Verbose("Entering LodestoneService.ProcessRequests()");
         try
         {
             if (!ServiceContext.ConfigService.GetConfig().LodestoneEnableLookup)
             {
-                PluginLog.LogVerbose("Lodestone lookup disabled, skipping.");
+                DalamudContext.PluginLog.Verbose("Lodestone lookup disabled, skipping.");
                 return;
             }
 
             if (UnixTimestampHelper.CurrentTime() < this.lodestoneCallAvailableAt)
             {
-                PluginLog.LogVerbose("Lodestone lookup not available, skipping.");
+                DalamudContext.PluginLog.Verbose("Lodestone lookup not available, skipping.");
                 return;
             }
 
@@ -92,7 +92,7 @@ public class LodestoneService : IDisposable
             {
                 if (this.isProcessing)
                 {
-                    PluginLog.LogVerbose("Lodestone lookup already processing, skipping.");
+                    DalamudContext.PluginLog.Verbose("Lodestone lookup already processing, skipping.");
                     return;
                 }
 
@@ -100,11 +100,11 @@ public class LodestoneService : IDisposable
             }
 
             // load requests and quit if nothing to process
-            PluginLog.LogVerbose("Loading lodestone requests.");
+            DalamudContext.PluginLog.Verbose("Loading lodestone requests.");
             var requestsToProcess = this.LoadRequests();
             if (!requestsToProcess)
             {
-                PluginLog.LogVerbose("No lodestone requests to process, skipping.");
+                DalamudContext.PluginLog.Verbose("No lodestone requests to process, skipping.");
                 lock (this.locker)
                 {
                     this.isProcessing = false;
@@ -119,7 +119,7 @@ public class LodestoneService : IDisposable
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to process lodestone requests.");
+            DalamudContext.PluginLog.Error(ex, "Failed to process lodestone requests.");
         }
         finally
         {
@@ -132,7 +132,7 @@ public class LodestoneService : IDisposable
 
     private void SendBatchRequest(List<LodestoneRequest> batchedRequests)
     {
-        PluginLog.LogVerbose($"Entering LodestoneService.SendBatchRequest(): {batchedRequests.Count}");
+        DalamudContext.PluginLog.Verbose($"Entering LodestoneService.SendBatchRequest(): {batchedRequests.Count}");
         var response = this.GetCharacterIdsAsync(batchedRequests).Result;
         if (response.StatusCode != HttpStatusCode.OK)
         {

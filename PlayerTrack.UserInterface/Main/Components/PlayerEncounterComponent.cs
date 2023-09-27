@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Loc.ImGui;
 using ImGuiNET;
@@ -7,6 +6,8 @@ using PlayerTrack.UserInterface.Components;
 using PlayerTrack.UserInterface.Main.Presenters;
 
 namespace PlayerTrack.UserInterface.Main.Components;
+
+using Dalamud.Interface.Utility;
 
 public class PlayerEncounterComponent : ViewComponent
 {

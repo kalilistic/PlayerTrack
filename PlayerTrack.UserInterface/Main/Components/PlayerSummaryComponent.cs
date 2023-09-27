@@ -3,7 +3,6 @@ using System.Linq;
 using System.Numerics;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Gui;
-using Dalamud.DrunkenToad.Util;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Loc.ImGui;
@@ -16,6 +15,8 @@ using PlayerTrack.UserInterface.Main.Presenters;
 namespace PlayerTrack.UserInterface.Main.Components;
 
 using System;
+using Dalamud.DrunkenToad.Helpers;
+using Dalamud.Interface.Utility;
 using ViewModels;
 
 public class PlayerSummaryComponent : ViewComponent

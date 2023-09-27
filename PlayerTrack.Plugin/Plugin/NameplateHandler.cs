@@ -2,7 +2,7 @@
 using Dalamud.DrunkenToad.Core;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
-using Dalamud.Logging;
+
 using Pilz.Dalamud;
 using Pilz.Dalamud.Nameplates.EventArgs;
 using Pilz.Dalamud.Nameplates.Tools;
@@ -24,7 +24,7 @@ public static class NameplateHandler
 
     public static void Start()
     {
-        PluginLog.LogVerbose("Entering NameplateHandler.Start()");
+        DalamudContext.PluginLog.Verbose("Entering NameplateHandler.Start()");
         PluginServices.Initialize(DalamudContext.PluginInterface);
         internalNameplateManager = new InternalNameplateManager();
         internalNameplateManager.Hooks.AddonNamePlate_SetPlayerNameManaged += OnNameplateUpdate;
@@ -35,11 +35,11 @@ public static class NameplateHandler
 
     public static void RefreshNameplates() => Task.Run(() =>
     {
-        PluginLog.LogVerbose("Entering NameplateHandler.RefreshNameplates()");
+        DalamudContext.PluginLog.Verbose("Entering NameplateHandler.RefreshNameplates()");
         var currentLocation = DalamudContext.PlayerLocationManager.GetCurrentLocation();
         if (currentLocation == null)
         {
-            PluginLog.LogVerbose("Failed to get current location.");
+            DalamudContext.PluginLog.Verbose("Failed to get current location.");
             return;
         }
 
@@ -48,7 +48,7 @@ public static class NameplateHandler
             var player = ServiceContext.PlayerDataService.GetPlayer(entry.Key);
             if (player == null)
             {
-                PluginLog.LogVerbose($"Failed to get player for {entry.Key}.");
+                DalamudContext.PluginLog.Verbose($"Failed to get player for {entry.Key}.");
                 continue;
             }
 
@@ -59,11 +59,11 @@ public static class NameplateHandler
 
     public static void UpdateNameplate(string key, Player player)
     {
-        PluginLog.LogVerbose($"Entering NameplateHandler.UpdateNameplate(): {key}");
+        DalamudContext.PluginLog.Verbose($"Entering NameplateHandler.UpdateNameplate(): {key}");
         var currentLocation = DalamudContext.PlayerLocationManager.GetCurrentLocation();
         if (currentLocation == null)
         {
-            PluginLog.LogVerbose("Failed to get current location.");
+            DalamudContext.PluginLog.Verbose("Failed to get current location.");
             return;
         }
 
@@ -73,13 +73,13 @@ public static class NameplateHandler
 
     public static void RemoveNameplate(string key)
     {
-        PluginLog.LogVerbose($"Entering NameplateHandler.RemoveNameplate(): {key}");
+        DalamudContext.PluginLog.Verbose($"Entering NameplateHandler.RemoveNameplate(): {key}");
         Nameplates.TryRemove(key, out _);
     }
 
     public static void Dispose()
     {
-        PluginLog.LogVerbose("Entering NameplateHandler.Dispose()");
+        DalamudContext.PluginLog.Verbose("Entering NameplateHandler.Dispose()");
         try
         {
             if (internalNameplateManager != null)
@@ -90,24 +90,24 @@ public static class NameplateHandler
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to dispose NameplateHandler properly.");
+            DalamudContext.PluginLog.Error(ex, "Failed to dispose NameplateHandler properly.");
         }
     }
 
     private static void OnNameplateUpdate(AddonNamePlate_SetPlayerNameManagedEventArgs eventArgs)
     {
-        PluginLog.LogVerbose("Entering NameplateHandler.OnNameplateUpdate()");
+        DalamudContext.PluginLog.Verbose("Entering NameplateHandler.OnNameplateUpdate()");
         var pc = InternalNameplateManager.GetNameplateGameObject<PlayerCharacter>(eventArgs.SafeNameplateObject);
         if (pc == null)
         {
-            PluginLog.LogVerbose("Failed to get player character.");
+            DalamudContext.PluginLog.Verbose("Failed to get player character.");
             return;
         }
 
         var loc = DalamudContext.PlayerLocationManager.GetCurrentLocation();
         if (loc == null)
         {
-            PluginLog.LogVerbose("Failed to get player location.");
+            DalamudContext.PluginLog.Verbose("Failed to get player location.");
             return;
         }
 
@@ -115,13 +115,13 @@ public static class NameplateHandler
         var nameplate = Nameplates.TryGetValue(key, out var nameplateValue) ? nameplateValue : null;
         if (nameplate is not { CustomizeNameplate: true })
         {
-            PluginLog.LogVerbose("Player nameplate is not customized.");
+            DalamudContext.PluginLog.Verbose("Player nameplate is not customized.");
             return;
         }
 
         if (!nameplate.NameplateUseColorIfDead && pc.IsDead)
         {
-            PluginLog.LogVerbose("Player is dead, disabling.");
+            DalamudContext.PluginLog.Verbose("Player is dead, disabling.");
             return;
         }
 
@@ -130,13 +130,13 @@ public static class NameplateHandler
         {
             if (element == NameplateElements.Title && string.IsNullOrEmpty(eventArgs.Title.ToString()) && !nameplate.HasCustomTitle)
             {
-                PluginLog.LogVerbose("Player does not have a title.");
+                DalamudContext.PluginLog.Verbose("Player does not have a title.");
                 continue;
             }
 
             if (element == NameplateElements.Title && nameplate.HasCustomTitle)
             {
-                PluginLog.LogVerbose("Player has a custom title.");
+                DalamudContext.PluginLog.Verbose("Player has a custom title.");
                 var titlePayload = new TextPayload($"《{nameplate.CustomTitle}》");
                 nameplateChanges.GetChange(element, StringPosition.Replace).Payloads.Add(titlePayload);
             }

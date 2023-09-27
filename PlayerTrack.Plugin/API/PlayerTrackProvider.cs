@@ -1,9 +1,11 @@
 ﻿using System;
-using Dalamud.Logging;
+
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 
 namespace PlayerTrack.API;
+
+using Dalamud.DrunkenToad.Core;
 
 /// <summary>
 /// IPC for PlayerTrack plugin.
@@ -42,7 +44,7 @@ public class PlayerTrackProvider
     /// <param name="api">plugin api.</param>
     public PlayerTrackProvider(DalamudPluginInterface pluginInterface, IPlayerTrackAPI api)
     {
-        PluginLog.LogVerbose("Entering PlayerTrackProvider");
+        DalamudContext.PluginLog.Verbose("Entering PlayerTrackProvider");
         this.API = api;
 
         try
@@ -52,7 +54,7 @@ public class PlayerTrackProvider
         }
         catch (Exception ex)
         {
-            PluginLog.LogError($"Error registering IPC provider for {LabelProviderApiVersion}:\n{ex}");
+            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderApiVersion}:\n{ex}");
         }
 
         try
@@ -63,7 +65,7 @@ public class PlayerTrackProvider
         }
         catch (Exception e)
         {
-            PluginLog.LogError($"Error registering IPC provider for {LabelProviderGetPlayerCurrentNameWorld}:\n{e}");
+            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerCurrentNameWorld}:\n{e}");
         }
     }
 
@@ -72,7 +74,7 @@ public class PlayerTrackProvider
     /// </summary>
     public void Dispose()
     {
-        PluginLog.LogVerbose("Entering PlayerTrackProvider.Dispose");
+        DalamudContext.PluginLog.Verbose("Entering PlayerTrackProvider.Dispose");
         this.ProviderAPIVersion?.UnregisterFunc();
         this.ProviderGetPlayerCurrentNameWorld?.UnregisterFunc();
     }

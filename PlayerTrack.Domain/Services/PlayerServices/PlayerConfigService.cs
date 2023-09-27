@@ -6,7 +6,7 @@ using PlayerTrack.Models.Structs;
 namespace PlayerTrack.Domain;
 
 using System.Collections.Generic;
-using Dalamud.Logging;
+using Dalamud.DrunkenToad.Core;
 
 public class PlayerConfigService
 {
@@ -33,7 +33,7 @@ public class PlayerConfigService
 
     public static VisibilityType GetVisibilityType(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetVisibilityType(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetVisibilityType(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -43,7 +43,7 @@ public class PlayerConfigService
 
     public static uint GetNameColor(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameColor(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetNameColor(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -53,7 +53,7 @@ public class PlayerConfigService
 
     public static char GetIcon(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetIcon(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetIcon(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -63,7 +63,7 @@ public class PlayerConfigService
 
     public static bool GetIsProximityAlertEnabled(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetIsProximityAlertEnabled(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetIsProximityAlertEnabled(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -73,7 +73,7 @@ public class PlayerConfigService
 
     public static bool GetIsWorldTransferAlertEnabled(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetIsWorldTransferAlertEnabled(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetIsWorldTransferAlertEnabled(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -83,7 +83,7 @@ public class PlayerConfigService
 
     public static bool GetIsNameChangeAlertEnabled(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetIsNameChangeAlertEnabled(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetIsNameChangeAlertEnabled(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -93,7 +93,7 @@ public class PlayerConfigService
 
     public static bool GetNameplateShowInOverworld(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateShowInOverworld(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetNameplateShowInOverworld(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -103,7 +103,7 @@ public class PlayerConfigService
 
     public static bool GetNameplateShowInContent(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateShowInContent(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetNameplateShowInContent(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -113,7 +113,7 @@ public class PlayerConfigService
 
     public static bool GetNameplateShowInHighEndContent(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateShowInHighEndContent(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetNameplateShowInHighEndContent(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -123,7 +123,7 @@ public class PlayerConfigService
 
     public static bool GetNameplateUseColor(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateColorShowColor(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetNameplateColorShowColor(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -133,7 +133,7 @@ public class PlayerConfigService
 
     public static uint GetNameplateColor(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateColor(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetNameplateColor(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -143,7 +143,7 @@ public class PlayerConfigService
 
     public static bool GetNameplateUseColorIfDead(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateUseColorIfDead(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetNameplateUseColorIfDead(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -153,7 +153,7 @@ public class PlayerConfigService
 
     public static NameplateTitleType GetNameplateTitleType(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateTitleType(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetNameplateTitleType(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -163,7 +163,7 @@ public class PlayerConfigService
 
     public static string GetNameplateCustomTitle(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetNameplateCustomTitle(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetNameplateCustomTitle(): {player.Name}");
         return ExtractPlayerProperty(
             GetDefaultConfig(),
             player.PlayerConfig,
@@ -173,7 +173,7 @@ public class PlayerConfigService
 
     public static uint GetCategoryColor(Category category)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.GetCategoryColor(): {category.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.GetCategoryColor(): {category.Name}");
         return ExtractCategoryProperty(
             GetDefaultConfig(),
             category.PlayerConfig,
@@ -182,7 +182,7 @@ public class PlayerConfigService
 
     public static void UpdateCategoryConfig(int categoryId, PlayerConfig config)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.UpdateConfig(): {categoryId}, {config.Id}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.UpdateConfig(): {categoryId}, {config.Id}");
         var category = ServiceContext.CategoryService.GetCategory(categoryId);
         if (category == null)
         {
@@ -208,7 +208,7 @@ public class PlayerConfigService
 
     public static void UpdateConfig(int playerId, PlayerConfig config)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.UpdateConfig(): {playerId}, {config.Id}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.UpdateConfig(): {playerId}, {config.Id}");
         var player = ServiceContext.PlayerDataService.GetPlayer(playerId);
         if (player == null)
         {
@@ -235,7 +235,7 @@ public class PlayerConfigService
 
     public static void ResetPlayerConfig(int playerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigService.ResetPlayerConfig(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigService.ResetPlayerConfig(): {playerId}");
         var player = ServiceContext.PlayerDataService.GetPlayer(playerId);
         if (player == null)
         {

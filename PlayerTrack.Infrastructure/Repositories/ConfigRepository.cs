@@ -2,12 +2,14 @@
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
+
+using Dalamud.DrunkenToad.Core;
 
 public class ConfigRepository : BaseRepository
 {
@@ -18,7 +20,7 @@ public class ConfigRepository : BaseRepository
 
     public PluginConfig? GetPluginConfig()
     {
-        PluginLog.LogVerbose("Entering ConfigRepository.GetPluginConfig()");
+        DalamudContext.PluginLog.Verbose("Entering ConfigRepository.GetPluginConfig()");
         try
         {
             const string sql = "SELECT * FROM configs";
@@ -27,14 +29,14 @@ public class ConfigRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to get plugin configuration from the database.");
+            DalamudContext.PluginLog.Error(ex, "Failed to get plugin configuration from the database.");
             return null;
         }
     }
 
     public bool UpdatePluginConfig(PluginConfig pluginConfig)
     {
-        PluginLog.LogVerbose("Entering ConfigRepository.UpdatePluginConfig()");
+        DalamudContext.PluginLog.Verbose("Entering ConfigRepository.UpdatePluginConfig()");
         var configEntryDTOs = ConfigMapper.ToDTOs(pluginConfig);
 
         using var transaction = this.Connection.BeginTransaction();
@@ -51,7 +53,7 @@ public class ConfigRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to update config.", pluginConfig);
+            DalamudContext.PluginLog.Error(ex, "Failed to update config.", pluginConfig);
             transaction.Rollback();
             return false;
         }

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
+
+using Dalamud.DrunkenToad.Core;
 
 public class PlayerNameWorldHistoryRepository : BaseRepository
 {
@@ -19,7 +21,7 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
 
     public int CreatePlayerNameWorldHistory(PlayerNameWorldHistory playerNameWorldHistory)
     {
-        PluginLog.LogVerbose("Entering PlayerNameWorldHistoryRepository.CreatePlayerNameWorldHistory()");
+        DalamudContext.PluginLog.Verbose("Entering PlayerNameWorldHistoryRepository.CreatePlayerNameWorldHistory()");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -39,7 +41,7 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to create PlayerNameWorldHistory.", playerNameWorldHistory);
+            DalamudContext.PluginLog.Error(ex, "Failed to create PlayerNameWorldHistory.", playerNameWorldHistory);
             transaction.Rollback();
             return 0;
         }
@@ -47,7 +49,7 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
 
     public int UpdatePlayerId(int oldestPlayerId, int newPlayerId)
     {
-        PluginLog.LogVerbose("Entering PlayerNameWorldHistoryRepository.UpdatePlayerId()");
+        DalamudContext.PluginLog.Verbose("Entering PlayerNameWorldHistoryRepository.UpdatePlayerId()");
         try
         {
             const string updateSql = "UPDATE player_name_world_histories SET player_id = @newPlayerId WHERE player_id = @oldestPlayerId";
@@ -57,14 +59,14 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to update playerIds from {oldestPlayerId} to {newPlayerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to update playerIds from {oldestPlayerId} to {newPlayerId}.");
             return 0;
         }
     }
 
     public string[]? GetHistoricalNames(int playerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerNameWorldHistoryRepository.GetHistoricalNames(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerNameWorldHistoryRepository.GetHistoricalNames(): {playerId}");
         try
         {
             const string sql = "SELECT player_name FROM player_name_world_histories WHERE player_id = @player_id ORDER BY updated DESC";
@@ -72,14 +74,14 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to get historical names for PlayerID {playerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to get historical names for PlayerID {playerId}.");
             return null;
         }
     }
 
     public IEnumerable<uint>? GetHistoricalWorlds(int playerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerNameWorldHistoryRepository.GetHistoricalWorlds(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerNameWorldHistoryRepository.GetHistoricalWorlds(): {playerId}");
         try
         {
             const string sql = "SELECT world_id FROM player_name_world_histories WHERE player_id = @player_id ORDER BY updated DESC";
@@ -87,14 +89,14 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to get historical worlds for PlayerID {playerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to get historical worlds for PlayerID {playerId}.");
             return null;
         }
     }
 
     public bool DeleteNameWorldHistory(int playerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerNameWorldHistoryRepository.DeleteNameWorldHistory(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerNameWorldHistoryRepository.DeleteNameWorldHistory(): {playerId}");
         try
         {
             const string sql = "DELETE FROM player_name_world_histories WHERE player_id = @player_id";
@@ -103,14 +105,14 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete NameWorldHistory for PlayerID {playerId}");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete NameWorldHistory for PlayerID {playerId}");
             return false;
         }
     }
 
     public bool CreatePlayerNameWorldHistories(IEnumerable<PlayerNameWorldHistory> playerNameWorldHistoriesList)
     {
-        PluginLog.LogVerbose("Entering PlayerNameWorldHistoryRepository.CreatePlayerNameWorldHistories()");
+        DalamudContext.PluginLog.Verbose("Entering PlayerNameWorldHistoryRepository.CreatePlayerNameWorldHistories()");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -135,7 +137,7 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to create PlayerNameWorldHistories.");
+            DalamudContext.PluginLog.Error(ex, "Failed to create PlayerNameWorldHistories.");
             transaction.Rollback();
             return false;
         }

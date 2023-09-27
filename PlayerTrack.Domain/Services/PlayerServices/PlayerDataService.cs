@@ -15,7 +15,7 @@ using Dalamud.DrunkenToad.Core.Models;
 using Dalamud.DrunkenToad.Extensions;
 using Dalamud.DrunkenToad.Helpers;
 using Dalamud.Interface;
-using Dalamud.Logging;
+
 using Models.Comparers;
 
 public class PlayerDataService : SortedCacheService<Player>
@@ -38,7 +38,7 @@ public class PlayerDataService : SortedCacheService<Player>
 
     public void DeletePlayer(int playerId)
     {
-        PluginLog.LogVerbose($"PlayerDataService.DeletePlayer(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"PlayerDataService.DeletePlayer(): {playerId}");
 
         PlayerChangeService.DeleteCustomizeHistory(playerId);
         PlayerChangeService.DeleteNameWorldHistory(playerId);
@@ -52,13 +52,13 @@ public class PlayerDataService : SortedCacheService<Player>
 
     public void UpdatePlayer(Player player)
     {
-        PluginLog.LogVerbose($"PlayerDataService.UpdatePlayer(): {player.Id}");
+        DalamudContext.PluginLog.Verbose($"PlayerDataService.UpdatePlayer(): {player.Id}");
         this.UpdatePlayerInCacheAndRepository(player);
     }
 
     public void AddPlayer(Player player)
     {
-        PluginLog.LogVerbose($"PlayerDataService.AddPlayer(): {player.Id}");
+        DalamudContext.PluginLog.Verbose($"PlayerDataService.AddPlayer(): {player.Id}");
         var categoryId = player.PrimaryCategoryId;
         this.AddPlayerToCacheAndRepository(player);
         PlayerLodestoneService.CreateLodestoneLookup(player.Id, player.Name, player.WorldId);
@@ -68,13 +68,13 @@ public class PlayerDataService : SortedCacheService<Player>
         }
         else
         {
-            PluginLog.LogVerbose($"PlayerDataService.AddPlayer(): No category assigned to player: {player.Id}");
+            DalamudContext.PluginLog.Verbose($"PlayerDataService.AddPlayer(): No category assigned to player: {player.Id}");
         }
     }
 
     public void UpdatePlayer(int playerId)
     {
-        PluginLog.LogVerbose($"PlayerDataService.UpdatePlayer(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"PlayerDataService.UpdatePlayer(): {playerId}");
         var player = this.cache.FindFirst(p => p.Id == playerId);
         if (player == null)
         {
@@ -98,13 +98,13 @@ public class PlayerDataService : SortedCacheService<Player>
 
     public void RefreshAllPlayers()
     {
-        PluginLog.LogVerbose("PlayerDataService.RefreshAllPlayers()");
+        DalamudContext.PluginLog.Verbose("PlayerDataService.RefreshAllPlayers()");
         Task.Run(this.ReloadPlayerCacheAsync);
     }
 
     public void RecalculatePlayerRankings()
     {
-        PluginLog.LogVerbose($"PlayerDataService.RecalculatePlayerRankings()");
+        DalamudContext.PluginLog.Verbose($"PlayerDataService.RecalculatePlayerRankings()");
         Task.Run(() =>
         {
             this.cache.Resort(new PlayerComparer(ServiceContext.CategoryService.GetCategoryRanks()));
@@ -114,7 +114,7 @@ public class PlayerDataService : SortedCacheService<Player>
 
     public void MergePlayers(Player oldestPlayer, int newPlayerId)
     {
-        PluginLog.LogVerbose($"PlayerDataService.MergePlayer(): {oldestPlayer.Id} -> {newPlayerId}");
+        DalamudContext.PluginLog.Verbose($"PlayerDataService.MergePlayer(): {oldestPlayer.Id} -> {newPlayerId}");
         var newPlayer = this.cache.FindFirst(p => p.Id == newPlayerId);
         if (newPlayer == null)
         {
@@ -326,13 +326,13 @@ public class PlayerDataService : SortedCacheService<Player>
 
     private void ReloadPlayerCache() => this.ExecuteReloadCache(() =>
     {
-        PluginLog.LogVerbose($"Entering PlayerDataService.ReloadPlayerCacheAsync()");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerDataService.ReloadPlayerCacheAsync()");
         this.ReloadPlayers();
     });
 
     private async Task ReloadPlayerCacheAsync() => await this.ExecuteReloadCacheAsync(() =>
     {
-        PluginLog.LogVerbose($"Entering PlayerDataService.ReloadPlayerCacheAsync()");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerDataService.ReloadPlayerCacheAsync()");
         this.ReloadPlayers();
         return Task.CompletedTask;
     });

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
+
+using Dalamud.DrunkenToad.Core;
 
 public class TagRepository : BaseRepository
 {
@@ -19,7 +21,7 @@ public class TagRepository : BaseRepository
 
     public IEnumerable<Tag>? GetAllTags()
     {
-        PluginLog.LogVerbose($"Entering TagRepository.GetAllTags().");
+        DalamudContext.PluginLog.Verbose($"Entering TagRepository.GetAllTags().");
         try
         {
             const string sql = "SELECT * FROM tags";
@@ -28,14 +30,14 @@ public class TagRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to get all tags from the database.");
+            DalamudContext.PluginLog.Error(ex, "Failed to get all tags from the database.");
             return null;
         }
     }
 
     public int CreateTag(Tag tag)
     {
-        PluginLog.LogVerbose($"Entering TagRepository.CreateTag(): {tag.Name}.");
+        DalamudContext.PluginLog.Verbose($"Entering TagRepository.CreateTag(): {tag.Name}.");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -55,14 +57,14 @@ public class TagRepository : BaseRepository
         catch (Exception ex)
         {
             transaction.Rollback();
-            PluginLog.LogError(ex, $"Failed to create new tag {tag.Name}.", tag);
+            DalamudContext.PluginLog.Error(ex, $"Failed to create new tag {tag.Name}.", tag);
             return 0;
         }
     }
 
     public bool UpdateTag(Tag tag)
     {
-        PluginLog.LogVerbose($"Entering TagRepository.UpdateTag(): {tag.Name}.");
+        DalamudContext.PluginLog.Verbose($"Entering TagRepository.UpdateTag(): {tag.Name}.");
         try
         {
             var tagDTO = this.Mapper.Map<TagDTO>(tag);
@@ -73,14 +75,14 @@ public class TagRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to update tag {tag.Name}.", tag);
+            DalamudContext.PluginLog.Error(ex, $"Failed to update tag {tag.Name}.", tag);
             return false;
         }
     }
 
     public bool DeleteTag(int id)
     {
-        PluginLog.LogVerbose($"Entering TagRepository.DeleteTag(): {id}.");
+        DalamudContext.PluginLog.Verbose($"Entering TagRepository.DeleteTag(): {id}.");
         try
         {
             const string sql = "DELETE FROM tags WHERE id = @id";
@@ -89,14 +91,14 @@ public class TagRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete tag by ID {id}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete tag by ID {id}.");
             return false;
         }
     }
 
     public bool CreateTags(List<Tag> tags)
     {
-        PluginLog.LogVerbose($"Entering TagRepository.CreateTags(): {tags.Count}.");
+        DalamudContext.PluginLog.Verbose($"Entering TagRepository.CreateTags(): {tags.Count}.");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -122,7 +124,7 @@ public class TagRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to create tags.");
+            DalamudContext.PluginLog.Error(ex, "Failed to create tags.");
             transaction.Rollback();
             return false;
         }

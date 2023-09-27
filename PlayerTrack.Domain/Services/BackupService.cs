@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Dalamud.DrunkenToad.Core;
-using Dalamud.Logging;
+
 using PlayerTrack.Infrastructure;
 using PlayerTrack.Models;
 
@@ -26,7 +26,7 @@ public class BackupService
 
     public void Startup()
     {
-        PluginLog.LogVerbose("Entering BackupService.Startup()");
+        DalamudContext.PluginLog.Verbose("Entering BackupService.Startup()");
         this.pluginDir = DalamudContext.PluginInterface.GetPluginConfigDirectory();
         this.backupDir = $"{this.pluginDir}/backups";
         this.pluginVersion = ServiceContext.ConfigService.GetConfig().PluginVersion;
@@ -36,7 +36,7 @@ public class BackupService
 
     public void AutoDeleteBackups()
     {
-        PluginLog.LogVerbose("Entering BackupService.AutoDeleteBackups()");
+        DalamudContext.PluginLog.Verbose("Entering BackupService.AutoDeleteBackups()");
         const int MaxBackups = 5;
         var unprotectedBackups = GetUnprotectedBackups();
         if (unprotectedBackups is not { Count: > MaxBackups })
@@ -54,7 +54,7 @@ public class BackupService
 
     public bool DeleteBackup(Backup backup)
     {
-        PluginLog.LogVerbose($"Entering BackupService.DeleteBackup(): {backup.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering BackupService.DeleteBackup(): {backup.Name}");
         try
         {
             File.Delete(Path.Combine(this.backupDir, backup.Name));
@@ -63,14 +63,14 @@ public class BackupService
         }
         catch (Exception ex)
         {
-            PluginLog.LogError($"Failed to delete {backup.Name}.", ex);
+            DalamudContext.PluginLog.Error($"Failed to delete {backup.Name}.", ex);
             return false;
         }
     }
 
     public void RunBackup(BackupType backupType)
     {
-        PluginLog.LogVerbose($"Entering BackupService.RunBackup(): {backupType}");
+        DalamudContext.PluginLog.Verbose($"Entering BackupService.RunBackup(): {backupType}");
         var backup = this.CreateBackupEntry(backupType);
         if (!File.Exists(Path.Combine(this.backupDir, "data.db")))
         {
@@ -127,7 +127,7 @@ public class BackupService
             var fileInfo = new FileInfo(file);
             if (!fileInfo.Extension.Equals(".zip", StringComparison.Ordinal))
             {
-                PluginLog.LogWarning($"Found unknown file in backup directory: {fileInfo.Name}");
+                DalamudContext.PluginLog.Warning($"Found unknown file in backup directory: {fileInfo.Name}");
                 continue;
             }
 
@@ -174,16 +174,16 @@ public class BackupService
         var latestBackup = RepositoryContext.BackupRepository.GetLatestBackup();
         if (latestBackup == null || latestBackup.Created + backupInterval < UnixTimestampHelper.CurrentTime())
         {
-            PluginLog.LogVerbose($"Running automatic backup.");
+            DalamudContext.PluginLog.Verbose($"Running automatic backup.");
             this.RunBackup(BackupType.Automatic);
         }
 
         // Run upgrade backup if needed
         var config = ServiceContext.ConfigService.GetConfig();
-        PluginLog.LogVerbose($"Checking for upgrade backup. Last backup version: {this.lastVersionBackup}. Current plugin version: {this.pluginVersion}.");
+        DalamudContext.PluginLog.Verbose($"Checking for upgrade backup. Last backup version: {this.lastVersionBackup}. Current plugin version: {this.pluginVersion}.");
         if (this.lastVersionBackup < this.pluginVersion)
         {
-            PluginLog.LogVerbose($"Running upgrade backup from v{this.lastVersionBackup} to v{this.pluginVersion}.");
+            DalamudContext.PluginLog.Verbose($"Running upgrade backup from v{this.lastVersionBackup} to v{this.pluginVersion}.");
             this.RunBackup(BackupType.Upgrade);
             this.lastVersionBackup = this.pluginVersion;
             config.LastVersionBackup = this.pluginVersion;
@@ -191,13 +191,13 @@ public class BackupService
         }
         else
         {
-            PluginLog.LogVerbose($"No upgrade backup needed.");
+            DalamudContext.PluginLog.Verbose($"No upgrade backup needed.");
         }
 
         // Clean up deleted backup records
         foreach (var backup in GetBackups().Where(backup => !File.Exists(Path.Combine(this.backupDir, backup.Name))))
         {
-            PluginLog.LogVerbose($"Backup {backup.Name} is missing. Marking as deleted.");
+            DalamudContext.PluginLog.Verbose($"Backup {backup.Name} is missing. Marking as deleted.");
             RepositoryContext.BackupRepository.DeleteBackup(backup.Id);
         }
 

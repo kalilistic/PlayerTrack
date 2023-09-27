@@ -10,7 +10,7 @@ namespace PlayerTrack.Domain;
 using System.Threading.Tasks;
 using Dalamud.DrunkenToad.Caching;
 using Dalamud.DrunkenToad.Collections;
-using Dalamud.Logging;
+using Dalamud.DrunkenToad.Core;
 
 public class CategoryService : UnsortedCacheService<Category>
 {
@@ -22,7 +22,7 @@ public class CategoryService : UnsortedCacheService<Category>
 
     public static int GetDefaultCategory(ToadLocation loc)
     {
-        PluginLog.LogVerbose($"Entering CategoryService.GetDefaultCategory(): {loc.LocationType}");
+        DalamudContext.PluginLog.Verbose($"Entering CategoryService.GetDefaultCategory(): {loc.LocationType}");
         var config = ServiceContext.ConfigService.GetConfig().GetTrackingLocationConfig(loc.LocationType);
         return config.DefaultCategoryId != 0 ? config.DefaultCategoryId : 0;
     }
@@ -37,7 +37,7 @@ public class CategoryService : UnsortedCacheService<Category>
 
     public void CreateCategory(string name)
     {
-        PluginLog.LogVerbose($"Entering CategoryService.CreateCategory(): {name}");
+        DalamudContext.PluginLog.Verbose($"Entering CategoryService.CreateCategory(): {name}");
         var rank = 1;
 
         var categories = this.GetAllCategories();
@@ -58,13 +58,13 @@ public class CategoryService : UnsortedCacheService<Category>
 
     public void UpdateCategory(Category category)
     {
-        PluginLog.LogVerbose($"Entering CategoryService.UpdateCategory(): {category.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering CategoryService.UpdateCategory(): {category.Name}");
         this.UpdateCategoryInCacheAndRepository(category);
     }
 
     public void DeleteCategory(Category category) => Task.Run(() =>
     {
-        PluginLog.LogVerbose($"Entering CategoryService.DeleteCategory(): {category.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering CategoryService.DeleteCategory(): {category.Name}");
         var categories = this.GetAllCategories();
 
         var filteredCategories = categories.Where(cat => cat.Rank > category.Rank).ToList();
@@ -119,7 +119,7 @@ public class CategoryService : UnsortedCacheService<Category>
 
     public void RefreshCategories()
     {
-        PluginLog.LogVerbose("CategoryService.RefreshCategories()");
+        DalamudContext.PluginLog.Verbose("CategoryService.RefreshCategories()");
         this.ReloadCategoryCache();
     }
 
@@ -140,7 +140,7 @@ public class CategoryService : UnsortedCacheService<Category>
 
     private void BuildCategoryNames()
     {
-        PluginLog.LogVerbose("Entering CategoryService.BuildCategoryNames()");
+        DalamudContext.PluginLog.Verbose("Entering CategoryService.BuildCategoryNames()");
         var categories = this.GetAllCategories();
         this.categoryNames = categories.Select(cat => cat.Name).ToList();
         this.categoryNamesWithBlank = new List<string> { string.Empty }.Concat(this.categoryNames).ToList();
@@ -148,7 +148,7 @@ public class CategoryService : UnsortedCacheService<Category>
 
     private void BuildCategoryFilters()
     {
-        PluginLog.LogVerbose("Entering CategoryService.BuildCategoryFilters()");
+        DalamudContext.PluginLog.Verbose("Entering CategoryService.BuildCategoryFilters()");
         var categoriesByRank = this.GetAllCategories();
         var totalCategories = categoriesByRank.Count;
 
@@ -213,7 +213,7 @@ public class CategoryService : UnsortedCacheService<Category>
 
     private void UpdateCategoryInCacheAndRepository(Category category)
     {
-        PluginLog.LogVerbose($"Entering CategoryService.UpdateCategoryInCacheAndRepository(): {category.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering CategoryService.UpdateCategoryInCacheAndRepository(): {category.Name}");
         this.cache.Update(category.Id, category);
         RepositoryContext.CategoryRepository.UpdateCategory(category);
         this.BuildCategoryFilters();

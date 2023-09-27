@@ -2,7 +2,6 @@
 
 using Dalamud.DrunkenToad.Core;
 using Dalamud.Game.Command;
-using Dalamud.Logging;
 
 public static class CommandHandler
 {
@@ -16,7 +15,7 @@ public static class CommandHandler
 
     public static void Start()
     {
-        PluginLog.LogVerbose("Entering CommandHandler.Start()");
+        DalamudContext.PluginLog.Verbose("Entering CommandHandler.Start()");
         DalamudContext.CommandManager.AddHandler("/ptrack", new CommandInfo((_, _) => { PlayerWindowToggled?.Invoke(); })
         {
             HelpMessage = DalamudContext.LocManager.GetString("ShowHidePlayerTrack"),

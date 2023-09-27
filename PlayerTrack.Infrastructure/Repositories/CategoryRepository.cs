@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
@@ -11,6 +11,7 @@ using PlayerTrack.Models;
 namespace PlayerTrack.Infrastructure;
 
 using System.Data.SQLite;
+using Dalamud.DrunkenToad.Core;
 
 public class CategoryRepository : BaseRepository
 {
@@ -21,7 +22,7 @@ public class CategoryRepository : BaseRepository
 
     public IEnumerable<Category>? GetAllCategories()
     {
-        PluginLog.LogVerbose("Entering CategoryRepository.GetAllCategories()");
+        DalamudContext.PluginLog.Verbose("Entering CategoryRepository.GetAllCategories()");
         try
         {
             const string sql = "SELECT * FROM categories";
@@ -30,14 +31,14 @@ public class CategoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to get all categories.");
+            DalamudContext.PluginLog.Error(ex, "Failed to get all categories.");
             return null;
         }
     }
 
     public int CreateCategory(Category category)
     {
-        PluginLog.LogVerbose($"Entering CategoryRepository.CreateCategory(): {category.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering CategoryRepository.CreateCategory(): {category.Name}");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -53,14 +54,14 @@ public class CategoryRepository : BaseRepository
         catch (Exception ex)
         {
             transaction.Rollback();
-            PluginLog.LogError(ex, "Failed to create new category.", category);
+            DalamudContext.PluginLog.Error(ex, "Failed to create new category.", category);
             return 0;
         }
     }
 
     public bool UpdateCategory(Category category)
     {
-        PluginLog.LogVerbose($"Entering CategoryRepository.UpdateCategory(): {category.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering CategoryRepository.UpdateCategory(): {category.Name}");
         try
         {
             var categoryDTO = this.Mapper.Map<CategoryDTO>(category);
@@ -72,14 +73,14 @@ public class CategoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to update category.", category);
+            DalamudContext.PluginLog.Error(ex, "Failed to update category.", category);
             return false;
         }
     }
 
     public bool DeleteCategory(int categoryId)
     {
-        PluginLog.LogVerbose($"Entering CategoryRepository.DeleteCategory(): {categoryId}");
+        DalamudContext.PluginLog.Verbose($"Entering CategoryRepository.DeleteCategory(): {categoryId}");
         try
         {
             const string sql = "DELETE FROM categories WHERE id = @id";
@@ -88,14 +89,14 @@ public class CategoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"DeleteCategory: Failed to delete category by id {categoryId}.");
+            DalamudContext.PluginLog.Error(ex, $"DeleteCategory: Failed to delete category by id {categoryId}.");
             return false;
         }
     }
 
     public bool SaveCategories(IEnumerable<Category> categories)
     {
-        PluginLog.LogVerbose("Entering CategoryRepository.SaveCategories()");
+        DalamudContext.PluginLog.Verbose("Entering CategoryRepository.SaveCategories()");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -120,7 +121,7 @@ public class CategoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to insert categories.");
+            DalamudContext.PluginLog.Error(ex, "Failed to insert categories.");
             transaction.Rollback();
             return false;
         }

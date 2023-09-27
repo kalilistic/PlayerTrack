@@ -4,8 +4,6 @@ using Dalamud.Loc;
 
 namespace PlayerTrack.Domain;
 
-using Dalamud.Logging;
-
 public static class ServiceContext
 {
     public static BackupService BackupService { get; set; } = null!;
@@ -46,7 +44,7 @@ public static class ServiceContext
 
     public static void Initialize()
     {
-        PluginLog.LogVerbose("Entering ServiceContext.Initialize()");
+        DalamudContext.PluginLog.Verbose("Entering ServiceContext.Initialize()");
         Localization = DalamudContext.LocManager;
         ConfigService = new ConfigService();
         BackupService = new BackupService();
@@ -71,7 +69,7 @@ public static class ServiceContext
 
     public static void Dispose()
     {
-        PluginLog.LogVerbose("Entering ServiceContext.Dispose()");
+        DalamudContext.PluginLog.Verbose("Entering ServiceContext.Dispose()");
         try
         {
             EncounterService.Dispose();
@@ -80,7 +78,7 @@ public static class ServiceContext
         }
         catch (Exception)
         {
-            PluginLog.LogWarning("Failed to dispose services.");
+            DalamudContext.PluginLog.Warning("Failed to dispose services.");
         }
     }
 }

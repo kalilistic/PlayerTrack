@@ -5,8 +5,8 @@ using FluentDapperLite.Extension;
 
 namespace PlayerTrack.Infrastructure;
 
+using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Helpers;
-using Dalamud.Logging;
 using FluentDapperLite.Maintenance;
 
 public static class RepositoryContext
@@ -72,19 +72,19 @@ public static class RepositoryContext
         }
         catch (Exception)
         {
-            PluginLog.LogWarning("Failed to dispose RepositoryContext");
+            DalamudContext.PluginLog.Warning("Failed to dispose RepositoryContext");
         }
     }
 
     public static void RunMaintenanceChecks(bool forceCheck = false)
     {
-        PluginLog.LogVerbose("Entering RepositoryContext.RunMaintenance()");
+        DalamudContext.PluginLog.Verbose("Entering RepositoryContext.RunMaintenance()");
         var currentTime = UnixTimestampHelper.CurrentTime();
         var config = ConfigRepository.GetPluginConfig();
 
         if (config == null)
         {
-            PluginLog.LogWarning("Plugin config not found, skipping maintenance");
+            DalamudContext.PluginLog.Warning("Plugin config not found, skipping maintenance");
             return;
         }
 
@@ -92,7 +92,7 @@ public static class RepositoryContext
 
         if (currentTime - config.MaintenanceLastRunOn >= weekInMillis || forceCheck)
         {
-            PluginLog.LogVerbose($"It's been a week since the last maintenance. Current time: {currentTime}, Last run: {config.MaintenanceLastRunOn}");
+            DalamudContext.PluginLog.Verbose($"It's been a week since the last maintenance. Current time: {currentTime}, Last run: {config.MaintenanceLastRunOn}");
             SQLiteDbMaintenance.Reindex(Database);
             SQLiteDbMaintenance.Vacuum(Database);
             SQLiteDbMaintenance.Analyze(Database);
@@ -102,10 +102,10 @@ public static class RepositoryContext
         }
         else
         {
-            PluginLog.LogVerbose("It hasn't been a week since the last maintenance, skipping");
+            DalamudContext.PluginLog.Verbose("It hasn't been a week since the last maintenance, skipping");
         }
 
-        PluginLog.LogVerbose("Exiting RepositoryContext.RunMaintenance()");
+        DalamudContext.PluginLog.Verbose("Exiting RepositoryContext.RunMaintenance()");
     }
 
     private static IMapper CreateMapper()

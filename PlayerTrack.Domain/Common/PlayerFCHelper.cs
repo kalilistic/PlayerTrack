@@ -3,7 +3,7 @@ using PlayerTrack.Models;
 
 namespace PlayerTrack.Domain.Common;
 
-using Dalamud.Logging;
+using Dalamud.DrunkenToad.Core;
 
 public static class PlayerFCHelper
 {
@@ -13,7 +13,7 @@ public static class PlayerFCHelper
 
     private static KeyValuePair<FreeCompanyState, string> DetermineFCState(string tag, bool inContent)
     {
-        PluginLog.LogVerbose($"Entering PlayerFCHelper.DetermineFCState(): {tag}, {inContent}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerFCHelper.DetermineFCState(): {tag}, {inContent}");
         if (inContent)
         {
             return new KeyValuePair<FreeCompanyState, string>(FreeCompanyState.Unknown, tag);

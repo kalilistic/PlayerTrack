@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
+
+using Dalamud.DrunkenToad.Core;
 
 public class ArchiveRecordRepository : BaseRepository
 {
@@ -19,7 +21,7 @@ public class ArchiveRecordRepository : BaseRepository
 
     public bool CreateArchiveRecord(ArchiveRecord archiveRecord)
     {
-        PluginLog.LogVerbose("Entering ArchiveRecordRepository.CreateArchiveRecord()");
+        DalamudContext.PluginLog.Verbose("Entering ArchiveRecordRepository.CreateArchiveRecord()");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -37,14 +39,14 @@ public class ArchiveRecordRepository : BaseRepository
         catch (Exception ex)
         {
             transaction.Rollback();
-            PluginLog.LogError(ex, "Failed to create new migration archive.");
+            DalamudContext.PluginLog.Error(ex, "Failed to create new migration archive.");
             return false;
         }
     }
 
     public bool CreateArchiveRecords(IEnumerable<ArchiveRecord> migrationArchiveRecords)
     {
-        PluginLog.LogVerbose("Entering ArchiveRecordRepository.CreateArchiveRecords()");
+        DalamudContext.PluginLog.Verbose("Entering ArchiveRecordRepository.CreateArchiveRecords()");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -77,7 +79,7 @@ public class ArchiveRecordRepository : BaseRepository
         catch (Exception ex)
         {
             transaction.Rollback();
-            PluginLog.LogError(ex, "Failed to create new migration archives.");
+            DalamudContext.PluginLog.Error(ex, "Failed to create new migration archives.");
             return false;
         }
     }

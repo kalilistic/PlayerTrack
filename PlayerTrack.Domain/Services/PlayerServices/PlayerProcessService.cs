@@ -9,7 +9,7 @@ using Common;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Core.Models;
 using Dalamud.DrunkenToad.Helpers;
-using Dalamud.Logging;
+
 using Infrastructure;
 using Models;
 
@@ -23,7 +23,7 @@ public class PlayerProcessService
 
     public static void HandleDuplicatePlayers(List<Player> players)
     {
-        PluginLog.LogVerbose($"Entering PlayerMergeService.HandleDuplicatePlayers(): {players.Count}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerMergeService.HandleDuplicatePlayers(): {players.Count}");
         if (players.Count < 2)
         {
             return;
@@ -44,7 +44,7 @@ public class PlayerProcessService
 
     public static void CheckForDuplicates() => Task.Run(() =>
     {
-        PluginLog.LogVerbose("Entering PlayerMergeService.CheckForDuplicates()");
+        DalamudContext.PluginLog.Verbose("Entering PlayerMergeService.CheckForDuplicates()");
         var allPlayers = ServiceContext.PlayerDataService.GetAllPlayers();
         var groupedPlayers = allPlayers.Where(p => p.LodestoneId > 0)
             .GroupBy(p => p.LodestoneId);
@@ -57,7 +57,7 @@ public class PlayerProcessService
 
     public static void CheckForDuplicates(Player player) => Task.Run(() =>
     {
-        PluginLog.LogVerbose($"Entering PlayerMergeService.CheckForDuplicates(): {player.Id}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerMergeService.CheckForDuplicates(): {player.Id}");
         if (player.LodestoneId > 0)
         {
             var players = RepositoryContext.PlayerRepository.GetPlayersByLodestoneId(player.LodestoneId) ?? new List<Player>();
@@ -81,11 +81,11 @@ public class PlayerProcessService
 
     public void RemoveCurrentPlayer(uint playerObjectId)
     {
-        PluginLog.LogVerbose($"Entering PlayerProcessService.RemoveCurrentPlayer(): {playerObjectId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerProcessService.RemoveCurrentPlayer(): {playerObjectId}");
         var player = ServiceContext.PlayerDataService.GetPlayer(playerObjectId);
         if (player == null)
         {
-            PluginLog.LogVerbose("Player not found.");
+            DalamudContext.PluginLog.Verbose("Player not found.");
             return;
         }
 
@@ -104,7 +104,7 @@ public class PlayerProcessService
         var player = ServiceContext.PlayerDataService.GetPlayer(name, worldId);
         if (player == null)
         {
-            PluginLog.LogVerbose("Player not found.");
+            DalamudContext.PluginLog.Verbose("Player not found.");
             return;
         }
 
@@ -115,18 +115,18 @@ public class PlayerProcessService
 
     public void AddOrUpdatePlayer(ToadPlayer toadPlayer, bool isCurrent = true, bool forceLoad = false)
     {
-        PluginLog.LogVerbose($"Entering PlayerProcessService.AddOrUpdatePlayer(): {toadPlayer.Id}, {toadPlayer.Name}, {toadPlayer.HomeWorld}, {forceLoad}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerProcessService.AddOrUpdatePlayer(): {toadPlayer.Id}, {toadPlayer.Name}, {toadPlayer.HomeWorld}, {forceLoad}");
         var enc = ServiceContext.EncounterService.GetCurrentEncounter();
 
         if (enc == null)
         {
-            PluginLog.LogVerbose("Encounter is missing.");
+            DalamudContext.PluginLog.Verbose("Encounter is missing.");
             return;
         }
 
         if (!enc.SavePlayers && !forceLoad)
         {
-            PluginLog.LogVerbose("Encounter is not set to save players.");
+            DalamudContext.PluginLog.Verbose("Encounter is not set to save players.");
             return;
         }
 
@@ -136,7 +136,7 @@ public class PlayerProcessService
 
         if (player == null)
         {
-            PluginLog.LogVerbose("Player not found, creating new player.");
+            DalamudContext.PluginLog.Verbose("Player not found, creating new player.");
             this.CreateNewPlayer(toadPlayer, key, isCurrent, enc.CategoryId, loc);
             player = ServiceContext.PlayerDataService.GetPlayer(key);
             if (player != null)
@@ -153,13 +153,13 @@ public class PlayerProcessService
         }
         else if (forceLoad)
         {
-            PluginLog.LogVerbose("Force load player, used for player search.");
+            DalamudContext.PluginLog.Verbose("Force load player, used for player search.");
             player = this.UpdateExistingPlayer(player, toadPlayer, isCurrent, loc);
             this.PlayerSelected?.Invoke(player);
         }
         else if (!player.IsCurrent)
         {
-            PluginLog.LogVerbose("Player found, updating existing player.");
+            DalamudContext.PluginLog.Verbose("Player found, updating existing player.");
             player = this.UpdateExistingPlayer(player, toadPlayer, isCurrent, loc);
             ServiceContext.PlayerAlertService.SendProximityAlert(player);
             if (enc.SaveEncounter)

@@ -1,7 +1,7 @@
 ﻿using System;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.Loc.ImGui;
-using Dalamud.Logging;
+
 using PlayerTrack.Domain;
 using PlayerTrack.Models;
 using PlayerTrack.UserInterface.Config.Views;
@@ -24,7 +24,7 @@ public static class GuiController
 
     public static void Start()
     {
-        PluginLog.LogVerbose("Entering GuiController.Start()");
+        DalamudContext.PluginLog.Verbose("Entering GuiController.Start()");
         Initialize();
         configView = new ConfigView($"{Name}###Config", config) { IsOpen = config.IsConfigOpen };
         configView.WindowConfigChanged += WindowConfigChanged;
@@ -50,7 +50,7 @@ public static class GuiController
 
     public static void Dispose()
     {
-        PluginLog.LogVerbose("Entering GuiController.Dispose()");
+        DalamudContext.PluginLog.Verbose("Entering GuiController.Dispose()");
         try
         {
             DalamudContext.PluginInterface.UiBuilder.OpenMainUi -= OnPlayerWindowToggled;
@@ -73,13 +73,13 @@ public static class GuiController
         }
         catch (Exception)
         {
-            PluginLog.LogWarning("Failed to dispose GuiController.");
+            DalamudContext.PluginLog.Warning("Failed to dispose GuiController.");
         }
     }
 
     private static void StartCombinedWindow()
     {
-        PluginLog.LogVerbose("Entering GuiController.StartCombinedWindow()");
+        DalamudContext.PluginLog.Verbose("Entering GuiController.StartCombinedWindow()");
         combinedView = presenter.Combined;
         combinedView.OpenConfig += OpenConfig;
         DalamudContext.WindowManager.AddWindows(combinedView);
@@ -87,7 +87,7 @@ public static class GuiController
 
     private static void CloseCombinedWindow()
     {
-        PluginLog.LogVerbose("Entering GuiController.CloseCombinedWindow()");
+        DalamudContext.PluginLog.Verbose("Entering GuiController.CloseCombinedWindow()");
         if (combinedView != null)
         {
             combinedView.OpenConfig -= OpenConfig;
@@ -97,7 +97,7 @@ public static class GuiController
 
     private static void StartSeparateWindows()
     {
-        PluginLog.LogVerbose("Entering GuiController.StartSeparateWindows()");
+        DalamudContext.PluginLog.Verbose("Entering GuiController.StartSeparateWindows()");
         playerListView = presenter.PlayerList;
         playerListView.OpenConfig += OpenConfig;
         panelView = presenter.PanelView;
@@ -106,7 +106,7 @@ public static class GuiController
 
     private static void CloseSeparateWindows()
     {
-        PluginLog.LogVerbose("Entering GuiController.CloseSeparateWindows()");
+        DalamudContext.PluginLog.Verbose("Entering GuiController.CloseSeparateWindows()");
         if (playerListView != null && panelView != null)
         {
             playerListView.OpenConfig -= OpenConfig;
@@ -118,7 +118,7 @@ public static class GuiController
 
     private static void WindowConfigChanged()
     {
-        PluginLog.LogVerbose("Entering GuiController.WindowConfigChanged()");
+        DalamudContext.PluginLog.Verbose("Entering GuiController.WindowConfigChanged()");
         if (isCombinedView && !config.IsWindowCombined)
         {
             CloseCombinedWindow();
@@ -142,7 +142,7 @@ public static class GuiController
 
     private static void Initialize()
     {
-        PluginLog.LogVerbose("Entering GuiController.Initialize()");
+        DalamudContext.PluginLog.Verbose("Entering GuiController.Initialize()");
         DalamudContext.LocManager.LoadLanguagesFromAssembly($"{Name}.Resource.Loc");
         LocGui.Initialize(ServiceContext.Localization);
         ServiceContext.ConfigService.GetConfig().PanelType = PanelType.None;
@@ -156,20 +156,20 @@ public static class GuiController
 
     private static void OnPlayerSelected(Player player)
     {
-        PluginLog.LogVerbose($"Entering GuiController.OnPlayerSelected(): {player.Id}");
+        DalamudContext.PluginLog.Verbose($"Entering GuiController.OnPlayerSelected(): {player.Id}");
         presenter.SelectPlayer(player);
         presenter.ShowPanel(PanelType.Player);
     }
 
     private static void OnConfigWindowToggled()
     {
-        PluginLog.LogVerbose("Entering GuiController.OnConfigWindowToggled()");
+        DalamudContext.PluginLog.Verbose("Entering GuiController.OnConfigWindowToggled()");
         configView?.Toggle();
     }
 
     private static void OnPlayerWindowToggled()
     {
-        PluginLog.LogVerbose("Entering GuiController.OnPlayerWindowToggled()");
+        DalamudContext.PluginLog.Verbose("Entering GuiController.OnPlayerWindowToggled()");
         if (isCombinedView)
         {
             combinedView?.Toggle();

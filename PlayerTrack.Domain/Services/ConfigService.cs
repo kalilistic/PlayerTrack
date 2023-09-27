@@ -1,9 +1,11 @@
 ﻿using Dalamud.DrunkenToad.Gui.Interfaces;
-using Dalamud.Logging;
+
 using PlayerTrack.Infrastructure;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Domain;
+
+using Dalamud.DrunkenToad.Core;
 
 public class ConfigService
 {
@@ -13,9 +15,9 @@ public class ConfigService
 
     public void SaveConfig(IPluginConfig config)
     {
-        PluginLog.LogVerbose("Entering ConfigService.SaveConfig()");
+        DalamudContext.PluginLog.Verbose("Entering ConfigService.SaveConfig()");
         var updatedPluginConfig = (PluginConfig)config;
-        PluginLog.LogVerbose($"Saving config with playerConfig of type: {updatedPluginConfig.PlayerConfig.PlayerConfigType}");
+        DalamudContext.PluginLog.Verbose($"Saving config with playerConfig of type: {updatedPluginConfig.PlayerConfig.PlayerConfigType}");
         RepositoryContext.PlayerConfigRepository.UpdatePlayerConfig(updatedPluginConfig.PlayerConfig);
         if (RepositoryContext.ConfigRepository.UpdatePluginConfig(updatedPluginConfig))
         {
@@ -27,11 +29,11 @@ public class ConfigService
 
     public void ReloadCache()
     {
-        PluginLog.LogVerbose("Entering ConfigService.ReloadCache()");
+        DalamudContext.PluginLog.Verbose("Entering ConfigService.ReloadCache()");
         var config = RepositoryContext.ConfigRepository.GetPluginConfig();
         if (config == null)
         {
-            PluginLog.LogVerbose($"Creating default config.");
+            DalamudContext.PluginLog.Verbose($"Creating default config.");
             this.pluginConfig = new PluginConfig();
             this.SaveConfig(this.pluginConfig);
             this.pluginConfig.PlayerConfig.Id = RepositoryContext.PlayerConfigRepository.CreatePlayerConfig(this.pluginConfig.PlayerConfig);
@@ -41,12 +43,12 @@ public class ConfigService
             var playerConfig = RepositoryContext.PlayerConfigRepository.GetDefaultPlayerConfig();
             if (playerConfig == null)
             {
-                PluginLog.LogVerbose("Player config not found, creating default.");
+                DalamudContext.PluginLog.Verbose("Player config not found, creating default.");
                 config.PlayerConfig.Id = RepositoryContext.PlayerConfigRepository.CreatePlayerConfig(config.PlayerConfig);
             }
             else
             {
-                PluginLog.LogVerbose($"Player config found with id {playerConfig.Id}.");
+                DalamudContext.PluginLog.Verbose($"Player config found with id {playerConfig.Id}.");
                 config.PlayerConfig = playerConfig;
             }
 

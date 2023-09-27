@@ -9,6 +9,7 @@ using PlayerTrack.Models;
 namespace PlayerTrack.UserInterface.Config.Components;
 
 using System.Linq;
+using Dalamud.Interface.Utility;
 
 public class LocationComponent : ConfigViewComponent
 {

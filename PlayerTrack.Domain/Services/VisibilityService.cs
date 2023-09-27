@@ -6,7 +6,7 @@ using System.Linq;
 using Common;
 using Dalamud.DrunkenToad.Consumers;
 using Dalamud.DrunkenToad.Core;
-using Dalamud.Logging;
+
 using Models;
 using Models.Integration;
 
@@ -18,12 +18,12 @@ public class VisibilityService
 
     public VisibilityService()
     {
-        PluginLog.LogVerbose("Entering VisibilityService.VisibilityService()");
+        DalamudContext.PluginLog.Verbose("Entering VisibilityService.VisibilityService()");
         this.visibilityConsumer = new VisibilityConsumer(DalamudContext.PluginInterface);
         if (ServiceContext.ConfigService.GetConfig().SyncWithVisibility)
         {
             this.IsVisibilityAvailable = this.visibilityConsumer.IsAvailable();
-            PluginLog.LogVerbose($"VisibilityService.VisibilityService() - IsVisibilityAvailable: {this.IsVisibilityAvailable}");
+            DalamudContext.PluginLog.Verbose($"VisibilityService.VisibilityService() - IsVisibilityAvailable: {this.IsVisibilityAvailable}");
             if (this.IsVisibilityAvailable)
             {
                 this.SyncWithVisibility();
@@ -37,10 +37,10 @@ public class VisibilityService
 
     public void SyncWithVisibility(Player player)
     {
-        PluginLog.LogVerbose($"Entering VisibilityService.SyncWithVisibility(): {player.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering VisibilityService.SyncWithVisibility(): {player.Name}");
         if (!this.IsVisibilityAvailable)
         {
-            PluginLog.LogVerbose("VisibilityService.SyncWithVisibility() - Visibility not available");
+            DalamudContext.PluginLog.Verbose("VisibilityService.SyncWithVisibility() - Visibility not available");
             return;
         }
 
@@ -49,11 +49,11 @@ public class VisibilityService
             var voidedEntries = this.GetVisibilityPlayers(VisibilityType.Voidlist);
             var whitelistedEntries = this.GetVisibilityPlayers(VisibilityType.Whitelist);
             var visibilityType = PlayerConfigService.GetVisibilityType(player);
-            PluginLog.LogVerbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType}");
+            DalamudContext.PluginLog.Verbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType}");
 
             if (visibilityType == VisibilityType.None)
             {
-                PluginLog.LogVerbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Removing from visibility");
+                DalamudContext.PluginLog.Verbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Removing from visibility");
                 if (voidedEntries.ContainsKey(player.Key))
                 {
                     this.visibilityConsumer.RemoveFromVoidList(player.Name, player.WorldId);
@@ -66,7 +66,7 @@ public class VisibilityService
             }
             else if (visibilityType == VisibilityType.Voidlist)
             {
-                PluginLog.LogVerbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Adding to void list");
+                DalamudContext.PluginLog.Verbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Adding to void list");
                 if (!voidedEntries.ContainsKey(player.Key))
                 {
                     this.visibilityConsumer.AddToVoidList(player.Name, player.WorldId, Reason);
@@ -74,7 +74,7 @@ public class VisibilityService
             }
             else if (visibilityType == VisibilityType.Whitelist)
             {
-                PluginLog.LogVerbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Adding to white list");
+                DalamudContext.PluginLog.Verbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Adding to white list");
                 if (!whitelistedEntries.ContainsKey(player.Key))
                 {
                     this.visibilityConsumer.AddToWhiteList(player.Name, player.WorldId, Reason);
@@ -82,12 +82,12 @@ public class VisibilityService
             }
             else
             {
-                PluginLog.LogWarning($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Unhandled");
+                DalamudContext.PluginLog.Warning($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Unhandled");
             }
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to sync with visibility for player {player.Name}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to sync with visibility for player {player.Name}.");
         }
     }
 
@@ -95,11 +95,11 @@ public class VisibilityService
     {
         if (!this.IsVisibilityAvailable)
         {
-            PluginLog.LogVerbose("VisibilityService.SyncWithVisibility() - Visibility not available");
+            DalamudContext.PluginLog.Verbose("VisibilityService.SyncWithVisibility() - Visibility not available");
             return;
         }
 
-        PluginLog.LogVerbose("Entering VisibilityService.SyncWithVisibility()");
+        DalamudContext.PluginLog.Verbose("Entering VisibilityService.SyncWithVisibility()");
         try
         {
             var players = ServiceContext.PlayerDataService.GetAllPlayers().ToList();
@@ -156,7 +156,7 @@ public class VisibilityService
                     var player = ServiceContext.PlayerDataService.GetPlayer(key);
                     if (player == null)
                     {
-                        PluginLog.LogWarning($"Failed to create voided player from visibility, key: {key}");
+                        DalamudContext.PluginLog.Warning($"Failed to create voided player from visibility, key: {key}");
                         continue;
                     }
 
@@ -185,7 +185,7 @@ public class VisibilityService
                     var player = ServiceContext.PlayerDataService.GetPlayer(key);
                     if (player == null)
                     {
-                        PluginLog.LogWarning($"Failed to create whitelisted player from visibility, key: {key}");
+                        DalamudContext.PluginLog.Warning($"Failed to create whitelisted player from visibility, key: {key}");
                         continue;
                     }
 
@@ -206,7 +206,7 @@ public class VisibilityService
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to sync with visibility.");
+            DalamudContext.PluginLog.Error(ex, "Failed to sync with visibility.");
         }
     }
 
@@ -254,7 +254,7 @@ public class VisibilityService
             }
             catch (Exception ex)
             {
-                PluginLog.LogError(ex, "Failed to load visibility entry.");
+                DalamudContext.PluginLog.Error(ex, "Failed to load visibility entry.");
             }
         }
 

@@ -1,6 +1,6 @@
-﻿using Dalamud.Logging;
+﻿namespace PlayerTrack.Models;
 
-namespace PlayerTrack.Models;
+using Dalamud.DrunkenToad.Core;
 
 public class LodestoneLookup
 {
@@ -29,12 +29,12 @@ public class LodestoneLookup
         if (this.FailureCount < 3)
         {
             this.LodestoneStatus = LodestoneStatus.Failed;
-            PluginLog.LogVerbose($"Failed to find lodestone response for {this.PlayerName} on {this.WorldName}.");
+            DalamudContext.PluginLog.Verbose($"Failed to find lodestone response for {this.PlayerName} on {this.WorldName}.");
         }
         else
         {
             this.LodestoneStatus = LodestoneStatus.Banned;
-            PluginLog.LogVerbose($"Banned lodestone response for {this.PlayerName} on {this.WorldName}.");
+            DalamudContext.PluginLog.Verbose($"Banned lodestone response for {this.PlayerName} on {this.WorldName}.");
         }
     }
 
@@ -42,7 +42,7 @@ public class LodestoneLookup
     {
         this.LodestoneStatus = LodestoneStatus.Verified;
         this.LodestoneId = lodestoneId;
-        PluginLog.LogVerbose($"Found lodestone response for {this.PlayerName} on {this.WorldName}.");
+        DalamudContext.PluginLog.Verbose($"Found lodestone response for {this.PlayerName} on {this.WorldName}.");
     }
 
     public void Reset()

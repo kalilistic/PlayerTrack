@@ -2,7 +2,6 @@
 using System.Numerics;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Gui;
-using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Loc.ImGui;
 using Dalamud.Utility;
@@ -11,6 +10,8 @@ using PlayerTrack.Domain;
 using PlayerTrack.UserInterface.Components;
 
 namespace PlayerTrack.UserInterface.Main.Components;
+
+using Dalamud.Interface.Utility;
 
 public class AddPlayerComponent : ViewComponent
 {

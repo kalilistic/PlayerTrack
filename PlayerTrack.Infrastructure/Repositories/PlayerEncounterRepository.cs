@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
+
+using Dalamud.DrunkenToad.Core;
 
 public class PlayerEncounterRepository : BaseRepository
 {
@@ -26,14 +28,14 @@ public class PlayerEncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to get list of players with encounters.");
+            DalamudContext.PluginLog.Error(ex, "Failed to get list of players with encounters.");
             return new List<int>();
         }
     }
 
     public List<PlayerEncounter>? GetAllByPlayerId(int playerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerEncounterRepository.GetAllByPlayerId(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerEncounterRepository.GetAllByPlayerId(): {playerId}");
         try
         {
             const string sql = "SELECT * FROM player_encounters WHERE player_id = @player_id ORDER BY created DESC";
@@ -42,14 +44,14 @@ public class PlayerEncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to get all player encounters by player id {playerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to get all player encounters by player id {playerId}.");
             return null;
         }
     }
 
     public List<PlayerEncounter>? GetAllByEncounterId(int encounterId)
     {
-        PluginLog.LogVerbose($"Entering PlayerEncounterRepository.GetAllByEncounterId(): {encounterId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerEncounterRepository.GetAllByEncounterId(): {encounterId}");
         try
         {
             const string sql = "SELECT * FROM player_encounters WHERE encounter_id = @encounter_id ORDER BY created DESC";
@@ -58,14 +60,14 @@ public class PlayerEncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to get all player encounters by encounter id {encounterId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to get all player encounters by encounter id {encounterId}.");
             return null;
         }
     }
 
     public bool DeleteAllByPlayerId(int playerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerEncounterRepository.DeleteAllByPlayerId(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerEncounterRepository.DeleteAllByPlayerId(): {playerId}");
         try
         {
             const string sql = "DELETE FROM player_encounters WHERE player_id = @player_id";
@@ -74,14 +76,14 @@ public class PlayerEncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete all player encounters by player id {playerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete all player encounters by player id {playerId}.");
             return false;
         }
     }
 
     public bool UpdatePlayerEncounter(PlayerEncounter playerEncounter)
     {
-        PluginLog.LogVerbose($"Entering PlayerEncounterRepository.UpdatePlayerEncounter(): {playerEncounter.Id}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerEncounterRepository.UpdatePlayerEncounter(): {playerEncounter.Id}");
         try
         {
             var playerEncounterDTO = this.Mapper.Map<PlayerEncounterDTO>(playerEncounter);
@@ -101,14 +103,14 @@ public class PlayerEncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to update player encounter with ID {playerEncounter.Id}.", playerEncounter);
+            DalamudContext.PluginLog.Error(ex, $"Failed to update player encounter with ID {playerEncounter.Id}.", playerEncounter);
             return false;
         }
     }
 
     public int CreatePlayerEncounter(PlayerEncounter playerEncounter)
     {
-        PluginLog.LogVerbose($"Entering PlayerEncounterRepository.CreatePlayerEncounter(): {playerEncounter.Id}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerEncounterRepository.CreatePlayerEncounter(): {playerEncounter.Id}");
         IDbTransaction? transaction = null;
 
         try
@@ -136,14 +138,14 @@ public class PlayerEncounterRepository : BaseRepository
         {
             transaction?.Rollback();
 
-            PluginLog.LogError(ex, $"Failed to create new player encounter.", playerEncounter);
+            DalamudContext.PluginLog.Error(ex, $"Failed to create new player encounter.", playerEncounter);
             return 0;
         }
     }
 
     public PlayerEncounter? GetByPlayerIdAndEncId(int playerId, int encounterId)
     {
-        PluginLog.LogVerbose($"Entering PlayerEncounterRepository.GetByPlayerIdAndEncId(): {playerId}, {encounterId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerEncounterRepository.GetByPlayerIdAndEncId(): {playerId}, {encounterId}");
         try
         {
             const string sql = "SELECT * FROM player_encounters WHERE player_id = @player_id AND encounter_id = @encounter_id LIMIT 1";
@@ -154,14 +156,14 @@ public class PlayerEncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to get player encounter for player ID {playerId} and encounter ID {encounterId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to get player encounter for player ID {playerId} and encounter ID {encounterId}.");
             return null;
         }
     }
 
     public int UpdatePlayerId(int oldestPlayerId, int newPlayerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerEncounterRepository.UpdatePlayerId(): {oldestPlayerId}, {newPlayerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerEncounterRepository.UpdatePlayerId(): {oldestPlayerId}, {newPlayerId}");
         try
         {
             const string updateSql = "UPDATE player_encounters SET player_id = @newPlayerId WHERE player_id = @oldestPlayerId";
@@ -171,14 +173,14 @@ public class PlayerEncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to update playerIds from {oldestPlayerId} to {newPlayerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to update playerIds from {oldestPlayerId} to {newPlayerId}.");
             return 0;
         }
     }
 
     public bool CreatePlayerEncounters(List<PlayerEncounter> playerEncounters)
     {
-        PluginLog.LogVerbose($"Entering PlayerEncounterRepository.CreatePlayerEncounters(): {playerEncounters}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerEncounterRepository.CreatePlayerEncounters(): {playerEncounters}");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -196,7 +198,7 @@ public class PlayerEncounterRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to insert player encounters batch.");
+            DalamudContext.PluginLog.Error(ex, "Failed to insert player encounters batch.");
             transaction.Rollback();
             return false;
         }

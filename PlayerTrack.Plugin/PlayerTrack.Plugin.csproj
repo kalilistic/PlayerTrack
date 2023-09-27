@@ -45,12 +45,11 @@
 		<AdditionalFiles Include="..\stylecop.json">
 			<Link>stylecop.json</Link>
 		</AdditionalFiles>
-		<PackageReference Include="Dalamud.ContextMenu" Version="1.2.3" />
-		<PackageReference Include="Dalamud.DrunkenToad" Version="1.6.4" />
-		<PackageReference Include="Dalamud.Loc" Version="1.0.5" />
-		<PackageReference Include="DalamudPackager" Version="2.1.8" />
+		<PackageReference Include="Dalamud.ContextMenu" Version="1.3.1" />
+		<PackageReference Include="Dalamud.DrunkenToad" Version="1.7.0" />
+		<PackageReference Include="Dalamud.Loc" Version="1.1.1" />
+		<PackageReference Include="DalamudPackager" Version="2.1.12" />
 		<PackageReference Include="LiteHelper" Version="0.0.6" />
-		<PackageReference Include="Pilz.Dalamud" Version="0.4.0" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -80,6 +79,9 @@
 		<Reference Include="Newtonsoft.Json">
 			<HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
 			<Private>False</Private>
+		</Reference>
+		<Reference Include="Pilz.Dalamud">
+		  <HintPath>..\lib\Pilz.Dalamud.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>

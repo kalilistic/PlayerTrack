@@ -7,13 +7,13 @@ using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
 
-using Dalamud.Logging;
+using Dalamud.DrunkenToad.Core;
 
 public static class ConfigMapper
 {
     public static PluginConfig ToModel(ConfigEntryDTO[] configEntryDTOs)
     {
-        PluginLog.LogVerbose("Entering ConfigMapper.ToModel()");
+        DalamudContext.PluginLog.Verbose("Entering ConfigMapper.ToModel()");
         var config = new PluginConfig();
         foreach (var property in typeof(PluginConfig).GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {
@@ -39,7 +39,7 @@ public static class ConfigMapper
 
     public static IEnumerable<ConfigEntryDTO> ToDTOs(PluginConfig pluginConfig)
     {
-        PluginLog.LogVerbose("Entering ConfigMapper.ToDTOs()");
+        DalamudContext.PluginLog.Verbose("Entering ConfigMapper.ToDTOs()");
         var configEntryDTOs = new List<ConfigEntryDTO>();
 
         foreach (var property in typeof(PluginConfig).GetProperties(BindingFlags.Public | BindingFlags.Instance))

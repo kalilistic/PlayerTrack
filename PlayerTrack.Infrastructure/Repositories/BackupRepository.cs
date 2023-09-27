@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
+
+using Dalamud.DrunkenToad.Core;
 
 public class BackupRepository : BaseRepository
 {
@@ -19,7 +21,7 @@ public class BackupRepository : BaseRepository
 
     public List<Backup>? GetAllBackups()
     {
-        PluginLog.LogVerbose("Entering BackupRepository.GetAllBackups()");
+        DalamudContext.PluginLog.Verbose("Entering BackupRepository.GetAllBackups()");
         try
         {
             const string sql = "SELECT * FROM backups";
@@ -28,14 +30,14 @@ public class BackupRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to get all backups.");
+            DalamudContext.PluginLog.Error(ex, "Failed to get all backups.");
             return null;
         }
     }
 
     public List<Backup>? GetAllUnprotectedBackups()
     {
-        PluginLog.LogVerbose("Entering BackupRepository.GetAllUnprotectedBackups()");
+        DalamudContext.PluginLog.Verbose("Entering BackupRepository.GetAllUnprotectedBackups()");
         try
         {
             const string sql = "SELECT * FROM backups WHERE is_protected = @is_protected ORDER BY created";
@@ -44,14 +46,14 @@ public class BackupRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to get unprotected backups.");
+            DalamudContext.PluginLog.Error(ex, "Failed to get unprotected backups.");
             return null;
         }
     }
 
     public int CreateBackup(Backup backup, bool setTimestamps = true)
     {
-        PluginLog.LogVerbose($"Entering BackupRepository.CreateBackup(), backup: {backup.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering BackupRepository.CreateBackup(), backup: {backup.Name}");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -75,14 +77,14 @@ public class BackupRepository : BaseRepository
         catch (Exception ex)
         {
             transaction.Rollback();
-            PluginLog.LogError(ex, "Failed to create backup.", backup);
+            DalamudContext.PluginLog.Error(ex, "Failed to create backup.", backup);
             return 0;
         }
     }
 
     public bool DeleteBackup(int backupId)
     {
-        PluginLog.LogVerbose($"Entering BackupRepository.DeleteBackup(): {backupId}");
+        DalamudContext.PluginLog.Verbose($"Entering BackupRepository.DeleteBackup(): {backupId}");
         try
         {
             const string sql = @"DELETE FROM backups WHERE id = @id";
@@ -91,14 +93,14 @@ public class BackupRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete backup with ID {backupId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete backup with ID {backupId}.");
             return false;
         }
     }
 
     public Backup? GetLatestBackup()
     {
-        PluginLog.LogVerbose("Entering BackupRepository.GetLatestBackup()");
+        DalamudContext.PluginLog.Verbose("Entering BackupRepository.GetLatestBackup()");
         try
         {
             const string sql = @"SELECT * FROM backups ORDER BY created DESC LIMIT 1";
@@ -107,7 +109,7 @@ public class BackupRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to get the latest backup.");
+            DalamudContext.PluginLog.Error(ex, "Failed to get the latest backup.");
             return null;
         }
     }

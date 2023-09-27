@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
+
+using Dalamud.DrunkenToad.Core;
 
 public class PlayerConfigRepository : BaseRepository
 {
@@ -19,7 +21,7 @@ public class PlayerConfigRepository : BaseRepository
 
     public int? GetIdByPlayerId(int playerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigRepository.GetIdByPlayerId(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigRepository.GetIdByPlayerId(): {playerId}");
         try
         {
             const string sql = "SELECT id FROM player_config WHERE player_id = @player_id";
@@ -29,14 +31,14 @@ public class PlayerConfigRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to get player config id by player id {playerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to get player config id by player id {playerId}.");
             return null;
         }
     }
 
     public int CreatePlayerConfig(PlayerConfig config)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigRepository.CreatePlayerConfig(): {config.PlayerConfigType}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigRepository.CreatePlayerConfig(): {config.PlayerConfigType}");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -104,14 +106,14 @@ public class PlayerConfigRepository : BaseRepository
         catch (Exception ex)
         {
             transaction.Rollback();
-            PluginLog.LogError(ex, "Failed to create player config.", config);
+            DalamudContext.PluginLog.Error(ex, "Failed to create player config.", config);
             return 0;
         }
     }
 
     public void UpdatePlayerConfig(PlayerConfig config)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigRepository.UpdatePlayerConfig(): {config.PlayerConfigType}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigRepository.UpdatePlayerConfig(): {config.PlayerConfigType}");
         try
         {
             var configDTO = this.Mapper.Map<PlayerConfigDTO>(config);
@@ -144,13 +146,13 @@ public class PlayerConfigRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to update player config.", config);
+            DalamudContext.PluginLog.Error(ex, "Failed to update player config.", config);
         }
     }
 
     public PlayerConfig? GetPlayerConfigByCategoryId(int categoryId)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigRepository.GetPlayerConfigByCategoryId(): {categoryId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigRepository.GetPlayerConfigByCategoryId(): {categoryId}");
         try
         {
             const string sql = "SELECT * FROM player_config WHERE category_id = @category_id";
@@ -160,14 +162,14 @@ public class PlayerConfigRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to get player config by category id {categoryId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to get player config by category id {categoryId}.");
             return null;
         }
     }
 
     public void DeletePlayerConfigByCategoryId(int categoryId)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigRepository.DeletePlayerConfigByCategoryId(): {categoryId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigRepository.DeletePlayerConfigByCategoryId(): {categoryId}");
         try
         {
             const string sql = "DELETE FROM player_config WHERE category_id = @category_id";
@@ -175,13 +177,13 @@ public class PlayerConfigRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete player config by category id {categoryId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete player config by category id {categoryId}.");
         }
     }
 
     public PlayerConfig? GetDefaultPlayerConfig()
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigRepository.GetDefaultPlayerConfig()");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigRepository.GetDefaultPlayerConfig()");
         try
         {
             const string sql = "SELECT * FROM player_config WHERE player_id IS NULL AND category_id IS NULL;";
@@ -191,14 +193,14 @@ public class PlayerConfigRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to get default player config.");
+            DalamudContext.PluginLog.Error(ex, "Failed to get default player config.");
             return null;
         }
     }
 
     public void DeletePlayerConfigByPlayerId(int playerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigRepository.DeletePlayerConfigByPlayerId(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigRepository.DeletePlayerConfigByPlayerId(): {playerId}");
         try
         {
             const string sql = "DELETE FROM player_config WHERE player_id = @playerId";
@@ -206,13 +208,13 @@ public class PlayerConfigRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete player config by player id {playerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete player config by player id {playerId}.");
         }
     }
 
     public void DeletePlayerConfigs(List<int> configIds)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigRepository.DeletePlayerConfigs(): {string.Join(", ", configIds)}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigRepository.DeletePlayerConfigs(): {string.Join(", ", configIds)}");
         try
         {
             const string sql = "DELETE FROM player_config WHERE id IN @configIds";
@@ -220,19 +222,19 @@ public class PlayerConfigRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete player configs for player config ids {string.Join(", ", configIds)}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete player configs for player config ids {string.Join(", ", configIds)}.");
         }
     }
 
     public bool CreatePlayerConfigs(List<PlayerConfig> playerConfigs)
     {
-        PluginLog.LogVerbose($"Entering PlayerConfigRepository.CreatePlayerConfigs(): {playerConfigs.Count}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigRepository.CreatePlayerConfigs(): {playerConfigs.Count}");
         var uniqueCategoryIds = new HashSet<int?>();
         foreach (var config in playerConfigs)
         {
             if (config.CategoryId.HasValue && !uniqueCategoryIds.Add(config.CategoryId.Value))
             {
-                PluginLog.LogError($"Duplicate CategoryId: {config.CategoryId.Value}");
+                DalamudContext.PluginLog.Error($"Duplicate CategoryId: {config.CategoryId.Value}");
                 return false;
             }
         }
@@ -303,7 +305,7 @@ public class PlayerConfigRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to create player configs.");
+            DalamudContext.PluginLog.Error(ex, "Failed to create player configs.");
             transaction.Rollback();
 
             return false;

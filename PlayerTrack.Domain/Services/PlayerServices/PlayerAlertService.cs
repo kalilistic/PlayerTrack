@@ -10,7 +10,6 @@ namespace PlayerTrack.Domain;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Dalamud.DrunkenToad.Helpers;
-using Dalamud.Logging;
 
 public class PlayerAlertService
 {
@@ -26,7 +25,7 @@ public class PlayerAlertService
 
     public List<Payload> CreatePlayerNameWorldChangeAlert(Player oldestPlayer, Player newPlayer)
     {
-        PluginLog.LogVerbose(
+        DalamudContext.PluginLog.Verbose(
             $"Entering PlayerAlertService.SendPlayerNameWorldChangeAlert(): {oldestPlayer.Name}, {newPlayer.Name}");
         var shouldSendNameAlert = oldestPlayer.Name != newPlayer.Name && IsNameChangeAlertEnabled(oldestPlayer);
         var shouldSendWorldAlert = oldestPlayer.WorldId != newPlayer.WorldId && IsWorldTransferAlertEnabled(oldestPlayer);
@@ -71,7 +70,7 @@ public class PlayerAlertService
 
     private static void OnChatLinkClick(uint id, SeString message)
     {
-        PluginLog.LogVerbose($"Entering ChatHandler.OnChatLinkClick(): {id}, {message}");
+        DalamudContext.PluginLog.Verbose($"Entering ChatHandler.OnChatLinkClick(): {id}, {message}");
 
         var match = NameWorldChangeRegex.Match(message.TextValue);
         if (!match.Success)
@@ -87,7 +86,7 @@ public class PlayerAlertService
         }
         else
         {
-            PluginLog.LogVerbose("Failed to parse chat link.");
+            DalamudContext.PluginLog.Verbose("Failed to parse chat link.");
         }
     }
 

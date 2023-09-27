@@ -4,7 +4,7 @@ using System.Reflection;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Extensions;
 using Dalamud.DrunkenToad.Gui.Windows;
-using Dalamud.Logging;
+
 using Dalamud.Plugin;
 using FluentDapperLite.Runner;
 using PlayerTrack.API;
@@ -23,18 +23,14 @@ public class Plugin : IDalamudPlugin
 
     public Plugin(DalamudPluginInterface pluginInterface)
     {
-        PluginLog.LogVerbose("Entering Plugin()");
-
         if (!DalamudContext.Initialize(pluginInterface))
         {
-            PluginLog.LogError("Failed to initialize properly.");
             return;
         }
 
         var isDatabaseLoadedSuccessfully = this.LoadDatabase();
         if (!isDatabaseLoadedSuccessfully)
         {
-            PluginLog.LogError("Failed to load database.");
             return;
         }
 
@@ -50,7 +46,7 @@ public class Plugin : IDalamudPlugin
 
     public void Dispose()
     {
-        PluginLog.LogVerbose("Entering Plugin.Dispose()");
+        DalamudContext.PluginLog.Verbose("Entering Plugin.Dispose()");
         GC.SuppressFinalize(this);
         try
         {
@@ -69,13 +65,13 @@ public class Plugin : IDalamudPlugin
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to dispose plugin.");
+            DalamudContext.PluginLog.Error(ex, "Failed to dispose plugin.");
         }
     }
 
     private static void SetPluginVersion()
     {
-        PluginLog.LogVerbose("Entering Plugin.SetPluginVersion()");
+        DalamudContext.PluginLog.Verbose("Entering Plugin.SetPluginVersion()");
         var pluginVersion = Assembly.GetExecutingAssembly().VersionNumber();
         var config = ServiceContext.ConfigService.GetConfig();
         config.PluginVersion = pluginVersion;
@@ -84,10 +80,10 @@ public class Plugin : IDalamudPlugin
 
     private void RunPostStartup() => Task.Run(() =>
     {
-        PluginLog.LogVerbose("Entering Plugin.RunPostStartup()");
+        DalamudContext.PluginLog.Verbose("Entering Plugin.RunPostStartup()");
         if (!LiteDBMigrator.Run())
         {
-            PluginLog.LogError("Terminating plugin early since migration failed.");
+            DalamudContext.PluginLog.Error("Terminating plugin early since migration failed.");
             return;
         }
 
@@ -106,7 +102,7 @@ public class Plugin : IDalamudPlugin
 
     private bool LoadDatabase()
     {
-        PluginLog.LogVerbose("Entering Plugin.LoadDatabase()");
+        DalamudContext.PluginLog.Verbose("Entering Plugin.LoadDatabase()");
         var isAvailable = this.IsDBAvailable();
         if (!isAvailable)
         {
@@ -121,14 +117,14 @@ public class Plugin : IDalamudPlugin
 
     private bool IsDBAvailable()
     {
-        PluginLog.LogVerbose("Entering Plugin.IsDBAvailable()");
+        DalamudContext.PluginLog.Verbose("Entering Plugin.IsDBAvailable()");
         var isAvailable = FileHelper.VerifyFileAccess(Path.Combine(DalamudContext.PluginInterface.GetPluginConfigDirectory(), "data.db"));
         if (isAvailable)
         {
             return true;
         }
 
-        PluginLog.LogError("Failed to load database since it's not available.");
+        DalamudContext.PluginLog.Error("Failed to load database since it's not available.");
         this.errorWindow = new ErrorWindow(
             DalamudContext.PluginInterface,
             "PlayerTrack failed to load since something else is using your database. Make sure it\'s not open anywhere else and try restarting your game and computer.");

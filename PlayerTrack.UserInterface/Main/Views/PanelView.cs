@@ -8,6 +8,8 @@ using PlayerTrack.UserInterface.Views;
 
 namespace PlayerTrack.UserInterface.Main.Views;
 
+using Dalamud.Interface.Utility;
+
 public class PanelView : PlayerTrackView
 {
     private readonly IMainPresenter presenter;

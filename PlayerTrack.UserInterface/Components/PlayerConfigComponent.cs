@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Gui;
-using Dalamud.DrunkenToad.Util;
 using Dalamud.Interface;
 using Dalamud.Loc.ImGui;
 using ImGuiNET;
@@ -14,7 +13,9 @@ using PlayerTrack.Models.Structs;
 namespace PlayerTrack.UserInterface.Components;
 
 using System.Numerics;
-using Dalamud.Logging;
+using Dalamud.DrunkenToad.Helpers;
+using Dalamud.Interface.Utility;
+
 using ViewModels;
 
 public static class PlayerConfigComponent
@@ -261,7 +262,7 @@ public static class PlayerConfigComponent
 
         if (displayValue is not TEnum enumValue)
         {
-            PluginLog.Error($"Failed to cast {displayValue} to {typeof(TEnum)}");
+            DalamudContext.PluginLog.Error($"Failed to cast {displayValue} to {typeof(TEnum)}");
             return;
         }
 

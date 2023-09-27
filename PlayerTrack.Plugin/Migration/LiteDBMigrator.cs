@@ -8,7 +8,6 @@ using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Core.Enums;
 using Dalamud.DrunkenToad.Gui.Windows;
 using Dalamud.Interface;
-using Dalamud.Logging;
 using Dalamud.Utility;
 using LiteDB;
 using LiteHelper.Extensions;
@@ -107,13 +106,13 @@ public static class LiteDBMigrator
             var categories = RepositoryContext.CategoryRepository.GetAllCategories() ?? Array.Empty<Category>();
             if (DefaultCategoryIds.Count == 0)
             {
-                PluginLog.LogWarning("No default categories found.");
+                DalamudContext.PluginLog.Warning("No default categories found.");
                 return;
             }
 
             if (DefaultCategoryIds.Count > 1)
             {
-                PluginLog.LogWarning($"Found {DefaultCategoryIds.Count} default categories. Only one should exist.");
+                DalamudContext.PluginLog.Warning($"Found {DefaultCategoryIds.Count} default categories. Only one should exist.");
                 return;
             }
 
@@ -121,14 +120,14 @@ public static class LiteDBMigrator
             var defaultCategory = categories.SingleOrDefault(c => c.Id == defaultCategoryId);
             if (defaultCategory == null)
             {
-                PluginLog.LogWarning($"Failed to find default category with id {defaultCategoryId}.");
+                DalamudContext.PluginLog.Warning($"Failed to find default category with id {defaultCategoryId}.");
                 return;
             }
 
             var defaultCategoryConfig = RepositoryContext.PlayerConfigRepository.GetPlayerConfigByCategoryId(defaultCategoryId);
             if (defaultCategoryConfig == null)
             {
-                PluginLog.Log($"No default config for {defaultCategoryId} so nothing to do.");
+                DalamudContext.PluginLog.Info($"No default config for {defaultCategoryId} so nothing to do.");
                 return;
             }
 
@@ -153,7 +152,7 @@ public static class LiteDBMigrator
         }
         catch (Exception ex)
         {
-            PluginLog.LogWarning($"Failed to exterminate default category: {ex.Message}");
+            DalamudContext.PluginLog.Warning($"Failed to exterminate default category: {ex.Message}");
         }
     }
 
@@ -181,7 +180,7 @@ public static class LiteDBMigrator
         }
         catch (Exception ex)
         {
-            PluginLog.LogWarning("Failed to fix category ranks.", ex);
+            DalamudContext.PluginLog.Warning("Failed to fix category ranks.", ex);
         }
     }
 
@@ -196,7 +195,7 @@ public static class LiteDBMigrator
             var configArchive = new ArchiveRecord { ArchiveType = ArchiveType.MigrationToV3Config, Data = jsonText, };
 
             RepositoryContext.ArchiveRecordRepository.CreateArchiveRecord(configArchive);
-            PluginLog.Log($"Archived plugin config.");
+            DalamudContext.PluginLog.Info($"Archived plugin config.");
 
             var jsonObject = JObject.Parse(jsonText);
 
@@ -283,7 +282,7 @@ public static class LiteDBMigrator
             }
 
             RepositoryContext.ConfigRepository.UpdatePluginConfig(pluginConfig);
-            PluginLog.Log($"Migrated plugin config.");
+            DalamudContext.PluginLog.Info($"Migrated plugin config.");
 
             // get new default player config
             var defaultConfig = RepositoryContext.PlayerConfigRepository.GetDefaultPlayerConfig();
@@ -299,7 +298,7 @@ public static class LiteDBMigrator
             defaultConfig.NameplateUseColorIfDead = new ConfigValue<bool>(InheritOverride.None, disableNamePlateColorIfDead);
 
             RepositoryContext.PlayerConfigRepository.UpdatePlayerConfig(defaultConfig);
-            PluginLog.Log($"Migrated default player config.");
+            DalamudContext.PluginLog.Info($"Migrated default player config.");
         }
         catch (Exception ex)
         {
@@ -719,7 +718,7 @@ public static class LiteDBMigrator
                 throw new DataException("Failed to insert batch category archives.");
             }
 
-            PluginLog.Log($"Migrated {categoryArchives.Count:N0} archived category data records.");
+            DalamudContext.PluginLog.Info($"Migrated {categoryArchives.Count:N0} archived category data records.");
         }
         catch (Exception ex)
         {
@@ -756,7 +755,7 @@ public static class LiteDBMigrator
                         {
                             var invalidMigrationArchive = CreateEncounterArchive(originalEncounter);
                             encounterArchives.Add(invalidMigrationArchive);
-                            PluginLog.Log($"Skipping invalid encounter: {originalEncounter.ToDebugString()}");
+                            DalamudContext.PluginLog.Info($"Skipping invalid encounter: {originalEncounter.ToDebugString()}");
                             invalidEncounterCount++;
                             continue;
                         }
@@ -796,7 +795,7 @@ public static class LiteDBMigrator
                         {
                             var invalidMigrationArchive = CreateEncounterArchive(originalEncounter);
                             encounterArchives.Add(invalidMigrationArchive);
-                            PluginLog.Log($"Skipping invalid encounter: {originalEncounter.ToDebugString()}");
+                            DalamudContext.PluginLog.Info($"Skipping invalid encounter: {originalEncounter.ToDebugString()}");
                             invalidEncounterCount++;
                             continue;
                         }
@@ -841,7 +840,7 @@ public static class LiteDBMigrator
 
                 Log($"Skipped {invalidPlayerEncounterCount:N0} invalid player encounters.");
 
-                PluginLog.Log($"Migrated {encounterArchives.Count:N0} archived encounter data records.");
+                DalamudContext.PluginLog.Info($"Migrated {encounterArchives.Count:N0} archived encounter data records.");
                 Log($"Skipped {invalidEncounterCount:N0} invalid encounters.");
             }
         }
@@ -892,7 +891,7 @@ public static class LiteDBMigrator
                     {
                         var migrationArchive = CreatePlayerArchive(oldestPlayer);
                         playerArchives.Add(migrationArchive);
-                        PluginLog.Log($"Skipping invalid player: {oldestPlayer.ToDebugString()}");
+                        DalamudContext.PluginLog.Info($"Skipping invalid player: {oldestPlayer.ToDebugString()}");
                         invalidPlayerCount++;
                         continue;
                     }
@@ -987,7 +986,7 @@ public static class LiteDBMigrator
                     throw new DataException("Failed to insert batch player archives.");
                 }
 
-                PluginLog.Log($"Created {playerArchives.Count:N0} archived player data records.");
+                DalamudContext.PluginLog.Info($"Created {playerArchives.Count:N0} archived player data records.");
                 Log($"Skipped {invalidPlayerCount:N0} invalid players.");
             }
         }
@@ -1012,7 +1011,7 @@ public static class LiteDBMigrator
             {
                 if (!name.IsValidCharacterName())
                 {
-                    PluginLog.Log($"Skipping invalid previous name: {name}");
+                    DalamudContext.PluginLog.Info($"Skipping invalid previous name: {name}");
                     continue;
                 }
 
@@ -1036,7 +1035,7 @@ public static class LiteDBMigrator
             {
                 if (!WorldIds.Contains(worldId.Key))
                 {
-                    PluginLog.Log($"Skipping invalid previous world id: {worldId.Key}");
+                    DalamudContext.PluginLog.Info($"Skipping invalid previous world id: {worldId.Key}");
                     continue;
                 }
 
@@ -1178,7 +1177,7 @@ public static class LiteDBMigrator
         var playerKey = originalEncounter.GetValueOrDefault<string>("PlayerKey");
         if (!PlayerKeyToIdMap.ContainsKey(playerKey))
         {
-            PluginLog.Log($"Skipping invalid player key: {playerKey}, so won't create encounter.");
+            DalamudContext.PluginLog.Info($"Skipping invalid player key: {playerKey}, so won't create encounter.");
             return null;
         }
 
@@ -1225,7 +1224,7 @@ public static class LiteDBMigrator
     {
         if (File.Exists(LegacyDatabaseFilePath))
         {
-            PluginLog.Log("Detected LiteDB file, will need to migrate.");
+            DalamudContext.PluginLog.Info("Detected LiteDB file, will need to migrate.");
             return true;
         }
 
@@ -1368,13 +1367,13 @@ public static class LiteDBMigrator
 
     private static void Log(string msg)
     {
-        PluginLog.Log(msg);
+        DalamudContext.PluginLog.Info(msg);
         migrationWindow?.StepQueue.Enqueue(msg);
     }
 
     private static void LogError(Exception ex, string msg)
     {
-        PluginLog.LogError(ex, msg);
+        DalamudContext.PluginLog.Error(ex, msg);
         migrationWindow?.ErrorQueue.Enqueue(msg);
         migrationWindow?.ErrorQueue.Enqueue(ex.Message);
         migrationWindow?.ErrorQueue.Enqueue(ex.StackTrace ?? "No stack trace");
@@ -1382,7 +1381,7 @@ public static class LiteDBMigrator
 
     private static void LogError(string msg)
     {
-        PluginLog.LogError(msg);
+        DalamudContext.PluginLog.Error(msg);
         migrationWindow?.ErrorQueue.Enqueue(msg);
     }
 
@@ -1403,7 +1402,7 @@ public static class LiteDBMigrator
             if (Directory.Exists(locPath))
             {
                 Directory.Delete(locPath, true);
-                PluginLog.Log($"Deleted old loc directory.");
+                DalamudContext.PluginLog.Info($"Deleted old loc directory.");
             }
 
             var versionPath = Path.Combine(DalamudContext.PluginInterface.GetPluginConfigDirectory(), "version");
@@ -1414,7 +1413,7 @@ public static class LiteDBMigrator
         }
         catch (Exception ex)
         {
-            PluginLog.LogWarning($"Failed to delete old loc files. {ex.Message}");
+            DalamudContext.PluginLog.Warning($"Failed to delete old loc files. {ex.Message}");
         }
     }
 }

@@ -11,8 +11,8 @@ using PlayerTrack.UserInterface.ViewModels.Mappers;
 namespace PlayerTrack.UserInterface.Main.Presenters;
 
 using System.Collections;
+using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Helpers;
-using Dalamud.Logging;
 
 public class MainPresenter : IMainPresenter
 {
@@ -186,7 +186,7 @@ public class MainPresenter : IMainPresenter
 
     public void ReloadPlayer()
     {
-        PluginLog.LogVerbose("Entering MainPresenter.ReloadPlayer()");
+        DalamudContext.PluginLog.Verbose("Entering MainPresenter.ReloadPlayer()");
         this.ClearCache();
         if (this.selectedPlayer == null)
         {

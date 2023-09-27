@@ -3,7 +3,7 @@ using PlayerTrack.Domain;
 
 namespace PlayerTrack.API;
 
-using Dalamud.Logging;
+using Dalamud.DrunkenToad.Core;
 
 /// <inheritdoc cref="IPlayerTrackAPI" />
 public class PlayerTrackAPI : IPlayerTrackAPI
@@ -21,12 +21,12 @@ public class PlayerTrackAPI : IPlayerTrackAPI
     /// <inheritdoc />
     public string GetPlayerCurrentNameWorld(string name, uint worldId)
     {
-        PluginLog.LogVerbose($"Entering PlayerTrackAPI.GetPlayerCurrentNameWorld({name}, {worldId})");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetPlayerCurrentNameWorld({name}, {worldId})");
         this.CheckInitialized();
         var player = ServiceContext.PlayerDataService.GetPlayer(name, worldId);
         if (player == null)
         {
-            PluginLog.LogWarning("Player not found");
+            DalamudContext.PluginLog.Warning("Player not found");
             return $"{name} {worldId}";
         }
 
@@ -35,11 +35,11 @@ public class PlayerTrackAPI : IPlayerTrackAPI
 
     private void CheckInitialized()
     {
-        PluginLog.LogVerbose($"Entering PlayerTrackAPI.CheckInitialized()");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.CheckInitialized()");
         if (!this.initialized)
         {
             const string msg = "API is not initialized.";
-            PluginLog.LogWarning(msg);
+            DalamudContext.PluginLog.Warning(msg);
             throw new InvalidOperationException(msg);
         }
     }

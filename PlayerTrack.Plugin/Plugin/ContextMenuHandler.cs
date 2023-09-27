@@ -4,7 +4,6 @@ using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Core.Models;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
-using Dalamud.Logging;
 using Dalamud.Utility;
 using PlayerTrack.Domain;
 
@@ -26,8 +25,8 @@ public static class ContextMenuHandler
 
     public static void Start()
     {
-        PluginLog.LogVerbose("Entering ContextMenuHandler.Start()");
-        contextMenu = new DalamudContextMenu();
+        DalamudContext.PluginLog.Verbose("Entering ContextMenuHandler.Start()");
+        contextMenu = new DalamudContextMenu(DalamudContext.PluginInterface);
         contextMenu.OnOpenGameObjectContextMenu += OpenGameObjectContextMenu;
         BuildContentMenuItems();
         isStarted = true;
@@ -35,14 +34,14 @@ public static class ContextMenuHandler
 
     public static void Restart()
     {
-        PluginLog.LogVerbose("Entering ContextMenuHandler.Restart()");
+        DalamudContext.PluginLog.Verbose("Entering ContextMenuHandler.Restart()");
         Dispose();
         Start();
     }
 
     public static void Dispose()
     {
-        PluginLog.LogVerbose("Entering ContextMenuHandler.Dispose()");
+        DalamudContext.PluginLog.Verbose("Entering ContextMenuHandler.Dispose()");
         try
         {
             if (contextMenu != null)
@@ -53,13 +52,13 @@ public static class ContextMenuHandler
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to dispose ContextMenuHandler properly.");
+            DalamudContext.PluginLog.Error(ex, "Failed to dispose ContextMenuHandler properly.");
         }
     }
 
     private static void BuildContentMenuItems()
     {
-        PluginLog.LogVerbose("Entering ContextMenuHandler.BuildContentMenuItems()");
+        DalamudContext.PluginLog.Verbose("Entering ContextMenuHandler.BuildContentMenuItems()");
         var showContextMenuIndicator = ServiceContext.ConfigService.GetConfig().ShowContextMenuIndicator;
         SeString openPlayerTrackMenuItemName;
         SeString openLodestoneItemName;
@@ -82,10 +81,10 @@ public static class ContextMenuHandler
 
     private static void OnOpenLodestone(BaseContextMenuArgs args)
     {
-        PluginLog.LogVerbose($"Entering ContextMenuHandler.OnOpenLodestone(): {args.Text} {args.ObjectWorld}");
+        DalamudContext.PluginLog.Verbose($"Entering ContextMenuHandler.OnOpenLodestone(): {args.Text} {args.ObjectWorld}");
         if (args.Text == null || !args.Text.IsValidCharacterName())
         {
-            PluginLog.LogWarning($"Invalid character name: {args.Text}");
+            DalamudContext.PluginLog.Warning($"Invalid character name: {args.Text}");
             return;
         }
 
@@ -97,10 +96,10 @@ public static class ContextMenuHandler
 
     private static void OnSelectPlayer(GameObjectContextMenuItemSelectedArgs args)
     {
-        PluginLog.LogVerbose($"Entering ContextMenuHandler.OnSelectPlayer(), {args.Text} {args.ObjectWorld}");
+        DalamudContext.PluginLog.Verbose($"Entering ContextMenuHandler.OnSelectPlayer(), {args.Text} {args.ObjectWorld}");
         if (args.Text == null || !args.Text.IsValidCharacterName())
         {
-            PluginLog.LogWarning($"Invalid character name: {args.Text}");
+            DalamudContext.PluginLog.Warning($"Invalid character name: {args.Text}");
             return;
         }
 
@@ -116,7 +115,7 @@ public static class ContextMenuHandler
 
     private static bool IsMenuValid(BaseContextMenuArgs args)
     {
-        PluginLog.LogVerbose($"Entering ContextMenuHandler.IsMenuValid(), ParentAddonName: {args.ParentAddonName}");
+        DalamudContext.PluginLog.Verbose($"Entering ContextMenuHandler.IsMenuValid(), ParentAddonName: {args.ParentAddonName}");
         switch (args.ParentAddonName)
         {
             case null:
@@ -136,14 +135,14 @@ public static class ContextMenuHandler
                 return args.Text != null && args.ObjectWorld != 0 && args.ObjectWorld != 65535;
 
             default:
-                PluginLog.LogWarning($"Invalid ParentAddonName: {args.ParentAddonName}");
+                DalamudContext.PluginLog.Warning($"Invalid ParentAddonName: {args.ParentAddonName}");
                 return false;
         }
     }
 
     private static void OpenGameObjectContextMenu(GameObjectContextMenuOpenArgs args)
     {
-        PluginLog.LogVerbose($"Entering ContextMenuHandler.OpenGameObjectContextMenu(), ObjectId: {args.ObjectId}, ParentAddonName: {args.ParentAddonName}");
+        DalamudContext.PluginLog.Verbose($"Entering ContextMenuHandler.OpenGameObjectContextMenu(), ObjectId: {args.ObjectId}, ParentAddonName: {args.ParentAddonName}");
 
         // check if plugin started
         if (!isStarted)
@@ -162,7 +161,7 @@ public static class ContextMenuHandler
         var worldId = DalamudContext.ClientStateHandler.LocalPlayer?.HomeWorld.Id;
         if (string.IsNullOrEmpty(name) || worldId == null)
         {
-            PluginLog.LogWarning("Failed to get self key.");
+            DalamudContext.PluginLog.Warning("Failed to get self key.");
             return;
         }
 
@@ -171,7 +170,7 @@ public static class ContextMenuHandler
         var menuKey = PlayerKeyBuilder.Build(args.Text.TextValue, args.ObjectWorld);
         if (selfKey.Equals(menuKey, StringComparison.Ordinal))
         {
-            PluginLog.LogVerbose("Self menu, skipping.");
+            DalamudContext.PluginLog.Verbose("Self menu, skipping.");
             return;
         }
 

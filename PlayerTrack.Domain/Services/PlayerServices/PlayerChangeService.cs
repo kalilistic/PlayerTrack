@@ -6,20 +6,18 @@ using PlayerTrack.Models;
 
 namespace PlayerTrack.Domain;
 
-using Dalamud.Logging;
-
 public class PlayerChangeService
 {
     public static void UpdatePlayerId(int oldestPlayerId, int newPlayerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerChangeService.UpdatePlayerId(): {oldestPlayerId}, {newPlayerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.UpdatePlayerId(): {oldestPlayerId}, {newPlayerId}");
         RepositoryContext.PlayerNameWorldHistoryRepository.UpdatePlayerId(oldestPlayerId, newPlayerId);
         RepositoryContext.PlayerCustomizeHistoryRepository.UpdatePlayerId(oldestPlayerId, newPlayerId);
     }
 
     public static void HandleNameWorldChange(Player oldestPlayer, Player newPlayer)
     {
-        PluginLog.LogVerbose($"Entering PlayerChangeService.HandleNameWorldChange(): {oldestPlayer.Name}, {newPlayer.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.HandleNameWorldChange(): {oldestPlayer.Name}, {newPlayer.Name}");
         var nameChanged = !oldestPlayer.Name.Equals(newPlayer.Name, StringComparison.OrdinalIgnoreCase);
         var worldChanged = oldestPlayer.WorldId != newPlayer.WorldId;
 
@@ -36,7 +34,7 @@ public class PlayerChangeService
 
     public static void HandleCustomizeChange(Player oldestPlayer, Player newPlayer)
     {
-        PluginLog.LogVerbose($"Entering PlayerChangeService.HandleCustomizeChange(): {oldestPlayer.Name}, {newPlayer.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.HandleCustomizeChange(): {oldestPlayer.Name}, {newPlayer.Name}");
         if (oldestPlayer.Customize != newPlayer.Customize && oldestPlayer.Customize != null)
         {
             RepositoryContext.PlayerCustomizeHistoryRepository.CreatePlayerCustomizeHistory(new PlayerCustomizeHistory
@@ -59,7 +57,7 @@ public class PlayerChangeService
 
     public static string GetPreviousNames(int playerId, string currentName)
     {
-        PluginLog.LogVerbose($"Entering PlayerChangeService.GetPreviousNames(): {playerId}, {currentName}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.GetPreviousNames(): {playerId}, {currentName}");
         var names = RepositoryContext.PlayerNameWorldHistoryRepository.GetHistoricalNames(playerId);
         if (names == null)
         {
@@ -76,7 +74,7 @@ public class PlayerChangeService
 
     public static string GetPreviousWorlds(int playerId, string currentWorldName)
     {
-        PluginLog.LogVerbose($"Entering PlayerChangeService.GetPreviousWorlds(): {playerId}, {currentWorldName}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.GetPreviousWorlds(): {playerId}, {currentWorldName}");
         var worldIds = RepositoryContext.PlayerNameWorldHistoryRepository.GetHistoricalWorlds(playerId);
         if (worldIds == null)
         {

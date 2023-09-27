@@ -9,6 +9,8 @@ using PlayerTrack.UserInterface.Views;
 
 namespace PlayerTrack.UserInterface.Config.Views;
 
+using Dalamud.Interface.Utility;
+
 public class ConfigView : PlayerTrackView, IDisposable
 {
     private readonly WindowComponent windowComponent = new();

@@ -4,13 +4,13 @@ using PlayerTrack.Models;
 
 namespace PlayerTrack.Domain;
 
-using Dalamud.Logging;
+using Dalamud.DrunkenToad.Core;
 
 public class PlayerNameplateService
 {
     public static PlayerNameplate GetPlayerNameplate(Player player, ToadLocation loc)
     {
-        PluginLog.LogVerbose($"Entering PlayerNameplateService.GetPlayerNameplate(): {player.Id}, {loc.LocationType}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerNameplateService.GetPlayerNameplate(): {player.Id}, {loc.LocationType}");
         var nameplate = new PlayerNameplate
         {
             CustomizeNameplate = loc.LocationType switch

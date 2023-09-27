@@ -4,17 +4,17 @@ using PlayerTrack.Models;
 
 namespace PlayerTrack.Domain;
 
-using Dalamud.Logging;
+using Dalamud.DrunkenToad.Core;
 
 public class PlayerTagService
 {
     public static void UpdateTags(int playerId, List<Tag> tags)
     {
-        PluginLog.LogVerbose($"Entering PlayerTagService.UpdateTags(), playerId: {playerId}, tags: {tags.Count}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTagService.UpdateTags(), playerId: {playerId}, tags: {tags.Count}");
         var player = ServiceContext.PlayerDataService.GetPlayer(playerId);
         if (player == null)
         {
-            PluginLog.LogWarning("Player not found, cannot update tags.");
+            DalamudContext.PluginLog.Warning("Player not found, cannot update tags.");
             return;
         }
 
@@ -24,11 +24,11 @@ public class PlayerTagService
 
     public static void UnassignTagsFromPlayer(int playerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerTagService.UnassignTagsFromPlayer(), playerId: {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTagService.UnassignTagsFromPlayer(), playerId: {playerId}");
         var tags = ServiceContext.PlayerDataService.GetPlayer(playerId)?.AssignedTags;
         if (tags == null || tags.Count == 0)
         {
-            PluginLog.LogWarning("Player not found, cannot remove tag.");
+            DalamudContext.PluginLog.Warning("Player not found, cannot remove tag.");
             return;
         }
 
@@ -39,11 +39,11 @@ public class PlayerTagService
 
     public static void UnassignTagFromPlayer(int playerId, int tagId)
     {
-        PluginLog.LogVerbose($"Entering PlayerTagService.UnassignTagFromPlayer(), playerId: {playerId}, tagId: {tagId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTagService.UnassignTagFromPlayer(), playerId: {playerId}, tagId: {tagId}");
         var tags = ServiceContext.PlayerDataService.GetPlayer(playerId)?.AssignedTags;
         if (tags == null || tags.Count == 0)
         {
-            PluginLog.LogWarning("Player not found, cannot remove tag.");
+            DalamudContext.PluginLog.Warning("Player not found, cannot remove tag.");
             return;
         }
 
@@ -54,11 +54,11 @@ public class PlayerTagService
 
     public static void AssignTag(int playerId, int tagId)
     {
-        PluginLog.LogVerbose($"Entering PlayerTagService.AssignTag(), playerId: {playerId}, tagId: {tagId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTagService.AssignTag(), playerId: {playerId}, tagId: {tagId}");
         var tag = ServiceContext.TagService.GetTagById(tagId);
         if (tag == null)
         {
-            PluginLog.LogWarning("Tag not found, cannot assign tag.");
+            DalamudContext.PluginLog.Warning("Tag not found, cannot assign tag.");
             return;
         }
 

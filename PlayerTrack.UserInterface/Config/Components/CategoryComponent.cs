@@ -11,6 +11,8 @@ using PlayerTrack.UserInterface.Components;
 
 namespace PlayerTrack.UserInterface.Config.Components;
 
+using Dalamud.Interface.Utility;
+
 public class CategoryComponent : ConfigViewComponent
 {
     private string categoryInput = string.Empty;

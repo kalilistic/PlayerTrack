@@ -5,7 +5,7 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Core.Models;
-using Dalamud.Logging;
+
 using PlayerTrack.Domain;
 
 namespace PlayerTrack.Plugin;
@@ -21,7 +21,7 @@ public static class EventDispatcher
 
     public static void Start()
     {
-        PluginLog.LogVerbose("Entering EventDispatcher.Start()");
+        DalamudContext.PluginLog.Verbose("Entering EventDispatcher.Start()");
         Task.Run(() => ProcessChannelAsync(EventChannel.Reader, Cts.Token));
         DalamudContext.PlayerLocationManager.LocationStarted += OnStartLocation;
         DalamudContext.PlayerLocationManager.LocationEnded += OnEndLocation;
@@ -32,7 +32,7 @@ public static class EventDispatcher
 
     public static void Dispose()
     {
-        PluginLog.LogVerbose("Entering EventDispatcher.Dispose()");
+        DalamudContext.PluginLog.Verbose("Entering EventDispatcher.Dispose()");
         try
         {
             DalamudContext.PlayerLocationManager.LocationStarted -= OnStartLocation;
@@ -45,13 +45,13 @@ public static class EventDispatcher
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to dispose EventDispatcher properly.");
+            DalamudContext.PluginLog.Error(ex, "Failed to dispose EventDispatcher properly.");
         }
     }
 
     private static async Task ProcessChannelAsync(ChannelReader<Action> reader, CancellationToken token)
     {
-        PluginLog.LogVerbose("Entering EventDispatcher.ProcessChannelAsync()");
+        DalamudContext.PluginLog.Verbose("Entering EventDispatcher.ProcessChannelAsync()");
         await foreach (var action in reader.ReadAllAsync(token))
         {
             action();
@@ -60,19 +60,19 @@ public static class EventDispatcher
 
     private static void OnStartLocation(ToadLocation location) => EventChannel.Writer.TryWrite(() =>
     {
-        PluginLog.LogVerbose($"Entering EventDispatcher.OnStartLocation(): {location.GetName()}");
+        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnStartLocation(): {location.GetName()}");
         ServiceContext.EncounterService.StartCurrentEncounter(location);
     });
 
     private static void OnEndLocation(ToadLocation location) => EventChannel.Writer.TryWrite(() =>
     {
-        PluginLog.LogVerbose($"Entering EventDispatcher.OnEndLocation(): {location.GetName()}");
+        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnEndLocation(): {location.GetName()}");
         ServiceContext.EncounterService.EndCurrentEncounter();
     });
 
     private static void OnAddPlayers(List<ToadPlayer> players) => EventChannel.Writer.TryWrite(() =>
     {
-        PluginLog.LogVerbose($"Entering EventDispatcher.OnAddPlayers(): {players.Count}");
+        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnAddPlayers(): {players.Count}");
         foreach (var player in players)
         {
             ServiceContext.PlayerProcessService.AddOrUpdatePlayer(player);
@@ -81,7 +81,7 @@ public static class EventDispatcher
 
     private static void OnRemovePlayers(List<uint> playerObjectIds) => EventChannel.Writer.TryWrite(() =>
     {
-        PluginLog.LogVerbose($"Entering EventDispatcher.OnRemovePlayers(): {playerObjectIds.Count}");
+        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnRemovePlayers(): {playerObjectIds.Count}");
         foreach (var playerObjectId in playerObjectIds)
         {
             ServiceContext.PlayerProcessService.RemoveCurrentPlayer(playerObjectId);
@@ -90,7 +90,7 @@ public static class EventDispatcher
 
     private static void OnSelectPlayer(ToadPlayer toadPlayer) => EventChannel.Writer.TryWrite(() =>
     {
-        PluginLog.LogVerbose($"Entering EventDispatcher.OnSelectPlayer(): {toadPlayer.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnSelectPlayer(): {toadPlayer.Name}");
         ServiceContext.PlayerProcessService.AddOrUpdatePlayer(toadPlayer, false, true);
     });
 }

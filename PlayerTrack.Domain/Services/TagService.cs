@@ -8,7 +8,6 @@ namespace PlayerTrack.Domain;
 using System.Linq;
 using Dalamud.DrunkenToad.Caching;
 using Dalamud.DrunkenToad.Collections;
-using Dalamud.Logging;
 
 public class TagService : UnsortedCacheService<Tag>
 {
@@ -16,7 +15,7 @@ public class TagService : UnsortedCacheService<Tag>
 
     public void CreateTag(string name)
     {
-        PluginLog.LogVerbose($"Entering TagService.CreateTag(): {name}");
+        DalamudContext.PluginLog.Verbose($"Entering TagService.CreateTag(): {name}");
         var tag = new Tag
         {
             Name = name,
@@ -35,14 +34,14 @@ public class TagService : UnsortedCacheService<Tag>
 
     public void DeleteTag(Tag tag)
     {
-        PluginLog.LogVerbose($"Entering TagService.DeleteTag(): {tag.Name}");
+        DalamudContext.PluginLog.Verbose($"Entering TagService.DeleteTag(): {tag.Name}");
         PlayerTagService.DeletePlayerTagsByTagId(tag.Id);
         this.DeleteTagFromCacheAndRepository(tag);
     }
 
     public void RefreshTags()
     {
-        PluginLog.LogVerbose("Entering TagService.RefreshTags()");
+        DalamudContext.PluginLog.Verbose("Entering TagService.RefreshTags()");
         this.ReloadTagCache();
     }
 

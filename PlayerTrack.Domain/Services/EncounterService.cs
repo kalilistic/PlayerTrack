@@ -1,6 +1,6 @@
 ﻿using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Core.Models;
-using Dalamud.Logging;
+
 using PlayerTrack.Infrastructure;
 using PlayerTrack.Models;
 
@@ -24,17 +24,17 @@ public class EncounterService
 
     public static void EnsureNoOpenEncounters()
     {
-        PluginLog.LogVerbose("Entering EncounterService.EnsureNoOpenEncounters()");
+        DalamudContext.PluginLog.Verbose("Entering EncounterService.EnsureNoOpenEncounters()");
         var encounters = RepositoryContext.EncounterRepository.GetAllOpenEncounters();
         if (encounters == null || encounters.Count == 0)
         {
-            PluginLog.LogVerbose("No open encounters found.");
+            DalamudContext.PluginLog.Verbose("No open encounters found.");
             return;
         }
 
         foreach (var encounter in encounters)
         {
-            PluginLog.LogVerbose($"Ending encounter: {encounter.Id}");
+            DalamudContext.PluginLog.Verbose($"Ending encounter: {encounter.Id}");
             encounter.Ended = encounter.Updated;
             UpdateEncounter(encounter);
             PlayerEncounterService.EndPlayerEncounters(encounter.Id);
@@ -59,7 +59,7 @@ public class EncounterService
 
     public void StartCurrentEncounter(ToadLocation location)
     {
-        PluginLog.LogVerbose($"Entering EncounterService.StartCurrentEncounter(): {location.TerritoryId}");
+        DalamudContext.PluginLog.Verbose($"Entering EncounterService.StartCurrentEncounter(): {location.TerritoryId}");
         var loc = DalamudContext.DataManager.Locations[location.TerritoryId];
 
         var encounter = new Encounter
@@ -71,7 +71,7 @@ public class EncounterService
         this.CurrentEncounter = RepositoryContext.EncounterRepository.GetOpenEncounter();
         if (this.CurrentEncounter == null)
         {
-            PluginLog.LogWarning("Failed to start encounter.");
+            DalamudContext.PluginLog.Warning("Failed to start encounter.");
             return;
         }
 
@@ -82,12 +82,12 @@ public class EncounterService
 
     public void EndCurrentEncounter()
     {
-        PluginLog.LogVerbose("Entering EncounterService.EndCurrentEncounter()");
+        DalamudContext.PluginLog.Verbose("Entering EncounterService.EndCurrentEncounter()");
         if (this.CurrentEncounter == null)
         {
             if (DalamudContext.ClientStateHandler.IsLoggedIn)
             {
-                PluginLog.LogWarning("Failed to end encounter.");
+                DalamudContext.PluginLog.Warning("Failed to end encounter.");
             }
 
             return;
@@ -114,14 +114,14 @@ public class EncounterService
 
     private static bool ShouldSaveEncounter(ToadLocation loc)
     {
-        PluginLog.LogVerbose($"Entering EncounterService.ShouldSaveEncounter(): {loc.LocationType}");
+        DalamudContext.PluginLog.Verbose($"Entering EncounterService.ShouldSaveEncounter(): {loc.LocationType}");
         var config = ServiceContext.ConfigService.GetConfig().GetTrackingLocationConfig(loc.LocationType);
         return config.AddEncounters;
     }
 
     private static bool ShouldSavePlayers(ToadLocation loc)
     {
-        PluginLog.LogVerbose($"Entering EncounterService.ShouldSavePlayers(): {loc.LocationType}");
+        DalamudContext.PluginLog.Verbose($"Entering EncounterService.ShouldSavePlayers(): {loc.LocationType}");
         var config = ServiceContext.ConfigService.GetConfig().GetTrackingLocationConfig(loc.LocationType);
         return config.AddPlayers;
     }

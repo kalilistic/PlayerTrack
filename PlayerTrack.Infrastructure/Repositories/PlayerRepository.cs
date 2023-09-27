@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
+
+using Dalamud.DrunkenToad.Core;
 
 public class PlayerRepository : BaseRepository
 {
@@ -19,7 +21,7 @@ public class PlayerRepository : BaseRepository
 
     public IEnumerable<Player> GetAllPlayersWithRelations()
     {
-        PluginLog.LogVerbose("Entering PlayerRepository.GetAllPlayersWithRelations()");
+        DalamudContext.PluginLog.Verbose("Entering PlayerRepository.GetAllPlayersWithRelations()");
         var players = new Dictionary<int, Player>();
 
         try
@@ -96,7 +98,7 @@ public class PlayerRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to fetch all players with relations.");
+            DalamudContext.PluginLog.Error(ex, "Failed to fetch all players with relations.");
             return Enumerable.Empty<Player>();
         }
 
@@ -105,7 +107,7 @@ public class PlayerRepository : BaseRepository
 
     public bool UpdatePlayer(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerRepository.UpdatePlayer(): {player.Id}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.UpdatePlayer(): {player.Id}");
         try
         {
             var playerDto = this.Mapper.Map<PlayerDTO>(player);
@@ -135,14 +137,14 @@ public class PlayerRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to update player with PlayerID {player.Id}.", player);
+            DalamudContext.PluginLog.Error(ex, $"Failed to update player with PlayerID {player.Id}.", player);
             return false;
         }
     }
 
     public List<Player>? GetPlayersByLodestoneId(uint lodestoneId)
     {
-        PluginLog.LogVerbose($"Entering PlayerRepository.GetPlayersByLodestoneId(): {lodestoneId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.GetPlayersByLodestoneId(): {lodestoneId}");
         try
         {
             const string sql = @"SELECT * FROM players WHERE lodestone_id = @lodestone_id";
@@ -151,14 +153,14 @@ public class PlayerRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to fetch players by LodestoneID {lodestoneId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to fetch players by LodestoneID {lodestoneId}.");
             return null;
         }
     }
 
     public Player? GetPlayerByObjectId(uint objectId)
     {
-        PluginLog.LogVerbose($"Entering PlayerRepository.GetPlayerByObjectId(): {objectId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.GetPlayerByObjectId(): {objectId}");
         try
         {
             const string sql = @"SELECT * FROM players WHERE object_id = @object_id";
@@ -167,14 +169,14 @@ public class PlayerRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to fetch player by ObjectID {objectId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to fetch player by ObjectID {objectId}.");
             return null;
         }
     }
 
     public bool DeletePlayer(int playerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerRepository.DeletePlayer(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.DeletePlayer(): {playerId}");
         try
         {
             const string sql = @"DELETE FROM players WHERE id = @player_id";
@@ -183,14 +185,14 @@ public class PlayerRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete player with PlayerID {playerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete player with PlayerID {playerId}.");
             return false;
         }
     }
 
     public bool DeletePlayersWithRelations(List<int> playerIds)
     {
-        PluginLog.LogVerbose($"Entering PlayerRepository.DeletePlayersWithRelations(): {string.Join(", ", playerIds)}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.DeletePlayersWithRelations(): {string.Join(", ", playerIds)}");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -213,14 +215,14 @@ public class PlayerRepository : BaseRepository
         catch (Exception ex)
         {
             transaction.Rollback();
-            PluginLog.LogError(ex, $"Failed to delete players and their relations for PlayerIDs {string.Join(", ", playerIds)}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete players and their relations for PlayerIDs {string.Join(", ", playerIds)}.");
             return false;
         }
     }
 
     public int CreatePlayer(Player player)
     {
-        PluginLog.LogVerbose($"Entering PlayerRepository.CreatePlayer(): {player.Key}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.CreatePlayer(): {player.Key}");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -229,7 +231,7 @@ public class PlayerRepository : BaseRepository
 
             if (existingId.HasValue)
             {
-                PluginLog.LogVerbose($"CreatePlayer(): Player with Key {player.Key} already exists.");
+                DalamudContext.PluginLog.Verbose($"CreatePlayer(): Player with Key {player.Key} already exists.");
                 return existingId.Value;
             }
 
@@ -283,7 +285,7 @@ public class PlayerRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to create new player with Key {player.Key}.", player);
+            DalamudContext.PluginLog.Error(ex, $"Failed to create new player with Key {player.Key}.", player);
             transaction.Rollback();
             return 0;
         }
@@ -291,7 +293,7 @@ public class PlayerRepository : BaseRepository
 
     public bool CreatePlayers(IEnumerable<Player> players)
     {
-        PluginLog.LogVerbose($"Entering PlayerRepository.CreatePlayers()");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.CreatePlayers()");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -340,7 +342,7 @@ public class PlayerRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to migrate players.");
+            DalamudContext.PluginLog.Error(ex, "Failed to migrate players.");
             transaction.Rollback();
             return false;
         }

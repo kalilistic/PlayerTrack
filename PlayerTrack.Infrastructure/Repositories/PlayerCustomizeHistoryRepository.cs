@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
+
+using Dalamud.DrunkenToad.Core;
 
 public class PlayerCustomizeHistoryRepository : BaseRepository
 {
@@ -19,7 +21,7 @@ public class PlayerCustomizeHistoryRepository : BaseRepository
 
     public int UpdatePlayerId(int oldestPlayerId, int newPlayerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerCustomizeHistoryRepository.UpdatePlayerId(): {oldestPlayerId}, {newPlayerId}.");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCustomizeHistoryRepository.UpdatePlayerId(): {oldestPlayerId}, {newPlayerId}.");
         try
         {
             const string updateSql = "UPDATE player_customize_histories SET player_id = @newPlayerId WHERE player_id = @oldestPlayerId";
@@ -29,14 +31,14 @@ public class PlayerCustomizeHistoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to update playerIds from {oldestPlayerId} to {newPlayerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to update playerIds from {oldestPlayerId} to {newPlayerId}.");
             return 0;
         }
     }
 
     public bool CreatePlayerCustomizeHistory(PlayerCustomizeHistory playerCustomizeHistory)
     {
-        PluginLog.LogVerbose($"Entering PlayerCustomizeHistoryRepository.CreatePlayerCustomizeHistory(): {playerCustomizeHistory}.");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCustomizeHistoryRepository.CreatePlayerCustomizeHistory(): {playerCustomizeHistory}.");
         try
         {
             var historyDto = this.Mapper.Map<PlayerCustomizeHistoryDTO>(playerCustomizeHistory);
@@ -49,14 +51,14 @@ public class PlayerCustomizeHistoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to create player customize history.", playerCustomizeHistory);
+            DalamudContext.PluginLog.Error(ex, "Failed to create player customize history.", playerCustomizeHistory);
             return false;
         }
     }
 
     public void DeleteCustomizeHistory(int playerId)
     {
-        PluginLog.LogVerbose($"Entering PlayerCustomizeHistoryRepository.DeleteCustomizeHistory(): {playerId}.");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCustomizeHistoryRepository.DeleteCustomizeHistory(): {playerId}.");
         try
         {
             const string sql = "DELETE FROM player_customize_histories WHERE player_id = @player_id";
@@ -64,13 +66,13 @@ public class PlayerCustomizeHistoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete customize history for player id {playerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete customize history for player id {playerId}.");
         }
     }
 
     public bool CreatePlayerCustomizeHistories(List<PlayerCustomizeHistory> playerCustomizeHistories)
     {
-        PluginLog.LogVerbose($"Entering PlayerCustomizeHistoryRepository.CreatePlayerCustomizeHistories(): {playerCustomizeHistories}.");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCustomizeHistoryRepository.CreatePlayerCustomizeHistories(): {playerCustomizeHistories}.");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -93,7 +95,7 @@ public class PlayerCustomizeHistoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to create player customize histories.");
+            DalamudContext.PluginLog.Error(ex, "Failed to create player customize histories.");
             transaction.Rollback();
             return false;
         }

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
+
+using Dalamud.DrunkenToad.Core;
 
 public class PlayerCategoryRepository : BaseRepository
 {
@@ -19,7 +21,7 @@ public class PlayerCategoryRepository : BaseRepository
 
     public bool DeletePlayerCategoryByCategoryId(int categoryId)
     {
-        PluginLog.LogVerbose($"Entering PlayerCategoryRepository.DeletePlayerCategoryByCategoryId(): {categoryId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryRepository.DeletePlayerCategoryByCategoryId(): {categoryId}");
         try
         {
             const string sql = "DELETE FROM player_categories WHERE category_id = @category_id";
@@ -28,14 +30,14 @@ public class PlayerCategoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete player categories by category id {categoryId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete player categories by category id {categoryId}.");
             return false;
         }
     }
 
     public bool DeletePlayerCategory(int playerId, int categoryId)
     {
-        PluginLog.LogVerbose($"Entering PlayerCategoryRepository.DeletePlayerCategory(): {playerId}, {categoryId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryRepository.DeletePlayerCategory(): {playerId}, {categoryId}");
         try
         {
             const string sql = "DELETE FROM player_categories WHERE player_id = @player_id AND category_id = @category_id";
@@ -44,14 +46,14 @@ public class PlayerCategoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete player category by player id {playerId} and category id {categoryId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete player category by player id {playerId} and category id {categoryId}.");
             return false;
         }
     }
 
     public int CreatePlayerCategory(int playerId, int categoryId)
     {
-        PluginLog.LogVerbose($"Entering PlayerCategoryRepository.CreatePlayerCategory(): {playerId}, {categoryId}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryRepository.CreatePlayerCategory(): {playerId}, {categoryId}");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -69,7 +71,7 @@ public class PlayerCategoryRepository : BaseRepository
         catch (Exception ex)
         {
             transaction.Rollback();
-            PluginLog.LogError(ex, $"Failed to create and retrieve player category for player id {playerId} and category id {categoryId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to create and retrieve player category for player id {playerId} and category id {categoryId}.");
             return 0;
         }
     }
@@ -84,14 +86,14 @@ public class PlayerCategoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete player category by player id {playerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete player category by player id {playerId}.");
             return false;
         }
     }
 
     public bool CreatePlayerCategories(IEnumerable<PlayerCategory> playerCategories)
     {
-        PluginLog.LogVerbose($"Entering PlayerCategoryRepository.CreatePlayerCategories()");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryRepository.CreatePlayerCategories()");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -106,7 +108,7 @@ public class PlayerCategoryRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, "Failed to migrate players.");
+            DalamudContext.PluginLog.Error(ex, "Failed to migrate players.");
             transaction.Rollback();
             return false;
         }

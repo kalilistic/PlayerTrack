@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using AutoMapper;
-using Dalamud.Logging;
+
 using Dapper;
 using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
+
+using Dalamud.DrunkenToad.Core;
 
 public class LodestoneLookupRepository : BaseRepository
 {
@@ -19,7 +21,7 @@ public class LodestoneLookupRepository : BaseRepository
 
     public LodestoneLookup? GetLodestoneLookupByPlayerId(int playerId)
     {
-        PluginLog.LogVerbose($"Entering LodestoneLookupRepository.GetLodestoneLookupByPlayerId(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering LodestoneLookupRepository.GetLodestoneLookupByPlayerId(): {playerId}");
         try
         {
             const string sql = @"
@@ -40,14 +42,14 @@ public class LodestoneLookupRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to retrieve LodestoneLookup by player id {playerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to retrieve LodestoneLookup by player id {playerId}.");
             return null;
         }
     }
 
     public bool UpdateLodestoneLookup(LodestoneLookup lookup)
     {
-        PluginLog.LogVerbose($"Entering LodestoneLookupRepository.UpdateLodestoneLookup(): {lookup.Id}");
+        DalamudContext.PluginLog.Verbose($"Entering LodestoneLookupRepository.UpdateLodestoneLookup(): {lookup.Id}");
         try
         {
             const string sql = @"
@@ -71,14 +73,14 @@ public class LodestoneLookupRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to update LodestoneLookup with id {lookup.Id}.", lookup);
+            DalamudContext.PluginLog.Error(ex, $"Failed to update LodestoneLookup with id {lookup.Id}.", lookup);
             return false;
         }
     }
 
     public int CreateLodestoneLookup(LodestoneLookup lookup)
     {
-        PluginLog.LogVerbose($"Entering LodestoneLookupRepository.CreateLodestoneLookup(): {lookup.PlayerId}");
+        DalamudContext.PluginLog.Verbose($"Entering LodestoneLookupRepository.CreateLodestoneLookup(): {lookup.PlayerId}");
         using var transaction = this.Connection.BeginTransaction();
         try
         {
@@ -117,14 +119,14 @@ public class LodestoneLookupRepository : BaseRepository
         catch (Exception ex)
         {
             transaction.Rollback();
-            PluginLog.LogError(ex, $"Failed to create LodestoneLookup for player id {lookup.PlayerId}.", lookup);
+            DalamudContext.PluginLog.Error(ex, $"Failed to create LodestoneLookup for player id {lookup.PlayerId}.", lookup);
             return 0;
         }
     }
 
     public IEnumerable<LodestoneLookup>? GetRequestsByStatus(LodestoneStatus status)
     {
-        PluginLog.LogVerbose($"Entering LodestoneLookupRepository.GetRequestsByStatus(): {status}");
+        DalamudContext.PluginLog.Verbose($"Entering LodestoneLookupRepository.GetRequestsByStatus(): {status}");
         try
         {
             const string sql = "SELECT * FROM lodestone_lookups WHERE lookup_status = @lookup_status";
@@ -134,14 +136,14 @@ public class LodestoneLookupRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to get LodestoneLookups by status {status}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to get LodestoneLookups by status {status}.");
             return null;
         }
     }
 
     public bool DeleteLodestoneRequestByPlayerId(int playerId)
     {
-        PluginLog.LogVerbose($"Entering LodestoneLookupRepository.DeleteLodestoneRequestByPlayerId(): {playerId}");
+        DalamudContext.PluginLog.Verbose($"Entering LodestoneLookupRepository.DeleteLodestoneRequestByPlayerId(): {playerId}");
         try
         {
             const string sql = "DELETE FROM lodestone_lookups WHERE player_id = @player_id";
@@ -150,7 +152,7 @@ public class LodestoneLookupRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            PluginLog.LogError(ex, $"Failed to delete LodestoneRequests by player id {playerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to delete LodestoneRequests by player id {playerId}.");
             return false;
         }
     }

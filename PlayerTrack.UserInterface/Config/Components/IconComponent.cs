@@ -10,6 +10,8 @@ using PlayerTrack.Domain;
 
 namespace PlayerTrack.UserInterface.Config.Components;
 
+using Dalamud.Interface.Utility;
+
 public class IconComponent : ConfigViewComponent
 {
     private readonly List<FontAwesomeIcon> icons;

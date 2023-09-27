@@ -4,31 +4,31 @@
     "net7.0-windows7.0": {
       "Dalamud.ContextMenu": {
         "type": "Direct",
-        "requested": "[1.2.3, )",
-        "resolved": "1.2.3",
-        "contentHash": "ydemplF7DNcA/LLeongDVzWUD/JV0Fw3EwA2+P0jYq3Le2ZYSt4U8qyJq4FyoChqt0lFG8BxYCAzfeWp4Jmnqw=="
+        "requested": "[1.3.1, )",
+        "resolved": "1.3.1",
+        "contentHash": "ptAxut5PiLnzZ4G/KQdHJVcyklC/BF3otHJ7zYVUPiKBjsOCoF0n/6h2jK7e+8ev2Y1yAY3Wtx2GuXLFQgt9Uw=="
       },
       "Dalamud.DrunkenToad": {
         "type": "Direct",
-        "requested": "[1.6.4, )",
-        "resolved": "1.6.4",
-        "contentHash": "yqWwXFOEpWiCcxzLRgp++Zmp6zhM9gAQZJ+dfz+/aVehNawSa/VxYelfYLzVYD3RUtJBWFy1Ztg1zSbTRT40iQ==",
+        "requested": "[1.7.0, )",
+        "resolved": "1.7.0",
+        "contentHash": "szm7Adfvs9MDPxg9otXNB5UzXziut0lG0gw9H/shhTJXW8GhfGL6wUtrJlUSduxEASnUtwaOLD8ySHnmL09x6g==",
         "dependencies": {
-          "Dalamud.Loc": "1.0.5",
+          "Dalamud.Loc": "1.1.1",
           "Microsoft.Extensions.DependencyInjection": "7.0.0"
         }
       },
       "Dalamud.Loc": {
         "type": "Direct",
-        "requested": "[1.0.5, )",
-        "resolved": "1.0.5",
-        "contentHash": "/3JJfX8BkiABT2Pg7E50NBb5dHAdxMeBtlN8csw52Yq3Pk4uHQpspCgxM21w5ci20ffXpfxQMBS0tn6NZtXLRA=="
+        "requested": "[1.1.1, )",
+        "resolved": "1.1.1",
+        "contentHash": "fPVMmkiK2WaShXfLbl9ow8QTPxpJgcT92u+HqU5eNCskjwpwYWi3fkWMM1IIvPI/x9qCo2UIRUSDybeGVoE2/Q=="
       },
       "DalamudPackager": {
         "type": "Direct",
-        "requested": "[2.1.8, )",
-        "resolved": "2.1.8",
-        "contentHash": "YqagNXs9InxmqkXzq7kLveImxnodkBEicAhydMXVp7dFjC7xb76U6zGgAax4/BWIWfZeWzr5DJyQSev31kj81A=="
+        "requested": "[2.1.12, )",
+        "resolved": "2.1.12",
+        "contentHash": "Sc0PVxvgg4NQjcI8n10/VfUQBAS4O+Fw2pZrAqBdRMbthYGeogzu5+xmIGCGmsEZ/ukMOBuAqiNiB5qA3MRalg=="
       },
       "LiteHelper": {
         "type": "Direct",
@@ -42,12 +42,6 @@
           "Serilog.Extensions.Logging": "3.1.0",
           "Serilog.Sinks.File": "5.0.0"
         }
-      },
-      "Pilz.Dalamud": {
-        "type": "Direct",
-        "requested": "[0.4.0, )",
-        "resolved": "0.4.0",
-        "contentHash": "cBpF8eY7UZ9OhDRm3fDxlWlB6u7+rg0/jPDgJdvqUfhg0h2u4o7lf2CR7dR9r0vl8QTx6RyofYbUkCWxQUJMFA=="
       },
       "StyleCop.Analyzers": {
         "type": "Direct",
@@ -578,7 +572,7 @@
       "playertrack.domain": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.6.4, )",
+          "Dalamud.DrunkenToad": "[1.7.0, )",
           "FlexConfig": "[1.0.0, )",
           "PlayerTrack.Infrastructure": "[1.0.0, )",
           "PlayerTrack.Models": "[1.0.0, )"
@@ -588,7 +582,7 @@
         "type": "Project",
         "dependencies": {
           "AutoMapper": "[12.0.1, )",
-          "Dalamud.DrunkenToad": "[1.6.4, )",
+          "Dalamud.DrunkenToad": "[1.7.0, )",
           "Dapper": "[2.0.123, )",
           "FlexConfig": "[1.0.0, )",
           "FluentDapperLite": "[0.0.5, )",
@@ -602,14 +596,14 @@
       "playertrack.models": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.6.4, )",
+          "Dalamud.DrunkenToad": "[1.7.0, )",
           "Dapper.Contrib": "[2.0.78, )"
         }
       },
       "playertrack.userinterface": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.6.4, )",
+          "Dalamud.DrunkenToad": "[1.7.0, )",
           "FlexConfig": "[1.0.0, )",
           "PlayerTrack.Domain": "[1.0.0, )",
           "PlayerTrack.Models": "[1.0.0, )"

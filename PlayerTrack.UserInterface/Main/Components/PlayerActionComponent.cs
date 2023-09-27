@@ -9,7 +9,7 @@ using PlayerTrack.UserInterface.Main.Presenters;
 namespace PlayerTrack.UserInterface.Main.Components;
 
 using Dalamud.Interface.Colors;
-using Models;
+using Dalamud.Interface.Utility;
 
 public class PlayerActionComponent : ViewComponent
 {
