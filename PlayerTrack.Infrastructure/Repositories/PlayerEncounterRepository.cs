@@ -126,8 +126,7 @@ public class PlayerEncounterRepository : BaseRepository
 
             this.Connection.Execute(sql, playerEncounterDTO, transaction);
 
-            const string retrieveSql = "SELECT id FROM player_encounters WHERE created = @created";
-            var newId = this.Connection.ExecuteScalar<int>(retrieveSql, new { playerEncounterDTO.created }, transaction);
+            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
 
             transaction.Commit();
 

@@ -61,8 +61,7 @@ public class PlayerCategoryRepository : BaseRepository
             const string insertSql = "INSERT INTO player_categories (player_id, category_id, created, updated) VALUES (@player_id, @category_id, @created, @updated)";
             this.Connection.Execute(insertSql, playerCategoryDto, transaction);
 
-            const string retrieveIdSql = "SELECT id FROM player_categories WHERE created = @created";
-            var newId = this.Connection.ExecuteScalar<int>(retrieveIdSql, new { playerCategoryDto.created }, transaction);
+            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
 
             transaction.Commit();
             return newId;

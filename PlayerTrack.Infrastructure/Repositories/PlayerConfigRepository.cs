@@ -95,8 +95,7 @@ public class PlayerConfigRepository : BaseRepository
 
             this.Connection.Execute(insertSql, configDTO, transaction);
 
-            const string retrieveSql = "SELECT id FROM player_config WHERE created = @created";
-            var newId = this.Connection.ExecuteScalar<int>(retrieveSql, new { configDTO.created }, transaction);
+            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
 
             transaction.Commit();
 

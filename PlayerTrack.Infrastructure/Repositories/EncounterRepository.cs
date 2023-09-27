@@ -145,8 +145,7 @@ public class EncounterRepository : BaseRepository
             )";
             this.Connection.Execute(insertSql, encounterDTO, transaction);
 
-            const string selectByCreatedDateSql = "SELECT id FROM encounters WHERE created = @created LIMIT 1";
-            var newId = this.Connection.ExecuteScalar<int>(selectByCreatedDateSql, new { encounterDTO.created }, transaction);
+            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
 
             transaction.Commit();
 

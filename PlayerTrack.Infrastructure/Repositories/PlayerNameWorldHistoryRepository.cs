@@ -32,8 +32,7 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
 
             this.Connection.Execute(sql, historyDto, transaction);
 
-            const string retrieveSql = "SELECT id FROM player_name_world_histories WHERE created = @created";
-            var newId = this.Connection.ExecuteScalar<int>(retrieveSql, new { historyDto.created }, transaction);
+            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
 
             transaction.Commit();
             return newId;

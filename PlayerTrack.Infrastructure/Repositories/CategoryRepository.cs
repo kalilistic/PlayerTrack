@@ -10,6 +10,8 @@ using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
 
+using System.Data.SQLite;
+
 public class CategoryRepository : BaseRepository
 {
     public CategoryRepository(IDbConnection connection, IMapper mapper)
@@ -44,17 +46,14 @@ public class CategoryRepository : BaseRepository
             const string insertSql = "INSERT INTO categories (name, rank, created, updated) VALUES (@name, @rank, @created, @updated)";
             this.Connection.Execute(insertSql, categoryDTO, transaction);
 
-            const string selectByCreatedDateSql = "SELECT id FROM categories WHERE created = @created LIMIT 1";
-            var newId = this.Connection.ExecuteScalar<int>(selectByCreatedDateSql, new { categoryDTO.created }, transaction);
-
+            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
             transaction.Commit();
-
             return newId;
         }
         catch (Exception ex)
         {
             transaction.Rollback();
-            PluginLog.LogError(ex, "Failed to create and retrieve category based on created date.", category);
+            PluginLog.LogError(ex, "Failed to create new category.", category);
             return 0;
         }
     }

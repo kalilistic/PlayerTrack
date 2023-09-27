@@ -66,8 +66,7 @@ public class PlayerTagRepository : BaseRepository
 
             this.Connection.Execute(sql, playerTagDto, transaction);
 
-            const string retrieveSql = "SELECT id FROM player_tags WHERE created = @created";
-            var newId = this.Connection.ExecuteScalar<int>(retrieveSql, new { playerTagDto.created }, transaction);
+            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
 
             transaction.Commit();
             return newId;

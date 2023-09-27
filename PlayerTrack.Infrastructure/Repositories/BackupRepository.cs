@@ -62,12 +62,11 @@ public class BackupRepository : BaseRepository
             }
 
             const string insertSql = @"INSERT INTO backups
-                                (created, updated, backup_type, name, size, is_restorable, is_protected, notes)
-                                VALUES (@created, @updated, @backup_type, @name, @size, @is_restorable, @is_protected, @notes)";
+                            (created, updated, backup_type, name, size, is_restorable, is_protected, notes)
+                            VALUES (@created, @updated, @backup_type, @name, @size, @is_restorable, @is_protected, @notes)";
             this.Connection.Execute(insertSql, backupDTO, transaction);
 
-            const string selectByCreatedDateSql = @"SELECT id FROM backups WHERE created = @created LIMIT 1";
-            var newId = this.Connection.ExecuteScalar<int>(selectByCreatedDateSql, new { backupDTO.created }, transaction);
+            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
 
             transaction.Commit();
 
@@ -76,7 +75,7 @@ public class BackupRepository : BaseRepository
         catch (Exception ex)
         {
             transaction.Rollback();
-            PluginLog.LogError(ex, "Failed to create and retrieve backup based on created date.", backup);
+            PluginLog.LogError(ex, "Failed to create backup.", backup);
             return 0;
         }
     }

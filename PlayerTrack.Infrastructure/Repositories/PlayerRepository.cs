@@ -156,6 +156,22 @@ public class PlayerRepository : BaseRepository
         }
     }
 
+    public Player? GetPlayerByObjectId(uint objectId)
+    {
+        PluginLog.LogVerbose($"Entering PlayerRepository.GetPlayerByObjectId(): {objectId}");
+        try
+        {
+            const string sql = @"SELECT * FROM players WHERE object_id = @object_id";
+            var playerDTO = this.Connection.QueryFirstOrDefault<PlayerDTO>(sql, new { object_id = objectId });
+            return playerDTO == null ? null : this.Mapper.Map<Player>(playerDTO);
+        }
+        catch (Exception ex)
+        {
+            PluginLog.LogError(ex, $"Failed to fetch player by ObjectID {objectId}.");
+            return null;
+        }
+    }
+
     public bool DeletePlayer(int playerId)
     {
         PluginLog.LogVerbose($"Entering PlayerRepository.DeletePlayer(): {playerId}");
@@ -221,47 +237,46 @@ public class PlayerRepository : BaseRepository
             SetCreateTimestamp(playerDto);
 
             const string sql = @"
-        INSERT INTO players (
-            created,
-            updated,
-            last_alert_sent,
-            last_seen,
-            customize,
-            seen_count,
-            lodestone_status,
-            lodestone_verified_on,
-            free_company_state,
-            free_company_tag,
-            key,
-            name,
-            notes,
-            lodestone_id,
-            object_id,
-            world_id,
-            last_territory_type)
-        VALUES (
-            @created,
-            @updated,
-            @last_alert_sent,
-            @last_seen,
-            @customize,
-            @seen_count,
-            @lodestone_status,
-            @lodestone_verified_on,
-            @free_company_state,
-            @free_company_tag,
-            @key,
-            @name,
-            @notes,
-            @lodestone_id,
-            @object_id,
-            @world_id,
-            @last_territory_type)";
+            INSERT INTO players (
+                created,
+                updated,
+                last_alert_sent,
+                last_seen,
+                customize,
+                seen_count,
+                lodestone_status,
+                lodestone_verified_on,
+                free_company_state,
+                free_company_tag,
+                key,
+                name,
+                notes,
+                lodestone_id,
+                object_id,
+                world_id,
+                last_territory_type)
+            VALUES (
+                @created,
+                @updated,
+                @last_alert_sent,
+                @last_seen,
+                @customize,
+                @seen_count,
+                @lodestone_status,
+                @lodestone_verified_on,
+                @free_company_state,
+                @free_company_tag,
+                @key,
+                @name,
+                @notes,
+                @lodestone_id,
+                @object_id,
+                @world_id,
+                @last_territory_type)";
 
             this.Connection.Execute(sql, playerDto, transaction);
 
-            const string retrieveSql = "SELECT id FROM players WHERE created = @created";
-            var newId = this.Connection.ExecuteScalar<int>(retrieveSql, new { playerDto.created }, transaction);
+            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
 
             transaction.Commit();
             return newId;
