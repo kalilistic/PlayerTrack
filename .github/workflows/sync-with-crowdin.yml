@@ -22,7 +22,7 @@ jobs:
         run: ls -la
 
       - name: Upload source language to Crowdin
-        uses: crowdin/github-action@1.0.19
+        uses: crowdin/github-action@v1
         with:
           upload_sources: true
           download_translations: false
