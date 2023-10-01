@@ -356,10 +356,15 @@ public static class LiteDBMigrator
         var hasNonDefaultSetting = false;
         var playerConfig = new PlayerConfig(PlayerConfigType.Player) { PlayerId = player.Id };
 
-        var visibilityType = oldestPlayer.GetValueOrDefault<VisibilityType>("VisibilityType");
-        if (visibilityType != VisibilityType.None)
+        var visibilityType = 0;
+        if (oldestPlayer.TryGetValue("VisibilityType", out var bsonValue))
         {
-            playerConfig.VisibilityType = new ConfigValue<VisibilityType>(InheritOverride.Override, visibilityType);
+            visibilityType = (int)bsonValue.RawValue;
+        }
+
+        if (visibilityType > 0)
+        {
+            playerConfig.VisibilityType = new ConfigValue<VisibilityType>(InheritOverride.Override, (VisibilityType)visibilityType);
             hasNonDefaultSetting = true;
         }
 
@@ -469,10 +474,15 @@ public static class LiteDBMigrator
             hasNonDefaultSetting = true;
         }
 
-        var visibilityType = originalCategory.GetValueOrDefault<VisibilityType>("VisibilityType");
-        if (visibilityType != VisibilityType.None)
+        var visibilityType = 0;
+        if (originalCategory.TryGetValue("VisibilityType", out var bsonValue))
         {
-            playerConfig.VisibilityType = new ConfigValue<VisibilityType>(InheritOverride.Override, visibilityType);
+           visibilityType = (int)bsonValue.RawValue;
+        }
+
+        if (visibilityType > 0)
+        {
+            playerConfig.VisibilityType = new ConfigValue<VisibilityType>(InheritOverride.Override, (VisibilityType)visibilityType);
             hasNonDefaultSetting = true;
         }
 
