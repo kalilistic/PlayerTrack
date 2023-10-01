@@ -46,7 +46,7 @@ public class TagComponent : ConfigViewComponent
         ImGui.SameLine();
 
         var color = DalamudContext.DataManager.GetUIColorAsVector4(tag.Color);
-        if (KalGui.SimpleUIColorPicker("###TagColorPicker" + tag.Id, tag.Color, ref color, false))
+        if (ToadGui.SimpleUIColorPicker("###TagColorPicker" + tag.Id, tag.Color, ref color, false))
         {
             this.UpdateTagColor(tag, color);
         }
