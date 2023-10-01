@@ -1,7 +1,0 @@
-project_id_env: CROWDIN_PROJECT_ID
-api_token_env: CROWDIN_PERSONAL_TOKEN
-base_path: ".."
-preserve_hierarchy: false
-files:
-  - source: src/PlayerTrack/PlayerTrack/Resource/source/PlayerTrack_Localizable.json
-    translation: src/PlayerTrack/PlayerTrack/Resource/translation/%two_letters_code%.json
