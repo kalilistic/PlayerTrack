@@ -18,6 +18,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Debug - List directory contents
+        run: ls -la
+
       - name: Upload source language to Crowdin
         uses: crowdin/github-action@1.0.19
         with:
