@@ -24,7 +24,6 @@ jobs:
       - name: Upload source language to Crowdin
         uses: crowdin/github-action@1.0.19
         with:
-          config: ./crowdin.yml
           upload_sources: true
           download_translations: false
           push_translations: false
@@ -32,7 +31,6 @@ jobs:
       - name: Create pull request for new translations
         uses: crowdin/github-action@1.0.19
         with:
-          config: ./crowdin.yml
           upload_sources: false
           download_translations: true
           push_translations: true
