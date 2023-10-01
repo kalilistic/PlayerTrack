@@ -11,12 +11,15 @@ using PlayerTrack.UserInterface.Components;
 
 namespace PlayerTrack.UserInterface.Config.Components;
 
+using System.Linq;
+using Dalamud.DrunkenToad.Core;
 using Dalamud.Interface.Utility;
 
 public class CategoryComponent : ConfigViewComponent
 {
     private string categoryInput = string.Empty;
     private Tuple<ActionRequest, Category>? categoryToDelete;
+    private int selectedCategoryIndex;
 
     public override void Draw()
     {
@@ -24,20 +27,29 @@ public class CategoryComponent : ConfigViewComponent
         {
             var categories = ServiceContext.CategoryService.GetAllCategories();
             this.DrawCategoryManagementTab(categories);
-            foreach (var category in categories)
-            {
-                this.DrawCategoryTab(category);
-            }
+            this.DrawEditCategoriesTab(categories);
         }
 
         ImGui.EndTabBar();
     }
 
-    private void DrawCategoryTab(Category category)
+    private void DrawEditCategoriesTab(IReadOnlyList<Category> categories)
     {
-        if (ImGui.BeginTabItem($"{category.Name}###{category.Id}"))
+        if (categories.Count == 0)
         {
-            this.DrawTabBar(category);
+            return;
+        }
+
+        var tabName = DalamudContext.LocManager.GetString("Settings");
+        if (ImGui.BeginTabItem(tabName))
+        {
+            var categoryNames = categories.Select(category => category.Name).ToList();
+            ToadGui.Combo("SelectCategory", ref this.selectedCategoryIndex, categoryNames, 160);
+            if (this.selectedCategoryIndex >= 0 && this.selectedCategoryIndex < categories.Count)
+            {
+                this.DrawTabBar(categories[this.selectedCategoryIndex]);
+            }
+
             ImGui.EndTabItem();
         }
     }
