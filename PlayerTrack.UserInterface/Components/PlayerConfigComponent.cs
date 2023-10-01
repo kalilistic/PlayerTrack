@@ -212,7 +212,7 @@ public static class PlayerConfigComponent
         DrawInheritOverrideCombo(key, playerConfigSet.PlayerConfigType, ref config.InheritOverride, ref isChanged);
 
         var color = DalamudContext.DataManager.GetUIColorAsVector4(uintValue);
-        if (ToadGui.UIColorPicker2(key, ref color))
+        if (KalGui.SimpleUIColorPicker(key, uintValue, ref color))
         {
             config.InheritOverride = playerConfigSet.PlayerConfigType == PlayerConfigType.Default ? InheritOverride.None : InheritOverride.Override;
             config.Value = DalamudContext.DataManager.FindClosestUIColor(color).Id;
