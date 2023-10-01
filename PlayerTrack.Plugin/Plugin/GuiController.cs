@@ -26,7 +26,7 @@ public static class GuiController
     {
         DalamudContext.PluginLog.Verbose("Entering GuiController.Start()");
         Initialize();
-        configView = new ConfigView($"{Name}###Config", config) { IsOpen = config.IsConfigOpen };
+        configView = new ConfigView($"{Name}###Config", config) { IsOpen = config is { IsConfigOpen: true, PreserveConfigState: true } };
         configView.WindowConfigChanged += WindowConfigChanged;
         configView.PlayerConfigChanged += presenter.ReloadPlayer;
         configView.PlayerConfigChanged += NameplateHandler.RefreshNameplates;

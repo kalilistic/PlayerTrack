@@ -20,6 +20,24 @@ public class WindowComponent : ConfigViewComponent
         {
             this.DrawGeneralTab();
             this.DrawPlayerListTab();
+            this.DrawSettingsTab();
+        }
+    }
+
+    private void DrawSettingsTab()
+    {
+        if (LocGui.BeginTabItem("Settings"))
+        {
+            ImGuiHelpers.ScaledDummy(1f);
+            var preserveConfigState = this.config.PreserveConfigState;
+            if (ToadGui.Checkbox("PreserveConfigState", ref preserveConfigState))
+            {
+                this.config.PreserveConfigState = preserveConfigState;
+                ServiceContext.ConfigService.SaveConfig(this.config);
+                this.WindowConfigComponent_WindowConfigChanged?.Invoke();
+            }
+
+            ImGui.EndTabItem();
         }
     }
 
