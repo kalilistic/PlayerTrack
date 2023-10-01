@@ -10,6 +10,9 @@ using PlayerTrack.Models;
 
 namespace PlayerTrack.UserInterface.Config.Components;
 
+using Dalamud.Logging;
+using UserInterface.Components;
+
 public class TagComponent : ConfigViewComponent
 {
     private string tagInput = string.Empty;
@@ -43,7 +46,7 @@ public class TagComponent : ConfigViewComponent
         ImGui.SameLine();
 
         var color = DalamudContext.DataManager.GetUIColorAsVector4(tag.Color);
-        if (ToadGui.UIColorPicker2("###TagColorPicker" + tag.Id, ref color, false))
+        if (KalGui.SimpleUIColorPicker("###TagColorPicker" + tag.Id, tag.Color, ref color, false))
         {
             this.UpdateTagColor(tag, color);
         }
