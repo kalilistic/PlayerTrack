@@ -20,8 +20,8 @@
 		<Configurations>Debug;Release</Configurations>
 		<AssemblyName>PlayerTrack</AssemblyName>
 		<RootNamespace>PlayerTrack</RootNamespace>
-		<PackageVersion>3.0.2</PackageVersion>
-		<AssemblyVersion>3.0.2.0</AssemblyVersion>
+		<PackageVersion>3.1.0</PackageVersion>
+		<AssemblyVersion>3.1.0.0</AssemblyVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugSymbols>true</DebugSymbols>
@@ -35,6 +35,7 @@
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DebugType>pdbonly</DebugType>
 		<Optimize>true</Optimize>
+		<DebugSymbols>true</DebugSymbols>
 		<OutputPath>bin\Release\</OutputPath>
 		<DefineConstants>TRACE</DefineConstants>
 		<ErrorReport>prompt</ErrorReport>
@@ -50,6 +51,7 @@
 		<PackageReference Include="Dalamud.Loc" Version="1.1.1" />
 		<PackageReference Include="DalamudPackager" Version="2.1.12" />
 		<PackageReference Include="LiteHelper" Version="0.0.6" />
+		<PackageReference Include="Pilz.Dalamud" Version="0.5.0" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -79,9 +81,6 @@
 		<Reference Include="Newtonsoft.Json">
 			<HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
 			<Private>False</Private>
-		</Reference>
-		<Reference Include="Pilz.Dalamud">
-		  <HintPath>..\lib\Pilz.Dalamud.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>

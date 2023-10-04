@@ -937,7 +937,15 @@ public static class LiteDBMigrator
                     var nameWorldHistories = CreateNameWorldHistory(player, oldestPlayer);
                     playerNameWorldHistoriesList.AddRange(nameWorldHistories);
 
-                    PlayerKeyToIdMap.Add(player.Key, player.Id); // save for encounters
+                    if (!PlayerKeyToIdMap.ContainsKey(player.Key))
+                    {
+                        PlayerKeyToIdMap.Add(player.Key, player.Id); // save for encounters
+                    }
+                    else
+                    {
+                        Log($"Duplicate player key: {player.Key}");
+                    }
+
                     playerCount++;
                 }
 

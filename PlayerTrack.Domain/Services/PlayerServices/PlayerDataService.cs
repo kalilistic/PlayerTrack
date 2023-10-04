@@ -24,8 +24,6 @@ public class PlayerDataService : SortedCacheService<Player>
     private const long NinetyDaysInMilliseconds = 7776000000;
     private const int MaxBatchSize = 500;
 
-    public PlayerDataService() => this.ReloadPlayerCache();
-
     public Player? GetPlayer(int playerId) => this.cache.FindFirst(p => p.Id == playerId);
 
     public Player? GetPlayer(string name, uint worldId) => this.cache.FindFirst(p => p.Key.Equals(PlayerKeyBuilder.Build(name, worldId), StringComparison.Ordinal));
@@ -234,6 +232,12 @@ public class PlayerDataService : SortedCacheService<Player>
         this.RefreshAllPlayers();
     }
 
+    public void ReloadPlayerCache() => this.ExecuteReloadCache(() =>
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerDataService.ReloadPlayerCacheAsync()");
+        this.ReloadPlayers();
+    });
+
     private static void PopulateDerivedFields(Player player, Dictionary<int, int> categoryRanks)
     {
         PlayerCategoryService.SetPrimaryCategoryId(player, categoryRanks);
@@ -323,12 +327,6 @@ public class PlayerDataService : SortedCacheService<Player>
 
         this.DeletePlayerFromCacheAndRepository(player);
     }
-
-    private void ReloadPlayerCache() => this.ExecuteReloadCache(() =>
-    {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerDataService.ReloadPlayerCacheAsync()");
-        this.ReloadPlayers();
-    });
 
     private async Task ReloadPlayerCacheAsync() => await this.ExecuteReloadCacheAsync(() =>
     {

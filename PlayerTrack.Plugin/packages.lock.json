@@ -43,6 +43,12 @@
           "Serilog.Sinks.File": "5.0.0"
         }
       },
+      "Pilz.Dalamud": {
+        "type": "Direct",
+        "requested": "[0.5.0, )",
+        "resolved": "0.5.0",
+        "contentHash": "pHFQZPPRX9YjJS1EdTWCD7UsajobFsrz/MhBp3vTSUKprSfC7UvRzs1uxhfqyWQafSrzTx6H42AnGm24dcHL4g=="
+      },
       "StyleCop.Analyzers": {
         "type": "Direct",
         "requested": "[1.2.0-beta.435, )",
