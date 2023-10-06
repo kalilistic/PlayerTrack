@@ -112,6 +112,8 @@ public static class LiteDBMigrator
 
             if (DefaultCategoryIds.Count > 1)
             {
+                Log("WARNING: Found multiple default categories so not touching them to avoid causing errors. " +
+                    "Please review and adjust your categories and settings after the migration is complete.");
                 DalamudContext.PluginLog.Warning($"Found {DefaultCategoryIds.Count} default categories. Only one should exist.");
                 return;
             }
@@ -949,10 +951,16 @@ public static class LiteDBMigrator
                     playerCount++;
                 }
 
-                var savedPlayers = RepositoryContext.PlayerRepository.CreatePlayers(players);
-                if (!savedPlayers)
+                foreach (var player in players)
                 {
-                    throw new DataException("Failed to insert batch players.");
+                    var id = RepositoryContext.PlayerRepository.CreatePlayer(player);
+                    if (id != 0)
+                    {
+                        continue;
+                    }
+
+                    DalamudContext.PluginLog.Error($"Failed to insert saved player {JsonConvert.SerializeObject(player)}");
+                    throw new DataException($"Failed to insert saved player {player.Key}");
                 }
 
                 Log($"Migrated {players.Count:N0} players.");

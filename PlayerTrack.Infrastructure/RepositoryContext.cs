@@ -84,7 +84,6 @@ public static class RepositoryContext
 
         if (config == null)
         {
-            DalamudContext.PluginLog.Warning("Plugin config not found, skipping maintenance");
             return;
         }
 

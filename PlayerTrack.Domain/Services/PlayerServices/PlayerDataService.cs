@@ -84,13 +84,20 @@ public class PlayerDataService : SortedCacheService<Player>
 
     public void ClearCategoryFromPlayers(int categoryId)
     {
-        var ranks = ServiceContext.CategoryService.GetCategoryRanks();
-        foreach (var player in this.cache.FindAll(p => p.AssignedCategories.Any(c => c.Id == categoryId)))
+        try
         {
-            player.AssignedCategories.RemoveAll(c => c.Id == categoryId);
-            player.PrimaryCategoryId = 0;
-            PopulateDerivedFields(player, ranks);
-            this.UpdatePlayerInCacheAndRepository(player);
+            var ranks = ServiceContext.CategoryService.GetCategoryRanks();
+            foreach (var player in this.cache.FindAll(p => p.AssignedCategories.Any(c => c.Id == categoryId)))
+            {
+                player.AssignedCategories.RemoveAll(c => c.Id == categoryId);
+                player.PrimaryCategoryId = 0;
+                PopulateDerivedFields(player, ranks);
+                this.UpdatePlayerInCacheAndRepository(player);
+            }
+        }
+        catch (Exception ex)
+        {
+            DalamudContext.PluginLog.Debug(ex, $"PlayerDataService.ClearCategoryFromPlayers(): {categoryId}");
         }
     }
 
@@ -105,8 +112,15 @@ public class PlayerDataService : SortedCacheService<Player>
         DalamudContext.PluginLog.Verbose($"PlayerDataService.RecalculatePlayerRankings()");
         Task.Run(() =>
         {
-            this.cache.Resort(new PlayerComparer(ServiceContext.CategoryService.GetCategoryRanks()));
-            this.OnCacheUpdated();
+            try
+            {
+                this.cache.Resort(new PlayerComparer(ServiceContext.CategoryService.GetCategoryRanks()));
+                this.OnCacheUpdated();
+            }
+            catch (Exception ex)
+            {
+                DalamudContext.PluginLog.Debug(ex, "PlayerDataService.RecalculatePlayerRankings()");
+            }
         });
     }
 
