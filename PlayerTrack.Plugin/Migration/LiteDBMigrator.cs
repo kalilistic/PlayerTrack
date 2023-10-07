@@ -21,6 +21,7 @@ using PlayerTrack.Models.Structs;
 namespace PlayerTrack.Migration;
 
 using System.Data;
+using Dalamud.DrunkenToad.Extensions;
 using Dalamud.DrunkenToad.Helpers;
 using Domain;
 using LiteHelper.Exception;
@@ -1270,7 +1271,7 @@ public static class LiteDBMigrator
     private static void SetupPaths()
     {
         ConfigDirectoryPath = DalamudContext.PluginInterface.GetPluginConfigDirectory();
-        BackupDirectoryPath = Path.Combine(ConfigDirectoryPath, "backups");
+        BackupDirectoryPath = DalamudContext.PluginInterface.PluginBackupDirectory();
         LegacyDataDirectoryPath = Path.Combine(ConfigDirectoryPath, "data");
         LegacyDatabaseFilePath = Path.Combine(LegacyDataDirectoryPath, "data.db");
         LegacyMetaFilePath = Path.Combine(LegacyDataDirectoryPath, "data.meta");
@@ -1343,7 +1344,7 @@ public static class LiteDBMigrator
             const string backupName = "UPGRADE_V2_FINAL";
             var backupSubDirPath = Path.Combine(BackupDirectoryPath, backupName);
             var backupFilePath = Path.Combine(backupSubDirPath, "litedb.db");
-            Log($"Backing up latest DB to pluginConfigs\\PlayerTrack\\backups\\{backupName}.");
+            Log($"Backing up latest DB to backup directory.");
             Directory.CreateDirectory(backupSubDirPath);
             File.Copy(LegacyDatabaseFilePath, backupFilePath);
             CopyLegacyConfigFile(backupSubDirPath);
@@ -1352,9 +1353,9 @@ public static class LiteDBMigrator
         }
         catch (Exception ex)
         {
-            LogError(ex, "Could not backup latest DB to pluginConfigs\\PlayerTrack\\backups\\UPGRADE_V2_FINAL.zip.");
+            LogError(ex, "Could not backup latest DB to backup directory.");
             migrationWindow?.StopMigration();
-            throw new FileLoadException("Could not backup latest DB to pluginConfigs\\PlayerTrack\\backups\\UPGRADE_V2_FINAL.zip.", ex);
+            throw new FileLoadException("Could not backup latest to DB to backup directory.", ex);
         }
     }
 
@@ -1364,16 +1365,16 @@ public static class LiteDBMigrator
         {
             if (Directory.Exists(LegacyDataDirectoryPath))
             {
-                Log($"Moving and compressing old backups to pluginConfigs\\PlayerTrack\\backups.");
+                Log($"Moving and compressing old backups to new backup directory.");
                 CleanupOldBackupDirectory(Path.Combine(LegacyDataDirectoryPath, "upgrade"), "UPGRADE");
                 CleanupOldBackupDirectory(LegacyDataDirectoryPath, "AUTOMATIC");
             }
         }
         catch (Exception ex)
         {
-            LogError(ex, "Could not move and compress old backups to pluginConfigs\\PlayerTrack\\backups.");
+            LogError(ex, "Could not move and compress old backups to new backup directory.");
             migrationWindow?.StopMigration();
-            throw new FileLoadException("Could not move and compress old backups to pluginConfigs\\PlayerTrack\\backups.", ex);
+            throw new FileLoadException("Could not move and compress old backups to new backup directory.", ex);
         }
     }
 

@@ -10,6 +10,7 @@ using PlayerTrack.Models;
 namespace PlayerTrack.Domain;
 
 using System.Text.RegularExpressions;
+using Dalamud.DrunkenToad.Extensions;
 using Dalamud.DrunkenToad.Helpers;
 
 public class BackupService
@@ -28,7 +29,7 @@ public class BackupService
     {
         DalamudContext.PluginLog.Verbose("Entering BackupService.Startup()");
         this.pluginDir = DalamudContext.PluginInterface.GetPluginConfigDirectory();
-        this.backupDir = $"{this.pluginDir}/backups";
+        this.backupDir = DalamudContext.PluginInterface.PluginBackupDirectory();
         this.pluginVersion = ServiceContext.ConfigService.GetConfig().PluginVersion;
         this.lastVersionBackup = ServiceContext.ConfigService.GetConfig().LastVersionBackup;
         this.RunStartupChecks();
@@ -119,6 +120,19 @@ public class BackupService
         // setup directories
         Directory.CreateDirectory(this.pluginDir);
         Directory.CreateDirectory(this.backupDir);
+
+        // move files in old backup dir to new one
+        var oldBackupDir = Path.Combine(this.pluginDir, "backups");
+        var oldFiles = Directory.GetFiles(oldBackupDir);
+        foreach (var file in oldFiles)
+        {
+            File.Move(file, Path.Combine(this.backupDir, Path.GetFileName(file)));
+        }
+
+        if (Directory.Exists(oldBackupDir) && !Directory.EnumerateFileSystemEntries(oldBackupDir).Any())
+        {
+            Directory.Delete(oldBackupDir);
+        }
 
         // create backup records for discovered files
         var files = Directory.GetFiles(this.backupDir);
