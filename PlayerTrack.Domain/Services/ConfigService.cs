@@ -6,6 +6,7 @@ using PlayerTrack.Models;
 namespace PlayerTrack.Domain;
 
 using Dalamud.DrunkenToad.Core;
+using Dalamud.Interface;
 
 public class ConfigService
 {
@@ -25,9 +26,30 @@ public class ConfigService
         }
     }
 
+    public void SyncIcons()
+    {
+        var icons = RepositoryContext.PlayerConfigRepository.GetDistinctIcons();
+        if (icons.Count == 0)
+        {
+            return;
+        }
+
+        var existingIcons = this.pluginConfig.Icons;
+        foreach (var icon in icons)
+        {
+            if (!existingIcons.Contains((FontAwesomeIcon)icon.Value))
+            {
+                existingIcons.Add((FontAwesomeIcon)icon.Value);
+            }
+        }
+
+        this.pluginConfig.Icons = existingIcons;
+        this.SaveConfig(this.pluginConfig);
+    }
+
     public PluginConfig GetConfig() => this.pluginConfig;
 
-    public void ReloadCache()
+    private void ReloadCache()
     {
         DalamudContext.PluginLog.Verbose("Entering ConfigService.ReloadCache()");
         var config = RepositoryContext.ConfigRepository.GetPluginConfig();

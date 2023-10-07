@@ -11,12 +11,31 @@ using PlayerTrack.Models;
 namespace PlayerTrack.Infrastructure;
 
 using Dalamud.DrunkenToad.Core;
+using Models.Structs;
+using Newtonsoft.Json;
 
 public class PlayerConfigRepository : BaseRepository
 {
     public PlayerConfigRepository(IDbConnection connection, IMapper mapper)
         : base(connection, mapper)
     {
+    }
+
+    public List<ConfigValue<char>> GetDistinctIcons()
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerConfigRepository.GetDistinctIcons()");
+        try
+        {
+            const string sql = "SELECT DISTINCT player_list_icon FROM player_config WHERE player_list_icon IS NOT NULL";
+            var iconJsonStrings = this.Connection.Query<string>(sql).ToList();
+
+            return iconJsonStrings.Select(JsonConvert.DeserializeObject<ConfigValue<char>>).ToList();
+        }
+        catch (Exception ex)
+        {
+            DalamudContext.PluginLog.Error(ex, "Failed to fetch distinct icons from player_config.");
+            return new List<ConfigValue<char>>();
+        }
     }
 
     public int? GetIdByPlayerId(int playerId)
