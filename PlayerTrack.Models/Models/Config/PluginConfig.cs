@@ -19,6 +19,8 @@ public class PluginConfig : IPluginConfig
 
     public bool PreserveConfigState { get; set; }
 
+    public bool PreserveMainWindowState { get; set; }
+
     public bool IsWindowCombined { get; set; } = true;
 
     public int PluginVersion { get; set; }

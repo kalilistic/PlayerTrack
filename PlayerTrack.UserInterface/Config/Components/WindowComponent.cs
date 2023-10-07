@@ -5,7 +5,6 @@ using PlayerTrack.Domain;
 
 namespace PlayerTrack.UserInterface.Config.Components;
 
-using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 
 public class WindowComponent : ConfigViewComponent
@@ -114,6 +113,13 @@ public class WindowComponent : ConfigViewComponent
             if (ToadGui.Checkbox("ShowCategorySeparator", ref showCategorySeparator))
             {
                 this.config.ShowCategorySeparator = showCategorySeparator;
+                ServiceContext.ConfigService.SaveConfig(this.config);
+            }
+
+            var preserveMainWindowState = this.config.PreserveMainWindowState;
+            if (ToadGui.Checkbox("PreserveMainWindowState", ref preserveMainWindowState))
+            {
+                this.config.PreserveMainWindowState = preserveMainWindowState;
                 ServiceContext.ConfigService.SaveConfig(this.config);
             }
 

@@ -240,15 +240,15 @@ public class MainPresenter : IMainPresenter
     {
         this.Combined = new Combined($"PlayerTrack##Combined", this.config, this.playerComponent, this.addPlayerComponent, this)
         {
-            IsOpen = this.config.IsWindowCombined,
+            IsOpen = this.config is { IsWindowCombined: true, PreserveMainWindowState: true },
         };
         this.PanelView = new PanelView($"PlayerTrack##PanelView", this.config, this.playerComponent, this.addPlayerComponent, this)
         {
-            IsOpen = !this.config.IsWindowCombined,
+            IsOpen = this.config is { IsWindowCombined: false, PreserveMainWindowState: true },
         };
         this.PlayerList = new PlayerList($"PlayerTrack##PlayerList", this.config, this)
         {
-            IsOpen = !this.config.IsWindowCombined,
+            IsOpen = this.config is { IsWindowCombined: false, PreserveMainWindowState: true },
         };
         this.PlayerList.OpenPanelView += () => this.PanelView.IsOpen = true;
     }
