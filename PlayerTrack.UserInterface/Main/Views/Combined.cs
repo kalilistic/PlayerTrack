@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-using Dalamud.Interface;
-using ImGuiNET;
+﻿using ImGuiNET;
 using PlayerTrack.Models;
 using PlayerTrack.UserInterface.Main.Components;
 using PlayerTrack.UserInterface.Main.Presenters;
@@ -8,28 +6,25 @@ using PlayerTrack.UserInterface.Views;
 
 namespace PlayerTrack.UserInterface.Main.Views;
 
+using System.Numerics;
 using Dalamud.Interface.Utility;
+using Domain;
 
 public class Combined : PlayerTrackView, IViewWithPanel
 {
     private readonly PlayerListComponent playerListComponent;
     private readonly PanelComponent panelComponent;
-    private readonly PlayerComponent playerComponent;
-    private readonly AddPlayerComponent addPlayerComponent;
     private readonly IMainPresenter presenter;
-
-    private float minimizedWidth;
+    private bool isPendingSizeUpdate;
+    private Vector2 lastSize;
 
     public Combined(string name, PluginConfig config, PlayerComponent playerComponent, AddPlayerComponent addPlayerComponent, IMainPresenter presenter, ImGuiWindowFlags flags = ImGuiWindowFlags.None)
         : base(name, config, flags)
     {
-        this.playerComponent = playerComponent;
-        this.addPlayerComponent = addPlayerComponent;
         this.presenter = presenter;
-        this.ResetWidth();
         this.playerListComponent = new PlayerListComponent(this.presenter);
         this.playerListComponent.PlayerListComponent_OpenConfig += () => this.OpenConfig?.Invoke();
-        this.panelComponent = new PanelComponent(this.playerComponent, this.addPlayerComponent);
+        this.panelComponent = new PanelComponent(playerComponent, addPlayerComponent);
     }
 
     public delegate void OpenConfigDelegate();
@@ -38,61 +33,38 @@ public class Combined : PlayerTrackView, IViewWithPanel
 
     public override void Draw()
     {
-        var globalScale = ImGuiHelpers.GlobalScale;
-        var minimizedWidthBase = 221f;
-        if (globalScale < 1)
-        {
-            minimizedWidthBase += (float)(globalScale * 3.2);
-        }
-        else if (globalScale > 1.25)
-        {
-            minimizedWidthBase -= (float)(globalScale * 3.2);
-        }
-
-        this.minimizedWidth = minimizedWidthBase * globalScale;
-        var windowSize = ImGui.GetWindowSize();
-
-        if (this.config.PanelType == PanelType.None)
-        {
-            this.Size = windowSize with { X = this.minimizedWidth } / globalScale;
-        }
-        else
-        {
-            this.config.MainWindowWidth = windowSize.X;
-            this.Size = windowSize / globalScale;
-        }
-
-        if (this.Size.Value.Y < 100)
-        {
-            this.Size = this.Size.Value with { Y = 400 };
-        }
-
+        this.CheckResize();
+        this.UpdateWindowSizes();
         this.playerListComponent.Draw();
         ImGui.SameLine();
         this.panelComponent.Draw();
     }
 
-    public override void Initialize() => this.SetWindowFlags();
+    public override void Initialize()
+    {
+        this.SetWindowFlags();
+        this.isPendingSizeUpdate = true;
+        this.UpdateWindowSizes();
+    }
 
     public void RefreshWindowConfig()
     {
         this.config.PanelType = PanelType.None;
-        this.SetMinimizedSize();
         this.presenter.ClosePlayer();
         this.SetWindowFlags();
     }
 
     public void ShowPanel(PanelType panelType)
     {
-        this.Size = new Vector2(this.config.MainWindowWidth, this.config.MainWindowHeight);
         this.config.PanelType = panelType;
         this.IsOpen = true;
+        this.isPendingSizeUpdate = true;
     }
 
     public void HidePanel()
     {
-        this.SetMinimizedSize();
         this.config.PanelType = PanelType.None;
+        this.isPendingSizeUpdate = true;
     }
 
     public void TogglePanel(PanelType panelType)
@@ -107,13 +79,50 @@ public class Combined : PlayerTrackView, IViewWithPanel
         }
     }
 
-    private void ResetWidth()
+    private void CheckResize()
     {
-        if (this.config.MainWindowWidth < 222)
+        if (ImGui.GetWindowSize() != this.lastSize)
         {
-            this.config.MainWindowWidth = 700;
+            this.lastSize = ImGui.GetWindowSize();
+            if (this.config.PanelType != PanelType.None)
+            {
+                this.config.MainWindowWidth = this.lastSize.X / ImGuiHelpers.GlobalScale;
+            }
+
+            this.config.MainWindowHeight = this.lastSize.Y / ImGuiHelpers.GlobalScale;
+            ServiceContext.ConfigService.SaveConfig(this.config);
         }
     }
 
-    private void SetMinimizedSize() => this.Size = new Vector2(this.minimizedWidth, this.config.MainWindowHeight);
+    private void UpdateWindowSizes()
+    {
+        if (!this.isPendingSizeUpdate)
+        {
+            this.SizeCondition = ImGuiCond.FirstUseEver;
+            return;
+        }
+
+        this.isPendingSizeUpdate = false;
+        if (this.config.PanelType != PanelType.None)
+        {
+            this.SizeConstraints = new WindowSizeConstraints
+            {
+                MinimumSize = new Vector2(221f, 120f),
+                MaximumSize = new Vector2(1000f, 1000f),
+            };
+            this.Size = new Vector2(this.config.MainWindowWidth, this.config.MainWindowHeight);
+            this.SizeCondition = ImGuiCond.Always;
+        }
+        else
+        {
+            this.config.PanelType = PanelType.None;
+            this.SizeConstraints = new WindowSizeConstraints
+            {
+                MinimumSize = new Vector2(221f, 120f),
+                MaximumSize = new Vector2(221f, 1000f),
+            };
+            this.Size = new Vector2(221f, this.config.MainWindowHeight);
+            this.SizeCondition = ImGuiCond.Always;
+        }
+    }
 }
