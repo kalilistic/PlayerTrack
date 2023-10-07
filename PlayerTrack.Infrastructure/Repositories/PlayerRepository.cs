@@ -220,7 +220,7 @@ public class PlayerRepository : BaseRepository
         }
     }
 
-    public int CreatePlayer(Player player)
+    public int CreatePlayer(Player player, bool setTimestamps = true)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.CreatePlayer(): {player.Key}");
         using var transaction = this.Connection.BeginTransaction();
@@ -236,7 +236,10 @@ public class PlayerRepository : BaseRepository
             }
 
             var playerDto = this.Mapper.Map<PlayerDTO>(player);
-            SetCreateTimestamp(playerDto);
+            if (setTimestamps)
+            {
+                SetCreateTimestamp(playerDto);
+            }
 
             const string sql = @"
             INSERT INTO players (

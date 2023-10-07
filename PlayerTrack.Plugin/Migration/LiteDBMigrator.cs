@@ -953,7 +953,7 @@ public static class LiteDBMigrator
 
                 foreach (var player in players)
                 {
-                    var id = RepositoryContext.PlayerRepository.CreatePlayer(player);
+                    var id = RepositoryContext.PlayerRepository.CreatePlayer(player, false);
                     if (id != 0)
                     {
                         continue;
