@@ -17,6 +17,7 @@ using Dalamud.DrunkenToad.Helpers;
 using Dalamud.Interface;
 
 using Models.Comparers;
+using Newtonsoft.Json;
 
 public class PlayerDataService : SortedCacheService<Player>
 {
@@ -134,6 +135,8 @@ public class PlayerDataService : SortedCacheService<Player>
         }
 
         // save state before changing
+        var oldestPlayerString = JsonConvert.SerializeObject(oldestPlayer);
+        var newPlayerString = JsonConvert.SerializeObject(newPlayer);
         var isCurrent = newPlayer.IsCurrent;
         var payloads = ServiceContext.PlayerAlertService.CreatePlayerNameWorldChangeAlert(oldestPlayer, newPlayer);
 
@@ -177,6 +180,14 @@ public class PlayerDataService : SortedCacheService<Player>
         }
 
         // send alert
+        if (!payloads.Any())
+        {
+            DalamudContext.PluginLog.Warning("Skipping empty alert for name/world change.");
+            DalamudContext.PluginLog.Warning($"Oldest Player: {oldestPlayerString}");
+            DalamudContext.PluginLog.Warning($"New Player: {newPlayerString}");
+            return;
+        }
+
         PlayerAlertService.SendNameWorldChangeAlert(payloads);
     }
 

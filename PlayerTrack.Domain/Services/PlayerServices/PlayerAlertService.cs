@@ -7,9 +7,12 @@ using PlayerTrack.Models;
 
 namespace PlayerTrack.Domain;
 
+using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Dalamud.DrunkenToad.Helpers;
+using Newtonsoft.Json;
 
 public class PlayerAlertService
 {
@@ -62,6 +65,21 @@ public class PlayerAlertService
             payloads.Add(new TextPayload(DalamudContext.DataManager.GetWorldNameById(player.WorldId)));
             payloads.Add(new TextPayload($" {ServiceContext.Localization.GetString("ProximityAlertMessage")}"));
             payloads.Add(RawPayload.LinkTerminator);
+            if (!payloads.Any())
+            {
+                DalamudContext.PluginLog.Warning("Skipping empty alert for proximity.");
+                try
+                {
+                    DalamudContext.PluginLog.Warning($"Player: {JsonConvert.SerializeObject(player)}");
+                }
+                catch (Exception ex)
+                {
+                    DalamudContext.PluginLog.Error(ex, "Failed to serialize player.");
+                }
+
+                return;
+            }
+
             DalamudContext.ChatGuiHandler.PluginPrintNotice(payloads);
         }
     });
