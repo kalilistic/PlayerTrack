@@ -106,15 +106,13 @@ public static class LiteDBMigrator
             var categories = RepositoryContext.CategoryRepository.GetAllCategories() ?? Array.Empty<Category>();
             if (DefaultCategoryIds.Count == 0)
             {
-                DalamudContext.PluginLog.Warning("No default categories found.");
+                LogWarning("No default category found, review your settings after.");
                 return;
             }
 
             if (DefaultCategoryIds.Count > 1)
             {
-                Log("WARNING: Found multiple default categories so not touching them to avoid causing errors. " +
-                    "Please review and adjust your categories and settings after the migration is complete.");
-                DalamudContext.PluginLog.Warning($"Found {DefaultCategoryIds.Count} default categories. Only one should exist.");
+                LogWarning("Found multiple default categories, review your settings after.");
                 return;
             }
 
@@ -951,6 +949,7 @@ public static class LiteDBMigrator
                     playerCount++;
                 }
 
+                var failedPlayerCount = 0;
                 foreach (var player in players)
                 {
                     var id = RepositoryContext.PlayerRepository.CreatePlayer(player, false);
@@ -959,8 +958,19 @@ public static class LiteDBMigrator
                         continue;
                     }
 
-                    DalamudContext.PluginLog.Error($"Failed to insert saved player {JsonConvert.SerializeObject(player)}");
-                    throw new DataException($"Failed to insert saved player {player.Key}");
+                    playerConfigs.RemoveAll(config => config.PlayerId == player.Id);
+                    playerCategories.RemoveAll(category => category.PlayerId == player.Id);
+                    playerTags.RemoveAll(tag => tag.PlayerId == player.Id);
+                    playerCustomizeHistoriesList.RemoveAll(history => history.PlayerId == player.Id);
+                    playerNameWorldHistoriesList.RemoveAll(history => history.PlayerId == player.Id);
+                    failedPlayerCount++;
+                    LogWarning($"Failed to migrate player {player.Key}.");
+                }
+
+                if (failedPlayerCount > 10)
+                {
+                    LogError($"Failed to insert over 10 players: {failedPlayerCount}");
+                    throw new DataException($"Failed to insert over 10 players: {failedPlayerCount}");
                 }
 
                 Log($"Migrated {players.Count:N0} players.");
@@ -1388,27 +1398,33 @@ public static class LiteDBMigrator
     private static void OpenMigrationWindow()
     {
         migrationWindow = new MigrationWindow(DalamudContext.PluginInterface);
-        migrationWindow.StepQueue.Enqueue("Starting migration.");
+        Log("Starting migration.");
     }
 
     private static void Log(string msg)
     {
         DalamudContext.PluginLog.Info(msg);
-        migrationWindow?.StepQueue.Enqueue(msg);
+        migrationWindow?.LogInfo(msg);
+    }
+
+    private static void LogWarning(string msg)
+    {
+        DalamudContext.PluginLog.Info(msg);
+        migrationWindow?.LogWarning(msg);
     }
 
     private static void LogError(Exception ex, string msg)
     {
         DalamudContext.PluginLog.Error(ex, msg);
-        migrationWindow?.ErrorQueue.Enqueue(msg);
-        migrationWindow?.ErrorQueue.Enqueue(ex.Message);
-        migrationWindow?.ErrorQueue.Enqueue(ex.StackTrace ?? "No stack trace");
+        migrationWindow?.LogError(msg);
+        migrationWindow?.LogError(ex.Message);
+        migrationWindow?.LogError(ex.StackTrace ?? "No stack trace");
     }
 
     private static void LogError(string msg)
     {
         DalamudContext.PluginLog.Error(msg);
-        migrationWindow?.ErrorQueue.Enqueue(msg);
+        migrationWindow?.LogError(msg);
     }
 
     private static void CopyLegacyConfigFile(string destDir)
