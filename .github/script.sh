@@ -47,11 +47,11 @@ else
 fi
 
 echo "> Creating new plugin toml manifest"
-echo "[plugin]" >>manifest.toml
-echo "repository = \"${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git\"" >>manifest.toml
-echo "owners = [ \"${GITHUB_REPOSITORY_OWNER}\" ]" >>manifest.toml
-echo "project_path = \"${INTERNAL_NAME}.Plugin\"" >>manifest.toml
-echo "commit = \"${GITHUB_SHA}\"" >>manifest.toml
+echo "[plugin]" > manifest.toml
+echo "repository = \"${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git\"" >> manifest.toml
+echo "owners = [ \"${GITHUB_REPOSITORY_OWNER}\" ]" >> manifest.toml
+echo "project_path = \"${INTERNAL_NAME}.Plugin\"" >> manifest.toml
+echo "commit = \"${GITHUB_SHA}\"" >> manifest.toml
 cat manifest.toml
 
 echo "> Adding and committing"
