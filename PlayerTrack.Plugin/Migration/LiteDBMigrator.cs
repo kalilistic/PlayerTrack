@@ -1245,16 +1245,18 @@ public static class LiteDBMigrator
             throw new DatabaseAccessException("Could not open LiteDB database.", ex);
         }
 
-        if (currentVersion < 3)
+        switch (currentVersion)
         {
-            LogError($"LiteDB Database v{currentVersion} is too old. Backing up and starting fresh.");
-            File.Move(TempLegacyDatabaseFilePath, Path.Combine(BackupDirectoryPath, "litedb.db"));
-            migrationWindow?.StopMigration();
-            return false;
+            case 0:
+                LogWarning("LiteDB schema version is missing. Will try to migrate anyway.");
+                return true;
+            case < 3:
+                LogWarning($"LiteDB schema version v{currentVersion} is too old. Will try to migrate anyway.");
+                return true;
+            default:
+                Log($"Detected LiteDB schema v{currentVersion}.");
+                return true;
         }
-
-        Log($"Detected LiteDB schema v{currentVersion}.");
-        return true;
     }
 
     private static bool IsLiteDB()
