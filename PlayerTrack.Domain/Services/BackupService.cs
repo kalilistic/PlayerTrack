@@ -122,16 +122,28 @@ public class BackupService
         Directory.CreateDirectory(this.backupDir);
 
         // move files in old backup dir to new one
-        var oldBackupDir = Path.Combine(this.pluginDir, "backups");
-        var oldFiles = Directory.GetFiles(oldBackupDir);
-        foreach (var file in oldFiles)
+        try
         {
-            File.Move(file, Path.Combine(this.backupDir, Path.GetFileName(file)));
-        }
+            var oldBackupDir = Path.Combine(this.pluginDir, "backups");
 
-        if (Directory.Exists(oldBackupDir) && !Directory.EnumerateFileSystemEntries(oldBackupDir).Any())
+            if (Directory.Exists(oldBackupDir))
+            {
+                var oldFiles = Directory.GetFiles(oldBackupDir);
+
+                foreach (var file in oldFiles)
+                {
+                    File.Move(file, Path.Combine(this.backupDir, Path.GetFileName(file)));
+                }
+
+                if (!Directory.EnumerateFileSystemEntries(oldBackupDir).Any())
+                {
+                    Directory.Delete(oldBackupDir);
+                }
+            }
+        }
+        catch (Exception ex)
         {
-            Directory.Delete(oldBackupDir);
+            DalamudContext.PluginLog.Error(ex, "Failed to move old backups to new directory.");
         }
 
         // create backup records for discovered files
