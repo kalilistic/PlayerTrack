@@ -73,7 +73,7 @@ public class PlayerSummaryComponent : ViewComponent
                     y: -1 - 5f * ImGuiHelpers.GlobalScale)))
         {
             player.Notes = notes;
-            ServiceContext.PlayerDataService.UpdatePlayer(player.Id);
+            ServiceContext.PlayerDataService.UpdatePlayerNotes(player.Id, notes);
         }
     }
 

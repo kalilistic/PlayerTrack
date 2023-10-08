@@ -263,6 +263,19 @@ public class PlayerDataService : SortedCacheService<Player>
         this.ReloadPlayers();
     });
 
+    public void UpdatePlayerNotes(int playerId, string notes)
+    {
+        DalamudContext.PluginLog.Verbose($"PlayerDataService.UpdatePlayerNotes(): {playerId}");
+        var player = this.cache.FindFirst(p => p.Id == playerId);
+        if (player == null)
+        {
+            return;
+        }
+
+        player.Notes = notes;
+        this.UpdatePlayerInCacheAndRepository(player);
+    }
+
     private static void PopulateDerivedFields(Player player, Dictionary<int, int> categoryRanks)
     {
         PlayerCategoryService.SetPrimaryCategoryId(player, categoryRanks);
