@@ -7,6 +7,7 @@ namespace PlayerTrack.Infrastructure;
 
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Helpers;
+using Dalamud.Utility;
 using FluentDapperLite.Maintenance;
 
 public static class RepositoryContext
@@ -61,6 +62,7 @@ public static class RepositoryContext
         PlayerTagRepository = new PlayerTagRepository(Database, Mapper);
         PlayerConfigRepository = new PlayerConfigRepository(Database, Mapper);
         ArchiveRecordRepository = new ArchiveRecordRepository(Database, Mapper);
+        RunLinuxPragmas();
         RunMaintenanceChecks();
     }
 
@@ -105,6 +107,21 @@ public static class RepositoryContext
         }
 
         DalamudContext.PluginLog.Verbose("Exiting RepositoryContext.RunMaintenance()");
+    }
+
+    private static void RunLinuxPragmas()
+    {
+        if (!Util.IsWine())
+        {
+            return;
+        }
+
+        DalamudContext.PluginLog.Info("Wine detected, running Wine specific pragmas.");
+        using var cmd = Database.CreateCommand();
+        cmd.CommandText = "PRAGMA journal_mode = MEMORY;";
+        cmd.ExecuteNonQuery();
+        cmd.CommandText = "PRAGMA cache_size = 32768;";
+        cmd.ExecuteNonQuery();
     }
 
     private static IMapper CreateMapper()
