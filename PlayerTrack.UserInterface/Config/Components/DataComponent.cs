@@ -6,9 +6,11 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Dalamud.DrunkenToad.Gui;
 using Dalamud.Interface.Colors;
+using Dalamud.Interface.Utility;
 using Dalamud.Loc.ImGui;
 using Domain;
 using ImGuiNET;
+using Infrastructure;
 using Models;
 
 public class DataComponent : ConfigViewComponent
@@ -20,16 +22,81 @@ public class DataComponent : ConfigViewComponent
     private string statusMessage = string.Empty;
     private Vector4 statusColor = Vector4.Zero;
     private bool isDirty = true;
+    private string sqlQuery = string.Empty;
+    private string sqlResult = string.Empty;
+    private string sqlResultDisplay = string.Empty;
 
     public override void Draw() => this.DrawControls();
 
     private void DrawControls()
     {
-        this.DrawSelectAction();
-        this.DrawActionOptions();
-        this.DrawGlobalOptions();
-        this.DrawRun();
-        this.DrawMessage();
+        if (ImGui.BeginTabBar("###Data_TabBar", ImGuiTabBarFlags.None))
+        {
+            this.DrawPurge();
+            this.DrawSQLExecutor();
+        }
+    }
+
+    private void DrawPurge()
+    {
+        if (LocGui.BeginTabItem("Purge"))
+        {
+            this.DrawSelectAction();
+            this.DrawActionOptions();
+            this.DrawGlobalOptions();
+            this.DrawRun();
+            this.DrawMessage();
+            ImGui.EndTabItem();
+        }
+    }
+
+    private void DrawSQLExecutor()
+    {
+        if (LocGui.BeginTabItem("SQLExecutor"))
+        {
+            ImGuiHelpers.ScaledDummy(1f);
+            var query = this.sqlQuery;
+            if (ImGui.InputTextMultiline("##SQLInput", ref query, 1000, ImGuiHelpers.ScaledVector2(-1, 90), ImGuiInputTextFlags.None))
+            {
+                this.sqlQuery = query;
+            }
+
+            ImGuiHelpers.ScaledDummy(1f);
+
+            if (ImGui.BeginChild("##SQLResultChild", ImGuiHelpers.ScaledVector2(-1, 90), true, ImGuiWindowFlags.None))
+            {
+                ImGui.TextUnformatted(this.sqlResultDisplay);
+                ImGui.EndChild();
+            }
+
+            ImGuiHelpers.ScaledDummy(1f);
+            if (LocGui.Button("Execute"))
+            {
+                this.ExecuteSQL();
+            }
+
+            ImGui.SameLine();
+
+            if (LocGui.Button("CopyToClipboard"))
+            {
+                ImGui.SetClipboardText(this.sqlResult);
+            }
+
+            ImGui.EndTabItem();
+        }
+    }
+
+    private void ExecuteSQL()
+    {
+        this.sqlResult = string.Empty;
+        this.sqlResultDisplay = string.Empty;
+        if (string.IsNullOrEmpty(this.sqlQuery))
+        {
+            return;
+        }
+
+        this.sqlResult = RepositoryContext.ExecuteSQLQuery(this.sqlQuery);
+        this.sqlResultDisplay = this.sqlResult.Length > 1000 ? this.sqlResult[..1000] : this.sqlResult;
     }
 
     private void DrawSelectAction()

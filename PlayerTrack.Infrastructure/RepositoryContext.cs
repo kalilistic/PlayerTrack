@@ -5,10 +5,14 @@ using FluentDapperLite.Extension;
 
 namespace PlayerTrack.Infrastructure;
 
+using System.Text.Json;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Helpers;
+using Dalamud.Loc.ImGui;
 using Dalamud.Utility;
+using Dapper;
 using FluentDapperLite.Maintenance;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 public static class RepositoryContext
 {
@@ -62,7 +66,7 @@ public static class RepositoryContext
         PlayerTagRepository = new PlayerTagRepository(Database, Mapper);
         PlayerConfigRepository = new PlayerConfigRepository(Database, Mapper);
         ArchiveRecordRepository = new ArchiveRecordRepository(Database, Mapper);
-        RunLinuxPragmas();
+        RunWinePragmas();
         RunMaintenanceChecks();
     }
 
@@ -109,7 +113,28 @@ public static class RepositoryContext
         DalamudContext.PluginLog.Verbose("Exiting RepositoryContext.RunMaintenance()");
     }
 
-    private static void RunLinuxPragmas()
+    public static string ExecuteSQLQuery(string sql)
+    {
+        DalamudContext.PluginLog.Debug($"Executing SQL query: {sql}.");
+        try
+        {
+            if (!sql.StartsWith("PRAGMA", StringComparison.OrdinalIgnoreCase) && !sql.StartsWith("SELECT", StringComparison.OrdinalIgnoreCase))
+            {
+                return DalamudContext.LocManager.GetString("SQLExecutorRestriction");
+            }
+
+            var results = Database.Query<dynamic>(sql).AsList();
+            var jsonResults = JsonSerializer.Serialize(results, new JsonSerializerOptions { WriteIndented = true });
+            return jsonResults;
+        }
+        catch (Exception ex)
+        {
+            DalamudContext.PluginLog.Error(ex, $"Failed to execute query: {sql}.", sql);
+            return ex.Message;
+        }
+    }
+
+    private static void RunWinePragmas()
     {
         if (!Util.IsWine())
         {
