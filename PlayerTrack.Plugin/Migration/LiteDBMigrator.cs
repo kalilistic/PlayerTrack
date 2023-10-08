@@ -1348,6 +1348,12 @@ public static class LiteDBMigrator
             var backupFilePath = Path.Combine(backupSubDirPath, "litedb.db");
             Log($"Backing up latest DB to backup directory.");
             Directory.CreateDirectory(backupSubDirPath);
+            if (File.Exists(backupFilePath))
+            {
+                LogWarning($"Backup file already exists at {backupFilePath}. Will add timestamp to file name.");
+                backupFilePath = Path.Combine(backupSubDirPath, $"litedb_{UnixTimestampHelper.CurrentTime()}.db");
+            }
+
             File.Copy(LegacyDatabaseFilePath, backupFilePath);
             CopyLegacyConfigFile(backupSubDirPath);
             DeleteOldLocFiles();
@@ -1363,38 +1369,39 @@ public static class LiteDBMigrator
 
     private static void MoveAndCompressLiteDBBackups()
     {
-        try
-        {
-            if (Directory.Exists(LegacyDataDirectoryPath))
-            {
-                Log($"Moving and compressing old backups to new backup directory.");
-                CleanupOldBackupDirectory(Path.Combine(LegacyDataDirectoryPath, "upgrade"), "UPGRADE");
-                CleanupOldBackupDirectory(LegacyDataDirectoryPath, "AUTOMATIC");
-            }
-        }
-        catch (Exception ex)
-        {
-            LogError(ex, "Could not move and compress old backups to new backup directory.");
-            migrationWindow?.StopMigration();
-            throw new FileLoadException("Could not move and compress old backups to new backup directory.", ex);
-        }
+        Log($"Moving and compressing old backups to new backup directory.");
+        CleanupOldBackupDirectory(Path.Combine(LegacyDataDirectoryPath, "upgrade"), "UPGRADE");
+        CleanupOldBackupDirectory(LegacyDataDirectoryPath, "AUTOMATIC");
     }
 
     private static void CleanupOldBackupDirectory(string sourceDirectory, string prefix)
     {
-        if (Directory.Exists(sourceDirectory))
+        try
         {
-            var subdirectories = Directory.GetDirectories(sourceDirectory);
-            foreach (var subdirectory in subdirectories)
+            if (Directory.Exists(sourceDirectory))
             {
-                var subDirPath = Path.GetFullPath(subdirectory);
-                var subDirName = Path.GetFileName(subdirectory);
-                var outputZipFileName = $"{prefix}_{subDirName}.zip";
-                CopyLegacyConfigFile(subDirPath);
-                FileHelper.MoveAndCompressDirectory(subDirPath, BackupDirectoryPath, outputZipFileName);
+                var subdirectories = Directory.GetDirectories(sourceDirectory);
+                foreach (var subdirectory in subdirectories)
+                {
+                    var subDirPath = Path.GetFullPath(subdirectory);
+                    var subDirName = Path.GetFileName(subdirectory);
+                    var outputZipFileName = $"{prefix}_{subDirName}.zip";
+                    CopyLegacyConfigFile(subDirPath);
+                    FileHelper.MoveAndCompressDirectory(subDirPath, BackupDirectoryPath, outputZipFileName);
+                }
+
+                Directory.Delete(sourceDirectory, true);
+            }
+        }
+        catch (Exception ex)
+        {
+            DalamudContext.PluginLog.Error(ex, $"Could not cleanup old backup directory {sourceDirectory}.");
+            if (ex.InnerException != null)
+            {
+                DalamudContext.PluginLog.Error(ex.InnerException, $"Could not cleanup old backup directory {sourceDirectory}.");
             }
 
-            Directory.Delete(sourceDirectory, true);
+            LogWarning($"Failed to cleanup old backup directory {prefix}.");
         }
     }
 
