@@ -23,6 +23,7 @@ public class ConfigView : PlayerTrackView, IDisposable
     private readonly IntegrationComponent integrationComponent = new();
     private readonly BackupComponent backupComponent = new();
     private readonly DataComponent dataComponent = new();
+    private readonly ContributeComponent contributeComponent = new();
 
     public ConfigView(string name, PluginConfig config, ImGuiWindowFlags flags = ImGuiWindowFlags.None)
         : base(name, config, flags)
@@ -121,6 +122,9 @@ public class ConfigView : PlayerTrackView, IDisposable
                 break;
             case ConfigMenuOption.Data:
                 this.dataComponent.Draw();
+                break;
+            case ConfigMenuOption.Contribute:
+                this.contributeComponent.Draw();
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

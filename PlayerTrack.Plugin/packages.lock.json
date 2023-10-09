@@ -20,9 +20,9 @@
       },
       "Dalamud.Loc": {
         "type": "Direct",
-        "requested": "[1.1.1, )",
-        "resolved": "1.1.1",
-        "contentHash": "fPVMmkiK2WaShXfLbl9ow8QTPxpJgcT92u+HqU5eNCskjwpwYWi3fkWMM1IIvPI/x9qCo2UIRUSDybeGVoE2/Q=="
+        "requested": "[1.1.2, )",
+        "resolved": "1.1.2",
+        "contentHash": "Sy7ooP1+mGtoCCPltgUNATz3UbnRFihVcDfg9wB2rdsfY5FDfCW/k3jpLZiJZc3xXHyttzwttJeVC3tE3JsEGw=="
       },
       "DalamudPackager": {
         "type": "Direct",
@@ -579,6 +579,7 @@
         "type": "Project",
         "dependencies": {
           "Dalamud.DrunkenToad": "[1.8.2, )",
+          "Dalamud.Loc": "[1.1.2, )",
           "FlexConfig": "[1.0.0, )",
           "PlayerTrack.Infrastructure": "[1.0.0, )",
           "PlayerTrack.Models": "[1.0.0, )"
@@ -589,6 +590,7 @@
         "dependencies": {
           "AutoMapper": "[12.0.1, )",
           "Dalamud.DrunkenToad": "[1.8.2, )",
+          "Dalamud.Loc": "[1.1.2, )",
           "Dapper": "[2.0.123, )",
           "FlexConfig": "[1.0.0, )",
           "FluentDapperLite": "[0.0.5, )",
@@ -603,6 +605,7 @@
         "type": "Project",
         "dependencies": {
           "Dalamud.DrunkenToad": "[1.8.2, )",
+          "Dalamud.Loc": "[1.1.2, )",
           "Dapper.Contrib": "[2.0.78, )"
         }
       },
@@ -610,6 +613,7 @@
         "type": "Project",
         "dependencies": {
           "Dalamud.DrunkenToad": "[1.8.2, )",
+          "Dalamud.Loc": "[1.1.2, )",
           "FlexConfig": "[1.0.0, )",
           "PlayerTrack.Domain": "[1.0.0, )",
           "PlayerTrack.Models": "[1.0.0, )"

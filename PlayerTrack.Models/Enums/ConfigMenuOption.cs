@@ -12,4 +12,5 @@ public enum ConfigMenuOption
     Integrations,
     Backups,
     Data,
+    Contribute,
 }
