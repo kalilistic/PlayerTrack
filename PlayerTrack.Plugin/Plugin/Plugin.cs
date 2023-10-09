@@ -29,8 +29,8 @@ public class Plugin : IDalamudPlugin
             return;
         }
 
-        var configDir = DalamudContext.PluginInterface.GetPluginConfigDirectory();
-        RepositoryContext.Initialize(configDir);
+        DalamudContext.LocManager.LoadLanguagesFromAssembly("PlayerTrack.Plugin.Resource.Loc");
+        RepositoryContext.Initialize(DalamudContext.PluginInterface.GetPluginConfigDirectory());
         ServiceContext.Initialize();
         this.RunPostStartup();
     }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Numerics;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Gui;
@@ -23,15 +22,45 @@ public class PlayerSummaryComponent : ViewComponent
 {
     private const float SectionSpace = 2.8f;
     private readonly IMainPresenter presenter;
-    private readonly List<string> overrideLangCodes = new() { "fr", "it", "es" };
-    private readonly float[] defaultPlayerOffsets = { 100f, 260f, 360f };
-    private readonly float[] alternatePlayerOffsets = { 120f, 280f, 450f };
-    private float[] currentOffsets = null!;
+    private float[] currentOffsets = Array.Empty<float>();
     private int selectedTagIndex;
     private int selectedCategoryIndex;
     private float assignedChildHeight;
 
-    public PlayerSummaryComponent(IMainPresenter presenter) => this.presenter = presenter;
+    public PlayerSummaryComponent(IMainPresenter presenter)
+    {
+        this.presenter = presenter;
+        DalamudContext.PluginInterface.LanguageChanged += _ => this.CalcSize();
+    }
+
+    public void CalcSize()
+    {
+        var offsets = new float[3];
+
+        var baseMaxLengthName = new string('W', 5);
+
+        var maxNameWidth = Math.Max(ImGui.CalcTextSize(ServiceContext.Localization.GetString("Name")).X, ImGui.CalcTextSize(baseMaxLengthName).X);
+        var maxHomeWorldWidth = Math.Max(ImGui.CalcTextSize(ServiceContext.Localization.GetString("Homeworld")).X, ImGui.CalcTextSize(baseMaxLengthName).X);
+        var maxFreeCompanyWidth = Math.Max(ImGui.CalcTextSize(ServiceContext.Localization.GetString("FreeCompany")).X, ImGui.CalcTextSize(baseMaxLengthName).X);
+        var maxLodestoneWidth = Math.Max(ImGui.CalcTextSize(ServiceContext.Localization.GetString("Lodestone")).X, ImGui.CalcTextSize(baseMaxLengthName).X);
+        var maxAppearanceWidth = Math.Max(ImGui.CalcTextSize(ServiceContext.Localization.GetString("Appearance")).X, ImGui.CalcTextSize(baseMaxLengthName).X);
+
+        var maxLastSeenWidth = Math.Max(ImGui.CalcTextSize(ServiceContext.Localization.GetString("LastSeen")).X, ImGui.CalcTextSize(baseMaxLengthName).X);
+        var maxSeenCountWidth = Math.Max(ImGui.CalcTextSize(ServiceContext.Localization.GetString("SeenCount")).X, ImGui.CalcTextSize(baseMaxLengthName).X);
+        var maxLastLocationWidth = Math.Max(ImGui.CalcTextSize(ServiceContext.Localization.GetString("LastLocation")).X, ImGui.CalcTextSize(baseMaxLengthName).X);
+
+        var maxFirstSeenWidth = Math.Max(ImGui.CalcTextSize(ServiceContext.Localization.GetString("FirstSeen")).X, ImGui.CalcTextSize(baseMaxLengthName).X);
+
+        var maxOffset0Width = Math.Max(maxNameWidth, Math.Max(maxHomeWorldWidth, Math.Max(maxFreeCompanyWidth, Math.Max(maxLodestoneWidth, maxAppearanceWidth))));
+        var maxOffset1Width = Math.Max(maxLastSeenWidth, Math.Max(maxSeenCountWidth, maxLastLocationWidth));
+        var maxOffset2Width = maxFirstSeenWidth;
+
+        offsets[0] = maxOffset0Width + (30f * ImGuiHelpers.GlobalScale);
+        offsets[1] = offsets[0] + maxOffset1Width + (60f * ImGuiHelpers.GlobalScale);
+        offsets[2] = offsets[1] + maxOffset2Width + (60f * ImGuiHelpers.GlobalScale);
+
+        this.currentOffsets = offsets;
+    }
 
     public override void Draw()
     {
@@ -41,7 +70,11 @@ public class PlayerSummaryComponent : ViewComponent
             return;
         }
 
-        this.currentOffsets = this.GetOffsets();
+        if (this.currentOffsets.Length == 0)
+        {
+            this.CalcSize();
+        }
+
         ImGui.BeginChild("###PlayerSummaryPlayer", new Vector2(-1, 0), false);
         this.DrawInfoStatHeadings();
         this.DrawName(player);
@@ -69,8 +102,8 @@ public class PlayerSummaryComponent : ViewComponent
                 ref notes,
                 2000,
                 new Vector2(
-                    x: ImGui.GetWindowSize().X - 5f * ImGuiHelpers.GlobalScale,
-                    y: -1 - 5f * ImGuiHelpers.GlobalScale)))
+                    x: ImGui.GetWindowSize().X - (5f * ImGuiHelpers.GlobalScale),
+                    y: -1 - (5f * ImGuiHelpers.GlobalScale))))
         {
             player.Notes = notes;
             ServiceContext.PlayerDataService.UpdatePlayerNotes(player.Id, notes);
@@ -391,15 +424,5 @@ public class PlayerSummaryComponent : ViewComponent
         }
 
         ImGui.EndChild();
-    }
-
-    private float[] GetOffsets()
-    {
-        if (this.overrideLangCodes.Contains(DalamudContext.PluginInterface.UiLanguage))
-        {
-            return this.alternatePlayerOffsets;
-        }
-
-        return this.defaultPlayerOffsets;
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Numerics;
-using Dalamud.Interface;
 using ImGuiNET;
 using PlayerTrack.Domain;
 using PlayerTrack.Models;
@@ -9,6 +8,7 @@ using PlayerTrack.UserInterface.Views;
 
 namespace PlayerTrack.UserInterface.Config.Views;
 
+using Dalamud.DrunkenToad.Core;
 using Dalamud.Interface.Utility;
 
 public class ConfigView : PlayerTrackView, IDisposable
@@ -24,6 +24,7 @@ public class ConfigView : PlayerTrackView, IDisposable
     private readonly BackupComponent backupComponent = new();
     private readonly DataComponent dataComponent = new();
     private readonly ContributeComponent contributeComponent = new();
+    private float navMaxWidth;
 
     public ConfigView(string name, PluginConfig config, ImGuiWindowFlags flags = ImGuiWindowFlags.None)
         : base(name, config, flags)
@@ -40,6 +41,7 @@ public class ConfigView : PlayerTrackView, IDisposable
         this.tagComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.locationComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.windowComponent.WindowConfigComponent_WindowConfigChanged += () => this.WindowConfigChanged?.Invoke();
+        DalamudContext.PluginInterface.LanguageChanged += _ => this.CalcSize();
     }
 
     public delegate void WindowConfigChangedDelegate();
@@ -76,9 +78,30 @@ public class ConfigView : PlayerTrackView, IDisposable
         ServiceContext.ConfigService.SaveConfig(this.config);
     }
 
+    public void CalcSize()
+    {
+        float maxWidth = 0;
+        foreach (var key in this.ConfigMenuOptions)
+        {
+            var translatedString = ServiceContext.Localization.GetString(key);
+            var stringSize = ImGui.CalcTextSize(translatedString);
+            if (stringSize.X > maxWidth)
+            {
+                maxWidth = stringSize.X;
+            }
+        }
+
+        this.navMaxWidth = (maxWidth + 20) * ImGuiHelpers.GlobalScale;
+    }
+
     public override void Draw()
     {
-        ImGui.BeginChild("###Config_Navigation", ImGuiHelpers.ScaledVector2(120, 0), true);
+        if (this.navMaxWidth == 0)
+        {
+            this.CalcSize();
+        }
+
+        ImGui.BeginChild("###Config_Navigation", ImGuiHelpers.ScaledVector2(this.navMaxWidth, 0), true);
         for (var i = 0; i < this.ConfigMenuOptions.Length; i++)
         {
             if (ImGui.Selectable(ServiceContext.Localization.GetString(this.ConfigMenuOptions[i]), (int)this.SelectedMenuOption == i))

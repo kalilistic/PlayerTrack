@@ -87,6 +87,42 @@
 	  <EmbeddedResource Include="Resource\Loc\en.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </EmbeddedResource>
+	  <None Remove="Resource\Loc\de.json" />
+	  <EmbeddedResource Include="Resource\Loc\de.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <None Remove="Resource\Loc\es.json" />
+	  <EmbeddedResource Include="Resource\Loc\es.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <None Remove="Resource\Loc\fr.json" />
+	  <EmbeddedResource Include="Resource\Loc\fr.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <None Remove="Resource\Loc\it.json" />
+	  <EmbeddedResource Include="Resource\Loc\it.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <None Remove="Resource\Loc\ja.json" />
+	  <EmbeddedResource Include="Resource\Loc\ja.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <None Remove="Resource\Loc\no.json" />
+	  <EmbeddedResource Include="Resource\Loc\no.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <None Remove="Resource\Loc\pt.json" />
+	  <EmbeddedResource Include="Resource\Loc\pt.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <None Remove="Resource\Loc\ru.json" />
+	  <EmbeddedResource Include="Resource\Loc\ru.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <None Remove="Resource\Loc\zh.json" />
+	  <EmbeddedResource Include="Resource\Loc\zh.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\PlayerTrack.Domain\PlayerTrack.Domain.csproj" />
