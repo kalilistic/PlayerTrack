@@ -93,21 +93,46 @@ public class PlayerListComponent : ViewComponent
         {
             var categoryFilters = ServiceContext.CategoryService.GetCategoryFilters();
 
-            if (categoryFilters.TotalCategories == 0)
+            if (categoryFilters.TotalFilters == 0)
             {
                 ImGui.BeginDisabled();
             }
 
             var filterCategoryIndex = this.config.FilterCategoryIndex;
-            if (ToadGui.Combo("###PlayerList_CategoryFilter", ref filterCategoryIndex, categoryFilters.CategoryFilterNames, -1, false))
+            if (ToadGui.Combo("###PlayerList_CategoryFilter", ref filterCategoryIndex, categoryFilters.FilterNames, -1, false))
             {
                 this.config.FilterCategoryIndex = filterCategoryIndex;
-                this.config.FilterCategoryId = categoryFilters.CategoryFilterIds[this.config.FilterCategoryIndex];
+                this.config.FilterCategoryId = categoryFilters.FilterIds[this.config.FilterCategoryIndex];
                 ServiceContext.ConfigService.SaveConfig(this.config);
                 this.presenter.ClearCache();
             }
 
-            if (categoryFilters.TotalCategories == 0)
+            if (categoryFilters.TotalFilters == 0)
+            {
+                ImGui.EndDisabled();
+            }
+        }
+
+        // Tag Filter
+        if (this.config.PlayerListFilter == PlayerListFilter.PlayersByTag)
+        {
+            var tagFilters = ServiceContext.TagService.GetTagFilters();
+
+            if (tagFilters.TotalFilters == 0)
+            {
+                ImGui.BeginDisabled();
+            }
+
+            var filterTagIndex = this.config.FilterTagIndex;
+            if (ToadGui.Combo("###PlayerList_TagFilter", ref filterTagIndex, tagFilters.FilterNames, -1, false))
+            {
+                this.config.FilterTagIndex = filterTagIndex;
+                this.config.FilterTagId = tagFilters.FilterIds[this.config.FilterTagIndex];
+                ServiceContext.ConfigService.SaveConfig(this.config);
+                this.presenter.ClearCache();
+            }
+
+            if (tagFilters.TotalFilters == 0)
             {
                 ImGui.EndDisabled();
             }

@@ -14,7 +14,7 @@ using Dalamud.DrunkenToad.Core;
 
 public class CategoryService : UnsortedCacheService<Category>
 {
-    private CategoryFilter categoryFilter = new();
+    private PlayerFilter playerCategoryFilter = new();
     private List<string> categoryNames = new();
     private List<string> categoryNamesWithBlank = new() { string.Empty };
 
@@ -33,7 +33,7 @@ public class CategoryService : UnsortedCacheService<Category>
 
     public Dictionary<int, int> GetCategoryRanks() => this.GetAllCategories().ToDictionary(cat => cat.Id, cat => cat.Rank);
 
-    public CategoryFilter GetCategoryFilters() => this.categoryFilter;
+    public PlayerFilter GetCategoryFilters() => this.playerCategoryFilter;
 
     public void CreateCategory(string name)
     {
@@ -158,11 +158,11 @@ public class CategoryService : UnsortedCacheService<Category>
         categoryFilterIds.Insert(0, 0);
         categoryFilterNames.Insert(0, string.Empty);
 
-        this.categoryFilter = new CategoryFilter
+        this.playerCategoryFilter = new PlayerFilter
         {
-            CategoryFilterIds = categoryFilterIds,
-            CategoryFilterNames = categoryFilterNames,
-            TotalCategories = totalCategories,
+            FilterIds = categoryFilterIds,
+            FilterNames = categoryFilterNames,
+            TotalFilters = totalCategories,
         };
     }
 

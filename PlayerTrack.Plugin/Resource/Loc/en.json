@@ -139,6 +139,7 @@
   "PlayerWorld": "Player World",
   "Players": "Players",
   "PlayersByCategory": "Players by Category",
+  "PlayersByTag": "Players by Tag",
   "PreserveConfigState": "Preserve Config Window State on Next Load",
   "PreserveMainWindowState": "Preserve Main Window State on Next Load",
   "PreviouslyKnownAs": "Previously known as {0}",

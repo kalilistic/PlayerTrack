@@ -208,7 +208,11 @@ public class PlayerDataService : SortedCacheService<Player>
 
     public int GetCategoryPlayersCount(int categoryId) => this.cache.GetFilteredItemsCount(p => p.PrimaryCategoryId == categoryId);
 
+    public int GetTagPlayersCount(int tagId) => this.cache.GetFilteredItemsCount(p => p.AssignedTags.Any(t => t.Id == tagId));
+
     public int GetCategoryPlayersCount(int categoryId, string name, SearchType searchType) => this.cache.GetFilteredItemsCount(p => p.PrimaryCategoryId == categoryId && GetSearchFilter(name, searchType)(p));
+
+    public int GetTagPlayersCount(int tagId, string name, SearchType searchType) => this.cache.GetFilteredItemsCount(p => p.AssignedTags.Any(t => t.Id == tagId) && GetSearchFilter(name, searchType)(p));
 
     public List<Player> GetAllPlayers(int start, int count) => this.cache.GetSortedItems(start, count);
 
@@ -230,10 +234,13 @@ public class PlayerDataService : SortedCacheService<Player>
 
     public List<Player> GetCategoryPlayers(int categoryId, int start, int count) => this.cache.GetFilteredSortedItems(p => p.PrimaryCategoryId == categoryId, start, count);
 
-    public IEnumerable<Player> GetCategoryPlayers(int categoryId) => this.cache.GetFilteredSortedItems(p => p.PrimaryCategoryId == categoryId);
-
     public List<Player> GetCategoryPlayers(int categoryId, int start, int count, string name, SearchType searchType) => this.cache.GetFilteredSortedItems(
         p => GetSearchFilter(name, searchType)(p) && p.PrimaryCategoryId == categoryId, start, count);
+
+    public List<Player> GetTagPlayers(int tagId, int start, int count) => this.cache.GetFilteredSortedItems(p => p.AssignedTags.Any(t => t.Id == tagId), start, count);
+
+    public List<Player> GetTagPlayers(int tagId, int start, int count, string name, SearchType searchType) => this.cache.GetFilteredSortedItems(
+        p => GetSearchFilter(name, searchType)(p) && p.AssignedTags.Any(t => t.Id == tagId), start, count);
 
     public int GetPlayerConfigCount() => this.cache.GetFilteredItemsCount(p => p.PlayerConfig.Id != 0);
 

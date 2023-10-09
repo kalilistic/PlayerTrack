@@ -81,6 +81,7 @@ public class MainPresenter : IMainPresenter
                 PlayerListFilter.CurrentPlayers => ServiceContext.PlayerDataService.GetCurrentPlayersCount(),
                 PlayerListFilter.RecentPlayers => ServiceContext.PlayerDataService.GetRecentPlayersCount(),
                 PlayerListFilter.PlayersByCategory => ServiceContext.PlayerDataService.GetCategoryPlayersCount(this.config.FilterCategoryId),
+                PlayerListFilter.PlayersByTag => ServiceContext.PlayerDataService.GetTagPlayersCount(this.config.FilterTagId),
                 _ => 0,
             };
         }
@@ -92,6 +93,7 @@ public class MainPresenter : IMainPresenter
                 PlayerListFilter.CurrentPlayers => ServiceContext.PlayerDataService.GetCurrentPlayersCount(this.config.SearchInput, this.config.SearchType),
                 PlayerListFilter.RecentPlayers => ServiceContext.PlayerDataService.GetRecentPlayersCount(this.config.SearchInput, this.config.SearchType),
                 PlayerListFilter.PlayersByCategory => ServiceContext.PlayerDataService.GetCategoryPlayersCount(this.config.FilterCategoryId, this.config.SearchInput, this.config.SearchType),
+                PlayerListFilter.PlayersByTag => ServiceContext.PlayerDataService.GetTagPlayersCount(this.config.FilterTagId, this.config.SearchInput, this.config.SearchType),
                 _ => 0,
             };
         }
@@ -110,6 +112,7 @@ public class MainPresenter : IMainPresenter
                 PlayerListFilter.CurrentPlayers => ServiceContext.PlayerDataService.GetCurrentPlayers(start, count),
                 PlayerListFilter.RecentPlayers => ServiceContext.PlayerDataService.GetRecentPlayers(start, count),
                 PlayerListFilter.PlayersByCategory => ServiceContext.PlayerDataService.GetCategoryPlayers(this.config.FilterCategoryId, start, count),
+                PlayerListFilter.PlayersByTag => ServiceContext.PlayerDataService.GetTagPlayers(this.config.FilterTagId, start, count),
                 _ => new List<Player>(),
             };
         }
@@ -120,6 +123,7 @@ public class MainPresenter : IMainPresenter
             PlayerListFilter.CurrentPlayers => ServiceContext.PlayerDataService.GetCurrentPlayers(start, count, this.config.SearchInput, this.config.SearchType),
             PlayerListFilter.RecentPlayers => ServiceContext.PlayerDataService.GetRecentPlayers(start, count, this.config.SearchInput, this.config.SearchType),
             PlayerListFilter.PlayersByCategory => ServiceContext.PlayerDataService.GetCategoryPlayers(this.config.FilterCategoryId, start, count, this.config.SearchInput, this.config.SearchType),
+            PlayerListFilter.PlayersByTag => ServiceContext.PlayerDataService.GetTagPlayers(this.config.FilterTagId, start, count, this.config.SearchInput, this.config.SearchType),
             _ => new List<Player>(),
         };
     }

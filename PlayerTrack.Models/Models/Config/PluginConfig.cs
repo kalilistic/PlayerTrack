@@ -13,7 +13,11 @@ public class PluginConfig : IPluginConfig
 {
     public int FilterCategoryIndex { get; set; }
 
+    public int FilterTagIndex { get; set; }
+
     public int FilterCategoryId { get; set; }
+
+    public int FilterTagId { get; set; }
 
     public bool IsConfigOpen { get; set; } = true;
 

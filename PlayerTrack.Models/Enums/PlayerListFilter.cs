@@ -6,4 +6,5 @@ public enum PlayerListFilter
     RecentPlayers,
     AllPlayers,
     PlayersByCategory,
+    PlayersByTag,
 }

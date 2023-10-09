@@ -11,6 +11,10 @@ using Dalamud.DrunkenToad.Collections;
 
 public class TagService : UnsortedCacheService<Tag>
 {
+    private PlayerFilter playerTagFilter = new();
+    private List<string> tagNames = new();
+    private List<string> tagNamesWithBlank = new() { string.Empty };
+
     public TagService() => this.ReloadTagCache();
 
     public void CreateTag(string name)
@@ -23,6 +27,8 @@ public class TagService : UnsortedCacheService<Tag>
         };
         this.AddTagToCacheAndRepository(tag);
     }
+
+    public PlayerFilter GetTagFilters() => this.playerTagFilter;
 
     public void UpdateTag(Tag tag) => this.UpdateTagInCacheAndRepository(tag);
 
@@ -43,6 +49,16 @@ public class TagService : UnsortedCacheService<Tag>
     {
         DalamudContext.PluginLog.Verbose("Entering TagService.RefreshTags()");
         this.ReloadTagCache();
+    }
+
+    public List<string> GetTagNames(bool includeBlank = true)
+    {
+        if (includeBlank)
+        {
+            return this.tagNamesWithBlank;
+        }
+
+        return this.tagNames;
     }
 
     private void UpdateTagInCacheAndRepository(Tag tag)
@@ -80,5 +96,35 @@ public class TagService : UnsortedCacheService<Tag>
         var collection = new ThreadSafeCollection<int, Tag>(tags.ToDictionary(tag => tag.Id));
 
         this.cache = collection;
+        this.BuildTagFilters();
+        this.BuildTagNames();
     });
+
+    private void BuildTagNames()
+    {
+        DalamudContext.PluginLog.Verbose("Entering TagService.BuildTagNames()");
+        var tags = this.GetAllTags();
+        this.tagNames = tags.Select(cat => cat.Name).ToList();
+        this.tagNamesWithBlank = new List<string> { string.Empty }.Concat(this.tagNames).ToList();
+    }
+
+    private void BuildTagFilters()
+    {
+        DalamudContext.PluginLog.Verbose("Entering TagService.BuildTagFilters()");
+        var tagsByRank = this.GetAllTags();
+        var totalCategories = tagsByRank.Count;
+
+        var tagFilterIds = tagsByRank.Select(tag => tag.Id).ToList();
+        var tagFilterNames = tagsByRank.Select(tag => tag.Name).ToList();
+
+        tagFilterIds.Insert(0, 0);
+        tagFilterNames.Insert(0, string.Empty);
+
+        this.playerTagFilter = new PlayerFilter
+        {
+            FilterIds = tagFilterIds,
+            FilterNames = tagFilterNames,
+            TotalFilters = totalCategories,
+        };
+    }
 }
