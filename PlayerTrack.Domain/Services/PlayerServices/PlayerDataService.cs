@@ -28,6 +28,7 @@ public class PlayerDataService : SortedCacheService<Player>
     private const long NinetyDaysInMilliseconds = 7776000000;
     private const int MaxBatchSize = 500;
     private readonly Timer recentPlayerTimer;
+    private bool isFirstLoad = true;
 
     public PlayerDataService()
     {
@@ -410,16 +411,39 @@ public class PlayerDataService : SortedCacheService<Player>
 
     private void ReloadPlayers()
     {
+        HashSet<int>? currentPlayerIds = null;
+        HashSet<int>? recentPlayerIds = null;
+
+        if (!this.isFirstLoad)
+        {
+            currentPlayerIds = new HashSet<int>(this.cache.GetFilteredSortedItems(p => p.IsCurrent).Select(p => p.Id));
+            recentPlayerIds = new HashSet<int>(this.cache.GetFilteredSortedItems(p => p.IsRecent).Select(p => p.Id));
+        }
+
         var players = RepositoryContext.PlayerRepository.GetAllPlayersWithRelations().ToList();
 
         var categoryRanks = ServiceContext.CategoryService.GetCategoryRanks();
-        foreach (var player in players)
+
+        if (currentPlayerIds != null && recentPlayerIds != null)
         {
-            PopulateDerivedFields(player, categoryRanks);
+            foreach (var player in players)
+            {
+                PopulateDerivedFields(player, categoryRanks);
+                player.IsCurrent = currentPlayerIds.Contains(player.Id);
+                player.IsRecent = recentPlayerIds.Contains(player.Id);
+            }
+        }
+        else
+        {
+            foreach (var player in players)
+            {
+                PopulateDerivedFields(player, categoryRanks);
+            }
         }
 
         this.cache = new ThreadSafeSortedCollection<Player>(players, new PlayerComparer(ServiceContext.CategoryService.GetCategoryRanks()));
 
         this.OnCacheUpdated();
+        this.isFirstLoad = false;
     }
 }
