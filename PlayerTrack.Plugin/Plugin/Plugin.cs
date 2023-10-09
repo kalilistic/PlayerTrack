@@ -3,8 +3,6 @@ using System.IO;
 using System.Reflection;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Extensions;
-using Dalamud.DrunkenToad.Gui.Windows;
-
 using Dalamud.Plugin;
 using FluentDapperLite.Runner;
 using PlayerTrack.API;
@@ -15,12 +13,9 @@ using PlayerTrack.Migration;
 namespace PlayerTrack.Plugin;
 
 using System.Threading.Tasks;
-using Dalamud.DrunkenToad.Helpers;
 
 public class Plugin : IDalamudPlugin
 {
-    private ErrorWindow? errorWindow;
-
     public Plugin(DalamudPluginInterface pluginInterface)
     {
         if (!DalamudContext.Initialize(pluginInterface))
@@ -28,7 +23,7 @@ public class Plugin : IDalamudPlugin
             return;
         }
 
-        var isDatabaseLoadedSuccessfully = this.LoadDatabase();
+        var isDatabaseLoadedSuccessfully = LoadDatabase();
         if (!isDatabaseLoadedSuccessfully)
         {
             return;
@@ -40,8 +35,6 @@ public class Plugin : IDalamudPlugin
         this.RunPostStartup();
     }
 
-    public string Name => "PlayerTrack";
-
     private PlayerTrackProvider? PlayerTrackProvider { get; set; }
 
     public void Dispose()
@@ -51,7 +44,6 @@ public class Plugin : IDalamudPlugin
         try
         {
             ServiceContext.LodestoneService.Stop();
-            this.errorWindow?.Dispose();
             this.PlayerTrackProvider?.Dispose();
             LiteDBMigrator.Dispose();
             CommandHandler.Dispose();
@@ -78,6 +70,15 @@ public class Plugin : IDalamudPlugin
         ServiceContext.ConfigService.SaveConfig(config);
     }
 
+    private static bool LoadDatabase()
+    {
+        DalamudContext.PluginLog.Verbose("Entering Plugin.LoadDatabase()");
+        var dataSource = Path.Combine(DalamudContext.PluginInterface.GetPluginConfigDirectory(), "data.db");
+        var assemblyWithMigrations = Assembly.Load("PlayerTrack.Infrastructure");
+        SQLiteFluentMigratorRunner.Run(dataSource, assemblyWithMigrations);
+        return true;
+    }
+
     private void RunPostStartup() => Task.Run(() =>
     {
         DalamudContext.PluginLog.Verbose("Entering Plugin.RunPostStartup()");
@@ -101,35 +102,4 @@ public class Plugin : IDalamudPlugin
         this.PlayerTrackProvider = new PlayerTrackProvider(DalamudContext.PluginInterface, new PlayerTrackAPI());
         PlayerProcessService.CheckForDuplicates();
     });
-
-    private bool LoadDatabase()
-    {
-        DalamudContext.PluginLog.Verbose("Entering Plugin.LoadDatabase()");
-        var isAvailable = this.IsDBAvailable();
-        if (!isAvailable)
-        {
-            return false;
-        }
-
-        var dataSource = Path.Combine(DalamudContext.PluginInterface.GetPluginConfigDirectory(), "data.db");
-        var assemblyWithMigrations = Assembly.Load("PlayerTrack.Infrastructure");
-        SQLiteFluentMigratorRunner.Run(dataSource, assemblyWithMigrations);
-        return true;
-    }
-
-    private bool IsDBAvailable()
-    {
-        DalamudContext.PluginLog.Verbose("Entering Plugin.IsDBAvailable()");
-        var isAvailable = FileHelper.VerifyFileAccess(Path.Combine(DalamudContext.PluginInterface.GetPluginConfigDirectory(), "data.db"));
-        if (isAvailable)
-        {
-            return true;
-        }
-
-        DalamudContext.PluginLog.Error("Failed to load database since it's not available.");
-        this.errorWindow = new ErrorWindow(
-            DalamudContext.PluginInterface,
-            "PlayerTrack failed to load since something else is using your database. Make sure it\'s not open anywhere else and try restarting your game and computer.");
-        return false;
-    }
 }
