@@ -143,8 +143,6 @@ public static class RepositoryContext
 
         DalamudContext.PluginLog.Info("Wine detected, running Wine specific pragmas.");
         using var cmd = Database.CreateCommand();
-        cmd.CommandText = "PRAGMA journal_mode = MEMORY;";
-        cmd.ExecuteNonQuery();
         cmd.CommandText = "PRAGMA cache_size = 32768;";
         cmd.ExecuteNonQuery();
     }
