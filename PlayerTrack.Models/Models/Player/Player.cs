@@ -49,6 +49,8 @@ public class Player
 
     [Write(false)] public bool IsCurrent { get; set; }
 
+    [Write(false)] public bool IsRecent { get; set; }
+
     [Write(false)] public int OpenPlayerEncounterId { get; set; }
 
     [Write(false)] public string[] PreviousNames { get; set; } = Array.Empty<string>();
@@ -100,6 +102,8 @@ public class Player
         this.PlayerConfig = player.PlayerConfig;
         this.AssignedTags = player.AssignedTags;
         this.AssignedCategories = player.AssignedCategories;
+
+        this.IsRecent = player.IsRecent;
     }
 
     public List<PlayerConfig> GetCategoryPlayerConfigs() => this.AssignedCategories.OrderBy(cat => cat.Rank).Select(cat => cat.PlayerConfig).ToList();

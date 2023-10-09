@@ -72,6 +72,7 @@ public static class ServiceContext
         DalamudContext.PluginLog.Verbose("Entering ServiceContext.Dispose()");
         try
         {
+            PlayerDataService.Dispose();
             EncounterService.Dispose();
             LodestoneService.Dispose();
             VisibilityService.Dispose();

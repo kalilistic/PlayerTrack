@@ -7,7 +7,9 @@ using PlayerTrack.Models;
 namespace PlayerTrack.Domain;
 
 using System;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using System.Timers;
 using Dalamud.DrunkenToad.Caching;
 using Dalamud.DrunkenToad.Collections;
 using Dalamud.DrunkenToad.Core;
@@ -21,9 +23,21 @@ using Newtonsoft.Json;
 
 public class PlayerDataService : SortedCacheService<Player>
 {
+    public readonly ConcurrentDictionary<int, long> RecentPlayersExpiry = new();
     public Action<Player>? PlayerUpdated;
     private const long NinetyDaysInMilliseconds = 7776000000;
     private const int MaxBatchSize = 500;
+    private readonly Timer recentPlayerTimer;
+
+    public PlayerDataService()
+    {
+        this.recentPlayerTimer = new Timer(30000);
+        this.recentPlayerTimer.Elapsed += this.OnRecentPlayerTimerOnElapsed;
+        this.recentPlayerTimer.AutoReset = true;
+        this.recentPlayerTimer.Start();
+    }
+
+    public new void Dispose() => this.recentPlayerTimer.Stop();
 
     public Player? GetPlayer(int playerId) => this.cache.FindFirst(p => p.Id == playerId);
 
@@ -69,18 +83,6 @@ public class PlayerDataService : SortedCacheService<Player>
         {
             DalamudContext.PluginLog.Verbose($"PlayerDataService.AddPlayer(): No category assigned to player: {player.Id}");
         }
-    }
-
-    public void UpdatePlayer(int playerId)
-    {
-        DalamudContext.PluginLog.Verbose($"PlayerDataService.UpdatePlayer(): {playerId}");
-        var player = this.cache.FindFirst(p => p.Id == playerId);
-        if (player == null)
-        {
-            return;
-        }
-
-        this.UpdatePlayerInCacheAndRepository(player);
     }
 
     public void ClearCategoryFromPlayers(int categoryId)
@@ -199,6 +201,10 @@ public class PlayerDataService : SortedCacheService<Player>
 
     public int GetCurrentPlayersCount(string name, SearchType searchType) => this.cache.GetFilteredItemsCount(p => p.IsCurrent && GetSearchFilter(name, searchType)(p));
 
+    public int GetRecentPlayersCount() => this.cache.GetFilteredItemsCount(p => p.IsRecent);
+
+    public int GetRecentPlayersCount(string name, SearchType searchType) => this.cache.GetFilteredItemsCount(p => p.IsRecent && GetSearchFilter(name, searchType)(p));
+
     public int GetCategoryPlayersCount(int categoryId) => this.cache.GetFilteredItemsCount(p => p.PrimaryCategoryId == categoryId);
 
     public int GetCategoryPlayersCount(int categoryId, string name, SearchType searchType) => this.cache.GetFilteredItemsCount(p => p.PrimaryCategoryId == categoryId && GetSearchFilter(name, searchType)(p));
@@ -211,6 +217,13 @@ public class PlayerDataService : SortedCacheService<Player>
 
     public List<Player> GetCurrentPlayers(int start, int count, string name, SearchType searchType) => this.cache.GetFilteredSortedItems(
         p => GetSearchFilter(name, searchType)(p) && p.IsCurrent,
+        start,
+        count);
+
+    public List<Player> GetRecentPlayers(int start, int count) => this.cache.GetFilteredSortedItems(p => p.IsRecent, start, count);
+
+    public List<Player> GetRecentPlayers(int start, int count, string name, SearchType searchType) => this.cache.GetFilteredSortedItems(
+        p => GetSearchFilter(name, searchType)(p) && p.IsRecent,
         start,
         count);
 
@@ -299,6 +312,28 @@ public class PlayerDataService : SortedCacheService<Player>
         }
 
         return Filter;
+    }
+
+    private void OnRecentPlayerTimerOnElapsed(object? sender, ElapsedEventArgs e)
+    {
+        var threshold = UnixTimestampHelper.CurrentTime() - ServiceContext.ConfigService.GetConfig().RecentPlayersThreshold;
+        var playerIds = this.RecentPlayersExpiry.Keys.ToList();
+
+        foreach (var playerId in playerIds)
+        {
+            if (this.RecentPlayersExpiry.TryGetValue(playerId, out var timestamp) && timestamp <= threshold)
+            {
+                if (this.RecentPlayersExpiry.TryRemove(playerId, out _))
+                {
+                    var player = this.cache.FindFirst(p => p.Id == playerId);
+                    if (player != null)
+                    {
+                        player.IsRecent = false;
+                        ServiceContext.PlayerDataService.UpdatePlayer(player);
+                    }
+                }
+            }
+        }
     }
 
     private List<Player> GetPlayersForDeletion()

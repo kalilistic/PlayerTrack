@@ -3,6 +3,7 @@
 public enum PlayerListFilter
 {
     CurrentPlayers,
+    RecentPlayers,
     AllPlayers,
     PlayersByCategory,
 }

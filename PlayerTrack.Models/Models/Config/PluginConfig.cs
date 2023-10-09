@@ -63,6 +63,8 @@ public class PluginConfig : IPluginConfig
 
     public long MaintenanceLastRunOn { get; set; } = UnixTimestampHelper.CurrentTime();
 
+    public int RecentPlayersThreshold { get; set; } = 900000;
+
     public List<FontAwesomeIcon> Icons { get; set; } = new()
     {
         FontAwesomeIcon.User,

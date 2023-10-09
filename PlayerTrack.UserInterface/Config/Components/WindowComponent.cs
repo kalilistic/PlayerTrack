@@ -5,6 +5,8 @@ using PlayerTrack.Domain;
 
 namespace PlayerTrack.UserInterface.Config.Components;
 
+using Dalamud.DrunkenToad.Core;
+using Dalamud.DrunkenToad.Extensions;
 using Dalamud.Interface.Utility;
 
 public class WindowComponent : ConfigViewComponent
@@ -120,6 +122,15 @@ public class WindowComponent : ConfigViewComponent
             if (ToadGui.Checkbox("PreserveMainWindowState", ref preserveMainWindowState))
             {
                 this.config.PreserveMainWindowState = preserveMainWindowState;
+                ServiceContext.ConfigService.SaveConfig(this.config);
+            }
+
+            var recentPlayersThreshold = this.config.RecentPlayersThreshold.FromMillisecondsToMinutes();
+            var label = DalamudContext.LocManager.GetString("RecentPlayersThreshold");
+            ImGui.SetNextItemWidth(85f * ImGuiHelpers.GlobalScale);
+            if (ImGui.InputInt(label, ref recentPlayersThreshold, 1, 5, ImGuiInputTextFlags.None))
+            {
+                this.config.RecentPlayersThreshold = recentPlayersThreshold.FromMinutesToMilliseconds();
                 ServiceContext.ConfigService.SaveConfig(this.config);
             }
 

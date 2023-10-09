@@ -146,6 +146,8 @@
   "ProximityAlert": "Proximity Alert",
   "ProximityAlertMessage": "is nearby.",
   "Purge": "Purge",
+  "RecentPlayers": "Recent Players",
+  "RecentPlayersThreshold": "Recent Players Threshold (in Minutes)",
   "ReplaceGameTitleWithCategoryName": "Replace Game Title with Category Name",
   "ReplaceGameTitleWithCustomTitle": "Replace Game Title with Custom Title",
   "Reset": "Reset",

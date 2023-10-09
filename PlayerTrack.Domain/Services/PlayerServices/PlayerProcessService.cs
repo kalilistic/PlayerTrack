@@ -96,6 +96,7 @@ public class PlayerProcessService
         player.OpenPlayerEncounterId = 0;
         ServiceContext.PlayerDataService.UpdatePlayer(player);
         this.CurrentPlayerRemoved?.Invoke(player);
+        ServiceContext.PlayerDataService.RecentPlayersExpiry.TryAdd(player.Id, UnixTimestampHelper.CurrentTime());
     }
 
     public void SelectPlayer(string name, string worldName)
@@ -183,12 +184,18 @@ public class PlayerProcessService
             LastTerritoryType = loc.TerritoryId,
             Created = UnixTimestampHelper.CurrentTime(),
             IsCurrent = isCurrent,
+            IsRecent = isCurrent,
             LastSeen = isCurrent ? UnixTimestampHelper.CurrentTime() : 0,
             SeenCount = isCurrent ? 1 : 0,
         };
 
         ServiceContext.PlayerDataService.AddPlayer(player);
         this.CurrentPlayerAdded?.Invoke(player);
+        var playerId = ServiceContext.PlayerDataService.GetPlayer(player.Key)?.Id;
+        if (playerId != null)
+        {
+            ServiceContext.PlayerDataService.RecentPlayersExpiry.TryRemove(player.Id, out _);
+        }
     }
 
     private Player UpdateExistingPlayer(Player player, ToadPlayer toadPlayer, bool isCurrent, ToadLocation loc)
@@ -208,11 +215,13 @@ public class PlayerProcessService
             player.LastTerritoryType = loc.TerritoryId;
             player.LastSeen = UnixTimestampHelper.CurrentTime();
             player.IsCurrent = true;
+            player.IsRecent = true;
             ServiceContext.PlayerDataService.UpdatePlayer(player);
         }
 
         player = ServiceContext.PlayerDataService.GetPlayer(player.Id) ?? player;
         this.CurrentPlayerAdded?.Invoke(player);
+        ServiceContext.PlayerDataService.RecentPlayersExpiry.TryRemove(player.Id, out _);
         return player;
     }
 }

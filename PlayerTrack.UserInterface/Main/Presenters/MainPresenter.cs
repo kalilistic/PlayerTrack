@@ -79,6 +79,7 @@ public class MainPresenter : IMainPresenter
             {
                 PlayerListFilter.AllPlayers => ServiceContext.PlayerDataService.GetAllPlayersCount(),
                 PlayerListFilter.CurrentPlayers => ServiceContext.PlayerDataService.GetCurrentPlayersCount(),
+                PlayerListFilter.RecentPlayers => ServiceContext.PlayerDataService.GetRecentPlayersCount(),
                 PlayerListFilter.PlayersByCategory => ServiceContext.PlayerDataService.GetCategoryPlayersCount(this.config.FilterCategoryId),
                 _ => 0,
             };
@@ -89,6 +90,7 @@ public class MainPresenter : IMainPresenter
             {
                 PlayerListFilter.AllPlayers => ServiceContext.PlayerDataService.GetAllPlayersCount(this.config.SearchInput, this.config.SearchType),
                 PlayerListFilter.CurrentPlayers => ServiceContext.PlayerDataService.GetCurrentPlayersCount(this.config.SearchInput, this.config.SearchType),
+                PlayerListFilter.RecentPlayers => ServiceContext.PlayerDataService.GetRecentPlayersCount(this.config.SearchInput, this.config.SearchType),
                 PlayerListFilter.PlayersByCategory => ServiceContext.PlayerDataService.GetCategoryPlayersCount(this.config.FilterCategoryId, this.config.SearchInput, this.config.SearchType),
                 _ => 0,
             };
@@ -106,6 +108,7 @@ public class MainPresenter : IMainPresenter
             {
                 PlayerListFilter.AllPlayers => ServiceContext.PlayerDataService.GetAllPlayers(start, count),
                 PlayerListFilter.CurrentPlayers => ServiceContext.PlayerDataService.GetCurrentPlayers(start, count),
+                PlayerListFilter.RecentPlayers => ServiceContext.PlayerDataService.GetRecentPlayers(start, count),
                 PlayerListFilter.PlayersByCategory => ServiceContext.PlayerDataService.GetCategoryPlayers(this.config.FilterCategoryId, start, count),
                 _ => new List<Player>(),
             };
@@ -115,6 +118,7 @@ public class MainPresenter : IMainPresenter
         {
             PlayerListFilter.AllPlayers => ServiceContext.PlayerDataService.GetAllPlayers(start, count, this.config.SearchInput, this.config.SearchType),
             PlayerListFilter.CurrentPlayers => ServiceContext.PlayerDataService.GetCurrentPlayers(start, count, this.config.SearchInput, this.config.SearchType),
+            PlayerListFilter.RecentPlayers => ServiceContext.PlayerDataService.GetRecentPlayers(start, count, this.config.SearchInput, this.config.SearchType),
             PlayerListFilter.PlayersByCategory => ServiceContext.PlayerDataService.GetCategoryPlayers(this.config.FilterCategoryId, start, count, this.config.SearchInput, this.config.SearchType),
             _ => new List<Player>(),
         };
