@@ -293,4 +293,76 @@ public class PlayerRepository : BaseRepository
             return 0;
         }
     }
+
+    public int CreateExistingPlayer(Player player)
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.CreatePlayer(): {player.Key}");
+        using var transaction = this.Connection.BeginTransaction();
+        try
+        {
+            const string checkExistenceSql = "SELECT id FROM players WHERE key = @key";
+            var existingId = this.Connection.ExecuteScalar<int?>(checkExistenceSql, new { key = player.Key }, transaction);
+
+            if (existingId.HasValue)
+            {
+                DalamudContext.PluginLog.Verbose($"CreatePlayer(): Player with Key {player.Key} already exists.");
+                return existingId.Value;
+            }
+
+            var playerDto = this.Mapper.Map<PlayerDTO>(player);
+
+            const string sql = @"
+            INSERT INTO players (
+                id,
+                created,
+                updated,
+                last_alert_sent,
+                last_seen,
+                customize,
+                seen_count,
+                lodestone_status,
+                lodestone_verified_on,
+                free_company_state,
+                free_company_tag,
+                key,
+                name,
+                notes,
+                lodestone_id,
+                object_id,
+                world_id,
+                last_territory_type)
+            VALUES (
+                @id,
+                @created,
+                @updated,
+                @last_alert_sent,
+                @last_seen,
+                @customize,
+                @seen_count,
+                @lodestone_status,
+                @lodestone_verified_on,
+                @free_company_state,
+                @free_company_tag,
+                @key,
+                @name,
+                @notes,
+                @lodestone_id,
+                @object_id,
+                @world_id,
+                @last_territory_type)";
+
+            this.Connection.Execute(sql, playerDto, transaction);
+
+            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
+
+            transaction.Commit();
+            return newId;
+        }
+        catch (Exception ex)
+        {
+            DalamudContext.PluginLog.Error(ex, $"Failed to create new player with Key {player.Key}.", player);
+            transaction.Rollback();
+            return 0;
+        }
+    }
 }

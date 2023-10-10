@@ -895,6 +895,8 @@ public static class LiteDBMigrator
                 var playerCustomizeHistoriesList = new List<PlayerCustomizeHistory>();
                 var playerNameWorldHistoriesList = new List<PlayerNameWorldHistory>();
                 var oldestPlayers = oldestPlayerCollection.FindAll().ToList();
+                var invalidCategories = new HashSet<int>();
+                var skippedPlayerCategoryCount = 0;
                 foreach (var oldestPlayer in oldestPlayers)
                 {
                     lastPlayer = oldestPlayer;
@@ -926,7 +928,15 @@ public static class LiteDBMigrator
                     playerArchives.Add(playerArchive);
 
                     var playerCategory = CreatePlayerCategory(player, oldestPlayer);
-                    playerCategories.Add(playerCategory);
+                    if (playerCategory != null)
+                    {
+                        playerCategories.Add(playerCategory);
+                    }
+                    else
+                    {
+                        skippedPlayerCategoryCount++;
+                        invalidCategories.Add(oldestPlayer.GetValueOrDefault<int>("CategoryId"));
+                    }
 
                     ExtractNewTags(oldestPlayer);
                     var playerTagsForPlayer = CreatePlayerTags(player, oldestPlayer);
@@ -950,12 +960,25 @@ public static class LiteDBMigrator
                     playerCount++;
                 }
 
+                if (skippedPlayerCategoryCount > 0)
+                {
+                    LogWarning($"Skipped assigning {skippedPlayerCategoryCount:N0} players to {invalidCategories.Count:N0} invalid categories.");
+                }
+
                 var failedPlayerCount = 0;
                 foreach (var player in players)
                 {
-                    var id = RepositoryContext.PlayerRepository.CreatePlayer(player, false);
+                    var id = RepositoryContext.PlayerRepository.CreateExistingPlayer(player);
+
+                    // check if id is 0, if so, failed to insert
                     if (id != 0)
                     {
+                        // ensure id matches since it's used for other inserts
+                        if (id != player.Id)
+                        {
+                            throw new DataException($"Player ID mismatch, failing out on {player.Key}. Expected {player.Id}; got {id}.");
+                        }
+
                         continue;
                     }
 
@@ -1172,13 +1195,23 @@ public static class LiteDBMigrator
         return true;
     }
 
-    private static PlayerCategory CreatePlayerCategory(Player player, BsonDocument oldestPlayer) => new()
+    private static PlayerCategory? CreatePlayerCategory(Player player, BsonDocument oldestPlayer)
     {
-        Created = player.Created,
-        Updated = player.Updated,
-        PlayerId = player.Id,
-        CategoryId = CategoryLegacyIdToId[oldestPlayer.GetValueOrDefault<int>("CategoryId")],
-    };
+        var oldCategoryId = oldestPlayer.GetValueOrDefault<int>("CategoryId");
+        if (CategoryLegacyIdToId.TryGetValue(oldCategoryId, out var value))
+        {
+            return new PlayerCategory
+            {
+                Created = player.Created,
+                Updated = player.Updated,
+                PlayerId = player.Id,
+                CategoryId = value,
+            };
+        }
+
+        DalamudContext.PluginLog.Info($"Skipping invalid category id: {oldCategoryId}, so won't create player category.");
+        return null;
+    }
 
     private static IEnumerable<PlayerTag> CreatePlayerTags(Player player, BsonDocument oldestPlayer)
     {
