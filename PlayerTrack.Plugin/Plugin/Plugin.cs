@@ -12,6 +12,7 @@ using PlayerTrack.Migration;
 
 namespace PlayerTrack.Plugin;
 
+using System.Linq;
 using System.Threading.Tasks;
 
 public class Plugin : IDalamudPlugin
@@ -20,6 +21,12 @@ public class Plugin : IDalamudPlugin
     {
         if (!DalamudContext.Initialize(pluginInterface))
         {
+            return;
+        }
+
+        if (!this.ShouldRun())
+        {
+            DalamudContext.PluginLog.Error("Terminating plugin since another version of PlayerTrack is loaded.");
             return;
         }
 
@@ -77,6 +84,24 @@ public class Plugin : IDalamudPlugin
         var assemblyWithMigrations = Assembly.Load("PlayerTrack.Infrastructure");
         SQLiteFluentMigratorRunner.Run(dataSource, assemblyWithMigrations);
         return true;
+    }
+
+    private static bool PluginNotLoaded(string pluginName)
+    {
+        var plugin = DalamudContext.PluginInterface.InstalledPlugins.FirstOrDefault(p => p.Name == pluginName);
+        return plugin == null || !plugin.IsLoaded;
+    }
+
+    private bool ShouldRun()
+    {
+        var internalName = DalamudContext.PluginInterface.InternalName;
+        if (!internalName.EndsWith("Canary", StringComparison.CurrentCulture))
+        {
+            return PluginNotLoaded($"{internalName}Canary");
+        }
+
+        var stableName = internalName.Replace("Canary", string.Empty);
+        return PluginNotLoaded(stableName);
     }
 
     private void RunPostStartup() => Task.Run(() =>
