@@ -42,7 +42,7 @@
 			<Link>stylecop.json</Link>
 		</AdditionalFiles>
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
-		<PackageReference Include="Dalamud.DrunkenToad" Version="1.8.2" />
+		<PackageReference Include="Dalamud.DrunkenToad" Version="1.8.4" />
 		<PackageReference Include="Dalamud.Loc" Version="1.1.2" />
 		<PackageReference Include="Dapper" Version="2.0.123" />
 		<PackageReference Include="FluentDapperLite" Version="0.0.5" />

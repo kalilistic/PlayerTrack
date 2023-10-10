@@ -4,11 +4,11 @@
     "net7.0-windows7.0": {
       "Dalamud.DrunkenToad": {
         "type": "Direct",
-        "requested": "[1.8.2, )",
-        "resolved": "1.8.2",
-        "contentHash": "pacN2vfEUQDiPEfgRR6ci269l/u4VE1GaUdN624Uqn2/gkESDr9UwkYEvHjIb2FjWcGDr8/592GGxeem70B2qQ==",
+        "requested": "[1.8.4, )",
+        "resolved": "1.8.4",
+        "contentHash": "3ktHbxrcZyBYjJ4XFihQ8H9Y9sEKUBZN/zmiQywXwhKM9Zsjoo3N8Wyz+KpvsUIEaJTowRMl8vBRonCZIAYb7A==",
         "dependencies": {
-          "Dalamud.Loc": "1.1.1",
+          "Dalamud.Loc": "1.1.2",
           "Microsoft.Extensions.DependencyInjection": "7.0.0"
         }
       },
@@ -528,7 +528,7 @@
       "playertrack.domain": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.8.2, )",
+          "Dalamud.DrunkenToad": "[1.8.4, )",
           "Dalamud.Loc": "[1.1.2, )",
           "FlexConfig": "[1.0.0, )",
           "PlayerTrack.Infrastructure": "[1.0.0, )",
@@ -539,7 +539,7 @@
         "type": "Project",
         "dependencies": {
           "AutoMapper": "[12.0.1, )",
-          "Dalamud.DrunkenToad": "[1.8.2, )",
+          "Dalamud.DrunkenToad": "[1.8.4, )",
           "Dalamud.Loc": "[1.1.2, )",
           "Dapper": "[2.0.123, )",
           "FlexConfig": "[1.0.0, )",
@@ -554,7 +554,7 @@
       "playertrack.models": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.8.2, )",
+          "Dalamud.DrunkenToad": "[1.8.4, )",
           "Dalamud.Loc": "[1.1.2, )",
           "Dapper.Contrib": "[2.0.78, )"
         }
