@@ -897,6 +897,7 @@ public static class LiteDBMigrator
                 var oldestPlayers = oldestPlayerCollection.FindAll().ToList();
                 var invalidCategories = new HashSet<int>();
                 var skippedPlayerCategoryCount = 0;
+                var dupePlayerKeyCount = 0;
                 foreach (var oldestPlayer in oldestPlayers)
                 {
                     lastPlayer = oldestPlayer;
@@ -954,10 +955,16 @@ public static class LiteDBMigrator
                     }
                     else
                     {
-                        LogWarning($"Found duplicate player, so skipping {player.Key}");
+                        DalamudContext.PluginLog.Warning($"Found duplicate player, so skipping {player.Key}");
+                        dupePlayerKeyCount++;
                     }
 
                     playerCount++;
+                }
+
+                if (dupePlayerKeyCount > 0)
+                {
+                    LogWarning($"Skipped {dupePlayerKeyCount:N0} duplicate player keys.");
                 }
 
                 if (skippedPlayerCategoryCount > 0)
