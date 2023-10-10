@@ -954,7 +954,7 @@ public static class LiteDBMigrator
                     }
                     else
                     {
-                        Log($"Duplicate player key: {player.Key}");
+                        LogWarning($"Found duplicate player, so skipping {player.Key}");
                     }
 
                     playerCount++;
