@@ -74,3 +74,4 @@ resharper_auto_property_can_be_made_get_only_global_highlighting = none
 resharper_non_readonly_member_in_get_hash_code_highlighting = none
 resharper_property_can_be_made_init_only_global_highlighting = none
 resharper_invert_if_highlighting = none
+resharper_loop_can_be_converted_to_query_highlighting = none
