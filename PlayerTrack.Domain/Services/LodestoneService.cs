@@ -252,12 +252,10 @@ public class LodestoneService : IDisposable
         var currentTime = UnixTimestampHelper.CurrentTime();
         foreach (var lookup in failedLookups)
         {
-            if (currentTime > lookup.Updated + 172800000)
-            {
-                var request = new LodestoneRequest(lookup.PlayerId, lookup.PlayerName, lookup.WorldName);
-                this.lodestoneQueue.Enqueue(request);
-                this.lodestoneLookups.TryAdd(lookup.PlayerId, lookup);
-            }
+            if (currentTime <= lookup.Updated + 172800000) continue;
+            var request = new LodestoneRequest(lookup.PlayerId, lookup.PlayerName, lookup.WorldName);
+            this.lodestoneQueue.Enqueue(request);
+            this.lodestoneLookups.TryAdd(lookup.PlayerId, lookup);
         }
     }
 }

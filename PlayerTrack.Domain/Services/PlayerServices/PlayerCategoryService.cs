@@ -111,14 +111,10 @@ public class PlayerCategoryService
 
         foreach (var category in player.AssignedCategories)
         {
-            if (categoryRanks.TryGetValue(category.Id, out var rank))
-            {
-                if (rank < highestRank)
-                {
-                    highestRank = rank;
-                    primaryCategoryId = category.Id;
-                }
-            }
+            if (!categoryRanks.TryGetValue(category.Id, out var rank)) continue;
+            if (rank >= highestRank) continue;
+            highestRank = rank;
+            primaryCategoryId = category.Id;
         }
 
         return primaryCategoryId;

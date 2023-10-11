@@ -308,6 +308,8 @@ public class PlayerDataService : SortedCacheService<Player>
 
     private static Func<Player, bool> GetSearchFilter(string name, SearchType searchType)
     {
+        return Filter;
+
         bool Filter(Player player)
         {
             return searchType switch
@@ -318,8 +320,6 @@ public class PlayerDataService : SortedCacheService<Player>
                 _ => throw new ArgumentException($"Invalid search type: {searchType}"),
             };
         }
-
-        return Filter;
     }
 
     private void OnRecentPlayerTimerOnElapsed(object? sender, ElapsedEventArgs e)
@@ -329,18 +329,12 @@ public class PlayerDataService : SortedCacheService<Player>
 
         foreach (var playerId in playerIds)
         {
-            if (this.RecentPlayersExpiry.TryGetValue(playerId, out var timestamp) && timestamp <= threshold)
-            {
-                if (this.RecentPlayersExpiry.TryRemove(playerId, out _))
-                {
-                    var player = this.cache.FindFirst(p => p.Id == playerId);
-                    if (player != null)
-                    {
-                        player.IsRecent = false;
-                        ServiceContext.PlayerDataService.UpdatePlayer(player);
-                    }
-                }
-            }
+            if (!this.RecentPlayersExpiry.TryGetValue(playerId, out var timestamp) || timestamp > threshold) continue;
+            if (!this.RecentPlayersExpiry.TryRemove(playerId, out _)) continue;
+            var player = this.cache.FindFirst(p => p.Id == playerId);
+            if (player == null) continue;
+            player.IsRecent = false;
+            ServiceContext.PlayerDataService.UpdatePlayer(player);
         }
     }
 

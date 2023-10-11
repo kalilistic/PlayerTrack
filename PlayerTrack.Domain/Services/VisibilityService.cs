@@ -167,11 +167,9 @@ public class VisibilityService
                 {
                     var player = players.First(p => p.Key == key);
                     var categoryVisibilityType = PlayerConfigService.GetVisibilityType(player);
-                    if (categoryVisibilityType == VisibilityType.None)
-                    {
-                        player.PlayerConfig.VisibilityType.Value = VisibilityType.Voidlist;
-                        ServiceContext.PlayerDataService.UpdatePlayer(player);
-                    }
+                    if (categoryVisibilityType != VisibilityType.None) continue;
+                    player.PlayerConfig.VisibilityType.Value = VisibilityType.Voidlist;
+                    ServiceContext.PlayerDataService.UpdatePlayer(player);
                 }
             }
 
@@ -196,11 +194,9 @@ public class VisibilityService
                 {
                     var player = players.First(p => p.Key == key);
                     var categoryVisibilityType = PlayerConfigService.GetVisibilityType(player);
-                    if (categoryVisibilityType == VisibilityType.None)
-                    {
-                        player.PlayerConfig.VisibilityType.Value = VisibilityType.Whitelist;
-                        ServiceContext.PlayerDataService.UpdatePlayer(player);
-                    }
+                    if (categoryVisibilityType != VisibilityType.None) continue;
+                    player.PlayerConfig.VisibilityType.Value = VisibilityType.Whitelist;
+                    ServiceContext.PlayerDataService.UpdatePlayer(player);
                 }
             }
         }

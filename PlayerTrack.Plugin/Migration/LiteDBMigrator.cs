@@ -105,16 +105,14 @@ public static class LiteDBMigrator
         try
         {
             var categories = RepositoryContext.CategoryRepository.GetAllCategories() ?? Array.Empty<Category>();
-            if (DefaultCategoryIds.Count == 0)
+            switch (DefaultCategoryIds.Count)
             {
-                LogWarning("No default category found, review your settings after.");
-                return;
-            }
-
-            if (DefaultCategoryIds.Count > 1)
-            {
-                LogWarning("Found multiple default categories, review your settings after.");
-                return;
+                case 0:
+                    LogWarning("No default category found, review your settings after.");
+                    return;
+                case > 1:
+                    LogWarning("Found multiple default categories, review your settings after.");
+                    return;
             }
 
             var defaultCategoryId = DefaultCategoryIds.First();
@@ -169,12 +167,10 @@ public static class LiteDBMigrator
 
             for (var i = 0; i < categories.Count; i++)
             {
-                if (categories[i].Rank != i)
-                {
-                    ranksHadIssues = true;
-                    categories[i].Rank = i;
-                    RepositoryContext.CategoryRepository.UpdateCategory(categories[i]);
-                }
+                if (categories[i].Rank == i) continue;
+                ranksHadIssues = true;
+                categories[i].Rank = i;
+                RepositoryContext.CategoryRepository.UpdateCategory(categories[i]);
             }
 
             Log(ranksHadIssues ? "Found and fixed duplicate category ranks." : "Validated category ranks - no issues.");
@@ -231,55 +227,53 @@ public static class LiteDBMigrator
             pluginConfig.IsWindowCombined = jsonObject.Value<bool>("CombinedPlayerDetailWindow");
 
             var restrictAddUpdatePlayers = jsonObject.Value<int>("RestrictAddUpdatePlayers");
-            if (restrictAddUpdatePlayers == 0)
+            switch (restrictAddUpdatePlayers)
             {
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddPlayers = true;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddPlayers = true;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddPlayers = true;
-            }
-            else if (restrictAddUpdatePlayers == 1)
-            {
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddPlayers = false;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddPlayers = true;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddPlayers = true;
-            }
-            else if (restrictAddUpdatePlayers == 2)
-            {
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddPlayers = false;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddPlayers = false;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddPlayers = true;
-            }
-            else if (restrictAddUpdatePlayers == 3)
-            {
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddPlayers = false;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddPlayers = false;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddPlayers = false;
+                case 0:
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddPlayers = true;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddPlayers = true;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddPlayers = true;
+                    break;
+                case 1:
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddPlayers = false;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddPlayers = true;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddPlayers = true;
+                    break;
+                case 2:
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddPlayers = false;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddPlayers = false;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddPlayers = true;
+                    break;
+                case 3:
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddPlayers = false;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddPlayers = false;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddPlayers = false;
+                    break;
             }
 
             var restrictAddEncounters = jsonObject.Value<int>("RestrictAddEncounters");
-            if (restrictAddEncounters == 0)
+            switch (restrictAddEncounters)
             {
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddEncounters = true;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddEncounters = true;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddEncounters = true;
-            }
-            else if (restrictAddEncounters == 1)
-            {
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddEncounters = false;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddEncounters = true;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddEncounters = true;
-            }
-            else if (restrictAddEncounters == 2)
-            {
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddEncounters = false;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddEncounters = false;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddEncounters = true;
-            }
-            else if (restrictAddEncounters == 3)
-            {
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddEncounters = false;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddEncounters = false;
-                pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddEncounters = false;
+                case 0:
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddEncounters = true;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddEncounters = true;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddEncounters = true;
+                    break;
+                case 1:
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddEncounters = false;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddEncounters = true;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddEncounters = true;
+                    break;
+                case 2:
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddEncounters = false;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddEncounters = false;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddEncounters = true;
+                    break;
+                case 3:
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Overworld).AddEncounters = false;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.Content).AddEncounters = false;
+                    pluginConfig.GetTrackingLocationConfig(ToadLocationType.HighEndContent).AddEncounters = false;
+                    break;
             }
 
             RepositoryContext.ConfigRepository.UpdatePluginConfig(pluginConfig);
@@ -401,20 +395,13 @@ public static class LiteDBMigrator
         }
 
         var isAlertEnabled = oldestPlayer.GetValueOrDefault<bool>("IsAlertEnabled");
-        if (isAlertEnabled)
-        {
-            playerConfig.AlertNameChange = new ConfigValue<bool>(InheritOverride.Override, true);
-            playerConfig.AlertWorldTransfer = new ConfigValue<bool>(InheritOverride.Override, true);
-            playerConfig.AlertProximity = new ConfigValue<bool>(InheritOverride.Override, true);
-            hasNonDefaultSetting = true;
-        }
+        if (!isAlertEnabled) return !hasNonDefaultSetting ? null : playerConfig;
+        playerConfig.AlertNameChange = new ConfigValue<bool>(InheritOverride.Override, true);
+        playerConfig.AlertWorldTransfer = new ConfigValue<bool>(InheritOverride.Override, true);
+        playerConfig.AlertProximity = new ConfigValue<bool>(InheritOverride.Override, true);
+        hasNonDefaultSetting = true;
 
-        if (!hasNonDefaultSetting)
-        {
-            return null;
-        }
-
-        return playerConfig;
+        return !hasNonDefaultSetting ? null : playerConfig;
     }
 
     private static PlayerConfig? CreateCategoryLevelConfig(Category category, BsonDocument originalCategory)
@@ -480,18 +467,11 @@ public static class LiteDBMigrator
             visibilityType = (int)bsonValue.RawValue;
         }
 
-        if (visibilityType > 0)
-        {
-            playerConfig.VisibilityType = new ConfigValue<VisibilityType>(InheritOverride.Override, (VisibilityType)visibilityType);
-            hasNonDefaultSetting = true;
-        }
+        if (visibilityType <= 0) return !hasNonDefaultSetting ? null : playerConfig;
+        playerConfig.VisibilityType = new ConfigValue<VisibilityType>(InheritOverride.Override, (VisibilityType)visibilityType);
+        hasNonDefaultSetting = true;
 
-        if (!hasNonDefaultSetting)
-        {
-            return null;
-        }
-
-        return playerConfig;
+        return !hasNonDefaultSetting ? null : playerConfig;
     }
 
     private static void MapCategoryDirectFields(Category category, BsonDocument originalCategory)
@@ -746,114 +726,112 @@ public static class LiteDBMigrator
         {
             using var dbFactory = GetLiteDBFactory();
             ILiteCollection<BsonDocument> originalEncounterCollection = dbFactory.Database.GetCollection("Encounter");
-            if (originalEncounterCollection != null)
+            if (originalEncounterCollection == null) return;
+            var encounters = new List<Encounter>();
+            var playerEncounters = new List<PlayerEncounter>();
+            var encounterArchives = new List<ArchiveRecord>();
+            var originalEncounters = originalEncounterCollection.FindAll().ToList();
+            var invalidEncounterCount = 0;
+            var invalidPlayerEncounterCount = 0;
+            foreach (var originalEncounter in originalEncounters)
             {
-                var encounters = new List<Encounter>();
-                var playerEncounters = new List<PlayerEncounter>();
-                var encounterArchives = new List<ArchiveRecord>();
-                var originalEncounters = originalEncounterCollection.FindAll().ToList();
-                var invalidEncounterCount = 0;
-                var invalidPlayerEncounterCount = 0;
-                foreach (var originalEncounter in originalEncounters)
+                lastEncounter = originalEncounter;
+                var eventId = originalEncounter.GetValueOrDefault<long?>("EventId");
+                var territoryType = originalEncounter.GetValueOrDefault<ushort>("TerritoryType");
+                if (eventId == null || eventId == 0 || !EventIdToEncounterMap.ContainsKey(eventId.Value))
                 {
-                    lastEncounter = originalEncounter;
-                    var eventId = originalEncounter.GetValueOrDefault<long?>("EventId");
-                    var territoryType = originalEncounter.GetValueOrDefault<ushort>("TerritoryType");
-                    if (eventId == null || eventId == 0 || !EventIdToEncounterMap.ContainsKey(eventId.Value))
+                    // check if valid
+                    if (!IsValidPlayer("PlayerKey", originalEncounter) || !TerritoryTypeIds.Contains(territoryType))
                     {
-                        // check if valid
-                        if (!IsValidPlayer("PlayerKey", originalEncounter) || !TerritoryTypeIds.Contains(territoryType))
-                        {
-                            var invalidMigrationArchive = CreateEncounterArchive(originalEncounter);
-                            encounterArchives.Add(invalidMigrationArchive);
-                            DalamudContext.PluginLog.Info($"Skipping invalid encounter: {originalEncounter.ToDebugString()}");
-                            invalidEncounterCount++;
-                            continue;
-                        }
-
-                        // create new encounter and player encounter
-                        var encounter = new Encounter
-                        {
-                            Id = encounters.Count + 1, // start at 1 and increment
-                        };
-
-                        MapEncounterDirectFields(encounter, originalEncounter);
-                        encounters.Add(encounter);
-
-                        var migrationArchive = CreateEncounterArchive(encounter.Id, originalEncounter);
-                        encounterArchives.Add(migrationArchive);
-
-                        var playerEncounter = CreatePlayerEncounter(encounter, originalEncounter);
-                        if (playerEncounter != null)
-                        {
-                            playerEncounters.Add(playerEncounter);
-                        }
-                        else
-                        {
-                            invalidPlayerEncounterCount++;
-                        }
-
-                        if (eventId != null && eventId != 0)
-                        {
-                            // save event id since can reuse unlike legacy 1-to-1 scenarios
-                            EventIdToEncounterMap.TryAdd(eventId.Value, encounter);
-                        }
+                        var invalidMigrationArchive = CreateEncounterArchive(originalEncounter);
+                        encounterArchives.Add(invalidMigrationArchive);
+                        DalamudContext.PluginLog.Info($"Skipping invalid encounter: {originalEncounter.ToDebugString()}");
+                        invalidEncounterCount++;
+                        continue;
                     }
-                    else if (EventIdToEncounterMap.TryGetValue(eventId.Value, out var encounter))
+
+                    // create new encounter and player encounter
+                    var encounter = new Encounter
                     {
-                        // check if valid
-                        if (!IsValidPlayer("PlayerKey", originalEncounter) || !TerritoryTypeIds.Contains(territoryType))
-                        {
-                            var invalidMigrationArchive = CreateEncounterArchive(originalEncounter);
-                            encounterArchives.Add(invalidMigrationArchive);
-                            DalamudContext.PluginLog.Info($"Skipping invalid encounter: {originalEncounter.ToDebugString()}");
-                            invalidEncounterCount++;
-                            continue;
-                        }
+                        Id = encounters.Count + 1, // start at 1 and increment
+                    };
 
-                        // use existing encounter but new player encounter
-                        if (encounter == null)
-                        {
-                            throw new DataException($"Failed to get encounter with event id {eventId.Value}.");
-                        }
+                    MapEncounterDirectFields(encounter, originalEncounter);
+                    encounters.Add(encounter);
 
-                        var playerEncounter = CreatePlayerEncounter(encounter, originalEncounter);
-                        if (playerEncounter != null)
-                        {
-                            playerEncounters.Add(playerEncounter);
-                        }
-                        else
-                        {
-                            invalidPlayerEncounterCount++;
-                        }
+                    var migrationArchive = CreateEncounterArchive(encounter.Id, originalEncounter);
+                    encounterArchives.Add(migrationArchive);
+
+                    var playerEncounter = CreatePlayerEncounter(encounter, originalEncounter);
+                    if (playerEncounter != null)
+                    {
+                        playerEncounters.Add(playerEncounter);
+                    }
+                    else
+                    {
+                        invalidPlayerEncounterCount++;
+                    }
+
+                    if (eventId != null && eventId != 0)
+                    {
+                        // save event id since can reuse unlike legacy 1-to-1 scenarios
+                        EventIdToEncounterMap.TryAdd(eventId.Value, encounter);
                     }
                 }
-
-                var savedEncounters = RepositoryContext.EncounterRepository.CreateEncounters(encounters);
-                if (!savedEncounters)
+                else if (EventIdToEncounterMap.TryGetValue(eventId.Value, out var encounter))
                 {
-                    throw new DataException("Failed to insert batch encounters.");
+                    // check if valid
+                    if (!IsValidPlayer("PlayerKey", originalEncounter) || !TerritoryTypeIds.Contains(territoryType))
+                    {
+                        var invalidMigrationArchive = CreateEncounterArchive(originalEncounter);
+                        encounterArchives.Add(invalidMigrationArchive);
+                        DalamudContext.PluginLog.Info($"Skipping invalid encounter: {originalEncounter.ToDebugString()}");
+                        invalidEncounterCount++;
+                        continue;
+                    }
+
+                    // use existing encounter but new player encounter
+                    if (encounter == null)
+                    {
+                        throw new DataException($"Failed to get encounter with event id {eventId.Value}.");
+                    }
+
+                    var playerEncounter = CreatePlayerEncounter(encounter, originalEncounter);
+                    if (playerEncounter != null)
+                    {
+                        playerEncounters.Add(playerEncounter);
+                    }
+                    else
+                    {
+                        invalidPlayerEncounterCount++;
+                    }
                 }
-
-                Log($"Migrated {encounters.Count:N0} encounters.");
-                var savedPlayerEncounters = RepositoryContext.PlayerEncounterRepository.CreatePlayerEncounters(playerEncounters);
-                if (!savedPlayerEncounters)
-                {
-                    throw new DataException("Failed to insert batch player encounters.");
-                }
-
-                Log($"Migrated {playerEncounters.Count:N0} player encounters.");
-                var savedEncounterArchives = RepositoryContext.ArchiveRecordRepository.CreateArchiveRecords(encounterArchives);
-                if (!savedEncounterArchives)
-                {
-                    throw new DataException("Failed to insert batch encounter archives.");
-                }
-
-                Log($"Skipped {invalidPlayerEncounterCount:N0} invalid player encounters.");
-
-                DalamudContext.PluginLog.Info($"Migrated {encounterArchives.Count:N0} archived encounter data records.");
-                Log($"Skipped {invalidEncounterCount:N0} invalid encounters.");
             }
+
+            var savedEncounters = RepositoryContext.EncounterRepository.CreateEncounters(encounters);
+            if (!savedEncounters)
+            {
+                throw new DataException("Failed to insert batch encounters.");
+            }
+
+            Log($"Migrated {encounters.Count:N0} encounters.");
+            var savedPlayerEncounters = RepositoryContext.PlayerEncounterRepository.CreatePlayerEncounters(playerEncounters);
+            if (!savedPlayerEncounters)
+            {
+                throw new DataException("Failed to insert batch player encounters.");
+            }
+
+            Log($"Migrated {playerEncounters.Count:N0} player encounters.");
+            var savedEncounterArchives = RepositoryContext.ArchiveRecordRepository.CreateArchiveRecords(encounterArchives);
+            if (!savedEncounterArchives)
+            {
+                throw new DataException("Failed to insert batch encounter archives.");
+            }
+
+            Log($"Skipped {invalidPlayerEncounterCount:N0} invalid player encounters.");
+
+            DalamudContext.PluginLog.Info($"Migrated {encounterArchives.Count:N0} archived encounter data records.");
+            Log($"Skipped {invalidEncounterCount:N0} invalid encounters.");
         }
         catch (Exception ex)
         {
@@ -885,177 +863,175 @@ public static class LiteDBMigrator
         {
             using var dbFactory = GetLiteDBFactory();
             ILiteCollection<BsonDocument> oldestPlayerCollection = dbFactory.Database.GetCollection("Player");
-            if (oldestPlayerCollection != null)
+            if (oldestPlayerCollection == null) return;
+            var players = new List<Player>();
+            var playerConfigs = new List<PlayerConfig>();
+            var playerCategories = new List<PlayerCategory>();
+            var playerArchives = new List<ArchiveRecord>();
+            var playerTags = new List<PlayerTag>();
+            var playerCustomizeHistoriesList = new List<PlayerCustomizeHistory>();
+            var playerNameWorldHistoriesList = new List<PlayerNameWorldHistory>();
+            var oldestPlayers = oldestPlayerCollection.FindAll().ToList();
+            var invalidCategories = new HashSet<int>();
+            var skippedPlayerCategoryCount = 0;
+            var dupePlayerKeyCount = 0;
+            foreach (var oldestPlayer in oldestPlayers)
             {
-                var players = new List<Player>();
-                var playerConfigs = new List<PlayerConfig>();
-                var playerCategories = new List<PlayerCategory>();
-                var playerArchives = new List<ArchiveRecord>();
-                var playerTags = new List<PlayerTag>();
-                var playerCustomizeHistoriesList = new List<PlayerCustomizeHistory>();
-                var playerNameWorldHistoriesList = new List<PlayerNameWorldHistory>();
-                var oldestPlayers = oldestPlayerCollection.FindAll().ToList();
-                var invalidCategories = new HashSet<int>();
-                var skippedPlayerCategoryCount = 0;
-                var dupePlayerKeyCount = 0;
-                foreach (var oldestPlayer in oldestPlayers)
+                lastPlayer = oldestPlayer;
+                if (!IsValidPlayer("Key", oldestPlayer))
                 {
-                    lastPlayer = oldestPlayer;
-                    if (!IsValidPlayer("Key", oldestPlayer))
-                    {
-                        var migrationArchive = CreatePlayerArchive(oldestPlayer);
-                        playerArchives.Add(migrationArchive);
-                        DalamudContext.PluginLog.Info($"Skipping invalid player: {oldestPlayer.ToDebugString()}");
-                        invalidPlayerCount++;
-                        continue;
-                    }
-
-                    var player = new Player
-                    {
-                        Id = playerCount + 1, // start at 1 and increment
-                    };
-                    MapPlayerDirectFields(player, oldestPlayer);
-                    MapPlayerLodestone(player, oldestPlayer);
-                    MapPlayerFreeCompany(player, oldestPlayer);
-                    players.Add(player);
-
-                    var playerConfig = CreatePlayerLevelConfig(player, oldestPlayer);
-                    if (playerConfig != null)
-                    {
-                        playerConfigs.Add(playerConfig);
-                    }
-
-                    var playerArchive = CreatePlayerArchive(player.Id, oldestPlayer);
-                    playerArchives.Add(playerArchive);
-
-                    var playerCategory = CreatePlayerCategory(player, oldestPlayer);
-                    if (playerCategory != null)
-                    {
-                        playerCategories.Add(playerCategory);
-                    }
-                    else
-                    {
-                        skippedPlayerCategoryCount++;
-                        invalidCategories.Add(oldestPlayer.GetValueOrDefault<int>("CategoryId"));
-                    }
-
-                    ExtractNewTags(oldestPlayer);
-                    var playerTagsForPlayer = CreatePlayerTags(player, oldestPlayer);
-                    playerTags.AddRange(playerTagsForPlayer);
-
-                    var playerCustomizeHistories = CreateCustomizeHistory(player, oldestPlayer);
-                    playerCustomizeHistoriesList.AddRange(playerCustomizeHistories);
-
-                    var nameWorldHistories = CreateNameWorldHistory(player, oldestPlayer);
-                    playerNameWorldHistoriesList.AddRange(nameWorldHistories);
-
-                    if (!PlayerKeyToIdMap.ContainsKey(player.Key))
-                    {
-                        PlayerKeyToIdMap.Add(player.Key, player.Id); // save for encounters
-                    }
-                    else
-                    {
-                        DalamudContext.PluginLog.Warning($"Found duplicate player, so skipping {player.Key}");
-                        dupePlayerKeyCount++;
-                    }
-
-                    playerCount++;
+                    var migrationArchive = CreatePlayerArchive(oldestPlayer);
+                    playerArchives.Add(migrationArchive);
+                    DalamudContext.PluginLog.Info($"Skipping invalid player: {oldestPlayer.ToDebugString()}");
+                    invalidPlayerCount++;
+                    continue;
                 }
 
-                if (dupePlayerKeyCount > 0)
+                var player = new Player
                 {
-                    LogWarning($"Skipped {dupePlayerKeyCount:N0} duplicate player keys.");
+                    Id = playerCount + 1, // start at 1 and increment
+                };
+                MapPlayerDirectFields(player, oldestPlayer);
+                MapPlayerLodestone(player, oldestPlayer);
+                MapPlayerFreeCompany(player, oldestPlayer);
+                players.Add(player);
+
+                var playerConfig = CreatePlayerLevelConfig(player, oldestPlayer);
+                if (playerConfig != null)
+                {
+                    playerConfigs.Add(playerConfig);
                 }
 
-                if (skippedPlayerCategoryCount > 0)
+                var playerArchive = CreatePlayerArchive(player.Id, oldestPlayer);
+                playerArchives.Add(playerArchive);
+
+                var playerCategory = CreatePlayerCategory(player, oldestPlayer);
+                if (playerCategory != null)
                 {
-                    LogWarning($"Skipped assigning {skippedPlayerCategoryCount:N0} players to {invalidCategories.Count:N0} invalid categories.");
+                    playerCategories.Add(playerCategory);
+                }
+                else
+                {
+                    skippedPlayerCategoryCount++;
+                    invalidCategories.Add(oldestPlayer.GetValueOrDefault<int>("CategoryId"));
                 }
 
-                var failedPlayerCount = 0;
-                foreach (var player in players)
+                ExtractNewTags(oldestPlayer);
+                var playerTagsForPlayer = CreatePlayerTags(player, oldestPlayer);
+                playerTags.AddRange(playerTagsForPlayer);
+
+                var playerCustomizeHistories = CreateCustomizeHistory(player, oldestPlayer);
+                playerCustomizeHistoriesList.AddRange(playerCustomizeHistories);
+
+                var nameWorldHistories = CreateNameWorldHistory(player, oldestPlayer);
+                playerNameWorldHistoriesList.AddRange(nameWorldHistories);
+
+                if (!PlayerKeyToIdMap.ContainsKey(player.Key))
                 {
-                    var id = RepositoryContext.PlayerRepository.CreateExistingPlayer(player);
-
-                    // check if id is 0, if so, failed to insert
-                    if (id != 0)
-                    {
-                        // ensure id matches since it's used for other inserts
-                        if (id != player.Id)
-                        {
-                            throw new DataException($"Player ID mismatch, failing out on {player.Key}. Expected {player.Id}; got {id}.");
-                        }
-
-                        continue;
-                    }
-
-                    playerConfigs.RemoveAll(config => config.PlayerId == player.Id);
-                    playerCategories.RemoveAll(category => category.PlayerId == player.Id);
-                    playerTags.RemoveAll(tag => tag.PlayerId == player.Id);
-                    playerCustomizeHistoriesList.RemoveAll(history => history.PlayerId == player.Id);
-                    playerNameWorldHistoriesList.RemoveAll(history => history.PlayerId == player.Id);
-                    failedPlayerCount++;
-                    LogWarning($"Failed to migrate player {player.Key}.");
+                    PlayerKeyToIdMap.Add(player.Key, player.Id); // save for encounters
+                }
+                else
+                {
+                    DalamudContext.PluginLog.Warning($"Found duplicate player, so skipping {player.Key}");
+                    dupePlayerKeyCount++;
                 }
 
-                if (failedPlayerCount > 10)
-                {
-                    LogError($"Failed to insert over 10 players: {failedPlayerCount}");
-                    throw new DataException($"Failed to insert over 10 players: {failedPlayerCount}");
-                }
-
-                Log($"Migrated {players.Count:N0} players.");
-                var savedPlayerConfigs = RepositoryContext.PlayerConfigRepository.CreatePlayerConfigs(playerConfigs);
-                if (!savedPlayerConfigs)
-                {
-                    throw new DataException("Failed to insert batch player configs.");
-                }
-
-                Log($"Migrated {playerConfigs.Count:N0} player configs.");
-                var savedPlayerCategories = RepositoryContext.PlayerCategoryRepository.CreatePlayerCategories(playerCategories);
-                if (!savedPlayerCategories)
-                {
-                    throw new DataException("Failed to insert batch player categories.");
-                }
-
-                Log($"Migrated {playerCategories.Count:N0} player categories.");
-                var savedTags = RepositoryContext.TagRepository.CreateTags(TagTextToTags.Values.ToList());
-                if (!savedTags)
-                {
-                    throw new DataException("Failed to insert batch tags.");
-                }
-
-                Log($"Migrated {TagTextToTags.Count:N0} tags.");
-                var savedPlayerTags = RepositoryContext.PlayerTagRepository.CreatePlayerTags(playerTags);
-                if (!savedPlayerTags)
-                {
-                    throw new DataException("Failed to insert batch player tags.");
-                }
-
-                Log($"Migrated {playerTags.Count:N0} player tags.");
-                var savedCustomizeHistory = RepositoryContext.PlayerCustomizeHistoryRepository.CreatePlayerCustomizeHistories(playerCustomizeHistoriesList);
-                if (!savedCustomizeHistory)
-                {
-                    throw new DataException("Failed to insert batch player customize histories.");
-                }
-
-                Log($"Migrated {playerCustomizeHistoriesList.Count:N0} player customize histories.");
-                var savedNameWorldHistory = RepositoryContext.PlayerNameWorldHistoryRepository.CreatePlayerNameWorldHistories(playerNameWorldHistoriesList);
-                if (!savedNameWorldHistory)
-                {
-                    throw new DataException("Failed to insert batch player name world histories.");
-                }
-
-                Log($"Migrated {playerNameWorldHistoriesList.Count:N0} player name/world histories.");
-                var savedPlayerArchives = RepositoryContext.ArchiveRecordRepository.CreateArchiveRecords(playerArchives);
-                if (!savedPlayerArchives)
-                {
-                    throw new DataException("Failed to insert batch player archives.");
-                }
-
-                DalamudContext.PluginLog.Info($"Created {playerArchives.Count:N0} archived player data records.");
-                Log($"Skipped {invalidPlayerCount:N0} invalid players.");
+                playerCount++;
             }
+
+            if (dupePlayerKeyCount > 0)
+            {
+                LogWarning($"Skipped {dupePlayerKeyCount:N0} duplicate player keys.");
+            }
+
+            if (skippedPlayerCategoryCount > 0)
+            {
+                LogWarning($"Skipped assigning {skippedPlayerCategoryCount:N0} players to {invalidCategories.Count:N0} invalid categories.");
+            }
+
+            var failedPlayerCount = 0;
+            foreach (var player in players)
+            {
+                var id = RepositoryContext.PlayerRepository.CreateExistingPlayer(player);
+
+                // check if id is 0, if so, failed to insert
+                if (id != 0)
+                {
+                    // ensure id matches since it's used for other inserts
+                    if (id != player.Id)
+                    {
+                        throw new DataException($"Player ID mismatch, failing out on {player.Key}. Expected {player.Id}; got {id}.");
+                    }
+
+                    continue;
+                }
+
+                playerConfigs.RemoveAll(config => config.PlayerId == player.Id);
+                playerCategories.RemoveAll(category => category.PlayerId == player.Id);
+                playerTags.RemoveAll(tag => tag.PlayerId == player.Id);
+                playerCustomizeHistoriesList.RemoveAll(history => history.PlayerId == player.Id);
+                playerNameWorldHistoriesList.RemoveAll(history => history.PlayerId == player.Id);
+                failedPlayerCount++;
+                LogWarning($"Failed to migrate player {player.Key}.");
+            }
+
+            if (failedPlayerCount > 10)
+            {
+                LogError($"Failed to insert over 10 players: {failedPlayerCount}");
+                throw new DataException($"Failed to insert over 10 players: {failedPlayerCount}");
+            }
+
+            Log($"Migrated {players.Count:N0} players.");
+            var savedPlayerConfigs = RepositoryContext.PlayerConfigRepository.CreatePlayerConfigs(playerConfigs);
+            if (!savedPlayerConfigs)
+            {
+                throw new DataException("Failed to insert batch player configs.");
+            }
+
+            Log($"Migrated {playerConfigs.Count:N0} player configs.");
+            var savedPlayerCategories = RepositoryContext.PlayerCategoryRepository.CreatePlayerCategories(playerCategories);
+            if (!savedPlayerCategories)
+            {
+                throw new DataException("Failed to insert batch player categories.");
+            }
+
+            Log($"Migrated {playerCategories.Count:N0} player categories.");
+            var savedTags = RepositoryContext.TagRepository.CreateTags(TagTextToTags.Values.ToList());
+            if (!savedTags)
+            {
+                throw new DataException("Failed to insert batch tags.");
+            }
+
+            Log($"Migrated {TagTextToTags.Count:N0} tags.");
+            var savedPlayerTags = RepositoryContext.PlayerTagRepository.CreatePlayerTags(playerTags);
+            if (!savedPlayerTags)
+            {
+                throw new DataException("Failed to insert batch player tags.");
+            }
+
+            Log($"Migrated {playerTags.Count:N0} player tags.");
+            var savedCustomizeHistory = RepositoryContext.PlayerCustomizeHistoryRepository.CreatePlayerCustomizeHistories(playerCustomizeHistoriesList);
+            if (!savedCustomizeHistory)
+            {
+                throw new DataException("Failed to insert batch player customize histories.");
+            }
+
+            Log($"Migrated {playerCustomizeHistoriesList.Count:N0} player customize histories.");
+            var savedNameWorldHistory = RepositoryContext.PlayerNameWorldHistoryRepository.CreatePlayerNameWorldHistories(playerNameWorldHistoriesList);
+            if (!savedNameWorldHistory)
+            {
+                throw new DataException("Failed to insert batch player name world histories.");
+            }
+
+            Log($"Migrated {playerNameWorldHistoriesList.Count:N0} player name/world histories.");
+            var savedPlayerArchives = RepositoryContext.ArchiveRecordRepository.CreateArchiveRecords(playerArchives);
+            if (!savedPlayerArchives)
+            {
+                throw new DataException("Failed to insert batch player archives.");
+            }
+
+            DalamudContext.PluginLog.Info($"Created {playerArchives.Count:N0} archived player data records.");
+            Log($"Skipped {invalidPlayerCount:N0} invalid players.");
         }
         catch (Exception ex)
         {
@@ -1095,7 +1071,7 @@ public static class LiteDBMigrator
             }
         }
 
-        if (worldIds.Any())
+        if (!worldIds.Any()) return nameWorldHistories;
         {
             worldIds.Reverse(); // reverse to get oldest first
             foreach (var worldId in worldIds)
@@ -1252,22 +1228,20 @@ public static class LiteDBMigrator
     private static PlayerEncounter? CreatePlayerEncounter(Encounter encounter, BsonDocument originalEncounter)
     {
         var playerKey = originalEncounter.GetValueOrDefault<string>("PlayerKey");
-        if (!PlayerKeyToIdMap.ContainsKey(playerKey))
-        {
-            DalamudContext.PluginLog.Info($"Skipping invalid player key: {playerKey}, so won't create encounter.");
-            return null;
-        }
+        if (PlayerKeyToIdMap.TryGetValue(playerKey, out var value))
+            return new PlayerEncounter
+            {
+                Created = encounter.Created,
+                Updated = encounter.Updated,
+                PlayerId = value,
+                EncounterId = encounter.Id,
+                JobId = originalEncounter.GetValueOrDefault<uint>("JobId"),
+                JobLvl = originalEncounter.GetValueOrDefault<byte>("JobLvl"),
+                Ended = encounter.Ended,
+            };
+        DalamudContext.PluginLog.Info($"Skipping invalid player key: {playerKey}, so won't create encounter.");
+        return null;
 
-        return new PlayerEncounter
-        {
-            Created = encounter.Created,
-            Updated = encounter.Updated,
-            PlayerId = PlayerKeyToIdMap[playerKey],
-            EncounterId = encounter.Id,
-            JobId = originalEncounter.GetValueOrDefault<uint>("JobId"),
-            JobLvl = originalEncounter.GetValueOrDefault<byte>("JobLvl"),
-            Ended = encounter.Ended,
-        };
     }
 
     private static bool IsSchemaCompatible()
@@ -1301,13 +1275,10 @@ public static class LiteDBMigrator
 
     private static bool IsLiteDB()
     {
-        if (File.Exists(LegacyDatabaseFilePath))
-        {
-            DalamudContext.PluginLog.Info("Detected LiteDB file, will need to migrate.");
-            return true;
-        }
+        if (!File.Exists(LegacyDatabaseFilePath)) return false;
+        DalamudContext.PluginLog.Info("Detected LiteDB file, will need to migrate.");
+        return true;
 
-        return false;
     }
 
     private static void SetupPaths()
@@ -1418,20 +1389,18 @@ public static class LiteDBMigrator
     {
         try
         {
-            if (Directory.Exists(sourceDirectory))
+            if (!Directory.Exists(sourceDirectory)) return;
+            var subdirectories = Directory.GetDirectories(sourceDirectory);
+            foreach (var subdirectory in subdirectories)
             {
-                var subdirectories = Directory.GetDirectories(sourceDirectory);
-                foreach (var subdirectory in subdirectories)
-                {
-                    var subDirPath = Path.GetFullPath(subdirectory);
-                    var subDirName = Path.GetFileName(subdirectory);
-                    var outputZipFileName = $"{prefix}_{subDirName}.zip";
-                    CopyLegacyConfigFile(subDirPath);
-                    FileHelper.MoveAndCompressDirectory(subDirPath, BackupDirectoryPath, outputZipFileName);
-                }
-
-                Directory.Delete(sourceDirectory, true);
+                var subDirPath = Path.GetFullPath(subdirectory);
+                var subDirName = Path.GetFileName(subdirectory);
+                var outputZipFileName = $"{prefix}_{subDirName}.zip";
+                CopyLegacyConfigFile(subDirPath);
+                FileHelper.MoveAndCompressDirectory(subDirPath, BackupDirectoryPath, outputZipFileName);
             }
+
+            Directory.Delete(sourceDirectory, true);
         }
         catch (Exception ex)
         {

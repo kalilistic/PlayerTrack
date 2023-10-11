@@ -34,18 +34,16 @@ public class PlayerAlertService
         var shouldSendWorldAlert = oldestPlayer.WorldId != newPlayer.WorldId && IsWorldTransferAlertEnabled(oldestPlayer);
 
         var payloads = new List<Payload>();
-        if (shouldSendNameAlert || shouldSendWorldAlert)
-        {
-            payloads.Add(this.OpenPlayerTrackChatLinkHandler);
-            payloads.Add(new TextPayload(oldestPlayer.Name));
-            payloads.Add(new IconPayload(BitmapFontIcon.CrossWorld));
-            payloads.Add(new TextPayload(DalamudContext.DataManager.GetWorldNameById(oldestPlayer.WorldId)));
-            payloads.Add(new TextPayload(" 》 "));
-            payloads.Add(new TextPayload(newPlayer.Name));
-            payloads.Add(new IconPayload(BitmapFontIcon.CrossWorld));
-            payloads.Add(new TextPayload(DalamudContext.DataManager.GetWorldNameById(newPlayer.WorldId)));
-            payloads.Add(RawPayload.LinkTerminator);
-        }
+        if (!shouldSendNameAlert && !shouldSendWorldAlert) return payloads;
+        payloads.Add(this.OpenPlayerTrackChatLinkHandler);
+        payloads.Add(new TextPayload(oldestPlayer.Name));
+        payloads.Add(new IconPayload(BitmapFontIcon.CrossWorld));
+        payloads.Add(new TextPayload(DalamudContext.DataManager.GetWorldNameById(oldestPlayer.WorldId)));
+        payloads.Add(new TextPayload(" 》 "));
+        payloads.Add(new TextPayload(newPlayer.Name));
+        payloads.Add(new IconPayload(BitmapFontIcon.CrossWorld));
+        payloads.Add(new TextPayload(DalamudContext.DataManager.GetWorldNameById(newPlayer.WorldId)));
+        payloads.Add(RawPayload.LinkTerminator);
 
         return payloads;
     }
@@ -53,35 +51,33 @@ public class PlayerAlertService
     public void SendProximityAlert(Player player) => Task.Run(() =>
     {
         var payloads = new List<Payload>();
-        if (IsProximityAlertEnabled(player) &&
-            UnixTimestampHelper.CurrentTime() - player.LastAlertSent > AlertFrequency &&
-            UnixTimestampHelper.CurrentTime() - player.Created > AlertFrequency)
+        if (!IsProximityAlertEnabled(player) ||
+            UnixTimestampHelper.CurrentTime() - player.LastAlertSent <= AlertFrequency ||
+            UnixTimestampHelper.CurrentTime() - player.Created <= AlertFrequency) return;
+        player.LastAlertSent = UnixTimestampHelper.CurrentTime();
+        UpdatePlayerAlert(player.Id, player.LastAlertSent);
+        payloads.Add(this.OpenPlayerTrackChatLinkHandler);
+        payloads.Add(new TextPayload(player.Name));
+        payloads.Add(new IconPayload(BitmapFontIcon.CrossWorld));
+        payloads.Add(new TextPayload(DalamudContext.DataManager.GetWorldNameById(player.WorldId)));
+        payloads.Add(new TextPayload($" {ServiceContext.Localization.GetString("ProximityAlertMessage")}"));
+        payloads.Add(RawPayload.LinkTerminator);
+        if (!payloads.Any())
         {
-            player.LastAlertSent = UnixTimestampHelper.CurrentTime();
-            UpdatePlayerAlert(player.Id, player.LastAlertSent);
-            payloads.Add(this.OpenPlayerTrackChatLinkHandler);
-            payloads.Add(new TextPayload(player.Name));
-            payloads.Add(new IconPayload(BitmapFontIcon.CrossWorld));
-            payloads.Add(new TextPayload(DalamudContext.DataManager.GetWorldNameById(player.WorldId)));
-            payloads.Add(new TextPayload($" {ServiceContext.Localization.GetString("ProximityAlertMessage")}"));
-            payloads.Add(RawPayload.LinkTerminator);
-            if (!payloads.Any())
+            DalamudContext.PluginLog.Warning("Skipping empty alert for proximity.");
+            try
             {
-                DalamudContext.PluginLog.Warning("Skipping empty alert for proximity.");
-                try
-                {
-                    DalamudContext.PluginLog.Warning($"Player: {JsonConvert.SerializeObject(player)}");
-                }
-                catch (Exception ex)
-                {
-                    DalamudContext.PluginLog.Error(ex, "Failed to serialize player.");
-                }
-
-                return;
+                DalamudContext.PluginLog.Warning($"Player: {JsonConvert.SerializeObject(player)}");
+            }
+            catch (Exception ex)
+            {
+                DalamudContext.PluginLog.Error(ex, "Failed to serialize player.");
             }
 
-            DalamudContext.ChatGuiHandler.PluginPrintNotice(payloads);
+            return;
         }
+
+        DalamudContext.ChatGuiHandler.PluginPrintNotice(payloads);
     });
 
     public void Dispose() => DalamudContext.PluginInterface.RemoveChatLinkHandler((uint)ChatLinkHandler.OpenPlayerTrack);

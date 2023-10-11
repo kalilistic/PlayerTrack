@@ -31,17 +31,15 @@ public class PlayerEncounterService
         }
 
         var playerEncounter = RepositoryContext.PlayerEncounterRepository.GetByPlayerIdAndEncId(player.Id, encId);
-        if (playerEncounter == null)
+        if (playerEncounter != null) return;
+        playerEncounter = new PlayerEncounter
         {
-            playerEncounter = new PlayerEncounter
-            {
-                PlayerId = player.Id,
-                EncounterId = encId,
-                JobId = toadPlayer.ClassJob,
-                JobLvl = toadPlayer.Level,
-            };
-            RepositoryContext.PlayerEncounterRepository.CreatePlayerEncounter(playerEncounter);
-        }
+            PlayerId = player.Id,
+            EncounterId = encId,
+            JobId = toadPlayer.ClassJob,
+            JobLvl = toadPlayer.Level,
+        };
+        RepositoryContext.PlayerEncounterRepository.CreatePlayerEncounter(playerEncounter);
     }
 
     public static ToadLocation GetEncounterLocation()

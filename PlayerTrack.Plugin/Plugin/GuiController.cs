@@ -63,13 +63,11 @@ public static class GuiController
                 combinedView.OpenConfig -= OpenConfig;
             }
 
-            if (configView != null)
-            {
-                configView.WindowConfigChanged -= WindowConfigChanged;
-                configView.PlayerConfigChanged -= presenter.ClearCache;
-                configView.PlayerConfigChanged -= NameplateHandler.RefreshNameplates;
-                configView.ContextMenuUpdated -= ContextMenuHandler.Restart;
-            }
+            if (configView == null) return;
+            configView.WindowConfigChanged -= WindowConfigChanged;
+            configView.PlayerConfigChanged -= presenter.ClearCache;
+            configView.PlayerConfigChanged -= NameplateHandler.RefreshNameplates;
+            configView.ContextMenuUpdated -= ContextMenuHandler.Restart;
         }
         catch (Exception)
         {
@@ -88,11 +86,9 @@ public static class GuiController
     private static void CloseCombinedWindow()
     {
         DalamudContext.PluginLog.Verbose("Entering GuiController.CloseCombinedWindow()");
-        if (combinedView != null)
-        {
-            combinedView.OpenConfig -= OpenConfig;
-            DalamudContext.WindowManager.RemoveWindows(combinedView);
-        }
+        if (combinedView == null) return;
+        combinedView.OpenConfig -= OpenConfig;
+        DalamudContext.WindowManager.RemoveWindows(combinedView);
     }
 
     private static void StartSeparateWindows()
@@ -107,11 +103,9 @@ public static class GuiController
     private static void CloseSeparateWindows()
     {
         DalamudContext.PluginLog.Verbose("Entering GuiController.CloseSeparateWindows()");
-        if (playerListView != null && panelView != null)
-        {
-            playerListView.OpenConfig -= OpenConfig;
-            DalamudContext.WindowManager.RemoveWindows(playerListView, panelView);
-        }
+        if (playerListView == null || panelView == null) return;
+        playerListView.OpenConfig -= OpenConfig;
+        DalamudContext.WindowManager.RemoveWindows(playerListView, panelView);
     }
 
     private static void OpenConfig() => configView?.Toggle();

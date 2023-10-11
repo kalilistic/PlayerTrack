@@ -158,41 +158,39 @@ public class BackupService
             }
 
             var backup = GetBackups().FirstOrDefault(bk => bk.Name.Equals(fileInfo.Name, StringComparison.Ordinal));
-            if (backup == null)
+            if (backup != null) continue;
+            DateTimeOffset creationTime = fileInfo.CreationTimeUtc;
+            DateTimeOffset modificationTime = fileInfo.LastWriteTimeUtc;
+            var creationTimestamp = creationTime.ToUnixTimeMilliseconds();
+            var modificationTimestamp = modificationTime.ToUnixTimeMilliseconds();
+            var backupType = fileInfo.Name switch
             {
-                DateTimeOffset creationTime = fileInfo.CreationTimeUtc;
-                DateTimeOffset modificationTime = fileInfo.LastWriteTimeUtc;
-                var creationTimestamp = creationTime.ToUnixTimeMilliseconds();
-                var modificationTimestamp = modificationTime.ToUnixTimeMilliseconds();
-                var backupType = fileInfo.Name switch
-                {
-                    { } name when name.Contains("UPGRADE") => BackupType.Upgrade,
-                    { } name when name.Contains("AUTOMATIC") => BackupType.Automatic,
-                    _ => BackupType.Unknown,
-                };
+                { } name when name.Contains("UPGRADE") => BackupType.Upgrade,
+                { } name when name.Contains("AUTOMATIC") => BackupType.Automatic,
+                _ => BackupType.Unknown,
+            };
 
-                var regex = new Regex(@"\d{13}");
-                var match = regex.Match(fileInfo.Name);
-                if (match.Success)
+            var regex = new Regex(@"\d{13}");
+            var match = regex.Match(fileInfo.Name);
+            if (match.Success)
+            {
+                if (long.TryParse(match.Value, out var filenameTimestamp))
                 {
-                    if (long.TryParse(match.Value, out var filenameTimestamp))
-                    {
-                        creationTimestamp = filenameTimestamp;
-                        modificationTimestamp = filenameTimestamp;
-                    }
+                    creationTimestamp = filenameTimestamp;
+                    modificationTimestamp = filenameTimestamp;
                 }
-
-                backup = new Backup
-                {
-                    Name = fileInfo.Name,
-                    Size = fileInfo.Length,
-                    BackupType = backupType,
-                    IsProtected = true,
-                    Created = creationTimestamp,
-                    Updated = modificationTimestamp,
-                };
-                RepositoryContext.BackupRepository.CreateBackup(backup, false);
             }
+
+            backup = new Backup
+            {
+                Name = fileInfo.Name,
+                Size = fileInfo.Length,
+                BackupType = backupType,
+                IsProtected = true,
+                Created = creationTimestamp,
+                Updated = modificationTimestamp,
+            };
+            RepositoryContext.BackupRepository.CreateBackup(backup, false);
         }
 
         // Run automatic scheduled backup if needed

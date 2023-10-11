@@ -82,11 +82,9 @@ public static class NameplateHandler
         DalamudContext.PluginLog.Verbose("Entering NameplateHandler.Dispose()");
         try
         {
-            if (internalNameplateManager != null)
-            {
-                internalNameplateManager.Hooks.AddonNamePlate_SetPlayerNameManaged -= OnNameplateUpdate;
-                internalNameplateManager.Dispose();
-            }
+            if (internalNameplateManager == null) return;
+            internalNameplateManager.Hooks.AddonNamePlate_SetPlayerNameManaged -= OnNameplateUpdate;
+            internalNameplateManager.Dispose();
         }
         catch (Exception ex)
         {

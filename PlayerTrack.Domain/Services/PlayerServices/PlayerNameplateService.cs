@@ -36,16 +36,15 @@ public class PlayerNameplateService
         nameplate.NameplateUseColorIfDead = PlayerConfigService.GetNameplateUseColorIfDead(player);
 
         var nameplateTitleType = PlayerConfigService.GetNameplateTitleType(player);
-        var title = string.Empty;
 
-        if (nameplateTitleType == NameplateTitleType.CustomTitle)
+        var title = nameplateTitleType switch
         {
-            title = PlayerConfigService.GetNameplateCustomTitle(player);
-        }
-        else if (nameplateTitleType == NameplateTitleType.CategoryName && player.PrimaryCategoryId != 0)
-        {
-            title = ServiceContext.CategoryService.GetCategory(player.PrimaryCategoryId)?.Name ?? string.Empty;
-        }
+            NameplateTitleType.CustomTitle => PlayerConfigService.GetNameplateCustomTitle(player),
+            NameplateTitleType.CategoryName when player.PrimaryCategoryId != 0 => ServiceContext.CategoryService
+                .GetCategory(player.PrimaryCategoryId)
+                ?.Name ?? string.Empty,
+            _ => string.Empty
+        };
 
         if (nameplateTitleType != NameplateTitleType.NoChange && !string.IsNullOrEmpty(title))
         {

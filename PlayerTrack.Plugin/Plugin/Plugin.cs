@@ -12,17 +12,13 @@ using PlayerTrack.Migration;
 
 namespace PlayerTrack.Plugin;
 
-using System.Linq;
 using System.Threading.Tasks;
 
 public class Plugin : IDalamudPlugin
 {
     public Plugin(DalamudPluginInterface pluginInterface)
     {
-        if (!DalamudContext.Initialize(pluginInterface))
-        {
-            return;
-        }
+        if (!DalamudContext.Initialize(pluginInterface)) return;
 
         if (pluginInterface.IsDifferentVersionLoaded())
         {
@@ -31,10 +27,7 @@ public class Plugin : IDalamudPlugin
         }
 
         var isDatabaseLoadedSuccessfully = LoadDatabase();
-        if (!isDatabaseLoadedSuccessfully)
-        {
-            return;
-        }
+        if (!isDatabaseLoadedSuccessfully) return;
 
         DalamudContext.LocManager.LoadLanguagesFromAssembly("PlayerTrack.Plugin.Resource.Loc");
         RepositoryContext.Initialize(DalamudContext.PluginInterface.GetPluginConfigDirectory());

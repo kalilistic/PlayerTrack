@@ -280,12 +280,7 @@ public class PlayerConfigService
         Func<PlayerConfig, ConfigValue<T>> propertySelector)
     {
         var categoryProperty = propertySelector(categoryPlayerConfig);
-        if (categoryProperty.InheritOverride == InheritOverride.Override)
-        {
-            return new ExtractedProperty<T> { PlayerConfigType = PlayerConfigType.Category, PropertyValue = categoryProperty.Value, CategoryId = categoryPlayerConfig.CategoryId ?? 0 };
-        }
-
-        return ExtractDefaultProperty(defaultPlayerConfig, propertySelector);
+        return categoryProperty.InheritOverride == InheritOverride.Override ? new ExtractedProperty<T> { PlayerConfigType = PlayerConfigType.Category, PropertyValue = categoryProperty.Value, CategoryId = categoryPlayerConfig.CategoryId ?? 0 } : ExtractDefaultProperty(defaultPlayerConfig, propertySelector);
     }
 
     private static ExtractedProperty<T> ExtractDefaultProperty<T>(

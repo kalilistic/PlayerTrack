@@ -44,11 +44,9 @@ public static class ContextMenuHandler
         DalamudContext.PluginLog.Verbose("Entering ContextMenuHandler.Dispose()");
         try
         {
-            if (contextMenu != null)
-            {
-                contextMenu.OnOpenGameObjectContextMenu -= OpenGameObjectContextMenu;
-                contextMenu.Dispose();
-            }
+            if (contextMenu == null) return;
+            contextMenu.OnOpenGameObjectContextMenu -= OpenGameObjectContextMenu;
+            contextMenu.Dispose();
         }
         catch (Exception ex)
         {
@@ -186,15 +184,13 @@ public static class ContextMenuHandler
             args.AddCustomItem(openPlayerTrackMenuItem);
         }
 
-        if (ServiceContext.ConfigService.GetConfig().ShowOpenLodestone)
+        if (!ServiceContext.ConfigService.GetConfig().ShowOpenLodestone) return;
+        var key = PlayerKeyBuilder.Build(args.Text.TextValue, args.ObjectWorld);
+        var player = ServiceContext.PlayerDataService.GetPlayer(key);
+        var lodestoneId = player?.LodestoneId ?? 0;
+        if (lodestoneId != 0)
         {
-            var key = PlayerKeyBuilder.Build(args.Text.TextValue, args.ObjectWorld);
-            var player = ServiceContext.PlayerDataService.GetPlayer(key);
-            var lodestoneId = player?.LodestoneId ?? 0;
-            if (lodestoneId != 0)
-            {
-                args.AddCustomItem(openLodestoneItem);
-            }
+            args.AddCustomItem(openLodestoneItem);
         }
     }
 }

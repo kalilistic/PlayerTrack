@@ -10,7 +10,6 @@ using PlayerTrack.Models;
 
 namespace PlayerTrack.Infrastructure;
 
-using System.Data.SQLite;
 using Dalamud.DrunkenToad.Core;
 
 public class CategoryRepository : BaseRepository

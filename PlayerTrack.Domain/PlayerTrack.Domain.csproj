@@ -17,7 +17,7 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<ProduceReferenceAssembly>false</ProduceReferenceAssembly>
 		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-		<NoWarn>1591,CA1822</NoWarn>
+		<NoWarn>CA1822,CS1591</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugSymbols>true</DebugSymbols>

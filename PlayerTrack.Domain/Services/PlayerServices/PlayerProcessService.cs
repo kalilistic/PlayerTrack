@@ -58,11 +58,9 @@ public class PlayerProcessService
     public static void CheckForDuplicates(Player player) => Task.Run(() =>
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerMergeService.CheckForDuplicates(): {player.Id}");
-        if (player.LodestoneId > 0)
-        {
-            var players = RepositoryContext.PlayerRepository.GetPlayersByLodestoneId(player.LodestoneId) ?? new List<Player>();
-            HandleDuplicatePlayers(players);
-        }
+        if (player.LodestoneId <= 0) return;
+        var players = RepositoryContext.PlayerRepository.GetPlayersByLodestoneId(player.LodestoneId) ?? new List<Player>();
+        HandleDuplicatePlayers(players);
     });
 
     public static void CreateNewPlayer(string name, uint worldId)

@@ -36,11 +36,9 @@ public class PlayerTrackAPI : IPlayerTrackAPI
     private void CheckInitialized()
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.CheckInitialized()");
-        if (!this.initialized)
-        {
-            const string msg = "API is not initialized.";
-            DalamudContext.PluginLog.Warning(msg);
-            throw new InvalidOperationException(msg);
-        }
+        if (this.initialized) return;
+        const string msg = "API is not initialized.";
+        DalamudContext.PluginLog.Warning(msg);
+        throw new InvalidOperationException(msg);
     }
 }

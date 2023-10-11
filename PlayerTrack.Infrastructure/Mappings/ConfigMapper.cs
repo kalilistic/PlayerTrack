@@ -18,20 +18,18 @@ public static class ConfigMapper
         foreach (var property in typeof(PluginConfig).GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {
             var configEntryDTO = configEntryDTOs.FirstOrDefault(dto => dto.key == property.Name);
-            if (configEntryDTO != null)
+            if (configEntryDTO == null) continue;
+            object typedValue;
+            if (property.PropertyType.IsPrimitive || property.PropertyType == typeof(string))
             {
-                object typedValue;
-                if (property.PropertyType.IsPrimitive || property.PropertyType == typeof(string))
-                {
-                    typedValue = Convert.ChangeType(configEntryDTO.value, property.PropertyType);
-                }
-                else
-                {
-                    typedValue = JsonConvert.DeserializeObject(configEntryDTO.value, property.PropertyType) ?? string.Empty;
-                }
-
-                property.SetValue(config, typedValue);
+                typedValue = Convert.ChangeType(configEntryDTO.value, property.PropertyType);
             }
+            else
+            {
+                typedValue = JsonConvert.DeserializeObject(configEntryDTO.value, property.PropertyType) ?? string.Empty;
+            }
+
+            property.SetValue(config, typedValue);
         }
 
         return config;
