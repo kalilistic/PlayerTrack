@@ -38,16 +38,8 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Remove="stylecop.json" />
-		<AdditionalFiles Include="..\stylecop.json">
-			<Link>stylecop.json</Link>
-		</AdditionalFiles>
 		<PackageReference Include="Dalamud.DrunkenToad" Version="1.8.4" />
 		<PackageReference Include="Dalamud.Loc" Version="1.1.2" />
-		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="FlexConfig" Version="1.0.0" />
 	</ItemGroup>
 	<ItemGroup>
