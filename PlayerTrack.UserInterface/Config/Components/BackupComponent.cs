@@ -16,10 +16,15 @@ using Dalamud.Interface.Utility;
 
 public class BackupComponent : ConfigViewComponent
 {
+    private readonly List<float> columnWidths = new();
+    private readonly List<string> columnHeaderKeys = new()
+    {
+        "Type", "Name", "Created", "Size", "Delete",
+    };
     private List<Backup> backups = null!;
     private Tuple<ActionRequest, Backup>? backupToDelete;
     private bool showError;
-
+    
     public override void Draw()
     {
         this.FetchBackups();
@@ -27,6 +32,27 @@ public class BackupComponent : ConfigViewComponent
         this.DrawErrorOrBackupList();
         DrawBackupControls();
         ImGui.EndChild();
+    }
+    
+    public void CalcSize()
+    {
+        var headers = ServiceContext.Localization.GetStrings(this.columnHeaderKeys.ToArray());
+        this.columnWidths.Clear();
+        var columnPaddings = new[] 
+        {
+            70f * ImGuiHelpers.GlobalScale, 
+            175f * ImGuiHelpers.GlobalScale, 
+            50f * ImGuiHelpers.GlobalScale, 
+            50f * ImGuiHelpers.GlobalScale, 
+            50f * ImGuiHelpers.GlobalScale
+        };
+
+        for (var i = 0; i < headers.Length; i++)
+        {
+            var padding = columnPaddings[i];
+            var computedWidth = ImGui.CalcTextSize(headers[i]).X + padding;
+            this.columnWidths.Add(computedWidth);
+        }
     }
 
     private static void DrawBackupErrorMessage() => LocGui.TextColored("BackupErrorMessage", ImGuiColors.DalamudRed);
@@ -68,18 +94,20 @@ public class BackupComponent : ConfigViewComponent
 
     private void DrawBackupList()
     {
-        var headers = ServiceContext.Localization.GetStrings(new[]
+        var headers = ServiceContext.Localization.GetStrings(this.columnHeaderKeys.ToArray());
+
+        if (this.columnWidths.Count == 0)
         {
-            "Type", "Name", "Created", "Size", "Delete",
-        });
+            this.CalcSize();
+        }
 
         if (ImGui.BeginTable("BackupTable", headers.Length, ImGuiTableFlags.None))
         {
-            ToadGui.TableSetupColumn("Backup_Table_Col_1", ImGuiTableColumnFlags.WidthFixed, 80f);
-            ToadGui.TableSetupColumn("Backup_Table_Col_2", ImGuiTableColumnFlags.WidthFixed, 240f);
-            ToadGui.TableSetupColumn("Backup_Table_Col_3", ImGuiTableColumnFlags.WidthFixed, 100f);
-            ToadGui.TableSetupColumn("Backup_Table_Col_4", ImGuiTableColumnFlags.WidthFixed, 80f);
-            ImGui.TableSetupColumn("Backup_Table_Col_5");
+            for (var i = 0; i < headers.Length; i++)
+            {
+                var columnID = $"Backup_Table_Col_{i + 1}";
+                ToadGui.TableSetupColumn(columnID, ImGuiTableColumnFlags.WidthFixed, this.columnWidths[i]);
+            }
 
             foreach (var header in headers)
             {

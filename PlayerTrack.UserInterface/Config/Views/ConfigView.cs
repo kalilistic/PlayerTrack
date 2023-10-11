@@ -41,7 +41,11 @@ public class ConfigView : PlayerTrackView, IDisposable
         this.tagComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.locationComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.windowComponent.WindowConfigComponent_WindowConfigChanged += () => this.WindowConfigChanged?.Invoke();
-        DalamudContext.PluginInterface.LanguageChanged += _ => this.CalcSize();
+        DalamudContext.PluginInterface.LanguageChanged += _ =>
+        {
+            this.CalcSize();
+            this.backupComponent.CalcSize();
+        };
     }
 
     public delegate void WindowConfigChangedDelegate();
