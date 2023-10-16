@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SQLite;
 using System.Linq;
 using AutoMapper;
 
@@ -294,7 +295,7 @@ public class PlayerRepository : BaseRepository
         }
     }
 
-    public int CreateExistingPlayer(Player player)
+    public Tuple<int, string> CreateExistingPlayer(Player player)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.CreatePlayer(): {player.Key}");
         using var transaction = this.Connection.BeginTransaction();
@@ -306,7 +307,7 @@ public class PlayerRepository : BaseRepository
             if (existingId.HasValue)
             {
                 DalamudContext.PluginLog.Verbose($"CreatePlayer(): Player with Key {player.Key} already exists.");
-                return existingId.Value;
+                return new Tuple<int, string>(existingId.Value, string.Empty);
             }
 
             var playerDto = this.Mapper.Map<PlayerDTO>(player);
@@ -356,13 +357,23 @@ public class PlayerRepository : BaseRepository
             var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
 
             transaction.Commit();
-            return newId;
+            return new Tuple<int, string>(newId, string.Empty);
+        }
+        catch (SQLiteException sqliteEx)
+        {
+            var playerDataJson = Newtonsoft.Json.JsonConvert.SerializeObject(player);
+            var errorMsg = $"SQLite Error: {sqliteEx.ErrorCode} - {sqliteEx.Message} - {sqliteEx.InnerException} - {sqliteEx.StackTrace} - {playerDataJson}";
+            DalamudContext.PluginLog.Error(errorMsg);
+            transaction.Rollback();
+            return new Tuple<int, string>(0, errorMsg);
         }
         catch (Exception ex)
         {
-            DalamudContext.PluginLog.Error(ex, $"Failed to create new player with Key {player.Key}.", player);
+            var playerDataJson = Newtonsoft.Json.JsonConvert.SerializeObject(player);
+            var errorMsg = $"General Error: {ex.Message} - {ex.InnerException} - {ex.StackTrace} - {playerDataJson}";
+            DalamudContext.PluginLog.Error(ex, $"Failed to create new player with Key {player.Key}.", errorMsg);
             transaction.Rollback();
-            return 0;
+            return new Tuple<int, string>(0, errorMsg);
         }
     }
 }

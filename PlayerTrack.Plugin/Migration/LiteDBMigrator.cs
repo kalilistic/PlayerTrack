@@ -878,12 +878,22 @@ public static class LiteDBMigrator
             foreach (var oldestPlayer in oldestPlayers)
             {
                 lastPlayer = oldestPlayer;
+                
+                // check is valid or skip
                 if (!IsValidPlayer("Key", oldestPlayer))
                 {
                     var migrationArchive = CreatePlayerArchive(oldestPlayer);
                     playerArchives.Add(migrationArchive);
                     DalamudContext.PluginLog.Info($"Skipping invalid player: {oldestPlayer.ToDebugString()}");
                     invalidPlayerCount++;
+                    continue;
+                }
+                
+                // check if dupe player key or skip
+                if (PlayerKeyToIdMap.ContainsKey(oldestPlayer.GetValueOrDefault<string>("Key")))
+                {
+                    DalamudContext.PluginLog.Info($"Skipping dupe player: {oldestPlayer.ToDebugString()}");
+                    dupePlayerKeyCount++;
                     continue;
                 }
 
@@ -926,17 +936,8 @@ public static class LiteDBMigrator
                 var nameWorldHistories = CreateNameWorldHistory(player, oldestPlayer);
                 playerNameWorldHistoriesList.AddRange(nameWorldHistories);
 
-                if (!PlayerKeyToIdMap.ContainsKey(player.Key))
-                {
-                    PlayerKeyToIdMap.Add(player.Key, player.Id); // save for encounters
-                }
-                else
-                {
-                    DalamudContext.PluginLog.Warning($"Found duplicate player, so skipping {player.Key}");
-                    dupePlayerKeyCount++;
-                }
-
                 playerCount++;
+                PlayerKeyToIdMap.TryAdd(player.Key, player.Id);
             }
 
             if (dupePlayerKeyCount > 0)
@@ -952,7 +953,7 @@ public static class LiteDBMigrator
             var failedPlayerCount = 0;
             foreach (var player in players)
             {
-                var id = RepositoryContext.PlayerRepository.CreateExistingPlayer(player);
+                var (id, errorMessage) = RepositoryContext.PlayerRepository.CreateExistingPlayer(player);
 
                 // check if id is 0, if so, failed to insert
                 if (id != 0)
@@ -960,6 +961,7 @@ public static class LiteDBMigrator
                     // ensure id matches since it's used for other inserts
                     if (id != player.Id)
                     {
+                        LogError(errorMessage);
                         throw new DataException($"Player ID mismatch, failing out on {player.Key}. Expected {player.Id}; got {id}.");
                     }
 
