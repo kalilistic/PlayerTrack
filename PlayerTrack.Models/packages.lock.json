@@ -4,9 +4,9 @@
     "net7.0-windows7.0": {
       "Dalamud.DrunkenToad": {
         "type": "Direct",
-        "requested": "[1.8.4, )",
-        "resolved": "1.8.4",
-        "contentHash": "3ktHbxrcZyBYjJ4XFihQ8H9Y9sEKUBZN/zmiQywXwhKM9Zsjoo3N8Wyz+KpvsUIEaJTowRMl8vBRonCZIAYb7A==",
+        "requested": "[1.8.5, )",
+        "resolved": "1.8.5",
+        "contentHash": "O9dnR4wZSSw701M7tqJFVPk7ps0I+qDHD3Py8z3S+txNZuisnwmkukIff7EGzqOddy8l+WIzvSIqkQ6yPswx/Q==",
         "dependencies": {
           "Dalamud.Loc": "1.1.2",
           "Microsoft.Extensions.DependencyInjection": "7.0.0"
@@ -27,15 +27,6 @@
           "Dapper": "2.0.78"
         }
       },
-      "StyleCop.Analyzers": {
-        "type": "Direct",
-        "requested": "[1.2.0-beta.435, )",
-        "resolved": "1.2.0-beta.435",
-        "contentHash": "TADk7vdGXtfTnYCV7GyleaaRTQjfoSfZXprQrVMm7cSJtJbFc1QIbWPyLvrgrfGdfHbGmUPvaN4ODKNxg2jgPQ==",
-        "dependencies": {
-          "StyleCop.Analyzers.Unstable": "1.2.0.435"
-        }
-      },
       "Dapper": {
         "type": "Transitive",
         "resolved": "2.0.78",
@@ -53,11 +44,6 @@
         "type": "Transitive",
         "resolved": "7.0.0",
         "contentHash": "h3j/QfmFN4S0w4C2A6X7arXij/M/OVw3uQHSOFxnND4DyAzO1F9eMX7Eti7lU/OkSthEE0WzRsfT/Dmx86jzCw=="
-      },
-      "StyleCop.Analyzers.Unstable": {
-        "type": "Transitive",
-        "resolved": "1.2.0.435",
-        "contentHash": "ouwPWZxbOV3SmCZxIRqHvljkSzkCyi1tDoMzQtDb/bRP8ctASV/iRJr+A2Gdj0QLaLmWnqTWDrH82/iP+X80Lg=="
       }
     }
   }

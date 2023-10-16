@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Dalamud.DrunkenToad.Core;
-
+using Dalamud.Utility;
 using PlayerTrack.Infrastructure;
 using PlayerTrack.Models;
 
@@ -115,17 +115,10 @@ public class BackupService
         return backup;
     }
 
-    private void RunStartupChecks()
+    private void MigrateBackups(string oldBackupDir)
     {
-        // setup directories
-        Directory.CreateDirectory(this.pluginDir);
-        Directory.CreateDirectory(this.backupDir);
-
-        // move files in old backup dir to new one
         try
         {
-            var oldBackupDir = Path.Combine(this.pluginDir, "backups");
-
             if (Directory.Exists(oldBackupDir))
             {
                 var oldFiles = Directory.GetFiles(oldBackupDir);
@@ -139,13 +132,25 @@ public class BackupService
                 {
                     Directory.Delete(oldBackupDir);
                 }
-            }
+            } 
         }
         catch (Exception ex)
         {
             DalamudContext.PluginLog.Error(ex, "Failed to move old backups to new directory.");
         }
 
+    }
+    
+    private void RunStartupChecks()
+    {
+        // setup directories
+        Directory.CreateDirectory(this.pluginDir);
+        Directory.CreateDirectory(this.backupDir);
+
+        // move files in old backup dir to new one
+        MigrateBackups(Path.Combine(this.pluginDir, "backups"));
+        if (Util.IsWine()) MigrateBackups(DalamudContext.PluginInterface.WindowsPluginBackupDirectory());
+        
         // create backup records for discovered files
         var files = Directory.GetFiles(this.backupDir);
         foreach (var file in files)
