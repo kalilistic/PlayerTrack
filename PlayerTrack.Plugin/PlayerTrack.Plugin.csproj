@@ -20,8 +20,8 @@
 		<Configurations>Debug;Release</Configurations>
 		<AssemblyName>PlayerTrack</AssemblyName>
 		<RootNamespace>PlayerTrack</RootNamespace>
-		<PackageVersion>3.1.8</PackageVersion>
-		<AssemblyVersion>3.1.8.0</AssemblyVersion>
+		<PackageVersion>3.1.9</PackageVersion>
+		<AssemblyVersion>3.1.9.0</AssemblyVersion>
 		<NoWarn>CS1591</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
