@@ -44,8 +44,8 @@ public class ConfigView : PlayerTrackView, IDisposable
         DalamudContext.PluginInterface.LanguageChanged += _ =>
         {
             this.CalcSize();
-            this.backupComponent.CalcSize();
         };
+        this.CalcSize();
     }
 
     public delegate void WindowConfigChangedDelegate();
@@ -96,6 +96,7 @@ public class ConfigView : PlayerTrackView, IDisposable
         }
 
         this.navMaxWidth = (maxWidth + 20) * ImGuiHelpers.GlobalScale;
+        this.backupComponent.CalcSize();
     }
 
     public override void Draw()
