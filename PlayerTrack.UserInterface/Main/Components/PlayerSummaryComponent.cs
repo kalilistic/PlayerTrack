@@ -31,7 +31,6 @@ public class PlayerSummaryComponent : ViewComponent
     {
         this.presenter = presenter;
         DalamudContext.PluginInterface.LanguageChanged += _ => this.CalcSize();
-        this.CalcSize();
     }
 
     public void CalcSize()
