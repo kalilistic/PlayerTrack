@@ -26,11 +26,12 @@ public class PlayerSummaryComponent : ViewComponent
     private int selectedTagIndex;
     private int selectedCategoryIndex;
     private float assignedChildHeight;
+    private bool isLanguageChanged = true;
 
     public PlayerSummaryComponent(IMainPresenter presenter)
     {
         this.presenter = presenter;
-        DalamudContext.PluginInterface.LanguageChanged += _ => this.CalcSize();
+        DalamudContext.PluginInterface.LanguageChanged += _ => this.isLanguageChanged = true;
     }
 
     public void CalcSize()
@@ -70,9 +71,10 @@ public class PlayerSummaryComponent : ViewComponent
             return;
         }
 
-        if (this.currentOffsets.Length == 0)
+        if (isLanguageChanged)
         {
             this.CalcSize();
+            this.isLanguageChanged = false;
         }
 
         ImGui.BeginChild("###PlayerSummaryPlayer", new Vector2(-1, 0), false);

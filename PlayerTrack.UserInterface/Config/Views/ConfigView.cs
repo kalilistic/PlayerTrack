@@ -25,6 +25,7 @@ public class ConfigView : PlayerTrackView, IDisposable
     private readonly DataComponent dataComponent = new();
     private readonly ContributeComponent contributeComponent = new();
     private float navMaxWidth;
+    private bool isLanguageChanged = true;
 
     public ConfigView(string name, PluginConfig config, ImGuiWindowFlags flags = ImGuiWindowFlags.None)
         : base(name, config, flags)
@@ -41,10 +42,7 @@ public class ConfigView : PlayerTrackView, IDisposable
         this.tagComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.locationComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.windowComponent.WindowConfigComponent_WindowConfigChanged += () => this.WindowConfigChanged?.Invoke();
-        DalamudContext.PluginInterface.LanguageChanged += _ =>
-        {
-            this.CalcSize();
-        };
+        DalamudContext.PluginInterface.LanguageChanged += _ => this.isLanguageChanged = true;
     }
 
     public delegate void WindowConfigChangedDelegate();
@@ -100,9 +98,10 @@ public class ConfigView : PlayerTrackView, IDisposable
 
     public override void Draw()
     {
-        if (this.navMaxWidth == 0)
+        if (isLanguageChanged)
         {
             this.CalcSize();
+            this.isLanguageChanged = false;
         }
 
         ImGui.BeginChild("###Config_Navigation", ImGuiHelpers.ScaledVector2(this.navMaxWidth, 0), true);
