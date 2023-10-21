@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using PlayerTrack.Domain.Common;
 using PlayerTrack.Infrastructure;
 using PlayerTrack.Models;
@@ -28,7 +29,11 @@ public class PlayerDataService : SortedCacheService<Player>
     private const long NinetyDaysInMilliseconds = 7776000000;
     private const int MaxBatchSize = 500;
     private readonly Timer recentPlayerTimer;
+    private readonly ConcurrentDictionary<int, ThreadSafeSortedCollection<Player>> categoryPlayersCache = new();
+    private readonly ConcurrentDictionary<int, ThreadSafeSortedCollection<Player>> tagPlayersCache = new();
     private bool isFirstLoad = true;
+    private ThreadSafeSortedCollection<Player> currentPlayersCache = new(LockRecursionPolicy.SupportsRecursion);
+    private ThreadSafeSortedCollection<Player> recentPlayersCache = new(LockRecursionPolicy.SupportsRecursion);
 
     public PlayerDataService()
     {
@@ -118,7 +123,20 @@ public class PlayerDataService : SortedCacheService<Player>
         {
             try
             {
-                this.cache.Resort(new PlayerComparer(ServiceContext.CategoryService.GetCategoryRanks()));
+                var comparer = new PlayerComparer(ServiceContext.CategoryService.GetCategoryRanks());
+                this.cache.Resort(comparer);
+                this.currentPlayersCache.Resort(comparer);
+                this.recentPlayersCache.Resort(comparer);
+                foreach (var entry in this.categoryPlayersCache)
+                {
+                    entry.Value.Resort(comparer);
+                }
+                
+                foreach (var entry in this.tagPlayersCache)
+                {
+                    entry.Value.Resort(comparer);
+                }
+                
                 this.OnCacheUpdated();
             }
             catch (Exception ex)
@@ -147,6 +165,20 @@ public class PlayerDataService : SortedCacheService<Player>
         ServiceContext.PlayerProcessService.RemoveCurrentPlayer(newPlayer.ObjectId);
         this.cache.Remove(newPlayer);
         this.cache.Remove(oldestPlayer);
+        this.currentPlayersCache.Remove(newPlayer);
+        this.currentPlayersCache.Remove(oldestPlayer);
+        this.recentPlayersCache.Remove(newPlayer);
+        this.recentPlayersCache.Remove(oldestPlayer);
+        foreach (var entry in this.categoryPlayersCache)
+        {
+            entry.Value.Remove(newPlayer);
+            entry.Value.Remove(oldestPlayer);
+        }
+        foreach (var entry in this.tagPlayersCache)
+        {
+            entry.Value.Remove(newPlayer);
+            entry.Value.Remove(oldestPlayer);
+        }
         this.OnCacheUpdated();
 
         // create records
@@ -173,6 +205,32 @@ public class PlayerDataService : SortedCacheService<Player>
         // update player in repo & cache
         RepositoryContext.PlayerRepository.UpdatePlayer(oldestPlayer);
         this.cache.Add(oldestPlayer);
+        if (oldestPlayer.IsCurrent)
+        {
+            this.currentPlayersCache.Add(oldestPlayer);
+        }
+        
+        if (oldestPlayer.IsRecent)
+        {
+            this.recentPlayersCache.Add(oldestPlayer);
+        }
+        
+        foreach (var entry in this.categoryPlayersCache)
+        {
+            if (oldestPlayer.AssignedCategories.Select(c => c.Id).Contains(entry.Key))
+            {
+                entry.Value.Add(oldestPlayer);
+            }
+        }
+        
+        foreach(var entry in this.tagPlayersCache)
+        {
+            if (oldestPlayer.AssignedTags.Select(t => t.Id).Contains(entry.Key))
+            {
+                entry.Value.Add(oldestPlayer);
+            }
+        }
+        
         this.OnCacheUpdated();
 
         // add to current players if needed
@@ -198,49 +256,49 @@ public class PlayerDataService : SortedCacheService<Player>
 
     public int GetAllPlayersCount(string name, SearchType searchType) => this.cache.GetFilteredItemsCount(GetSearchFilter(name, searchType));
 
-    public int GetCurrentPlayersCount() => this.cache.GetFilteredItemsCount(p => p.IsCurrent);
+    public int GetCurrentPlayersCount() => this.currentPlayersCache.Count;
 
-    public int GetCurrentPlayersCount(string name, SearchType searchType) => this.cache.GetFilteredItemsCount(p => p.IsCurrent && GetSearchFilter(name, searchType)(p));
+    public int GetCurrentPlayersCount(string name, SearchType searchType) => this.currentPlayersCache.GetFilteredItemsCount(p => GetSearchFilter(name, searchType)(p));
 
-    public int GetRecentPlayersCount() => this.cache.GetFilteredItemsCount(p => p.IsRecent);
+    public int GetRecentPlayersCount() => this.recentPlayersCache.Count;
 
-    public int GetRecentPlayersCount(string name, SearchType searchType) => this.cache.GetFilteredItemsCount(p => p.IsRecent && GetSearchFilter(name, searchType)(p));
+    public int GetRecentPlayersCount(string name, SearchType searchType) => this.recentPlayersCache.GetFilteredItemsCount(p => GetSearchFilter(name, searchType)(p));
 
-    public int GetCategoryPlayersCount(int categoryId) => this.cache.GetFilteredItemsCount(p => p.PrimaryCategoryId == categoryId);
+    public int GetCategoryPlayersCount(int categoryId) => this.categoryPlayersCache[categoryId].GetFilteredItemsCount(p => p.PrimaryCategoryId == categoryId);
 
-    public int GetTagPlayersCount(int tagId) => this.cache.GetFilteredItemsCount(p => p.AssignedTags.Any(t => t.Id == tagId));
+    public int GetTagPlayersCount(int tagId) => this.tagPlayersCache[tagId].Count;
 
-    public int GetCategoryPlayersCount(int categoryId, string name, SearchType searchType) => this.cache.GetFilteredItemsCount(p => p.PrimaryCategoryId == categoryId && GetSearchFilter(name, searchType)(p));
+    public int GetCategoryPlayersCount(int categoryId, string name, SearchType searchType) => this.categoryPlayersCache[categoryId].GetFilteredItemsCount(p => p.PrimaryCategoryId == categoryId && GetSearchFilter(name, searchType)(p));
 
-    public int GetTagPlayersCount(int tagId, string name, SearchType searchType) => this.cache.GetFilteredItemsCount(p => p.AssignedTags.Any(t => t.Id == tagId) && GetSearchFilter(name, searchType)(p));
+    public int GetTagPlayersCount(int tagId, string name, SearchType searchType) => this.tagPlayersCache[tagId].GetFilteredItemsCount(p => GetSearchFilter(name, searchType)(p));
 
     public List<Player> GetAllPlayers(int start, int count) => this.cache.GetSortedItems(start, count);
 
     public List<Player> GetAllPlayers(int start, int count, string name, SearchType searchType) => this.cache.GetFilteredSortedItems(GetSearchFilter(name, searchType), start, count);
 
-    public List<Player> GetCurrentPlayers(int start, int count) => this.cache.GetFilteredSortedItems(p => p.IsCurrent, start, count);
+    public List<Player> GetCurrentPlayers(int start, int count) => this.currentPlayersCache.GetSortedItems(start, count);
 
-    public List<Player> GetCurrentPlayers(int start, int count, string name, SearchType searchType) => this.cache.GetFilteredSortedItems(
-        p => GetSearchFilter(name, searchType)(p) && p.IsCurrent,
+    public List<Player> GetCurrentPlayers(int start, int count, string name, SearchType searchType) => this.currentPlayersCache.GetFilteredSortedItems(
+        p => GetSearchFilter(name, searchType)(p),
         start,
         count);
 
-    public List<Player> GetRecentPlayers(int start, int count) => this.cache.GetFilteredSortedItems(p => p.IsRecent, start, count);
+    public List<Player> GetRecentPlayers(int start, int count) => this.recentPlayersCache.GetSortedItems(start, count);
 
-    public List<Player> GetRecentPlayers(int start, int count, string name, SearchType searchType) => this.cache.GetFilteredSortedItems(
-        p => GetSearchFilter(name, searchType)(p) && p.IsRecent,
+    public List<Player> GetRecentPlayers(int start, int count, string name, SearchType searchType) => this.recentPlayersCache.GetFilteredSortedItems(
+        p => GetSearchFilter(name, searchType)(p),
         start,
         count);
 
-    public List<Player> GetCategoryPlayers(int categoryId, int start, int count) => this.cache.GetFilteredSortedItems(p => p.PrimaryCategoryId == categoryId, start, count);
+    public List<Player> GetCategoryPlayers(int categoryId, int start, int count) => this.categoryPlayersCache[categoryId].GetFilteredSortedItems(p => p.PrimaryCategoryId == categoryId, start, count);
 
-    public List<Player> GetCategoryPlayers(int categoryId, int start, int count, string name, SearchType searchType) => this.cache.GetFilteredSortedItems(
+    public List<Player> GetCategoryPlayers(int categoryId, int start, int count, string name, SearchType searchType) => this.categoryPlayersCache[categoryId].GetFilteredSortedItems(
         p => GetSearchFilter(name, searchType)(p) && p.PrimaryCategoryId == categoryId, start, count);
 
-    public List<Player> GetTagPlayers(int tagId, int start, int count) => this.cache.GetFilteredSortedItems(p => p.AssignedTags.Any(t => t.Id == tagId), start, count);
+    public List<Player> GetTagPlayers(int tagId, int start, int count) => this.tagPlayersCache[tagId].GetSortedItems(start, count);
 
-    public List<Player> GetTagPlayers(int tagId, int start, int count, string name, SearchType searchType) => this.cache.GetFilteredSortedItems(
-        p => GetSearchFilter(name, searchType)(p) && p.AssignedTags.Any(t => t.Id == tagId), start, count);
+    public List<Player> GetTagPlayers(int tagId, int start, int count, string name, SearchType searchType) => this.tagPlayersCache[tagId].GetFilteredSortedItems(
+        p => GetSearchFilter(name, searchType)(p), start, count);
 
     public int GetPlayerConfigCount() => this.cache.GetFilteredItemsCount(p => p.PlayerConfig.Id != 0);
 
@@ -367,10 +425,70 @@ public class PlayerDataService : SortedCacheService<Player>
             (!options.KeepSettingsForPlayersVerifiedOnLodestone || p.LodestoneStatus != LodestoneStatus.Verified)).Select(p => p.PlayerConfig).ToList();
     }
 
+    private void UpdateCurrentPlayerCache(Player player)
+    {
+        if (player.IsCurrent)
+        {
+            this.currentPlayersCache.AddOrUpdate(player);
+        }
+    }
+
+    private void UpdateRecentPlayerCache(Player player)
+    {
+        if (player.IsRecent)
+        {
+            this.recentPlayersCache.AddOrUpdate(player);
+        }
+    }
+
+    private void UpdateCategoryPlayersCache(Player player)
+    {
+        foreach (var entry in this.categoryPlayersCache)
+        {
+            if (player.AssignedCategories.Select(c => c.Id).Contains(entry.Key))
+            {
+                entry.Value.AddOrUpdate(player);
+            }
+            else
+            {
+                entry.Value.Remove(player);
+            }
+        }
+
+        if (player.AssignedCategories.Count == 0)
+        {
+            this.categoryPlayersCache[0].AddOrUpdate(player);
+        }
+    }
+
+    private void UpdateTagPlayersCache(Player player)
+    {
+        foreach (var entry in this.tagPlayersCache)
+        {
+            if (player.AssignedTags.Select(t => t.Id).Contains(entry.Key))
+            {
+                entry.Value.AddOrUpdate(player);
+            }
+            else
+            {
+                entry.Value.Remove(player);
+            }
+        }
+        
+        if (player.AssignedTags.Count == 0)
+        {
+            this.tagPlayersCache[0].AddOrUpdate(player);
+        }
+    }
+    
     private void UpdatePlayerInCacheAndRepository(Player player)
     {
         PopulateDerivedFields(player, ServiceContext.CategoryService.GetCategoryRanks());
         this.cache.Update(player);
+        UpdateCurrentPlayerCache(player);
+        UpdateRecentPlayerCache(player);
+        UpdateCategoryPlayersCache(player);
+        UpdateTagPlayersCache(player);
         RepositoryContext.PlayerRepository.UpdatePlayer(player);
         this.OnCacheUpdated();
         this.PlayerUpdated?.Invoke(player);
@@ -382,12 +500,26 @@ public class PlayerDataService : SortedCacheService<Player>
         player.PlayerConfig.PlayerId = player.Id;
         PopulateDerivedFields(player, ServiceContext.CategoryService.GetCategoryRanks());
         this.cache.Add(player);
+        UpdateCurrentPlayerCache(player);
+        UpdateRecentPlayerCache(player);
+        UpdateCategoryPlayersCache(player);
+        UpdateTagPlayersCache(player);
         this.OnCacheUpdated();
     }
 
     private void DeletePlayerFromCacheAndRepository(Player player)
     {
         this.cache.Remove(player);
+        this.currentPlayersCache.Remove(player);
+        this.recentPlayersCache.Remove(player);
+        foreach (var entry in this.categoryPlayersCache)
+        {
+            entry.Value.Remove(player);
+        }
+        foreach (var entry in this.tagPlayersCache)
+        {
+            entry.Value.Remove(player);
+        }
         RepositoryContext.PlayerRepository.DeletePlayer(player.Id);
         this.OnCacheUpdated();
     }
@@ -412,19 +544,44 @@ public class PlayerDataService : SortedCacheService<Player>
 
     private void ReloadPlayers()
     {
+        // load current and recent player ids from cache (if not first load)
         HashSet<int>? currentPlayerIds = null;
         HashSet<int>? recentPlayerIds = null;
-
+        
         if (!this.isFirstLoad)
         {
             currentPlayerIds = new HashSet<int>(this.cache.GetFilteredSortedItems(p => p.IsCurrent).Select(p => p.Id));
             recentPlayerIds = new HashSet<int>(this.cache.GetFilteredSortedItems(p => p.IsRecent).Select(p => p.Id));
         }
-
-        var players = RepositoryContext.PlayerRepository.GetAllPlayersWithRelations().ToList();
-
+        
+        // load category and tag data to determine caches and sorting
         var categoryRanks = ServiceContext.CategoryService.GetCategoryRanks();
+        var tags = ServiceContext.TagService.GetAllTags();
 
+        // load players from repo
+        var players = RepositoryContext.PlayerRepository.GetAllPlayersWithRelations().ToList();
+        
+        // setup new lists for caches
+        var currentPlayers = new List<Player>();
+        var recentPlayers = new List<Player>();
+        var categoryPlayers = new ConcurrentDictionary<int, List<Player>>();
+        var tagPlayers = new ConcurrentDictionary<int, List<Player>>();
+        
+        // add empty lists for each category
+        categoryPlayers.TryAdd(0, new List<Player>());
+        for (var i = 0; i < categoryRanks.Count; i++)
+        {
+            categoryPlayers.TryAdd(categoryRanks.ElementAt(i).Key, new List<Player>());
+        }
+
+        // add empty lists for each tag
+        tagPlayers.TryAdd(0, new List<Player>());
+        foreach (var tag in tags)
+        {
+            tagPlayers.TryAdd(tag.Id, new List<Player>());
+        }
+        
+        // populate caches
         if (currentPlayerIds != null && recentPlayerIds != null)
         {
             foreach (var player in players)
@@ -432,6 +589,50 @@ public class PlayerDataService : SortedCacheService<Player>
                 PopulateDerivedFields(player, categoryRanks);
                 player.IsCurrent = currentPlayerIds.Contains(player.Id);
                 player.IsRecent = recentPlayerIds.Contains(player.Id);
+
+                if (player.IsCurrent)
+                {
+                    currentPlayers.Add(player);
+                }
+                
+                if (player.IsRecent)
+                {
+                    recentPlayers.Add(player);
+                }
+
+                if (player.AssignedCategories.Count == 0)
+                {
+                    categoryPlayers[0].Add(player);
+                }
+                else
+                {
+                    foreach (var category in player.AssignedCategories)
+                    {
+                        if (!categoryPlayers.ContainsKey(category.Id))
+                        {
+                            categoryPlayers.TryAdd(category.Id, new List<Player>());
+                        }
+
+                        categoryPlayers[category.Id].Add(player);
+                    }
+                }
+
+                if (player.AssignedTags.Count == 0)
+                {
+                    tagPlayers[0].Add(player);
+                }
+                else
+                {
+                    foreach (var tag in player.AssignedTags)
+                    {
+                        if (!tagPlayers.ContainsKey(tag.Id))
+                        {
+                            tagPlayers.TryAdd(tag.Id, new List<Player>());
+                        }
+
+                        tagPlayers[tag.Id].Add(player);
+                    }
+                }
             }
         }
         else
@@ -439,11 +640,58 @@ public class PlayerDataService : SortedCacheService<Player>
             foreach (var player in players)
             {
                 PopulateDerivedFields(player, categoryRanks);
+                if (player.AssignedCategories.Count == 0)
+                {
+                    categoryPlayers[0].Add(player);
+                }
+                else
+                {
+                    foreach (var category in player.AssignedCategories)
+                    {
+                        if (!categoryPlayers.ContainsKey(category.Id))
+                        {
+                            categoryPlayers.TryAdd(category.Id, new List<Player>());
+                        }
+
+                        categoryPlayers[category.Id].Add(player);
+                    } 
+                }
+                
+                if (player.AssignedTags.Count == 0)
+                {
+                    tagPlayers[0].Add(player);
+                }
+                else
+                {
+                    foreach (var tag in player.AssignedTags)
+                    {
+                        if (!tagPlayers.ContainsKey(tag.Id))
+                        {
+                            tagPlayers.TryAdd(tag.Id, new List<Player>());
+                        }
+
+                        tagPlayers[tag.Id].Add(player);
+                    }
+                }
             }
         }
-
-        this.cache = new ThreadSafeSortedCollection<Player>(players, new PlayerComparer(ServiceContext.CategoryService.GetCategoryRanks()));
-
+        
+        // create caches with sorted collections
+        var comparer = new PlayerComparer(ServiceContext.CategoryService.GetCategoryRanks());
+        this.cache = new ThreadSafeSortedCollection<Player>(players, comparer, LockRecursionPolicy.SupportsRecursion);
+        this.currentPlayersCache = new ThreadSafeSortedCollection<Player>(currentPlayers, comparer, LockRecursionPolicy.SupportsRecursion);
+        this.recentPlayersCache = new ThreadSafeSortedCollection<Player>(recentPlayers, comparer, LockRecursionPolicy.SupportsRecursion);
+        
+        foreach (var entry in categoryPlayers)
+        {
+            this.categoryPlayersCache.TryAdd(entry.Key, new ThreadSafeSortedCollection<Player>(entry.Value, comparer, LockRecursionPolicy.SupportsRecursion));
+        }
+        
+        foreach (var entry in tagPlayers)
+        {
+            this.tagPlayersCache.TryAdd(entry.Key, new ThreadSafeSortedCollection<Player>(entry.Value, comparer, LockRecursionPolicy.SupportsRecursion));
+        }
+        
         this.OnCacheUpdated();
         this.isFirstLoad = false;
     }

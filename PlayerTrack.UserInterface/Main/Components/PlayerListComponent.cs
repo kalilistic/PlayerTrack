@@ -295,6 +295,10 @@ public class PlayerListComponent : ViewComponent
                             {
                                 PlayerCategoryService.AssignCategoryToPlayer(player.Id, this.categories[j].Id);
                             }
+                            
+                            this.presenter.HidePanel();
+                            this.presenter.ClosePlayer();
+
                         }
                     }
 
