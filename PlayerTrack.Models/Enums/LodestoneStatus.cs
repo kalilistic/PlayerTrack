@@ -6,4 +6,5 @@ public enum LodestoneStatus
     Verified = 1,
     Failed = 2,
     Banned = 3,
+    NotApplicable = 4,
 }

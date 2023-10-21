@@ -73,9 +73,11 @@ public static class PlayerViewMapper
         switch (lodeStoneStatus)
         {
             case LodestoneStatus.Unverified:
-                return ImGuiColors.DalamudWhite;
+                return ImGuiColors.DalamudGrey;
             case LodestoneStatus.Verified:
                 return ImGuiColors.HealerGreen;
+            case LodestoneStatus.NotApplicable:
+                return ImGuiColors.DalamudYellow;
             case LodestoneStatus.Failed:
             case LodestoneStatus.Banned:
             default:

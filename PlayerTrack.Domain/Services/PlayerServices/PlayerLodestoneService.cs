@@ -1,4 +1,6 @@
-﻿namespace PlayerTrack.Domain;
+﻿using Dalamud.DrunkenToad.Helpers;
+
+namespace PlayerTrack.Domain;
 
 using System.Diagnostics;
 using Dalamud.DrunkenToad.Core;
@@ -18,6 +20,23 @@ public class PlayerLodestoneService
     public static void CreateLodestoneLookup(int playerId, string name, uint worldId)
     {
         DalamudContext.PluginLog.Verbose($"Entering LodestoneService.CreateLodestoneLookup(): {playerId}, {name}, {worldId}");
+        var isTestDC = DalamudContext.DataManager.IsTestDC(worldId);
+        if (isTestDC)
+        {
+            DalamudContext.PluginLog.Debug("Cannot create lodestone lookup for test DC.");
+            var player = ServiceContext.PlayerDataService.GetPlayer(playerId);
+            if (player == null)
+            {
+                DalamudContext.PluginLog.Warning("Player not found for test DC.");
+                return;
+            }
+
+            player.LodestoneStatus = LodestoneStatus.NotApplicable;
+            player.LodestoneVerifiedOn = UnixTimestampHelper.CurrentTime();
+            ServiceContext.PlayerDataService.UpdatePlayer(player);
+            return;
+        }
+        
         var worldName = DalamudContext.DataManager.GetWorldNameById(worldId);
         CreateLodestoneLookup(playerId, name, worldName);
     }

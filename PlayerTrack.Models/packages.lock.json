@@ -4,9 +4,9 @@
     "net7.0-windows7.0": {
       "Dalamud.DrunkenToad": {
         "type": "Direct",
-        "requested": "[1.8.6, )",
-        "resolved": "1.8.6",
-        "contentHash": "Is8CLs2KyQUFVmfEi822TOsygJ6UZImG9AD6oDpTCDdYmDZkbZNSTReHZqW5cVtG2knD0XXfC1MMJhoskHZjJg==",
+        "requested": "[1.8.9, )",
+        "resolved": "1.8.9",
+        "contentHash": "4/yq4B8W2TylSU6HhKJ/Mqce62/87eXr2iwsFFRjVNyDgaDAQIg2Ib/Cz22iIgcZgokTFw6kU6M5rLWkC/W6eg==",
         "dependencies": {
           "Dalamud.Loc": "1.1.2",
           "Microsoft.Extensions.DependencyInjection": "7.0.0"
