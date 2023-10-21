@@ -1,5 +1,5 @@
-﻿using System.Numerics;
-using Dalamud.Interface;
+﻿using System;
+using System.Numerics;
 using ImGuiNET;
 using PlayerTrack.Models;
 using PlayerTrack.UserInterface.Main.Components;
@@ -50,11 +50,35 @@ public class PanelView : PlayerTrackView
         this.config.PanelType = PanelType.None;
     }
 
-    public override void Initialize() => this.SetWindowFlags();
+    public override void Initialize()
+    {
+        this.SetWindowFlags();
+        this.ValidateWindowConfig();
+    }
 
     public void ResetWindow()
     {
         this.config.PanelType = PanelType.None;
         this.SetWindowFlags();
+    }
+    
+    private void ValidateWindowConfig()
+    {
+        if (!Enum.IsDefined(typeof(PanelType), this.config.PanelType))
+        {
+            this.config.PanelType = PanelType.None;
+        }
+
+        if (this.Size.HasValue)
+        {
+            if (this.Size.Value.X < 0f || this.Size.Value.Y < 0f)
+            {
+                this.Size = new Vector2(730f, 380f);
+            }
+        }
+        else
+        {
+            this.Size = new Vector2(730f, 380f);
+        }
     }
 }

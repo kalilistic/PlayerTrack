@@ -1,4 +1,5 @@
-﻿using ImGuiNET;
+﻿using System;
+using ImGuiNET;
 using PlayerTrack.Models;
 using PlayerTrack.UserInterface.Main.Components;
 using PlayerTrack.UserInterface.Main.Presenters;
@@ -45,6 +46,7 @@ public class PlayerList : PlayerTrackView, IViewWithPanel
         this.SetWindowFlags();
         this.isPendingSizeUpdate = true;
         this.UpdateWindowSizes();
+        this.ValidateWindowConfig();
     }
 
     public void RefreshWindowConfig()
@@ -106,5 +108,18 @@ public class PlayerList : PlayerTrackView, IViewWithPanel
         };
         this.Size = new Vector2(221f, this.config.MainWindowHeight);
         this.SizeCondition = ImGuiCond.Always;
+    }
+    
+    private void ValidateWindowConfig()
+    {
+        if (!Enum.IsDefined(typeof(PanelType), this.config.PanelType))
+        {
+            this.config.PanelType = PanelType.None;
+        }
+
+        if (this.config.MainWindowHeight is < 120f or > 1000f)
+        {
+            this.config.MainWindowHeight = 120f;
+        }
     }
 }
