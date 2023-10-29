@@ -18,7 +18,7 @@ using Dalamud.Interface.Utility;
 
 public class PlayerListComponent : ViewComponent
 {
-    private const int DebounceTime = 100;
+    private const int DebounceTime = 300;
     private readonly IMainPresenter presenter;
     private List<Category> categories = null!;
     private List<string> categoryNames = null!;

@@ -16,8 +16,8 @@ using Dalamud.DrunkenToad.Helpers;
 
 public class MainPresenter : IMainPresenter
 {
-    private const int CacheChunkSize = 60;
-    private const long CacheTtl = 10000;
+    private const int CacheChunkSize = 100;
+    private const long CacheTtl = 600000;
     private readonly PluginConfig config;
     private readonly Dictionary<int, List<Player>> playerCache = new();
     private readonly Dictionary<string, int> playerCountCache = new();
