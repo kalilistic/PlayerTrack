@@ -85,9 +85,6 @@ public class Player
         this.Key = player.Key;
         this.Name = player.Name;
         this.WorldId = player.WorldId;
-        this.LodestoneId = player.LodestoneId;
-        this.LodestoneStatus = player.LodestoneStatus;
-        this.LodestoneVerifiedOn = player.LodestoneVerifiedOn;
         this.PrimaryCategoryId = player.PrimaryCategoryId;
         this.PreviousNames = player.PreviousNames;
         this.PreviousWorlds = player.PreviousWorlds;
@@ -97,7 +94,7 @@ public class Player
         
         // combine
         this.SeenCount += player.SeenCount;
-        this.Notes += " " + player.Notes;
+        this.Notes = (string.IsNullOrEmpty(this.Notes) ? "" : this.Notes + " ") + (string.IsNullOrEmpty(player.Notes) ? "" : player.Notes);
         
         // true if either is true
         this.IsCurrent = player.IsCurrent || this.IsCurrent;
@@ -112,6 +109,12 @@ public class Player
         this.LastTerritoryType = player.LastTerritoryType != 0 ? player.LastTerritoryType : this.LastTerritoryType;
         this.FreeCompany = player.FreeCompany.Key != FreeCompanyState.Unknown ? player.FreeCompany : this.FreeCompany;
         this.ObjectId = player.ObjectId != 0 ? player.ObjectId : this.ObjectId;
+        if (this.LodestoneStatus != LodestoneStatus.Verified)
+        {
+            this.LodestoneId = player.LodestoneId;
+            this.LodestoneStatus = player.LodestoneStatus;
+            this.LodestoneVerifiedOn = player.LodestoneVerifiedOn;
+        }
     }
 
     public List<PlayerConfig> GetCategoryPlayerConfigs() => this.AssignedCategories.OrderBy(cat => cat.Rank).Select(cat => cat.PlayerConfig).ToList();
