@@ -230,6 +230,7 @@ public class CategoryService : UnsortedCacheService<Category>
         this.cache.Add(category.Id, category);
         this.BuildCategoryFilters();
         this.BuildCategoryNames();
+        ServiceContext.PlayerCacheService.AddCategory(category.Id);
         ServiceContext.PlayerDataService.RecalculatePlayerRankings();
         this.OnCacheUpdated();
     }

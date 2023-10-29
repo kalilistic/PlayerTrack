@@ -157,8 +157,8 @@ public class DataComponent : ConfigViewComponent
                         .ContinueWith(_ =>
                         {
                             this.HandlePostTaskSuccess();
-                            this.itemsToDeleteCount = ServiceContext.PlayerDataService.GetPlayersForDeletionCount();
-                            this.totalItemsCount = ServiceContext.PlayerDataService.GetAllPlayersCount();
+                            this.itemsToDeleteCount = ServiceContext.PlayerCacheService.GetPlayersForDeletionCount();
+                            this.totalItemsCount = ServiceContext.PlayerCacheService.GetAllPlayersCount();
                         }),
                     DataActionType.DeletePlayerSettings => Task.Run(() =>
                         {
@@ -169,8 +169,8 @@ public class DataComponent : ConfigViewComponent
                         .ContinueWith(_ =>
                         {
                             this.HandlePostTaskSuccess();
-                            this.itemsToDeleteCount = ServiceContext.PlayerDataService.GetPlayerConfigsForDeletionCount();
-                            this.totalItemsCount = ServiceContext.PlayerDataService.GetPlayerConfigCount();
+                            this.itemsToDeleteCount = ServiceContext.PlayerCacheService.GetPlayerConfigsForDeletionCount();
+                            this.totalItemsCount = ServiceContext.PlayerCacheService.GetPlayerConfigCount();
                         }),
                     DataActionType.DeleteEncounters => Task.Run(() =>
                         {
@@ -252,8 +252,8 @@ public class DataComponent : ConfigViewComponent
                 if (this.isDirty)
                 {
                     this.isDirty = false;
-                    this.itemsToDeleteCount = ServiceContext.PlayerDataService.GetPlayersForDeletionCount();
-                    this.totalItemsCount = ServiceContext.PlayerDataService.GetAllPlayersCount();
+                    this.itemsToDeleteCount = ServiceContext.PlayerCacheService.GetPlayersForDeletionCount();
+                    this.totalItemsCount = ServiceContext.PlayerCacheService.GetAllPlayersCount();
                 }
 
                 LocGui.TextColored("KeepPlayers", ImGuiColors.DalamudViolet);
@@ -276,8 +276,8 @@ public class DataComponent : ConfigViewComponent
                 if (this.isDirty)
                 {
                     this.isDirty = false;
-                    this.itemsToDeleteCount = ServiceContext.PlayerDataService.GetPlayerConfigsForDeletionCount();
-                    this.totalItemsCount = ServiceContext.PlayerDataService.GetPlayerConfigCount();
+                    this.itemsToDeleteCount = ServiceContext.PlayerCacheService.GetPlayerConfigsForDeletionCount();
+                    this.totalItemsCount = ServiceContext.PlayerCacheService.GetPlayerConfigCount();
                 }
 
                 LocGui.TextColored("KeepPlayerSettings", ImGuiColors.DalamudViolet);

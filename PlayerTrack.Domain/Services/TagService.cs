@@ -73,6 +73,7 @@ public class TagService : UnsortedCacheService<Tag>
     {
         tag.Id = RepositoryContext.TagRepository.CreateTag(tag);
         this.cache.Add(tag.Id, tag);
+        ServiceContext.PlayerCacheService.AddTag(tag.Id);
         this.OnCacheUpdated();
     }
 

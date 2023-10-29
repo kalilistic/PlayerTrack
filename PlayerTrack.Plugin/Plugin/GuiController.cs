@@ -142,7 +142,7 @@ public static class GuiController
         ServiceContext.ConfigService.GetConfig().PanelType = PanelType.None;
         config = ServiceContext.ConfigService.GetConfig();
         presenter = new MainPresenter { OnConfigMenuOptionSelected = configMenuOption => configView?.Open(configMenuOption), };
-        ServiceContext.PlayerDataService.CacheUpdated += presenter.ClearCache;
+        ServiceContext.PlayerCacheService.CacheUpdated += presenter.ClearCache;
         ServiceContext.PlayerProcessService.PlayerSelected += OnPlayerSelected;
         CommandHandler.ConfigWindowToggled += OnConfigWindowToggled;
         CommandHandler.PlayerWindowToggled += OnPlayerWindowToggled;

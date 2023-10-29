@@ -35,6 +35,8 @@ public static class ServiceContext
     public static PlayerAlertService PlayerAlertService { get; set; } = null!;
 
     public static PlayerProcessService PlayerProcessService { get; set; } = null!;
+    
+    public static PlayerCacheService PlayerCacheService { get; set; } = null!;
 
     public static TagService TagService { get; set; } = null!;
 
@@ -56,6 +58,7 @@ public static class ServiceContext
         PlayerLodestoneService = new PlayerLodestoneService();
         PlayerTagService = new PlayerTagService();
         PlayerChangeService = new PlayerChangeService();
+        PlayerCacheService = new PlayerCacheService();
         PlayerDataService = new PlayerDataService();
         PlayerEncounterService = new PlayerEncounterService();
         PlayerAlertService = new PlayerAlertService();
@@ -72,7 +75,7 @@ public static class ServiceContext
         DalamudContext.PluginLog.Verbose("Entering ServiceContext.Dispose()");
         try
         {
-            PlayerDataService.Dispose();
+            PlayerCacheService.Dispose();
             EncounterService.Dispose();
             LodestoneService.Dispose();
             VisibilityService.Dispose();

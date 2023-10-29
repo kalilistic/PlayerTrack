@@ -77,11 +77,11 @@ public class MainPresenter : IMainPresenter
         {
             count = this.config.PlayerListFilter switch
             {
-                PlayerListFilter.AllPlayers => ServiceContext.PlayerDataService.GetAllPlayersCount(),
-                PlayerListFilter.CurrentPlayers => ServiceContext.PlayerDataService.GetCurrentPlayersCount(),
-                PlayerListFilter.RecentPlayers => ServiceContext.PlayerDataService.GetRecentPlayersCount(),
-                PlayerListFilter.PlayersByCategory => ServiceContext.PlayerDataService.GetCategoryPlayersCount(this.config.FilterCategoryId),
-                PlayerListFilter.PlayersByTag => ServiceContext.PlayerDataService.GetTagPlayersCount(this.config.FilterTagId),
+                PlayerListFilter.AllPlayers => ServiceContext.PlayerCacheService.GetAllPlayersCount(),
+                PlayerListFilter.CurrentPlayers => ServiceContext.PlayerCacheService.GetCurrentPlayersCount(),
+                PlayerListFilter.RecentPlayers => ServiceContext.PlayerCacheService.GetRecentPlayersCount(),
+                PlayerListFilter.PlayersByCategory => ServiceContext.PlayerCacheService.GetCategoryPlayersCount(this.config.FilterCategoryId),
+                PlayerListFilter.PlayersByTag => ServiceContext.PlayerCacheService.GetTagPlayersCount(this.config.FilterTagId),
                 _ => 0,
             };
         }
@@ -89,11 +89,11 @@ public class MainPresenter : IMainPresenter
         {
             count = this.config.PlayerListFilter switch
             {
-                PlayerListFilter.AllPlayers => ServiceContext.PlayerDataService.GetAllPlayersCount(this.config.SearchInput, this.config.SearchType),
-                PlayerListFilter.CurrentPlayers => ServiceContext.PlayerDataService.GetCurrentPlayersCount(this.config.SearchInput, this.config.SearchType),
-                PlayerListFilter.RecentPlayers => ServiceContext.PlayerDataService.GetRecentPlayersCount(this.config.SearchInput, this.config.SearchType),
-                PlayerListFilter.PlayersByCategory => ServiceContext.PlayerDataService.GetCategoryPlayersCount(this.config.FilterCategoryId, this.config.SearchInput, this.config.SearchType),
-                PlayerListFilter.PlayersByTag => ServiceContext.PlayerDataService.GetTagPlayersCount(this.config.FilterTagId, this.config.SearchInput, this.config.SearchType),
+                PlayerListFilter.AllPlayers => ServiceContext.PlayerCacheService.GetAllPlayersCount(this.config.SearchInput, this.config.SearchType),
+                PlayerListFilter.CurrentPlayers => ServiceContext.PlayerCacheService.GetCurrentPlayersCount(this.config.SearchInput, this.config.SearchType),
+                PlayerListFilter.RecentPlayers => ServiceContext.PlayerCacheService.GetRecentPlayersCount(this.config.SearchInput, this.config.SearchType),
+                PlayerListFilter.PlayersByCategory => ServiceContext.PlayerCacheService.GetCategoryPlayersCount(this.config.FilterCategoryId, this.config.SearchInput, this.config.SearchType),
+                PlayerListFilter.PlayersByTag => ServiceContext.PlayerCacheService.GetTagPlayersCount(this.config.FilterTagId, this.config.SearchInput, this.config.SearchType),
                 _ => 0,
             };
         }
@@ -108,22 +108,22 @@ public class MainPresenter : IMainPresenter
         {
             return this.config.PlayerListFilter switch
             {
-                PlayerListFilter.AllPlayers => ServiceContext.PlayerDataService.GetAllPlayers(start, count),
-                PlayerListFilter.CurrentPlayers => ServiceContext.PlayerDataService.GetCurrentPlayers(start, count),
-                PlayerListFilter.RecentPlayers => ServiceContext.PlayerDataService.GetRecentPlayers(start, count),
-                PlayerListFilter.PlayersByCategory => ServiceContext.PlayerDataService.GetCategoryPlayers(this.config.FilterCategoryId, start, count),
-                PlayerListFilter.PlayersByTag => ServiceContext.PlayerDataService.GetTagPlayers(this.config.FilterTagId, start, count),
+                PlayerListFilter.AllPlayers => ServiceContext.PlayerCacheService.GetAllPlayers(start, count),
+                PlayerListFilter.CurrentPlayers => ServiceContext.PlayerCacheService.GetCurrentPlayers(start, count),
+                PlayerListFilter.RecentPlayers => ServiceContext.PlayerCacheService.GetRecentPlayers(start, count),
+                PlayerListFilter.PlayersByCategory => ServiceContext.PlayerCacheService.GetCategoryPlayers(this.config.FilterCategoryId, start, count),
+                PlayerListFilter.PlayersByTag => ServiceContext.PlayerCacheService.GetTagPlayers(this.config.FilterTagId, start, count),
                 _ => new List<Player>(),
             };
         }
 
         return this.config.PlayerListFilter switch
         {
-            PlayerListFilter.AllPlayers => ServiceContext.PlayerDataService.GetAllPlayers(start, count, this.config.SearchInput, this.config.SearchType),
-            PlayerListFilter.CurrentPlayers => ServiceContext.PlayerDataService.GetCurrentPlayers(start, count, this.config.SearchInput, this.config.SearchType),
-            PlayerListFilter.RecentPlayers => ServiceContext.PlayerDataService.GetRecentPlayers(start, count, this.config.SearchInput, this.config.SearchType),
-            PlayerListFilter.PlayersByCategory => ServiceContext.PlayerDataService.GetCategoryPlayers(this.config.FilterCategoryId, start, count, this.config.SearchInput, this.config.SearchType),
-            PlayerListFilter.PlayersByTag => ServiceContext.PlayerDataService.GetTagPlayers(this.config.FilterTagId, start, count, this.config.SearchInput, this.config.SearchType),
+            PlayerListFilter.AllPlayers => ServiceContext.PlayerCacheService.GetAllPlayers(start, count, this.config.SearchInput, this.config.SearchType),
+            PlayerListFilter.CurrentPlayers => ServiceContext.PlayerCacheService.GetCurrentPlayers(start, count, this.config.SearchInput, this.config.SearchType),
+            PlayerListFilter.RecentPlayers => ServiceContext.PlayerCacheService.GetRecentPlayers(start, count, this.config.SearchInput, this.config.SearchType),
+            PlayerListFilter.PlayersByCategory => ServiceContext.PlayerCacheService.GetCategoryPlayers(this.config.FilterCategoryId, start, count, this.config.SearchInput, this.config.SearchType),
+            PlayerListFilter.PlayersByTag => ServiceContext.PlayerCacheService.GetTagPlayers(this.config.FilterTagId, start, count, this.config.SearchInput, this.config.SearchType),
             _ => new List<Player>(),
         };
     }
