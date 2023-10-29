@@ -19,7 +19,7 @@ public static class ContextMenuHandler
     private static DalamudContextMenu? contextMenu;
     private static bool isStarted;
 
-    public delegate void SelectPlayerDelegate(ToadPlayer player);
+    public delegate void SelectPlayerDelegate(ToadPlayer player, bool isCurrent);
 
     public static event SelectPlayerDelegate? SelectPlayer;
 
@@ -101,14 +101,24 @@ public static class ContextMenuHandler
             return;
         }
 
-        var toadPlayer = DalamudContext.PlayerEventDispatcher.GetPlayerByNameAndWorldId(args.Text.TextValue, args.ObjectWorld) ?? new ToadPlayer
+        bool isCurrent;
+        var toadPlayer = DalamudContext.PlayerEventDispatcher.GetPlayerByNameAndWorldId(args.Text.TextValue, args.ObjectWorld);
+        if (toadPlayer == null)
         {
-            Name = args.Text.TextValue,
-            HomeWorld = args.ObjectWorld,
-            CompanyTag = string.Empty,
-        };
+            toadPlayer = new ToadPlayer
+            {
+                Name = args.Text.TextValue,
+                HomeWorld = args.ObjectWorld,
+                CompanyTag = string.Empty,
+            };
+            isCurrent = false;
+        }
+        else
+        {
+            isCurrent = true;
+        }
 
-        SelectPlayer?.Invoke(toadPlayer);
+        SelectPlayer?.Invoke(toadPlayer, isCurrent);
     }
 
     private static bool IsMenuValid(BaseContextMenuArgs args)
@@ -133,7 +143,7 @@ public static class ContextMenuHandler
                 return args.Text != null && args.ObjectWorld != 0 && args.ObjectWorld != 65535;
 
             default:
-                DalamudContext.PluginLog.Warning($"Invalid ParentAddonName: {args.ParentAddonName}");
+                DalamudContext.PluginLog.Verbose($"Invalid ParentAddonName: {args.ParentAddonName}");
                 return false;
         }
     }
@@ -148,6 +158,12 @@ public static class ContextMenuHandler
             return;
         }
 
+        // validate menu
+        if (!IsMenuValid(args))
+        {
+            return;
+        }
+        
         // name can't be null
         if (string.IsNullOrEmpty(args.Text?.TextValue))
         {
@@ -169,12 +185,6 @@ public static class ContextMenuHandler
         if (selfKey.Equals(menuKey, StringComparison.Ordinal))
         {
             DalamudContext.PluginLog.Verbose("Self menu, skipping.");
-            return;
-        }
-
-        // validate menu
-        if (!IsMenuValid(args))
-        {
             return;
         }
 

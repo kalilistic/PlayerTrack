@@ -81,29 +81,37 @@ public class Player
 
     public void Merge(Player player)
     {
-        this.LastAlertSent = player.LastAlertSent;
-        this.LastSeen = player.LastSeen;
-        this.Customize = player.Customize;
-        this.SeenCount += player.SeenCount;
-        this.LodestoneStatus = player.LodestoneStatus;
-        this.LodestoneVerifiedOn = player.LodestoneVerifiedOn;
-        this.FreeCompany = player.FreeCompany;
+        // override
         this.Key = player.Key;
         this.Name = player.Name;
-        this.Notes += " " + player.Notes;
-        this.LodestoneId = player.LodestoneId;
-        this.ObjectId = player.ObjectId;
         this.WorldId = player.WorldId;
-        this.LastTerritoryType = player.LastTerritoryType;
-
+        this.LodestoneId = player.LodestoneId;
+        this.LodestoneStatus = player.LodestoneStatus;
+        this.LodestoneVerifiedOn = player.LodestoneVerifiedOn;
         this.PrimaryCategoryId = player.PrimaryCategoryId;
         this.PreviousNames = player.PreviousNames;
         this.PreviousWorlds = player.PreviousWorlds;
         this.PlayerConfig = player.PlayerConfig;
         this.AssignedTags = player.AssignedTags;
         this.AssignedCategories = player.AssignedCategories;
-
-        this.IsRecent = player.IsRecent;
+        
+        // combine
+        this.SeenCount += player.SeenCount;
+        this.Notes += " " + player.Notes;
+        
+        // true if either is true
+        this.IsCurrent = player.IsCurrent || this.IsCurrent;
+        this.IsRecent = player.IsRecent || this.IsRecent;
+        
+        // use the most recent timestamp
+        this.LastAlertSent = Math.Max(this.LastAlertSent, player.LastAlertSent);
+        this.LastSeen = Math.Max(this.LastSeen, player.LastSeen);
+        
+        // use from latest player if set
+        this.Customize = player.Customize?.Length > 0 ? player.Customize : this.Customize;
+        this.LastTerritoryType = player.LastTerritoryType != 0 ? player.LastTerritoryType : this.LastTerritoryType;
+        this.FreeCompany = player.FreeCompany.Key != FreeCompanyState.Unknown ? player.FreeCompany : this.FreeCompany;
+        this.ObjectId = player.ObjectId != 0 ? player.ObjectId : this.ObjectId;
     }
 
     public List<PlayerConfig> GetCategoryPlayerConfigs() => this.AssignedCategories.OrderBy(cat => cat.Rank).Select(cat => cat.PlayerConfig).ToList();

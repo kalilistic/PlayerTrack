@@ -178,7 +178,7 @@ public class PlayerProcessService
             PrimaryCategoryId = categoryId,
             FreeCompany = PlayerFCHelper.CheckFreeCompany(toadPlayer.CompanyTag, loc.InContent()),
             Customize = toadPlayer.Customize,
-            LastTerritoryType = loc.TerritoryId,
+            LastTerritoryType = (ushort)(isCurrent ? loc.TerritoryId : 0),
             Created = UnixTimestampHelper.CurrentTime(),
             IsCurrent = isCurrent,
             IsRecent = isCurrent,

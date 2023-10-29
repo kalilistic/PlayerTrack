@@ -88,9 +88,9 @@ public static class EventDispatcher
         }
     });
 
-    private static void OnSelectPlayer(ToadPlayer toadPlayer) => EventChannel.Writer.TryWrite(() =>
+    private static void OnSelectPlayer(ToadPlayer toadPlayer, bool isCurrent) => EventChannel.Writer.TryWrite(() =>
     {
         DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnSelectPlayer(): {toadPlayer.Name}");
-        ServiceContext.PlayerProcessService.AddOrUpdatePlayer(toadPlayer, false, true);
+        ServiceContext.PlayerProcessService.AddOrUpdatePlayer(toadPlayer, isCurrent, true);
     });
 }

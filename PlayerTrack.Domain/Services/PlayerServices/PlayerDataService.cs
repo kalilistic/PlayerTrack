@@ -132,17 +132,17 @@ public class PlayerDataService
         // merge data into original
         oldestPlayer.Merge(newPlayer);
 
-        // update player in repo & cache
-        RepositoryContext.PlayerRepository.UpdatePlayer(oldestPlayer);
-        ServiceContext.PlayerCacheService.AddPlayer(oldestPlayer);
-
         // add to current players if needed
         oldestPlayer.IsCurrent = isCurrent;
         if (oldestPlayer.IsCurrent)
         {
             ServiceContext.PlayerProcessService.RegisterCurrentPlayer(oldestPlayer);
         }
-
+        
+        // update player in repo & cache
+        RepositoryContext.PlayerRepository.UpdatePlayer(oldestPlayer);
+        ServiceContext.PlayerCacheService.AddPlayer(oldestPlayer);
+        
         // send alert
         if (!payloads.Any())
         {
