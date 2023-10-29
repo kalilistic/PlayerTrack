@@ -21,6 +21,11 @@ public class PlayerTrackProvider
     /// GetPlayerCurrentNameWorld.
     /// </summary>
     public const string LabelProviderGetPlayerCurrentNameWorld = "PlayerTrack.GetPlayerCurrentNameWorld";
+    
+    /// <summary>
+    /// GetPlayerNotes.
+    /// </summary>
+    public const string LabelProviderGetPlayerNotes = "PlayerTrack.GetPlayerNotes";
 
     /// <summary>
     /// API.
@@ -36,6 +41,11 @@ public class PlayerTrackProvider
     /// GetPlayerCurrentNameWorld.
     /// </summary>
     public readonly ICallGateProvider<string, uint, string>? ProviderGetPlayerCurrentNameWorld;
+    
+    /// <summary>
+    /// GetPlayerNotes.
+    /// </summary>
+    public readonly ICallGateProvider<string, uint, string>? ProviderGetPlayerNotes;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PlayerTrackProvider"/> class.
@@ -67,6 +77,17 @@ public class PlayerTrackProvider
         {
             DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerCurrentNameWorld}:\n{e}");
         }
+        
+        try
+        {
+            this.ProviderGetPlayerNotes =
+                pluginInterface.GetIpcProvider<string, uint, string>(LabelProviderGetPlayerNotes);
+            this.ProviderGetPlayerNotes.RegisterFunc(api.GetPlayerNotes);
+        }
+        catch (Exception e)
+        {
+            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerNotes}:\n{e}");
+        }
     }
 
     /// <summary>
@@ -77,5 +98,6 @@ public class PlayerTrackProvider
         DalamudContext.PluginLog.Verbose("Entering PlayerTrackProvider.Dispose");
         this.ProviderAPIVersion?.UnregisterFunc();
         this.ProviderGetPlayerCurrentNameWorld?.UnregisterFunc();
+        this.ProviderGetPlayerNotes?.UnregisterFunc();
     }
 }

@@ -33,6 +33,21 @@ public class PlayerTrackAPI : IPlayerTrackAPI
         return $"{player.Name} {player.WorldId}";
     }
 
+    /// <inheritdoc />
+    public string GetPlayerNotes(string name, uint worldId)
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetPlayerNotes({name}, {worldId})");
+        this.CheckInitialized();
+        var player = ServiceContext.PlayerDataService.GetPlayer(name, worldId);
+        if (player == null)
+        {
+            DalamudContext.PluginLog.Warning("Player not found");
+            return string.Empty;
+        }
+
+        return player.Notes;
+    }
+
     private void CheckInitialized()
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.CheckInitialized()");
