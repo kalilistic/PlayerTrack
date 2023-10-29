@@ -34,7 +34,7 @@ public static class PlayerViewMapper
             Appearance = GetAppearance(player.Customize),
             FirstSeen = player.SeenCount != 0 && player.Created != 0 ? player.Created.ToTimeSpan() : na,
             LastSeen = player.SeenCount != 0 && player.LastSeen != 0 ? player.LastSeen.ToTimeSpan() : na,
-            LastLocation = player.LastTerritoryType != 0 ? DalamudContext.DataManager.Locations[player.LastTerritoryType].GetName() : na,
+            LastLocation = GetLastLocation(player.LastTerritoryType),
             SeenCount = player.SeenCount != 0 ? $"{player.SeenCount}x" : na,
             Notes = player.Notes,
             PreviousNames = PlayerChangeService.GetPreviousNames(player.Id, player.Name),
@@ -48,6 +48,14 @@ public static class PlayerViewMapper
         return playerView;
     }
 
+    public static string GetLastLocation(ushort lastTerritoryType)
+    {
+        var locationName = lastTerritoryType != 0
+            ? DalamudContext.DataManager.Locations[lastTerritoryType].GetName()
+            : null;
+        return string.IsNullOrEmpty(locationName) ? na : locationName;
+    }
+    
     private static string GetHomeWorld(uint worldId)
     {
         var worldName = DalamudContext.DataManager.GetWorldNameById(worldId);
@@ -166,7 +174,7 @@ public static class PlayerViewMapper
                     Duration = pEnc.Ended == 0 ? (pEnc.Updated - pEnc.Created).ToDuration() : (pEnc.Ended - pEnc.Created).ToDuration(),
                     Job = DalamudContext.DataManager.ClassJobs[pEnc.JobId].Code,
                     Level = pEnc.JobLvl.ToString(),
-                    Location = DalamudContext.DataManager.Locations[enc.TerritoryTypeId].GetName(),
+                    Location = GetLastLocation(enc.TerritoryTypeId)
                 };
                 playerView.Encounters.Add(pEncView);
             }
