@@ -34,8 +34,8 @@ public class Combined : PlayerTrackView, IViewWithPanel
 
     public override void Draw()
     {
-        this.CheckResize();
         this.UpdateWindowSizes();
+        this.CheckResize();
         this.playerListComponent.Draw();
         ImGui.SameLine();
         this.panelComponent.Draw();
@@ -83,7 +83,7 @@ public class Combined : PlayerTrackView, IViewWithPanel
 
     private void CheckResize()
     {
-        if (ImGui.GetWindowSize() != this.lastSize)
+        if (ImGui.GetWindowSize() != this.lastSize || this.isPendingSizeUpdate)
         {
             this.lastSize = ImGui.GetWindowSize();
             if (this.config.PanelType != PanelType.None)

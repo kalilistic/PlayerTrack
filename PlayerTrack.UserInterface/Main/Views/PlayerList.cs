@@ -1,4 +1,5 @@
 ﻿using System;
+using Dalamud.DrunkenToad.Core;
 using ImGuiNET;
 using PlayerTrack.Models;
 using PlayerTrack.UserInterface.Main.Components;
@@ -36,8 +37,8 @@ public class PlayerList : PlayerTrackView, IViewWithPanel
 
     public override void Draw()
     {
-        this.CheckResize();
         this.UpdateWindowSizes();
+        this.CheckResize();
         this.playerListComponent.Draw();
     }
 
