@@ -26,7 +26,7 @@ public class PlayerActionComponent : ViewComponent
         }
 
         ImGui.BeginChild("###PlayerAction", new Vector2(-1, 0), false);
-        var buttonSize = ImGuiHelpers.ScaledVector2(100f, 25f);
+        var buttonSize = ImGuiHelpers.ScaledVector2(120f, 25f);
 
         ImGuiHelpers.ScaledDummy(1f);
         ImGui.PushFont(UiBuilder.IconFont);
@@ -44,12 +44,28 @@ public class PlayerActionComponent : ViewComponent
             PlayerCategoryService.UnassignCategoriesFromPlayer(player.Id);
             PlayerTagService.UnassignTagsFromPlayer(player.Id);
             this.presenter.ClosePlayer();
+            this.presenter.HidePanel();
         }
 
         if (LocGui.Button("Delete", buttonSize))
         {
             ServiceContext.PlayerDataService.DeletePlayer(player.Id);
             this.presenter.ClosePlayer();
+            this.presenter.HidePanel();
+        }
+        
+        if (LocGui.Button("ResetLodestone", buttonSize))
+        {
+            PlayerLodestoneService.ResetLodestone(player.Id);
+            this.presenter.ClosePlayer();
+            this.presenter.HidePanel();
+        }
+        
+        if (LocGui.Button("DeleteHistory", buttonSize))
+        {
+            ServiceContext.PlayerDataService.DeleteHistory(player.Id);
+            this.presenter.ClosePlayer();
+            this.presenter.HidePanel();
         }
 
         ImGui.EndChild();

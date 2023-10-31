@@ -41,16 +41,20 @@ public class PlayerLodestoneService
         CreateLodestoneLookup(playerId, name, worldName);
     }
 
-    public static void ResetLodestoneLookup(int playerId)
+    public static void ResetLodestoneLookup(int playerId, string name, string worldName)
     {
         DalamudContext.PluginLog.Verbose($"Entering LodestoneService.ResetLodestoneLookup(): {playerId}");
         var lookup = RepositoryContext.LodestoneRepository.GetLodestoneLookupByPlayerId(playerId);
         if (lookup == null)
         {
+            DalamudContext.PluginLog.Warning("Lodestone lookup not found, creating new.");
+            CreateLodestoneLookup(playerId, name, worldName);
             return;
         }
 
         lookup.Reset();
+        lookup.PlayerName = name;
+        lookup.WorldName = worldName;
         RepositoryContext.LodestoneRepository.UpdateLodestoneLookup(lookup);
     }
 
@@ -85,8 +89,10 @@ public class PlayerLodestoneService
 
         player.LodestoneId = 0;
         player.LodestoneStatus = LodestoneStatus.Unverified;
+        player.LodestoneVerifiedOn = 0;
         ServiceContext.PlayerDataService.UpdatePlayer(player);
-        ResetLodestoneLookup(playerId);
+        var worldName = DalamudContext.DataManager.GetWorldNameById(player.WorldId);
+        ResetLodestoneLookup(playerId, player.Name, worldName);
     }
 
     public static void OpenLodestoneProfile(uint lodestoneId)

@@ -227,4 +227,11 @@ public class PlayerDataService
             (!options.KeepSettingsForPlayersSeenInLast90Days || currentTimeUnix - p.LastSeen > NinetyDaysInMilliseconds) &&
             (!options.KeepSettingsForPlayersVerifiedOnLodestone || p.LodestoneStatus != LodestoneStatus.Verified)).Select(p => p.PlayerConfig).ToList();
     }
+
+    public void DeleteHistory(int playerId)
+    {
+        PlayerChangeService.DeleteCustomizeHistory(playerId);
+        PlayerChangeService.DeleteNameWorldHistory(playerId);
+        RefreshAllPlayers();
+    }
 }
