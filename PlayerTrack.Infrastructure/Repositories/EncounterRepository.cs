@@ -125,37 +125,30 @@ public class EncounterRepository : BaseRepository
     public int CreateEncounter(Encounter encounter)
     {
         DalamudContext.PluginLog.Verbose("Entering EncounterRepository.CreateEncounter()");
-        using var transaction = this.Connection.BeginTransaction();
         try
         {
             var encounterDTO = this.Mapper.Map<EncounterDTO>(encounter);
             SetCreateTimestamp(encounterDTO);
             const string insertSql = @"
-            INSERT INTO encounters
-            (
-                created,
-                updated,
-                territory_type_id,
-                ended
-            )
-            VALUES
-            (
-                @created,
-                @updated,
-                @territory_type_id,
-                @ended
-            )";
-            this.Connection.Execute(insertSql, encounterDTO, transaction);
-
-            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
-
-            transaction.Commit();
-
+        INSERT INTO encounters
+        (
+            created,
+            updated,
+            territory_type_id,
+            ended
+        )
+        VALUES
+        (
+            @created,
+            @updated,
+            @territory_type_id,
+            @ended
+        ) RETURNING id";
+            var newId = this.Connection.ExecuteScalar<int>(insertSql, encounterDTO);
             return newId;
         }
         catch (Exception ex)
         {
-            transaction.Rollback();
             DalamudContext.PluginLog.Error(ex, "Failed to create and retrieve encounter based on created date.", encounter);
             return 0;
         }

@@ -81,47 +81,32 @@ public class LodestoneLookupRepository : BaseRepository
     public int CreateLodestoneLookup(LodestoneLookup lookup)
     {
         DalamudContext.PluginLog.Verbose($"Entering LodestoneLookupRepository.CreateLodestoneLookup(): {lookup.PlayerId}");
-        using var transaction = this.Connection.BeginTransaction();
-        try
-        {
-            const string sql = @"
-            INSERT INTO lodestone_lookups (
-                created,
-                updated,
-                player_id,
-                player_name,
-                world_name,
-                lodestone_id,
-                failure_count,
-                lookup_status
-            )
-            VALUES (
-                @created,
-                @updated,
-                @player_id,
-                @player_name,
-                @world_name,
-                @lodestone_id,
-                @failure_count,
-                @lookup_status
-            )";
+        const string sql = @"
+    INSERT INTO lodestone_lookups (
+        created,
+        updated,
+        player_id,
+        player_name,
+        world_name,
+        lodestone_id,
+        failure_count,
+        lookup_status
+    )
+    VALUES (
+        @created,
+        @updated,
+        @player_id,
+        @player_name,
+        @world_name,
+        @lodestone_id,
+        @failure_count,
+        @lookup_status
+    ) RETURNING id";
 
-            var requestDTO = this.Mapper.Map<LodestoneLookupDTO>(lookup);
-            SetCreateTimestamp(requestDTO);
-
-            this.Connection.Execute(sql, requestDTO, transaction);
-
-            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
-
-            transaction.Commit();
-            return newId;
-        }
-        catch (Exception ex)
-        {
-            transaction.Rollback();
-            DalamudContext.PluginLog.Error(ex, $"Failed to create LodestoneLookup for player id {lookup.PlayerId}.", lookup);
-            return 0;
-        }
+        var requestDTO = this.Mapper.Map<LodestoneLookupDTO>(lookup);
+        SetCreateTimestamp(requestDTO);
+        var newId = this.Connection.ExecuteScalar<int>(sql, requestDTO);
+        return newId;
     }
 
     public IEnumerable<LodestoneLookup>? GetRequestsByStatus(LodestoneStatus status)

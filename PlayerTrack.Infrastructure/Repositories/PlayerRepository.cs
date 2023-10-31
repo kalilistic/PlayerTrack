@@ -223,76 +223,61 @@ public class PlayerRepository : BaseRepository
 
     public int CreatePlayer(Player player, bool setTimestamps = true)
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.CreatePlayer(): {player.Key}");
-        using var transaction = this.Connection.BeginTransaction();
-        try
+        const string checkExistenceSql = "SELECT id FROM players WHERE key = @key";
+        var existingId = this.Connection.ExecuteScalar<int?>(checkExistenceSql, new { key = player.Key });
+
+        if (existingId.HasValue)
         {
-            const string checkExistenceSql = "SELECT id FROM players WHERE key = @key";
-            var existingId = this.Connection.ExecuteScalar<int?>(checkExistenceSql, new { key = player.Key }, transaction);
-
-            if (existingId.HasValue)
-            {
-                DalamudContext.PluginLog.Verbose($"CreatePlayer(): Player with Key {player.Key} already exists.");
-                return existingId.Value;
-            }
-
-            var playerDto = this.Mapper.Map<PlayerDTO>(player);
-            if (setTimestamps)
-            {
-                SetCreateTimestamp(playerDto);
-            }
-
-            const string sql = @"
-            INSERT INTO players (
-                created,
-                updated,
-                last_alert_sent,
-                last_seen,
-                customize,
-                seen_count,
-                lodestone_status,
-                lodestone_verified_on,
-                free_company_state,
-                free_company_tag,
-                key,
-                name,
-                notes,
-                lodestone_id,
-                object_id,
-                world_id,
-                last_territory_type)
-            VALUES (
-                @created,
-                @updated,
-                @last_alert_sent,
-                @last_seen,
-                @customize,
-                @seen_count,
-                @lodestone_status,
-                @lodestone_verified_on,
-                @free_company_state,
-                @free_company_tag,
-                @key,
-                @name,
-                @notes,
-                @lodestone_id,
-                @object_id,
-                @world_id,
-                @last_territory_type)";
-
-            this.Connection.Execute(sql, playerDto, transaction);
-
-            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
-
-            transaction.Commit();
-            return newId;
+            return existingId.Value;
         }
-        catch (Exception ex)
+
+        var playerDto = this.Mapper.Map<PlayerDTO>(player);
+        if (setTimestamps)
         {
-            DalamudContext.PluginLog.Error(ex, $"Failed to create new player with Key {player.Key}.", player);
-            transaction.Rollback();
-            return 0;
+            SetCreateTimestamp(playerDto);
         }
+
+        const string sql = @"
+        INSERT INTO players (
+            created,
+            updated,
+            last_alert_sent,
+            last_seen,
+            customize,
+            seen_count,
+            lodestone_status,
+            lodestone_verified_on,
+            free_company_state,
+            free_company_tag,
+            key,
+            name,
+            notes,
+            lodestone_id,
+            object_id,
+            world_id,
+            last_territory_type)
+        VALUES (
+            @created,
+            @updated,
+            @last_alert_sent,
+            @last_seen,
+            @customize,
+            @seen_count,
+            @lodestone_status,
+            @lodestone_verified_on,
+            @free_company_state,
+            @free_company_tag,
+            @key,
+            @name,
+            @notes,
+            @lodestone_id,
+            @object_id,
+            @world_id,
+            @last_territory_type)
+        RETURNING id";
+
+        var newId = this.Connection.ExecuteScalar<int>(sql, playerDto);
+        return newId;
     }
 
     public Tuple<int, string> CreateExistingPlayer(Player player)

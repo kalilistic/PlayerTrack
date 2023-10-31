@@ -21,30 +21,16 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
 
     public int CreatePlayerNameWorldHistory(PlayerNameWorldHistory playerNameWorldHistory)
     {
-        DalamudContext.PluginLog.Verbose("Entering PlayerNameWorldHistoryRepository.CreatePlayerNameWorldHistory()");
-        using var transaction = this.Connection.BeginTransaction();
-        try
-        {
-            const string sql = @"
-            INSERT INTO player_name_world_histories (created, updated, is_migrated, player_name, world_id, player_id)
-            VALUES (@created, @updated, @is_migrated, @player_name, @world_id, @player_id)";
+        const string sql = @"
+        INSERT INTO player_name_world_histories (created, updated, is_migrated, player_name, world_id, player_id)
+        VALUES (@created, @updated, @is_migrated, @player_name, @world_id, @player_id)
+        RETURNING id";
 
-            var historyDto = this.Mapper.Map<PlayerNameWorldHistoryDTO>(playerNameWorldHistory);
-            SetCreateTimestamp(historyDto);
+        var historyDto = this.Mapper.Map<PlayerNameWorldHistoryDTO>(playerNameWorldHistory);
+        SetCreateTimestamp(historyDto);
 
-            this.Connection.Execute(sql, historyDto, transaction);
-
-            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
-
-            transaction.Commit();
-            return newId;
-        }
-        catch (Exception ex)
-        {
-            DalamudContext.PluginLog.Error(ex, "Failed to create PlayerNameWorldHistory.", playerNameWorldHistory);
-            transaction.Rollback();
-            return 0;
-        }
+        var newId = this.Connection.ExecuteScalar<int>(sql, historyDto);
+        return newId;
     }
 
     public int UpdatePlayerId(int oldestPlayerId, int newPlayerId)

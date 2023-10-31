@@ -38,21 +38,16 @@ public class CategoryRepository : BaseRepository
     public int CreateCategory(Category category)
     {
         DalamudContext.PluginLog.Verbose($"Entering CategoryRepository.CreateCategory(): {category.Name}");
-        using var transaction = this.Connection.BeginTransaction();
         try
         {
             var categoryDTO = this.Mapper.Map<CategoryDTO>(category);
             SetCreateTimestamp(categoryDTO);
-            const string insertSql = "INSERT INTO categories (name, rank, created, updated) VALUES (@name, @rank, @created, @updated)";
-            this.Connection.Execute(insertSql, categoryDTO, transaction);
-
-            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
-            transaction.Commit();
+            const string insertSql = "INSERT INTO categories (name, rank, created, updated) VALUES (@name, @rank, @created, @updated) RETURNING id";
+            var newId = this.Connection.ExecuteScalar<int>(insertSql, categoryDTO);
             return newId;
         }
         catch (Exception ex)
         {
-            transaction.Rollback();
             DalamudContext.PluginLog.Error(ex, "Failed to create new category.", category);
             return 0;
         }

@@ -55,30 +55,16 @@ public class PlayerTagRepository : BaseRepository
 
     public int CreatePlayerTag(int playerId, int tagId)
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerTagRepository.CreatePlayerTag(): {playerId}, {tagId}");
-        using var transaction = this.Connection.BeginTransaction();
-        try
-        {
-            var playerTagDto = new PlayerTagDTO { player_id = playerId, tag_id = tagId };
-            SetCreateTimestamp(playerTagDto);
+        const string sql = @"
+    INSERT INTO player_tags (player_id, tag_id, created, updated)
+    VALUES (@player_id, @tag_id, @created, @updated)
+    RETURNING id";
 
-            const string sql = @"
-            INSERT INTO player_tags (player_id, tag_id, created, updated)
-            VALUES (@player_id, @tag_id, @created, @updated)";
+        var playerTagDto = new PlayerTagDTO { player_id = playerId, tag_id = tagId };
+        SetCreateTimestamp(playerTagDto);
 
-            this.Connection.Execute(sql, playerTagDto, transaction);
-
-            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
-
-            transaction.Commit();
-            return newId;
-        }
-        catch (Exception ex)
-        {
-            DalamudContext.PluginLog.Error(ex, $"Failed to create new tag with PlayerID {playerId} and TagID {tagId}.");
-            transaction.Rollback();
-            return 0;
-        }
+        var newId = this.Connection.ExecuteScalar<int>(sql, playerTagDto);
+        return newId;
     }
 
     public bool DeletePlayerTagByPlayerId(int playerId)

@@ -54,7 +54,6 @@ public class BackupRepository : BaseRepository
     public int CreateBackup(Backup backup, bool setTimestamps = true)
     {
         DalamudContext.PluginLog.Verbose($"Entering BackupRepository.CreateBackup(), backup: {backup.Name}");
-        using var transaction = this.Connection.BeginTransaction();
         try
         {
             var backupDTO = this.Mapper.Map<BackupDTO>(backup);
@@ -64,19 +63,16 @@ public class BackupRepository : BaseRepository
             }
 
             const string insertSql = @"INSERT INTO backups
-                            (created, updated, backup_type, name, size, is_restorable, is_protected, notes)
-                            VALUES (@created, @updated, @backup_type, @name, @size, @is_restorable, @is_protected, @notes)";
-            this.Connection.Execute(insertSql, backupDTO, transaction);
+                                (created, updated, backup_type, name, size, is_restorable, is_protected, notes)
+                                VALUES (@created, @updated, @backup_type, @name, @size, @is_restorable, @is_protected, @notes)
+                                RETURNING id";
 
-            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
-
-            transaction.Commit();
+            var newId = this.Connection.ExecuteScalar<int>(insertSql, backupDTO);
 
             return newId;
         }
         catch (Exception ex)
         {
-            transaction.Rollback();
             DalamudContext.PluginLog.Error(ex, "Failed to create backup.", backup);
             return 0;
         }

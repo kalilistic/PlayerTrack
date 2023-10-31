@@ -111,36 +111,16 @@ public class PlayerEncounterRepository : BaseRepository
     public int CreatePlayerEncounter(PlayerEncounter playerEncounter)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerEncounterRepository.CreatePlayerEncounter(): {playerEncounter.Id}");
-        IDbTransaction? transaction = null;
+        var playerEncounterDTO = this.Mapper.Map<PlayerEncounterDTO>(playerEncounter);
+        SetCreateTimestamp(playerEncounterDTO);
+        const string sql = @"
+        INSERT INTO player_encounters
+        (job_id, job_lvl, player_id, encounter_id, created, updated, ended)
+        VALUES
+        (@job_id, @job_lvl, @player_id, @encounter_id, @created, @updated, @ended) RETURNING id";
 
-        try
-        {
-            transaction = this.Connection.BeginTransaction();
-
-            var playerEncounterDTO = this.Mapper.Map<PlayerEncounterDTO>(playerEncounter);
-            SetCreateTimestamp(playerEncounterDTO);
-
-            const string sql = @"
-                INSERT INTO player_encounters
-                (job_id, job_lvl, player_id, encounter_id, created, updated, ended)
-                VALUES
-                (@job_id, @job_lvl, @player_id, @encounter_id, @created, @updated, @ended)";
-
-            this.Connection.Execute(sql, playerEncounterDTO, transaction);
-
-            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
-
-            transaction.Commit();
-
-            return newId;
-        }
-        catch (Exception ex)
-        {
-            transaction?.Rollback();
-
-            DalamudContext.PluginLog.Error(ex, $"Failed to create new player encounter.", playerEncounter);
-            return 0;
-        }
+        var newId = this.Connection.ExecuteScalar<int>(sql, playerEncounterDTO);
+        return newId;
     }
 
     public PlayerEncounter? GetByPlayerIdAndEncId(int playerId, int encounterId)

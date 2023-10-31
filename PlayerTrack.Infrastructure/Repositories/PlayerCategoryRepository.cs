@@ -54,26 +54,11 @@ public class PlayerCategoryRepository : BaseRepository
     public int CreatePlayerCategory(int playerId, int categoryId)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryRepository.CreatePlayerCategory(): {playerId}, {categoryId}");
-        using var transaction = this.Connection.BeginTransaction();
-        try
-        {
-            var playerCategoryDto = new PlayerCategoryDTO { player_id = playerId, category_id = categoryId };
-            SetCreateTimestamp(playerCategoryDto);
-
-            const string insertSql = "INSERT INTO player_categories (player_id, category_id, created, updated) VALUES (@player_id, @category_id, @created, @updated)";
-            this.Connection.Execute(insertSql, playerCategoryDto, transaction);
-
-            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
-
-            transaction.Commit();
-            return newId;
-        }
-        catch (Exception ex)
-        {
-            transaction.Rollback();
-            DalamudContext.PluginLog.Error(ex, $"Failed to create and retrieve player category for player id {playerId} and category id {categoryId}.");
-            return 0;
-        }
+        var playerCategoryDto = new PlayerCategoryDTO { player_id = playerId, category_id = categoryId };
+        SetCreateTimestamp(playerCategoryDto);
+        const string insertSql = "INSERT INTO player_categories (player_id, category_id, created, updated) VALUES (@player_id, @category_id, @created, @updated) RETURNING id";
+        var newId = this.Connection.ExecuteScalar<int>(insertSql, playerCategoryDto);
+        return newId;
     }
 
     public bool DeletePlayerCategoryByPlayerId(int playerId)

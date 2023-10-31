@@ -58,7 +58,6 @@ public class PlayerConfigRepository : BaseRepository
     public int CreatePlayerConfig(PlayerConfig config)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerConfigRepository.CreatePlayerConfig(): {config.PlayerConfigType}");
-        using var transaction = this.Connection.BeginTransaction();
         try
         {
             var configDTO = this.Mapper.Map<PlayerConfigDTO>(config);
@@ -112,19 +111,15 @@ public class PlayerConfigRepository : BaseRepository
                     @created,
                     @player_id,
                     @category_id
-                )";
+                )
+                RETURNING id";
 
-            this.Connection.Execute(insertSql, configDTO, transaction);
-
-            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
-
-            transaction.Commit();
+            var newId = this.Connection.ExecuteScalar<int>(insertSql, configDTO);
 
             return newId;
         }
         catch (Exception ex)
         {
-            transaction.Rollback();
             DalamudContext.PluginLog.Error(ex, "Failed to create player config.", config);
             return 0;
         }

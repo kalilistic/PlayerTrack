@@ -37,29 +37,14 @@ public class TagRepository : BaseRepository
 
     public int CreateTag(Tag tag)
     {
-        DalamudContext.PluginLog.Verbose($"Entering TagRepository.CreateTag(): {tag.Name}.");
-        using var transaction = this.Connection.BeginTransaction();
-        try
-        {
-            var tagDTO = this.Mapper.Map<TagDTO>(tag);
-            SetCreateTimestamp(tagDTO);
+        const string sql =
+            "INSERT INTO tags (name, color, created, updated) VALUES (@name, @color, @created, @updated) RETURNING id";
 
-            const string sql =
-                "INSERT INTO tags (name, color, created, updated) VALUES (@name, @color, @created, @updated)";
+        var tagDTO = this.Mapper.Map<TagDTO>(tag);
+        SetCreateTimestamp(tagDTO);
 
-            this.Connection.Execute(sql, tagDTO, transaction);
-
-            var newId = this.Connection.ExecuteScalar<int>("SELECT last_insert_rowid()", transaction: transaction);
-
-            transaction.Commit();
-            return newId;
-        }
-        catch (Exception ex)
-        {
-            transaction.Rollback();
-            DalamudContext.PluginLog.Error(ex, $"Failed to create new tag {tag.Name}.", tag);
-            return 0;
-        }
+        var newId = this.Connection.ExecuteScalar<int>(sql, tagDTO);
+        return newId;
     }
 
     public bool UpdateTag(Tag tag)
