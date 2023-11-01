@@ -10,6 +10,7 @@ using Dalamud.DrunkenToad.Core;
 
 public class PlayerConfigService
 {
+    public static Action<int>? CategoryUpdated;
     public static ExtractedProperty<T> ExtractProperty<T>(
         PlayerConfigSet playerConfigSet,
         Func<PlayerConfig, ConfigValue<T>> propertySelector)
@@ -202,6 +203,8 @@ public class PlayerConfigService
 
         category.PlayerConfig = config;
         ServiceContext.CategoryService.UpdateCategory(category);
+        CategoryUpdated?.Invoke(category.Id);
+        
     }
 
     public static void DeletePlayerConfig(int playerId) => RepositoryContext.PlayerConfigRepository.DeletePlayerConfigByPlayerId(playerId);

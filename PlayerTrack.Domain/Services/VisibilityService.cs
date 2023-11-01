@@ -1,4 +1,7 @@
-﻿namespace PlayerTrack.Domain;
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace PlayerTrack.Domain;
 
 using System;
 using System.Collections.Generic;
@@ -12,14 +15,20 @@ using Models.Integration;
 
 public class VisibilityService
 {
-    public readonly bool IsVisibilityAvailable;
+    public bool IsVisibilityAvailable;
     private const string Reason = "PlayerTrack";
     private readonly VisibilityConsumer visibilityConsumer;
+    private int isSyncing;
 
     public VisibilityService()
     {
         DalamudContext.PluginLog.Verbose("Entering VisibilityService.VisibilityService()");
         this.visibilityConsumer = new VisibilityConsumer(DalamudContext.PluginInterface);
+    }
+
+    public void Initialize()
+    {
+        DalamudContext.PluginLog.Verbose("Entering VisibilityService.Initialize()");
         if (ServiceContext.ConfigService.GetConfig().SyncWithVisibility)
         {
             this.IsVisibilityAvailable = this.visibilityConsumer.IsAvailable();
@@ -31,16 +40,51 @@ public class VisibilityService
         }
 
         ServiceContext.PlayerDataService.PlayerUpdated += this.SyncWithVisibility;
+        PlayerConfigService.CategoryUpdated += this.SyncWithVisibility;
     }
 
-    public void Dispose() => ServiceContext.PlayerDataService.PlayerUpdated -= this.SyncWithVisibility;
+    public void Dispose()
+    {
+        ServiceContext.PlayerDataService.PlayerUpdated -= this.SyncWithVisibility;
+        PlayerConfigService.CategoryUpdated -= this.SyncWithVisibility;
+    }
 
+    private void SyncWithVisibility(int categoryId)
+    {
+        if (Interlocked.CompareExchange(ref this.isSyncing, 1, 0) == 1)
+        {
+            DalamudContext.PluginLog.Warning($"VisibilityService.SyncWithVisibility() - Already syncing");
+            return;
+        }
+        
+        Task.Run(() =>
+        {
+            var category = ServiceContext.CategoryService.GetCategory(categoryId);
+            if (category == null)
+            {
+                DalamudContext.PluginLog.Warning(
+                    $"VisibilityService.SyncWithVisibility() - Category not found: {categoryId}");
+                Interlocked.Exchange(ref this.isSyncing, 0);
+                return;
+            }
+
+            var players = ServiceContext.PlayerCacheService.GetCategoryPlayers(categoryId);
+            foreach (var player in players)
+            {
+                SyncWithVisibility(player);
+            }
+            
+            Interlocked.Exchange(ref this.isSyncing, 0);
+        });
+    }
+    
     public void SyncWithVisibility(Player player)
     {
         DalamudContext.PluginLog.Verbose($"Entering VisibilityService.SyncWithVisibility(): {player.Name}");
         if (!this.IsVisibilityAvailable)
         {
             DalamudContext.PluginLog.Verbose("VisibilityService.SyncWithVisibility() - Visibility not available");
+            Interlocked.Exchange(ref this.isSyncing, 0);
             return;
         }
 
@@ -51,38 +95,46 @@ public class VisibilityService
             var visibilityType = PlayerConfigService.GetVisibilityType(player);
             DalamudContext.PluginLog.Verbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType}");
 
-            if (visibilityType == VisibilityType.None)
+            switch (visibilityType)
             {
-                DalamudContext.PluginLog.Verbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Removing from visibility");
-                if (voidedEntries.ContainsKey(player.Key))
+                case VisibilityType.None:
                 {
-                    this.visibilityConsumer.RemoveFromVoidList(player.Name, player.WorldId);
-                }
+                    DalamudContext.PluginLog.Verbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Removing from visibility");
+                    if (voidedEntries.ContainsKey(player.Key))
+                    {
+                        this.visibilityConsumer.RemoveFromVoidList(player.Name, player.WorldId);
+                    }
 
-                if (whitelistedEntries.ContainsKey(player.Key))
-                {
-                    this.visibilityConsumer.RemoveFromWhiteList(player.Name, player.WorldId);
+                    if (whitelistedEntries.ContainsKey(player.Key))
+                    {
+                        this.visibilityConsumer.RemoveFromWhiteList(player.Name, player.WorldId);
+                    }
+
+                    break;
                 }
-            }
-            else if (visibilityType == VisibilityType.Voidlist)
-            {
-                DalamudContext.PluginLog.Verbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Adding to void list");
-                if (!voidedEntries.ContainsKey(player.Key))
+                case VisibilityType.Voidlist:
                 {
-                    this.visibilityConsumer.AddToVoidList(player.Name, player.WorldId, Reason);
+                    DalamudContext.PluginLog.Verbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Adding to void list");
+                    if (!voidedEntries.ContainsKey(player.Key))
+                    {
+                        this.visibilityConsumer.AddToVoidList(player.Name, player.WorldId, Reason);
+                    }
+
+                    break;
                 }
-            }
-            else if (visibilityType == VisibilityType.Whitelist)
-            {
-                DalamudContext.PluginLog.Verbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Adding to white list");
-                if (!whitelistedEntries.ContainsKey(player.Key))
+                case VisibilityType.Whitelist:
                 {
-                    this.visibilityConsumer.AddToWhiteList(player.Name, player.WorldId, Reason);
+                    DalamudContext.PluginLog.Verbose($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Adding to white list");
+                    if (!whitelistedEntries.ContainsKey(player.Key))
+                    {
+                        this.visibilityConsumer.AddToWhiteList(player.Name, player.WorldId, Reason);
+                    }
+
+                    break;
                 }
-            }
-            else
-            {
-                DalamudContext.PluginLog.Warning($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Unhandled");
+                default:
+                    DalamudContext.PluginLog.Warning($"VisibilityService.SyncWithVisibility() - {player.Name} - {visibilityType} - Unhandled");
+                    break;
             }
         }
         catch (Exception ex)

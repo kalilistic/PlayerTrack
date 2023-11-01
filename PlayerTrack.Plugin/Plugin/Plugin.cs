@@ -90,6 +90,7 @@ public class Plugin : IDalamudPlugin
 
         ServiceContext.ConfigService.SyncIcons();
         ServiceContext.PlayerCacheService.LoadPlayers();
+        ServiceContext.VisibilityService.Initialize();
         SetPluginVersion();
         ServiceContext.BackupService.Startup();
         GuiController.Start();

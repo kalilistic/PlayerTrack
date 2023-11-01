@@ -474,6 +474,19 @@ public class PlayerCacheService
         }
     }
     
+    public List<Player> GetCategoryPlayers(int categoryId)
+    {
+        this.setLock.EnterReadLock();
+        try
+        {
+            return this.playerCategoryCache.GetGroup(categoryId)?.Values.ToList() ?? new List<Player>();
+        }
+        finally
+        {
+            this.setLock.ExitReadLock();
+        }
+    }
+    
     public List<Player> GetCategoryPlayers(int categoryId, int start, int count)
     {
         this.setLock.EnterReadLock();
