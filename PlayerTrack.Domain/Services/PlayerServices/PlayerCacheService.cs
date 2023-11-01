@@ -357,6 +357,19 @@ public class PlayerCacheService
         }
     }
 
+    public List<Player> GetCurrentPlayers()
+    {
+        this.setLock.EnterReadLock();
+        try
+        {
+            return this.playerCurrentCache.GetAll();
+        }
+        finally
+        {
+            this.setLock.ExitReadLock();
+        }
+    }
+    
     public List<Player> GetCurrentPlayers(int start, int count)
     {
         this.setLock.EnterReadLock();

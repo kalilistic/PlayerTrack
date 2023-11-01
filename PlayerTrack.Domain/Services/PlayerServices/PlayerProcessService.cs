@@ -1,4 +1,6 @@
-﻿namespace PlayerTrack.Domain;
+﻿using System.Timers;
+
+namespace PlayerTrack.Domain;
 
 using System;
 using System.Collections;
@@ -20,6 +22,60 @@ public class PlayerProcessService
     public event Action<Player>? CurrentPlayerAdded;
 
     public event Action<Player>? CurrentPlayerRemoved;
+    
+    private readonly Timer reconcileCurrentPlayerTimer;
+
+    public PlayerProcessService()
+    {
+        this.reconcileCurrentPlayerTimer = new Timer(30000);
+        this.reconcileCurrentPlayerTimer.Elapsed += this.ReconcileCurrentPlayerTimerOnElapsed;
+        this.reconcileCurrentPlayerTimer.Start();
+    }
+
+    public void Dispose()
+    {
+        this.reconcileCurrentPlayerTimer.Stop();
+        this.reconcileCurrentPlayerTimer.Dispose();
+    }
+    
+    private void ReconcileCurrentPlayerTimerOnElapsed(object? sender, ElapsedEventArgs e)
+    {
+        DalamudContext.PluginLog.Verbose("Entering PlayerProcessService.ReconcileCurrentPlayerTimerOnElapsed()");
+        try
+        {
+            if (ServiceContext.ConfigService.GetConfig().PlayerListFilter == PlayerListFilter.CurrentPlayers)
+            {
+                var currentPlayers = ServiceContext.PlayerCacheService.GetCurrentPlayers();
+                if (currentPlayers.Count > 0)
+                {
+                    var hasRemovedPlayers = false;
+                    foreach (var player in currentPlayers)
+                    {
+                        var toadPlayer = DalamudContext.PlayerEventDispatcher.GetPlayerByNameAndWorldId(player.Name, player.WorldId);
+                        if (toadPlayer == null)
+                        {
+                            PlayerEncounterService.EndPlayerEncounter(player, ServiceContext.EncounterService.GetCurrentEncounter());
+                            player.IsCurrent = false;
+                            player.LastSeen = UnixTimestampHelper.CurrentTime();
+                            player.OpenPlayerEncounterId = 0;
+                            ServiceContext.PlayerDataService.UpdatePlayer(player);
+                            this.CurrentPlayerRemoved?.Invoke(player);
+                            hasRemovedPlayers = true;
+                        }
+                    }
+
+                    if (hasRemovedPlayers)
+                    {
+                        ServiceContext.PlayerDataService.RefreshAllPlayers();
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            DalamudContext.PluginLog.Error(ex, "Failed to reconcile current players.");
+        }
+    }
 
     public static void HandleDuplicatePlayers(List<Player> players)
     {

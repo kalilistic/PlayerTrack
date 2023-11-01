@@ -76,6 +76,7 @@ public static class ServiceContext
         try
         {
             PlayerCacheService.Dispose();
+            PlayerProcessService.Dispose();
             EncounterService.Dispose();
             LodestoneService.Dispose();
             VisibilityService.Dispose();
