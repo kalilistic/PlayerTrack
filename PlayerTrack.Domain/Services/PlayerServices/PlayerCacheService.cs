@@ -280,7 +280,7 @@ public class PlayerCacheService
                 }
 
                 InitializeComparer();
-                ResortAllCaches();
+                ResortCache();
             }
         }
         finally
@@ -296,7 +296,7 @@ public class PlayerCacheService
         try
         {
             InitializeComparer();
-            ResortAllCaches();
+            ResortCache();
         }
         finally
         {
@@ -606,13 +606,39 @@ public class PlayerCacheService
         return this.GetPlayerConfigsForDeletion().Count;
     }
 
-    private void ResortAllCaches()
+    public void PopulateDerivedFields(Player player)
     {
-        this.playerCache.Resort(this.comparer);
-        this.playerCurrentCache.Resort(this.comparer);
-        this.playerRecentCache.Resort(this.comparer);
-        this.playerCategoryCache.Resort(this.comparer);
-        this.playerTagCache.Resort(this.comparer);
+        PlayerCategoryService.SetPrimaryCategoryId(player, this.dbCategoryRanks);
+        var colorId = PlayerConfigService.GetNameColor(player);
+        var color = DalamudContext.DataManager.UIColors.TryGetValue(colorId, out var uiColor) ? uiColor : new ToadUIColor();
+        player.PlayerListNameColor = color.Foreground.ToVector4();
+        player.PlayerListIconString = ((FontAwesomeIcon)PlayerConfigService.GetIcon(player)).ToIconString();
+    }
+    
+    private void ResortCache()
+    {
+        var filter = ServiceContext.ConfigService.GetConfig().PlayerListFilter;
+        switch (filter)
+        {
+            case PlayerListFilter.CurrentPlayers:
+                this.playerCurrentCache.Resort(this.comparer);
+                break;
+            case PlayerListFilter.RecentPlayers:
+                this.playerRecentCache.Resort(this.comparer);
+                break;
+            case PlayerListFilter.AllPlayers:
+                this.playerCache.Resort(this.comparer);
+                break;
+            case PlayerListFilter.PlayersByCategory:
+                this.playerCategoryCache.Resort(this.comparer);
+                break;
+            case PlayerListFilter.PlayersByTag:
+                this.playerTagCache.Resort(this.comparer);
+                break;
+            default:
+                DalamudContext.PluginLog.Warning($"Invalid player list filter: {filter}");
+                break;
+        }
     }
      
     private void RemovePlayerFromAllCaches(Player playerToRemove)
@@ -674,15 +700,6 @@ public class PlayerCacheService
         playerRecentCache.Add(player);
         playerCategoryCache.Add(player);
         playerTagCache.Add(player);
-    }
-    
-    private void PopulateDerivedFields(Player player)
-    {
-        PlayerCategoryService.SetPrimaryCategoryId(player, this.dbCategoryRanks);
-        var colorId = PlayerConfigService.GetNameColor(player);
-        var color = DalamudContext.DataManager.UIColors.TryGetValue(colorId, out var uiColor) ? uiColor : new ToadUIColor();
-        player.PlayerListNameColor = color.Foreground.ToVector4();
-        player.PlayerListIconString = ((FontAwesomeIcon)PlayerConfigService.GetIcon(player)).ToIconString();
     }
     
     private static Func<Player, bool> GetSearchFilter(string name, SearchType searchType)

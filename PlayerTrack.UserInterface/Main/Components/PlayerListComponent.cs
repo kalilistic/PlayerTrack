@@ -84,6 +84,7 @@ public class PlayerListComponent : ViewComponent
             {
                 this.config.PlayerListFilter = playerListFilter;
                 ServiceContext.ConfigService.SaveConfig(this.config);
+                ServiceContext.PlayerCacheService.Resort();
                 this.presenter.ClearCache();
             }
         }

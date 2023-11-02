@@ -218,7 +218,12 @@ public class CategoryService : UnsortedCacheService<Category>
         RepositoryContext.CategoryRepository.UpdateCategory(category);
         this.BuildCategoryFilters();
         this.BuildCategoryNames();
-        ServiceContext.PlayerDataService.RefreshAllPlayers();
+        var players = ServiceContext.PlayerCacheService.GetCategoryPlayers(category.Id);
+        foreach (var player in players)
+        {
+            ServiceContext.PlayerCacheService.PopulateDerivedFields(player);
+            ServiceContext.VisibilityService.SyncWithVisibility(player);
+        }
         this.OnCacheUpdated();
     }
 
