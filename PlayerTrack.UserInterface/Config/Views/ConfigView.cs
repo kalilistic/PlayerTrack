@@ -30,7 +30,7 @@ public class ConfigView : PlayerTrackView, IDisposable
     public ConfigView(string name, PluginConfig config, ImGuiWindowFlags flags = ImGuiWindowFlags.None)
         : base(name, config, flags)
     {
-        this.Size = new Vector2(730f, 450f);
+        this.Size = new Vector2(820f, 450f);
         this.SizeCondition = ImGuiCond.Appearing;
         this.backupComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.categoryComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();

@@ -40,11 +40,11 @@ public class BackupComponent : ConfigViewComponent
         this.columnWidths.Clear();
         var columnPaddings = new[] 
         {
-            70f * ImGuiHelpers.GlobalScale, 
-            175f * ImGuiHelpers.GlobalScale, 
-            50f * ImGuiHelpers.GlobalScale, 
-            50f * ImGuiHelpers.GlobalScale, 
-            50f * ImGuiHelpers.GlobalScale
+            70f * ImGuiHelpers.GlobalScale, // Type
+            175f * ImGuiHelpers.GlobalScale, // Name
+            50f * ImGuiHelpers.GlobalScale, // Created
+            50f * ImGuiHelpers.GlobalScale, // Size
+            150f * ImGuiHelpers.GlobalScale // Delete
         };
 
         for (var i = 0; i < headers.Length; i++)
