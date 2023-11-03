@@ -53,7 +53,7 @@ public class PlayerProcessService
                         var toadPlayer = DalamudContext.PlayerEventDispatcher.GetPlayerByNameAndWorldId(player.Name, player.WorldId);
                         if (toadPlayer == null)
                         {
-                            DalamudContext.PluginLog.Warning($"Player not found, removing from current players: {player.Name}, {player.WorldId}");
+                            DalamudContext.PluginLog.Verbose($"Player not found, removing from current players: {player.Name}, {player.WorldId}");
                             this.RemoveCurrentPlayer(player);
                         }
                     }
