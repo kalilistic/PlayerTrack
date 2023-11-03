@@ -10,28 +10,38 @@ using Dalamud.DrunkenToad.Helpers;
 
 public class PlayerEncounterService
 {
-    public static List<PlayerEncounter>? GetPlayerEncountersByPlayer(int playerId) => RepositoryContext.PlayerEncounterRepository.GetAllByPlayerId(playerId);
+    public static List<PlayerEncounter>? GetPlayerEncountersByPlayer(int playerId)
+    {
+        var pEncs = RepositoryContext.PlayerEncounterRepository.GetAllByPlayerId(playerId);
+        if (pEncs == null) return null;
+        foreach (var pEnc in pEncs)
+        {
+            if (pEnc.Ended == 0) pEnc.Ended = pEnc.Updated;
+        }
+
+        return pEncs;
+    }
 
     public static void DeletePlayerEncountersByPlayer(int playerId) => RepositoryContext.PlayerEncounterRepository.DeleteAllByPlayerId(playerId);
 
-    public static void CreatePlayerEncounter(ToadPlayer toadPlayer, Player player)
+    public static int CreatePlayerEncounter(ToadPlayer toadPlayer, Player player)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerEncounterService.CreatePlayerEncounter(): {toadPlayer.Id}, {player.Id}");
         if (player.Id == 0)
         {
             DalamudContext.PluginLog.Warning("Player Id is 0, cannot create player encounter.");
-            return;
+            return 0;
         }
 
         var encId = ServiceContext.EncounterService.CurrentEncounter?.Id ?? 0;
         if (encId == 0)
         {
             DalamudContext.PluginLog.Warning("Encounter Id is 0, cannot create player encounter.");
-            return;
+            return 0;
         }
 
         var playerEncounter = RepositoryContext.PlayerEncounterRepository.GetByPlayerIdAndEncId(player.Id, encId);
-        if (playerEncounter != null) return;
+        if (playerEncounter != null) return playerEncounter.Id;
         playerEncounter = new PlayerEncounter
         {
             PlayerId = player.Id,
@@ -39,7 +49,7 @@ public class PlayerEncounterService
             JobId = toadPlayer.ClassJob,
             JobLvl = toadPlayer.Level,
         };
-        RepositoryContext.PlayerEncounterRepository.CreatePlayerEncounter(playerEncounter);
+        return RepositoryContext.PlayerEncounterRepository.CreatePlayerEncounter(playerEncounter);
     }
 
     public static ToadLocation GetEncounterLocation()

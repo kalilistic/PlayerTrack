@@ -184,7 +184,7 @@ public class PlayerProcessService
                 }
                 else if (enc.SaveEncounter)
                 {
-                    PlayerEncounterService.CreatePlayerEncounter(toadPlayer, player);
+                    player.OpenPlayerEncounterId = PlayerEncounterService.CreatePlayerEncounter(toadPlayer, player);
                 }
             }
         }
@@ -201,7 +201,7 @@ public class PlayerProcessService
             ServiceContext.PlayerAlertService.SendProximityAlert(player);
             if (enc.SaveEncounter)
             {
-                PlayerEncounterService.CreatePlayerEncounter(toadPlayer, player);
+                player.OpenPlayerEncounterId = PlayerEncounterService.CreatePlayerEncounter(toadPlayer, player);
             }
         }
     }
