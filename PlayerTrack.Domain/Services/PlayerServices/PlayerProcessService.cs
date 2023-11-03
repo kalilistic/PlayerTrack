@@ -28,7 +28,7 @@ public class PlayerProcessService
     public PlayerProcessService()
     {
         this.reconcileCurrentPlayerTimer = new Timer(30000);
-        this.reconcileCurrentPlayerTimer.Elapsed += this.ReconcileCurrentPlayerTimerOnElapsed;
+        this.reconcileCurrentPlayerTimer.Elapsed += this.ReconcileCurrentPlayersTimerOnElapsed;
         this.reconcileCurrentPlayerTimer.Start();
     }
 
@@ -38,7 +38,7 @@ public class PlayerProcessService
         this.reconcileCurrentPlayerTimer.Dispose();
     }
     
-    private void ReconcileCurrentPlayerTimerOnElapsed(object? sender, ElapsedEventArgs e)
+    private void ReconcileCurrentPlayersTimerOnElapsed(object? sender, ElapsedEventArgs e)
     {
         DalamudContext.PluginLog.Verbose("Entering PlayerProcessService.ReconcileCurrentPlayerTimerOnElapsed()");
         try
@@ -48,25 +48,14 @@ public class PlayerProcessService
                 var currentPlayers = ServiceContext.PlayerCacheService.GetCurrentPlayers();
                 if (currentPlayers.Count > 0)
                 {
-                    var hasRemovedPlayers = false;
                     foreach (var player in currentPlayers)
                     {
                         var toadPlayer = DalamudContext.PlayerEventDispatcher.GetPlayerByNameAndWorldId(player.Name, player.WorldId);
                         if (toadPlayer == null)
                         {
-                            PlayerEncounterService.EndPlayerEncounter(player, ServiceContext.EncounterService.GetCurrentEncounter());
-                            player.IsCurrent = false;
-                            player.LastSeen = UnixTimestampHelper.CurrentTime();
-                            player.OpenPlayerEncounterId = 0;
-                            ServiceContext.PlayerDataService.UpdatePlayer(player);
-                            this.CurrentPlayerRemoved?.Invoke(player);
-                            hasRemovedPlayers = true;
+                            DalamudContext.PluginLog.Warning($"Player not found, removing from current players: {player.Name}, {player.WorldId}");
+                            this.RemoveCurrentPlayer(player);
                         }
-                    }
-
-                    if (hasRemovedPlayers)
-                    {
-                        ServiceContext.PlayerDataService.RefreshAllPlayers();
                     }
                 }
             }
@@ -143,13 +132,7 @@ public class PlayerProcessService
             return;
         }
 
-        PlayerEncounterService.EndPlayerEncounter(player, ServiceContext.EncounterService.GetCurrentEncounter());
-
-        player.IsCurrent = false;
-        player.LastSeen = UnixTimestampHelper.CurrentTime();
-        player.OpenPlayerEncounterId = 0;
-        ServiceContext.PlayerDataService.UpdatePlayer(player);
-        this.CurrentPlayerRemoved?.Invoke(player);
+        RemoveCurrentPlayer(player);
     }
 
     public void SelectPlayer(string name, string worldName)
@@ -223,6 +206,16 @@ public class PlayerProcessService
         }
     }
 
+    private void RemoveCurrentPlayer(Player player)
+    {
+        PlayerEncounterService.EndPlayerEncounter(player, ServiceContext.EncounterService.GetCurrentEncounter());
+        player.IsCurrent = false;
+        player.LastSeen = UnixTimestampHelper.CurrentTime();
+        player.OpenPlayerEncounterId = 0;
+        ServiceContext.PlayerDataService.UpdatePlayer(player);
+        this.CurrentPlayerRemoved?.Invoke(player);
+    }
+    
     private void CreateNewPlayer(ToadPlayer toadPlayer, string key, bool isCurrent, int categoryId, ToadLocation loc)
     {
         var player = new Player
