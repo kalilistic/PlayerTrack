@@ -2,6 +2,7 @@
 	<PropertyGroup>
 		<Title>PlayerTrack.Plugin</Title>
 		<Authors>kalilistic</Authors>
+		<Version>3.2.7.0</Version>
 		<TargetFramework>net7.0-windows</TargetFramework>
 		<Platforms>x64</Platforms>
 		<LangVersion>10</LangVersion>
@@ -20,8 +21,8 @@
 		<Configurations>Debug;Release</Configurations>
 		<AssemblyName>PlayerTrack</AssemblyName>
 		<RootNamespace>PlayerTrack</RootNamespace>
-		<PackageVersion>3.2.7</PackageVersion>
-		<AssemblyVersion>3.2.7.0</AssemblyVersion>
+		<PackageVersion>$(Version)</PackageVersion>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<NoWarn>CS1591</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
