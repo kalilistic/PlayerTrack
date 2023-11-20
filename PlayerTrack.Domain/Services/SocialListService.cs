@@ -230,7 +230,10 @@ public class SocialListService
                 }
             }
             
-            PlayerCategoryService.AssignCategoryToPlayers(players.ToArray(), syncedCategory.Id);
+            foreach (var player in players)
+            {
+                PlayerCategoryService.AssignCategoryToPlayerSync(player.Id, syncedCategory.Id);
+            }
         }
         else if (syncedCategory != null)
         {
@@ -241,7 +244,10 @@ public class SocialListService
         DalamudContext.PluginLog.Verbose($"HandleMembersList: Adding to default category");
         if (socialList.DefaultCategoryId != 0)
         {
-            PlayerCategoryService.AssignCategoryToPlayers(players.ToArray(), socialList.DefaultCategoryId);
+            foreach (var player in players)
+            {
+                PlayerCategoryService.AssignCategoryToPlayerSync(player.Id, socialList.DefaultCategoryId);
+            }
         }
         
         // add content id to player
