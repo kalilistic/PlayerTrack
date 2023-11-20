@@ -10,7 +10,7 @@ using Dalamud.DrunkenToad.Core;
 
 public class PlayerCategoryService
 {
-    public static void AssignCategoryToPlayers(Player[] players, int categoryId) => Task.Run(() =>
+    public static void AssignCategoryToPlayers(Player[] players, int categoryId)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryService.AssignCategoryToPlayers(): {categoryId}");
         var category = ServiceContext.CategoryService.GetCategoryById(categoryId);
@@ -36,7 +36,7 @@ public class PlayerCategoryService
             RepositoryContext.PlayerCategoryRepository.CreatePlayerCategory(player.Id, categoryId);
             ServiceContext.PlayerDataService.RecalculatePlayerRankings();
         }
-    });
+    }
     
     public static void AssignCategoryToPlayer(int playerId, int categoryId) => Task.Run(() =>
     {
