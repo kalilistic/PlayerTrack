@@ -44,6 +44,8 @@ public class Player
     public uint WorldId { get; set; }
 
     public ushort LastTerritoryType { get; set; }
+    
+    public ulong ContentId { get; set; }
 
     [Write(false)] public int PrimaryCategoryId { get; set; }
 

@@ -99,7 +99,7 @@ public class PluginConfig : IPluginConfig
         AddPlayers = true,
         AddEncounters = true,
     };
-
+    
     public PlayerDataActionOptions PlayerDataActionOptions { get; set; } = new();
 
     public PlayerSettingsDataActionOptions PlayerSettingsDataActionOptions { get; set; } = new();
@@ -130,7 +130,7 @@ public class PluginConfig : IPluginConfig
         ToadLocationType.None => throw new ArgumentException($"Unsupported location type: {locType}"),
         _ => throw new ArgumentException($"Unsupported location type: {locType}"),
     };
-
+    
     public void ClearCategoryIds(int categoryId)
     {
         if (this.Overworld.DefaultCategoryId == categoryId)

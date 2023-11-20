@@ -23,7 +23,7 @@ public class PlayerLodestoneService
         var isTestDC = DalamudContext.DataManager.IsTestDC(worldId);
         if (isTestDC)
         {
-            DalamudContext.PluginLog.Debug("Cannot create lodestone lookup for test DC.");
+            DalamudContext.PluginLog.Verbose("Cannot create lodestone lookup for test DC.");
             var player = ServiceContext.PlayerDataService.GetPlayer(playerId);
             if (player == null)
             {

@@ -1,4 +1,8 @@
-﻿namespace PlayerTrack.UserInterface.Config.Components;
+﻿using Dalamud.DrunkenToad.Core;
+using Dalamud.DrunkenToad.Gui.Enums;
+using Dalamud.Interface;
+
+namespace PlayerTrack.UserInterface.Config.Components;
 
 using System;
 using System.Globalization;
@@ -25,6 +29,7 @@ public class DataComponent : ConfigViewComponent
     private string sqlQuery = string.Empty;
     private string sqlResult = string.Empty;
     private string sqlResultDisplay = string.Empty;
+    private Tuple<ActionRequest, LocalPlayer>? localPlayerToDelete;
 
     public override void Draw() => this.DrawControls();
 
@@ -34,7 +39,59 @@ public class DataComponent : ConfigViewComponent
         {
             this.DrawPurge();
             this.DrawSQLExecutor();
+            this.DrawLocalPlayers();
         }
+    }
+
+    private void DrawLocalPlayers()
+    {
+        if (LocGui.BeginTabItem("LocalPlayers"))
+        {
+            var players = LocalPlayerService.GetLocalPlayers();
+            if (players.Count == 0)
+            {
+                LocGui.TextColored("NoLocalPlayers", ImGuiColors.DalamudYellow);
+            }
+            else
+            {
+                LocGui.TextColored("LocalPlayers", ImGuiColors.DalamudViolet);
+                ImGui.Spacing();
+                foreach (var player in players)
+                {
+                    var worldName = DalamudContext.DataManager.GetWorldNameById(player.WorldId);
+                    ImGui.Text($"{player.Name} [{worldName}]");
+                    ImGui.SameLine();
+                    HandleLocalPlayerDeletion(player);
+                }
+
+            }
+            ImGui.EndTabItem();
+        }
+    }
+    
+    private void HandleLocalPlayerDeletion(LocalPlayer LocalPlayer)
+    {
+        ToadGui.Confirm(LocalPlayer, FontAwesomeIcon.Trash, "ConfirmDelete", ref this.localPlayerToDelete);
+        if (this.localPlayerToDelete?.Item1 == ActionRequest.Confirmed)
+        {
+            DeleteLocalPlayer();
+        }
+        else if (this.localPlayerToDelete?.Item1 == ActionRequest.None)
+        {
+            this.localPlayerToDelete = null;
+        }
+    }
+
+    private void DeleteLocalPlayer()
+    {
+        var player = this.localPlayerToDelete?.Item2;
+        if (player != null)
+        {
+            LocalPlayerService.DeleteLocalPlayer(player); 
+        }
+        
+        this.localPlayerToDelete = null;
+
     }
 
     private void DrawPurge()

@@ -34,8 +34,8 @@ public class PlayerListComponent : ViewComponent
 
     public override void Draw()
     {
-        this.categories = ServiceContext.CategoryService.GetAllCategories();
-        this.categoryNames = ServiceContext.CategoryService.GetCategoryNames(false);
+        this.categories = ServiceContext.CategoryService.GetCategories(false);
+        this.categoryNames = ServiceContext.CategoryService.GetCategoryNames(false, false);
         ImGui.BeginChild("###LeftPanel", new Vector2(205 * ImGuiHelpers.GlobalScale, 0), false);
         this.DrawControls();
         ImGui.BeginChild("###PlayerList", new Vector2(205 * ImGuiHelpers.GlobalScale, 0), true);
@@ -160,7 +160,7 @@ public class PlayerListComponent : ViewComponent
             }
         }
 
-        // CreateLodestoneRequests dummy spacing if nothing available so can still open menu
+        // Dummy spacing if nothing available so can still open menu
         if (this.config is { ShowSearchBox: false, ShowPlayerFilter: false })
         {
             ImGui.Dummy(new Vector2(this.config.MainWindowWidth, 5f));

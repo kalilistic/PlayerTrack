@@ -10,6 +10,34 @@ using Dalamud.DrunkenToad.Core;
 
 public class PlayerCategoryService
 {
+    public static void AssignCategoryToPlayers(Player[] players, int categoryId) => Task.Run(() =>
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryService.AssignCategoryToPlayers(): {categoryId}");
+        var category = ServiceContext.CategoryService.GetCategoryById(categoryId);
+        if (category == null)
+        {
+            DalamudContext.PluginLog.Warning($"Category not found, categoryId: {categoryId}");
+            return;
+        }
+
+        foreach (var player in players)
+        {
+            var assignedCategories = player.AssignedCategories;
+            if (assignedCategories.Any(c => c.Id == categoryId))
+            {
+                DalamudContext.PluginLog.Verbose($"Category already assigned to player, playerId: {player.Id}, categoryId: {categoryId}");
+                continue;
+            }
+            
+            assignedCategories.Add(category);
+            var categoryRanks = ServiceContext.CategoryService.GetCategoryRanks();
+            SetPrimaryCategoryId(player, categoryRanks);
+            ServiceContext.PlayerDataService.UpdatePlayer(player);
+            RepositoryContext.PlayerCategoryRepository.CreatePlayerCategory(player.Id, categoryId);
+            ServiceContext.PlayerDataService.RecalculatePlayerRankings();
+        }
+    });
+    
     public static void AssignCategoryToPlayer(int playerId, int categoryId) => Task.Run(() =>
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryService.AssignCategoryToPlayer(): {playerId}, {categoryId}");
@@ -30,7 +58,7 @@ public class PlayerCategoryService
         var assignedCategories = player.AssignedCategories;
         if (assignedCategories.Any(c => c.Id == categoryId))
         {
-            DalamudContext.PluginLog.Warning($"Category already assigned to player, playerId: {playerId}, categoryId: {categoryId}");
+            DalamudContext.PluginLog.Verbose($"Category already assigned to player, playerId: {playerId}, categoryId: {categoryId}");
             return;
         }
 

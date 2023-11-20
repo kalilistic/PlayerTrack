@@ -131,7 +131,7 @@ public static class PlayerViewMapper
 
     private static void AddCategories(IReadOnlyCollection<Category> assignedCategories, PlayerView playerView)
     {
-        var cats = ServiceContext.CategoryService.GetAllCategories();
+        var cats = ServiceContext.CategoryService.GetCategories();
         if (cats.Any())
         {
             foreach (var cat in cats)
@@ -140,7 +140,7 @@ public static class PlayerViewMapper
                 {
                     playerView.AssignedCategories.Add(cat);
                 }
-                else
+                else if (cat.SocialListId == 0)
                 {
                     playerView.UnassignedCategories.Add(cat);
                 }

@@ -8,7 +8,6 @@ namespace PlayerTrack.Infrastructure;
 using System.Text.Json;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Helpers;
-using Dalamud.Loc.ImGui;
 using Dalamud.Utility;
 using Dapper;
 using FluentDapperLite.Maintenance;
@@ -43,6 +42,12 @@ public static class RepositoryContext
     public static PlayerConfigRepository PlayerConfigRepository { get; set; } = null!;
 
     public static ArchiveRecordRepository ArchiveRecordRepository { get; set; } = null!;
+    
+    public static LocalPlayerRepository LocalPlayerRepository { get; set; } = null!;
+    
+    public static SocialListRepository SocialListRepository { get; set; } = null!;
+    
+    public static SocialListMemberRepository SocialListMemberRepository { get; set; } = null!;
 
     private static IDbConnection Database { get; set; } = null!;
 
@@ -66,6 +71,9 @@ public static class RepositoryContext
         PlayerTagRepository = new PlayerTagRepository(Database, Mapper);
         PlayerConfigRepository = new PlayerConfigRepository(Database, Mapper);
         ArchiveRecordRepository = new ArchiveRecordRepository(Database, Mapper);
+        LocalPlayerRepository = new LocalPlayerRepository(Database, Mapper);
+        SocialListRepository = new SocialListRepository(Database, Mapper);
+        SocialListMemberRepository = new SocialListMemberRepository(Database, Mapper);
         RunWinePragmas();
         RunMaintenanceChecks();
     }
@@ -164,6 +172,9 @@ public static class RepositoryContext
             cfg.AddProfile<PlayerCategoryMappingProfile>();
             cfg.AddProfile<TagMappingProfile>();
             cfg.AddProfile<ArchiveRecordMappingProfile>();
+            cfg.AddProfile<LocalPlayerMappingProfile>();
+            cfg.AddProfile<SocialListMappingProfile>();
+            cfg.AddProfile<SocialListMemberMappingProfile>();
         });
 
         return mapperConfig.CreateMapper();

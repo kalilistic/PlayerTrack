@@ -29,11 +29,16 @@ public class PlayerCacheService
     private List<Player> dbPlayers = null!;
     private Dictionary<int, int> dbCategoryRanks = null!;
     private const long NinetyDaysInMilliseconds = 7776000000;
+    private Dictionary<PlayerListFilter, bool> pendingCacheUpdates = new();
 
     public event Action? CacheUpdated;
 
     public PlayerCacheService()
     {
+        foreach (PlayerListFilter filter in Enum.GetValues(typeof(PlayerListFilter)))
+        {
+            this.pendingCacheUpdates.Add(filter, false);
+        }
         this.recentPlayerTimer = new Timer(30000);
         this.recentPlayerTimer.Elapsed += this.OnRecentPlayerTimerOnElapsed;
         this.recentPlayerTimer.AutoReset = true;
@@ -44,24 +49,6 @@ public class PlayerCacheService
     {
         this.recentPlayerTimer.Elapsed -= this.OnRecentPlayerTimerOnElapsed;
         this.recentPlayerTimer.Stop();
-    }
-    
-    private void OnRecentPlayerTimerOnElapsed(object? sender, ElapsedEventArgs e)
-    {
-        var currentTime = UnixTimestampHelper.CurrentTime();
-        var threshold = ServiceContext.ConfigService.GetConfig().RecentPlayersThreshold;
-        var expiry = this.playerRecentCache.GetExpiry();
-
-        foreach (var entry in expiry)
-        {
-            var expiryTime = entry.Value + threshold;
-            if (expiryTime > currentTime) continue;
-            if (!this.playerRecentCache.RemoveExpiry(entry.Key)) continue;
-            var player = this.playerCache.Get(entry.Key);
-            if (player == null) continue;
-            player.IsRecent = false;
-            ServiceContext.PlayerDataService.UpdatePlayer(player);
-        }
     }
 
     public void LoadPlayers()
@@ -202,6 +189,19 @@ public class PlayerCacheService
             this.setLock.ExitReadLock();
         }
     }
+
+    public Player? GetPlayer(ulong contentId)
+    {
+        this.setLock.EnterReadLock();
+        try
+        {
+            return this.playerCache.FindFirst(p => p.ContentId == contentId);
+        }
+        finally
+        {
+            this.setLock.ExitReadLock();
+        }
+    }
     
     public List<Player> GetPlayers()
     {
@@ -296,6 +296,7 @@ public class PlayerCacheService
         try
         {
             InitializeComparer();
+            this.pendingCacheUpdates = this.pendingCacheUpdates.ToDictionary(entry => entry.Key, _ => true);
             ResortCache();
         }
         finally
@@ -615,25 +616,68 @@ public class PlayerCacheService
         player.PlayerListIconString = ((FontAwesomeIcon)PlayerConfigService.GetIcon(player)).ToIconString();
     }
     
+    private void OnRecentPlayerTimerOnElapsed(object? sender, ElapsedEventArgs e)
+    {
+        var currentTime = UnixTimestampHelper.CurrentTime();
+        var threshold = ServiceContext.ConfigService.GetConfig().RecentPlayersThreshold;
+        var expiry = this.playerRecentCache.GetExpiry();
+
+        foreach (var entry in expiry)
+        {
+            var expiryTime = entry.Value + threshold;
+            if (expiryTime > currentTime) continue;
+            if (!this.playerRecentCache.RemoveExpiry(entry.Key)) continue;
+            var player = this.playerCache.Get(entry.Key);
+            if (player == null) continue;
+            player.IsRecent = false;
+            ServiceContext.PlayerDataService.UpdatePlayer(player);
+        }
+    }
+    
     private void ResortCache()
     {
         var filter = ServiceContext.ConfigService.GetConfig().PlayerListFilter;
         switch (filter)
         {
             case PlayerListFilter.CurrentPlayers:
-                this.playerCurrentCache.Resort(this.comparer);
+                if (this.pendingCacheUpdates[PlayerListFilter.CurrentPlayers])
+                {
+                    this.pendingCacheUpdates[PlayerListFilter.CurrentPlayers] = false;
+                    this.playerCurrentCache.Resort(this.comparer);
+                }
+                
                 break;
             case PlayerListFilter.RecentPlayers:
-                this.playerRecentCache.Resort(this.comparer);
+                if (this.pendingCacheUpdates[PlayerListFilter.RecentPlayers])
+                {
+                    this.pendingCacheUpdates[PlayerListFilter.RecentPlayers] = false;
+                    this.playerRecentCache.Resort(this.comparer);
+                }
+                
                 break;
             case PlayerListFilter.AllPlayers:
-                this.playerCache.Resort(this.comparer);
+                if (this.pendingCacheUpdates[PlayerListFilter.AllPlayers])
+                {
+                    this.pendingCacheUpdates[PlayerListFilter.AllPlayers] = false;
+                    this.playerCache.Resort(this.comparer);
+                }
+                
                 break;
             case PlayerListFilter.PlayersByCategory:
-                this.playerCategoryCache.Resort(this.comparer);
+                if (this.pendingCacheUpdates[PlayerListFilter.PlayersByCategory])
+                {
+                    this.pendingCacheUpdates[PlayerListFilter.PlayersByCategory] = false;
+                    this.playerCategoryCache.Resort(this.comparer);
+                }
+                
                 break;
             case PlayerListFilter.PlayersByTag:
-                this.playerTagCache.Resort(this.comparer);
+                if (this.pendingCacheUpdates[PlayerListFilter.PlayersByTag])
+                {
+                    this.pendingCacheUpdates[PlayerListFilter.PlayersByTag] = false;
+                    this.playerTagCache.Resort(this.comparer);
+                }
+                
                 break;
             default:
                 DalamudContext.PluginLog.Warning($"Invalid player list filter: {filter}");

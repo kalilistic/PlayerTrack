@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Dalamud.DrunkenToad.Core.Models;
 using PlayerTrack.Infrastructure;
 using PlayerTrack.Models;
@@ -8,15 +9,17 @@ using PlayerTrack.Models;
 namespace PlayerTrack.Domain;
 
 using System.Threading.Tasks;
-using Dalamud.DrunkenToad.Caching;
-using Dalamud.DrunkenToad.Collections;
 using Dalamud.DrunkenToad.Core;
 
-public class CategoryService : UnsortedCacheService<Category>
+public class CategoryService
 {
     private PlayerFilter playerCategoryFilter = new();
     private List<string> categoryNames = new();
     private List<string> categoryNamesWithBlank = new() { string.Empty };
+    private List<string> categoryNamesExclDynamic = new() { string.Empty };
+    private List<string> categoryNamesExclDynamicWithBlank  = new() { string.Empty };
+    private Dictionary<int, Category> categories = new();
+    private readonly ReaderWriterLockSlim setLock = new(LockRecursionPolicy.SupportsRecursion);
 
     public CategoryService() => this.ReloadCategoryCache();
 
@@ -27,66 +30,135 @@ public class CategoryService : UnsortedCacheService<Category>
         return config.DefaultCategoryId != 0 ? config.DefaultCategoryId : 0;
     }
 
-    public Category? GetCategory(int id) => this.cache.FindFirst(cat => cat.Id == id);
+    public Category? GetCategory(int id)
+    {
+        setLock.EnterReadLock();
+        try
+        {
+            return this.categories.TryGetValue(id, out var category) ? category : null;
+        }
+        finally
+        {
+            setLock.ExitReadLock();
+        }
+    }
+    
+    public Category? GetSyncedCategory(int socialListId)
+    {
+        setLock.EnterReadLock();
+        try
+        {
+            return this.categories.Values.FirstOrDefault(cat => cat.SocialListId == socialListId);
+        }
+        finally
+        {
+            setLock.ExitReadLock();
+        }
+    }
 
-    public List<Category> GetAllCategories() => this.cache.GetAll().OrderBy(cat => cat.Rank).ToList();
+    public List<Category> GetCategories(bool includeDynamic = true)
+    {
+        setLock.EnterReadLock();
+        try
+        {
+            var categoriesList = this.categories.Values;
+            return includeDynamic ? categoriesList.OrderBy(cat => cat.Rank).ToList() : 
+                categoriesList.Where(cat => cat.SocialListId == 0).OrderBy(cat => cat.Rank).ToList();
+        }
+        finally
+        {
+            setLock.ExitReadLock();
+        }
+    }
 
-    public Dictionary<int, int> GetCategoryRanks() => this.GetAllCategories().ToDictionary(cat => cat.Id, cat => cat.Rank);
+    public Dictionary<int, int> GetCategoryRanks() => this.GetCategories().ToDictionary(cat => cat.Id, cat => cat.Rank);
 
     public PlayerFilter GetCategoryFilters() => this.playerCategoryFilter;
 
-    public void CreateCategory(string name)
+    public void CreateCategory(string name, int socialListId = 0)
     {
-        DalamudContext.PluginLog.Verbose($"Entering CategoryService.CreateCategory(): {name}");
-        var rank = 1;
-
-        var categories = this.GetAllCategories();
-        if (categories.Count > 0)
+        setLock.EnterWriteLock();
+        try
         {
-            var maxCategory = categories.Aggregate((max, cat) => cat.Id > max.Id || cat.Rank > max.Rank ? cat : max);
-            rank += maxCategory.Rank;
+            DalamudContext.PluginLog.Verbose($"Entering CategoryService.CreateCategory(): {name}");
+            var rank = 1;
+            var categoriesList = this.GetCategories();
+
+            if (categories.Count > 0)
+            {
+                var maxCategory = categoriesList.Aggregate((max, cat) => cat.Id > max.Id || cat.Rank > max.Rank ? cat : max);
+                rank += maxCategory.Rank;
+            }
+
+            var category = new Category
+            {
+                Rank = rank,
+                Name = name,
+                SocialListId = socialListId,
+            };
+
+            this.AddCategoryToCacheAndRepository(category);
         }
-
-        var category = new Category
+        finally
         {
-            Rank = rank,
-            Name = name,
-        };
-
-        this.AddCategoryToCacheAndRepository(category);
+            setLock.ExitWriteLock();
+        }
     }
 
     public void UpdateCategory(Category category)
     {
-        DalamudContext.PluginLog.Verbose($"Entering CategoryService.UpdateCategory(): {category.Name}");
-        this.UpdateCategoryInCacheAndRepository(category);
+        setLock.EnterWriteLock();
+        try
+        {
+            DalamudContext.PluginLog.Verbose($"Entering CategoryService.UpdateCategory(): {category.Name}");
+            this.UpdateCategoryInCacheAndRepository(category);
+        }
+        finally
+        {
+            setLock.ExitWriteLock();
+        }
     }
 
-    public void DeleteCategory(Category category) => Task.Run(() =>
+    public void DeleteCategory(Category category)
     {
-        DalamudContext.PluginLog.Verbose($"Entering CategoryService.DeleteCategory(): {category.Name}");
-        var categories = this.GetAllCategories();
-
-        var filteredCategories = categories.Where(cat => cat.Rank > category.Rank).ToList();
-        foreach (var cat in filteredCategories)
+        setLock.EnterWriteLock();
+        try
         {
-            cat.Rank -= 1;
-            this.UpdateCategory(cat);
+            DalamudContext.PluginLog.Verbose($"Entering CategoryService.DeleteCategory(): {category.Name}");
+            var categoriesList = this.GetCategories();
+
+            var filteredCategories = categoriesList.Where(cat => cat.Rank > category.Rank).ToList();
+            foreach (var cat in filteredCategories)
+            {
+                cat.Rank -= 1;
+                this.UpdateCategory(cat);
+            }
+
+            this.DeleteCategoryFromCacheAndRepository(category);
         }
-
-        this.DeleteCategoryFromCacheAndRepository(category);
-    });
-
-    public List<string> GetCategoryNames(bool includeBlank = true)
-    {
-        if (includeBlank)
+        finally
         {
-            return this.categoryNamesWithBlank;
+            setLock.ExitWriteLock();
         }
-
-        return this.categoryNames;
     }
 
+    public List<string> GetCategoryNames(bool includeBlank = true, bool includeDynamic = true)
+    {
+        setLock.EnterReadLock();
+        try
+        {
+            if (includeDynamic)
+            {
+                return includeBlank ? this.categoryNamesWithBlank : this.categoryNames;
+            }
+            return includeBlank ? this.categoryNamesExclDynamicWithBlank : this.categoryNamesExclDynamic;
+        }
+        finally
+        {
+            setLock.ExitReadLock();
+        }
+    }
+    
     public void DecreaseCategoryRank(int id) => this.SwapCategoryRanks(id, 1);
 
     public void IncreaseCategoryRank(int id) => this.SwapCategoryRanks(id, -1);
@@ -95,8 +167,8 @@ public class CategoryService : UnsortedCacheService<Category>
     {
         try
         {
-            var categories = this.GetAllCategories();
-            return category.Rank == categories.Max(cat => cat.Rank);
+            var categoriesList = this.GetCategories();
+            return category.Rank == categoriesList.Max(cat => cat.Rank);
         }
         catch (InvalidOperationException)
         {
@@ -108,8 +180,8 @@ public class CategoryService : UnsortedCacheService<Category>
     {
         try
         {
-            var categories = this.GetAllCategories();
-            return category.Rank == categories.Min(cat => cat.Rank);
+            var categoriesList = this.GetCategories();
+            return category.Rank == categoriesList.Min(cat => cat.Rank);
         }
         catch (InvalidOperationException)
         {
@@ -123,9 +195,33 @@ public class CategoryService : UnsortedCacheService<Category>
         this.ReloadCategoryCache();
     }
 
-    public Category? GetCategoryByName(string name) => this.cache.FindFirst(category => category.Name.Equals(name, StringComparison.OrdinalIgnoreCase)) ?? null;
+    public Category? GetCategoryByName(string name)
+    {
+        setLock.EnterReadLock();
+        try
+        {
+            return this.categories.Values.FirstOrDefault(category => 
+                category.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+        finally
+        {
+            setLock.ExitReadLock();
+        }
+    }
 
-    public Category? GetCategoryById(int categoryId) => this.cache.Get(categoryId);
+    public Category? GetCategoryById(int categoryId)
+    {
+        setLock.EnterReadLock();
+        try
+        {
+            this.categories.TryGetValue(categoryId, out var category);
+            return category;
+        }
+        finally
+        {
+            setLock.ExitReadLock();
+        }
+    }
 
     private static void PopulateDerivedFields(Category category)
     {
@@ -140,81 +236,107 @@ public class CategoryService : UnsortedCacheService<Category>
 
     private void BuildCategoryNames()
     {
-        DalamudContext.PluginLog.Verbose("Entering CategoryService.BuildCategoryNames()");
-        var categories = this.GetAllCategories();
-        this.categoryNames = categories.Select(cat => cat.Name).ToList();
-        this.categoryNamesWithBlank = new List<string> { string.Empty }.Concat(this.categoryNames).ToList();
+        setLock.EnterWriteLock();
+        try
+        {
+            DalamudContext.PluginLog.Verbose("Entering CategoryService.BuildCategoryNames()");
+            var categoriesList = this.GetCategories();
+            this.categoryNames = categoriesList.Select(cat => cat.Name).ToList();
+            this.categoryNamesWithBlank = new List<string> { string.Empty }.Concat(this.categoryNames).ToList();
+            this.categoryNamesExclDynamic = categoriesList.Where(cat => cat.SocialListId == 0).Select(cat => cat.Name).ToList();
+            this.categoryNamesExclDynamicWithBlank = new List<string> { string.Empty }.Concat(this.categoryNamesExclDynamic).ToList();
+        }
+        finally
+        {
+            setLock.ExitWriteLock();
+        }
     }
 
     private void BuildCategoryFilters()
     {
-        DalamudContext.PluginLog.Verbose("Entering CategoryService.BuildCategoryFilters()");
-        var categoriesByRank = this.GetAllCategories();
-        var totalCategories = categoriesByRank.Count;
-
-        var categoryFilterIds = categoriesByRank.Select(category => category.Id).ToList();
-        var categoryFilterNames = categoriesByRank.Select(category => category.Name).ToList();
-
-        categoryFilterIds.Insert(0, 0);
-        categoryFilterNames.Insert(0, string.Empty);
-
-        this.playerCategoryFilter = new PlayerFilter
+        setLock.EnterWriteLock();
+        try
         {
-            FilterIds = categoryFilterIds,
-            FilterNames = categoryFilterNames,
-            TotalFilters = totalCategories,
-        };
+            DalamudContext.PluginLog.Verbose("Entering CategoryService.BuildCategoryFilters()");
+            var categoriesByRank = this.GetCategories();
+            var totalCategories = categoriesByRank.Count;
+
+            var categoryFilterIds = categoriesByRank.Select(category => category.Id).ToList();
+            var categoryFilterNames = categoriesByRank.Select(category => category.Name).ToList();
+
+            categoryFilterIds.Insert(0, 0);
+            categoryFilterNames.Insert(0, string.Empty);
+
+            this.playerCategoryFilter = new PlayerFilter
+            {
+                FilterIds = categoryFilterIds,
+                FilterNames = categoryFilterNames,
+                TotalFilters = totalCategories,
+            };
+        }
+        finally
+        {
+            setLock.ExitWriteLock();
+        }
     }
 
-    private void SwapCategoryRanks(int id, int rankOffset) => Task.Run(() =>
+    private void SwapCategoryRanks(int id, int rankOffset)
     {
-        var categories = this.GetAllCategories();
-
-        var currentCategory = categories.FirstOrDefault(cat => cat.Id == id);
-        if (currentCategory == null)
+        setLock.EnterWriteLock();
+        try
         {
-            return;
-        }
+            var categoriesList = this.GetCategories();
 
-        var swapCategory = categories.FirstOrDefault(cat => cat.Rank == currentCategory.Rank + rankOffset);
-        if (swapCategory == null)
+            var currentCategory = categoriesList.FirstOrDefault(cat => cat.Id == id);
+            if (currentCategory == null)
+            {
+                return;
+            }
+
+            var swapCategory = categoriesList.FirstOrDefault(cat => cat.Rank == currentCategory.Rank + rankOffset);
+            if (swapCategory == null)
+            {
+                return;
+            }
+
+            currentCategory.Rank += rankOffset;
+            swapCategory.Rank -= rankOffset;
+
+            this.UpdateCategory(currentCategory);
+            this.UpdateCategory(swapCategory);
+            ServiceContext.PlayerDataService.RecalculatePlayerRankings();
+        }
+        finally
         {
-            return;
+            setLock.ExitWriteLock();
         }
+    }
 
-        currentCategory.Rank += rankOffset;
-        swapCategory.Rank -= rankOffset;
-
-        this.UpdateCategory(currentCategory);
-        this.UpdateCategory(swapCategory);
-        ServiceContext.PlayerDataService.RecalculatePlayerRankings();
-    });
-
-    private void ReloadCategoryCache() => this.ExecuteReloadCache(() =>
+    private void ReloadCategoryCache()
     {
-        var categories = RepositoryContext.CategoryRepository.GetAllCategories();
-
-        if (categories == null)
+        setLock.EnterWriteLock();
+        try
         {
-            this.cache = new ThreadSafeCollection<int, Category>();
+            var categoriesList = RepositoryContext.CategoryRepository.GetAllCategories()?.ToList() ?? new List<Category>();
+            foreach (var category in categoriesList)
+            {
+                PopulateDerivedFields(category);
+            }
+
+            this.categories = categoriesList.ToDictionary(category => category.Id, category => category);
+            this.BuildCategoryFilters();
+            this.BuildCategoryNames();
         }
-
-        var collection = new ThreadSafeCollection<int, Category>(categories!.ToDictionary(cat => cat.Id));
-
-        foreach (var category in collection.GetAll())
+        finally
         {
-            PopulateDerivedFields(category);
+            setLock.ExitWriteLock();
         }
-
-        this.cache = collection;
-        this.BuildCategoryFilters();
-        this.BuildCategoryNames();
-    });
+    }
 
     private void UpdateCategoryInCacheAndRepository(Category category)
     {
         DalamudContext.PluginLog.Verbose($"Entering CategoryService.UpdateCategoryInCacheAndRepository(): {category.Name}");
-        this.cache.Update(category.Id, category);
+        this.categories[category.Id] = category;
         RepositoryContext.CategoryRepository.UpdateCategory(category);
         this.BuildCategoryFilters();
         this.BuildCategoryNames();
@@ -224,7 +346,6 @@ public class CategoryService : UnsortedCacheService<Category>
             ServiceContext.PlayerCacheService.PopulateDerivedFields(player);
             ServiceContext.VisibilityService.SyncWithVisibility(player);
         }
-        this.OnCacheUpdated();
     }
 
     private void AddCategoryToCacheAndRepository(Category category)
@@ -232,12 +353,11 @@ public class CategoryService : UnsortedCacheService<Category>
         category.Id = RepositoryContext.CategoryRepository.CreateCategory(category);
         category.PlayerConfig = new PlayerConfig(PlayerConfigType.Category);
         PopulateDerivedFields(category);
-        this.cache.Add(category.Id, category);
+        this.categories.Add(category.Id, category);
         this.BuildCategoryFilters();
         this.BuildCategoryNames();
         ServiceContext.PlayerCacheService.AddCategory(category.Id);
         ServiceContext.PlayerDataService.RecalculatePlayerRankings();
-        this.OnCacheUpdated();
     }
 
     private void DeleteCategoryFromCacheAndRepository(Category category)
@@ -248,10 +368,10 @@ public class CategoryService : UnsortedCacheService<Category>
         var config = ServiceContext.ConfigService.GetConfig();
         config.ClearCategoryIds(category.Id);
         ServiceContext.ConfigService.SaveConfig(config);
-        this.cache.Remove(category.Id);
+        this.categories.Remove(category.Id);
         ServiceContext.CategoryService.RefreshCategories();
         ServiceContext.PlayerDataService.ClearCategoryFromPlayers(category.Id);
         ServiceContext.PlayerDataService.RecalculatePlayerRankings();
-        this.OnCacheUpdated();
+        SocialListService.ClearCategoryFromSocialLists(category.Id);
     }
 }
