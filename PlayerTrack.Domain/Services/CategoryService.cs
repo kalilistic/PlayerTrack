@@ -247,7 +247,7 @@ public class CategoryService : CacheService<Category>
         this.BuildCategoryNames();
         ServiceContext.PlayerCacheService.AddCategory(category.Id);
         ServiceContext.PlayerDataService.RecalculatePlayerRankings();
-        ServiceContext.PlayerCacheService.LoadPlayers();
+        // ServiceContext.PlayerCacheService.LoadPlayers(); // disable for now due to lock contention
         this.OnCacheUpdated();
     }
 
