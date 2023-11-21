@@ -13,4 +13,11 @@ public class Category
     public int Rank { get; set; }
 
     public PlayerConfig PlayerConfig { get; set; } = new(PlayerConfigType.Category);
+    
+    public int SocialListId { get; set; }
+
+    public bool IsDynamicCategory()
+    {
+        return SocialListId != 0;
+    }
 }

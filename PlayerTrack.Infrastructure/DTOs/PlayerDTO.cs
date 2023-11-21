@@ -34,4 +34,6 @@ public class PlayerDTO : DTO
     public uint world_id { get; set; }
 
     public ushort last_territory_type { get; set; }
+    
+    public ulong content_id { get; set; }
 }

@@ -25,7 +25,7 @@ public class CategoryComponent : ConfigViewComponent
     {
         if (ImGui.BeginTabBar("Categories_TabBar", ImGuiTabBarFlags.None))
         {
-            var categories = ServiceContext.CategoryService.GetAllCategories();
+            var categories = ServiceContext.CategoryService.GetCategories();
             this.DrawCategoryManagementTab(categories);
             this.DrawEditCategoriesTab(categories);
         }
@@ -97,6 +97,7 @@ public class CategoryComponent : ConfigViewComponent
     {
         this.DrawAndHandleEditInput(category);
         this.DrawAndHandleDeleteIcon(category);
+        this.DrawAndHandleResetIcon(category);
         this.DrawAndHandleRankIcons(category);
     }
 
@@ -104,7 +105,7 @@ public class CategoryComponent : ConfigViewComponent
     {
         var name = category.Name;
         ToadGui.SetNextItemWidth(240f);
-        if (ToadGui.InputText("###EditCategoryInput" + category.Id, ref name, 20))
+        if (ToadGui.InputText("###EditCategoryInput" + category.Id, ref name, 50))
         {
             category.Name = name;
             ServiceContext.CategoryService.UpdateCategory(category);
@@ -114,6 +115,7 @@ public class CategoryComponent : ConfigViewComponent
 
     private void DrawAndHandleDeleteIcon(Category category)
     {
+        if (category.IsDynamicCategory()) return;
         ImGui.SameLine();
         ToadGui.Confirm(category, FontAwesomeIcon.Trash, "ConfirmDelete", ref this.categoryToDelete);
         if (this.categoryToDelete?.Item1 == ActionRequest.Confirmed)
@@ -128,6 +130,25 @@ public class CategoryComponent : ConfigViewComponent
         }
     }
 
+    private void DrawAndHandleResetIcon(Category category)
+    {
+        if (!category.IsDynamicCategory()) return;
+        ImGui.SameLine();
+        ImGui.PushFont(UiBuilder.IconFont);
+        ImGui.Text(FontAwesomeIcon.Redo.ToIconString());
+        ImGui.PopFont();
+        if (ImGui.IsItemClicked())
+        {
+            SocialListService.ResetCategoryName(category);
+        }
+        if (ImGui.IsItemHovered())
+        {
+            LocGui.SetHoverTooltip(string.Format(DalamudContext.LocManager.GetString("ResetCategoryTooltip"), 
+                SocialListService.GetCategoryName(category)));
+        }
+        
+    }
+    
     private void DrawAndHandleRankIcons(Category category)
     {
         ImGui.PushFont(UiBuilder.IconFont);

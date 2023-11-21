@@ -374,18 +374,27 @@ public class PlayerSummaryComponent : ViewComponent
             ImGui.PushStyleColor(ImGuiCol.ButtonActive, color);
             ImGui.PushStyleColor(ImGuiCol.ButtonHovered, color);
 
-            if (ImGui.SmallButton($"{category.Name} x"))
+            if (category.IsDynamicCategory())
             {
-                PlayerCategoryService.UnassignCategoryFromPlayer(player.Id, category.Id);
-                player.AssignedCategories.RemoveAll(assignedCategory => assignedCategory.Id == category.Id);
-                player.UnassignedCategories.Add(category);
+                ImGui.SmallButton(category.Name);
+            }
+            else
+            {
+                if (ImGui.SmallButton($"{category.Name} x"))
+                {
+                    PlayerCategoryService.UnassignCategoryFromPlayer(player.Id, category.Id);
+                    player.AssignedCategories.RemoveAll(assignedCategory => assignedCategory.Id == category.Id);
+                    player.UnassignedCategories.Add(category);
+                }
             }
 
             ImGui.PopStyleColor(4);
 
             if (ImGui.IsItemHovered())
             {
-                LocGui.SetHoverTooltip("UnassignCategoryTooltip");
+                LocGui.SetHoverTooltip(category.IsDynamicCategory()
+                    ? "UnassignDynamicCategoryTooltip"
+                    : "UnassignCategoryTooltip");
             }
 
             if ((i + 1) % 3 != 0 && i != player.AssignedCategories.Count - 1)

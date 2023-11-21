@@ -25,6 +25,8 @@ public class PlayerDataService
     public Player? GetPlayer(string playerKey) => ServiceContext.PlayerCacheService.GetPlayer(playerKey);
 
     public Player? GetPlayer(uint playerObjectId) => ServiceContext.PlayerCacheService.GetPlayer(playerObjectId);
+    
+    public Player? GetPlayer(ulong contentId) => ServiceContext.PlayerCacheService.GetPlayer(contentId);
 
     public IEnumerable<Player> GetAllPlayers() => ServiceContext.PlayerCacheService.GetPlayers();
 

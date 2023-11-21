@@ -4,9 +4,9 @@
     "net7.0-windows7.0": {
       "Dalamud.DrunkenToad": {
         "type": "Direct",
-        "requested": "[1.8.10, )",
-        "resolved": "1.8.10",
-        "contentHash": "n+/0WmbS0UtI/Inxe9T3IBUG1E4pk9ziwDh5lqp6lQU1zcyAWaAuteULNUiueZpBzYxL5pTaF3S4Ail+ErzLRA==",
+        "requested": "[1.8.15, )",
+        "resolved": "1.8.15",
+        "contentHash": "biuHkQR0qmIMWEsa14CcWtUH4f6G7sOTQMDZZKws2MhzTYl/3sw2lDS3z6bBOPd17I1UPtmkFBBn0QbQEpO4PA==",
         "dependencies": {
           "Dalamud.Loc": "1.1.2",
           "Microsoft.Extensions.DependencyInjection": "7.0.0"
@@ -50,8 +50,8 @@
       },
       "FluentDapperLite": {
         "type": "Transitive",
-        "resolved": "0.0.5",
-        "contentHash": "Ui4JFnZ4ZQPypte0yLhlc1elX2C561aqNgGOBgMmxh2oIu3KLZ7EaZ9Z2y7nyWgeNRuEMW1LA1O89NHMfResmw==",
+        "resolved": "0.0.7",
+        "contentHash": "HHmNHXCH+s1hkvvosls5vZsgE8CpWYcloG8wuGDSScoyJ3sWkInzy7/5NlctAUhwzv70Dtr8B96iwLYv3Vw/7A==",
         "dependencies": {
           "AutoMapper": "12.0.1",
           "Dapper": "2.0.123",
@@ -514,7 +514,7 @@
       "playertrack.domain": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.8.10, )",
+          "Dalamud.DrunkenToad": "[1.8.15, )",
           "Dalamud.Loc": "[1.1.2, )",
           "FlexConfig": "[1.0.0, )",
           "PlayerTrack.Infrastructure": "[1.0.0, )",
@@ -525,11 +525,11 @@
         "type": "Project",
         "dependencies": {
           "AutoMapper": "[12.0.1, )",
-          "Dalamud.DrunkenToad": "[1.8.10, )",
+          "Dalamud.DrunkenToad": "[1.8.15, )",
           "Dalamud.Loc": "[1.1.2, )",
           "Dapper": "[2.0.123, )",
           "FlexConfig": "[1.0.0, )",
-          "FluentDapperLite": "[0.0.5, )",
+          "FluentDapperLite": "[0.0.7, )",
           "FluentMigrator": "[3.3.2, )",
           "FluentMigrator.Abstractions": "[3.3.2, )",
           "FluentMigrator.Runner": "[3.3.2, )",
@@ -540,7 +540,7 @@
       "playertrack.models": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.8.10, )",
+          "Dalamud.DrunkenToad": "[1.8.15, )",
           "Dalamud.Loc": "[1.1.2, )",
           "Dapper.Contrib": "[2.0.78, )"
         }

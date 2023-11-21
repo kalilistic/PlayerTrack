@@ -108,7 +108,7 @@ public class PlayerProcessService
         HandleDuplicatePlayers(players);
     });
 
-    public static void CreateNewPlayer(string name, uint worldId)
+    public static void CreateNewPlayer(string name, uint worldId, ulong contentId = 0)
     {
         var key = PlayerKeyBuilder.Build(name, worldId);
         var player = new Player
@@ -116,6 +116,7 @@ public class PlayerProcessService
             Key = key,
             Name = name,
             WorldId = worldId,
+            ContentId = contentId,
             Created = UnixTimestampHelper.CurrentTime(),
         };
 
@@ -150,9 +151,9 @@ public class PlayerProcessService
 
     public void RegisterCurrentPlayer(Player player) => this.CurrentPlayerAdded?.Invoke(player);
 
-    public void AddOrUpdatePlayer(ToadPlayer toadPlayer, bool isCurrent = true, bool forceLoad = false)
+    public void AddOrUpdatePlayer(ToadPlayer toadPlayer, bool isCurrent = true, bool isUserRequest = false)
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerProcessService.AddOrUpdatePlayer(): {toadPlayer.Id}, {toadPlayer.Name}, {toadPlayer.HomeWorld}, {forceLoad}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerProcessService.AddOrUpdatePlayer(): {toadPlayer.Id}, {toadPlayer.Name}, {toadPlayer.HomeWorld}, {isUserRequest}");
         var enc = ServiceContext.EncounterService.GetCurrentEncounter();
 
         if (enc == null)
@@ -161,7 +162,7 @@ public class PlayerProcessService
             return;
         }
 
-        if (!enc.SavePlayers && !forceLoad)
+        if (!enc.SavePlayers && !isUserRequest)
         {
             DalamudContext.PluginLog.Verbose("Encounter is not set to save players.");
             return;
@@ -178,7 +179,7 @@ public class PlayerProcessService
             player = ServiceContext.PlayerDataService.GetPlayer(key);
             if (player != null)
             {
-                if (forceLoad)
+                if (isUserRequest)
                 {
                     this.PlayerSelected?.Invoke(player);
                 }
@@ -188,7 +189,7 @@ public class PlayerProcessService
                 }
             }
         }
-        else if (forceLoad)
+        else if (isUserRequest)
         {
             DalamudContext.PluginLog.Verbose("Force load player, used for player search.");
             player = this.UpdateExistingPlayer(player, toadPlayer, isCurrent, loc);

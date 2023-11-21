@@ -42,7 +42,7 @@ public class CategoryRepository : BaseRepository
         {
             var categoryDTO = this.Mapper.Map<CategoryDTO>(category);
             SetCreateTimestamp(categoryDTO);
-            const string insertSql = "INSERT INTO categories (name, rank, created, updated) VALUES (@name, @rank, @created, @updated) RETURNING id";
+            const string insertSql = "INSERT INTO categories (name, rank, social_list_id, created, updated) VALUES (@name, @rank, @social_list_id, @created, @updated) RETURNING id";
             var newId = this.Connection.ExecuteScalar<int>(insertSql, categoryDTO);
             return newId;
         }
@@ -61,7 +61,7 @@ public class CategoryRepository : BaseRepository
             var categoryDTO = this.Mapper.Map<CategoryDTO>(category);
             SetUpdateTimestamp(categoryDTO);
             const string sql =
-                "UPDATE categories SET name = @name, rank = @rank, updated = @updated WHERE id = @id";
+                "UPDATE categories SET name = @name, rank = @rank, social_list_id = @social_list_id, updated = @updated WHERE id = @id";
             this.Connection.Execute(sql, categoryDTO);
             return true;
         }
@@ -98,11 +98,13 @@ public class CategoryRepository : BaseRepository
                     INSERT INTO categories (
                         name,
                         rank,
+                        social_list_id,
                         created,
                         updated)
                     VALUES (
                         @name,
                         @rank,
+                        @social_list_id,
                         @created,
                         @updated)";
 

@@ -5,8 +5,10 @@ using System.Threading.Channels;
 using System.Threading.Tasks;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Core.Models;
-
+using Dalamud.DrunkenToad.Extensions;
+using Newtonsoft.Json;
 using PlayerTrack.Domain;
+using PlayerTrack.Models;
 
 namespace PlayerTrack.Plugin;
 
@@ -28,6 +30,13 @@ public static class EventDispatcher
         DalamudContext.PlayerEventDispatcher.AddPlayers += OnAddPlayers;
         DalamudContext.PlayerEventDispatcher.RemovePlayers += OnRemovePlayers;
         ContextMenuHandler.SelectPlayer += OnSelectPlayer;
+        DalamudContext.ClientStateHandler.Login += OnLogin;
+        if (DalamudContext.ClientStateHandler.IsLoggedIn) OnLogin();
+        DalamudContext.SocialListHandler.FriendListReceived += OnFriendListReceived;
+        DalamudContext.SocialListHandler.FreeCompanyReceived += OnFreeCompanyReceived;
+        DalamudContext.SocialListHandler.BlackListReceived += OnBlackListReceived;
+        DalamudContext.SocialListHandler.LinkShellReceived += OnLinkShellReceived;
+        DalamudContext.SocialListHandler.CrossWorldLinkShellReceived += OnCrossWorldLinkShellReceived;
     }
 
     public static void Dispose()
@@ -35,6 +44,12 @@ public static class EventDispatcher
         DalamudContext.PluginLog.Verbose("Entering EventDispatcher.Dispose()");
         try
         {
+            DalamudContext.SocialListHandler.FriendListReceived -= OnFriendListReceived;
+            DalamudContext.SocialListHandler.FreeCompanyReceived -= OnFreeCompanyReceived;
+            DalamudContext.SocialListHandler.BlackListReceived -= OnBlackListReceived;
+            DalamudContext.SocialListHandler.LinkShellReceived -= OnLinkShellReceived;
+            DalamudContext.SocialListHandler.CrossWorldLinkShellReceived -= OnCrossWorldLinkShellReceived;
+            DalamudContext.ClientStateHandler.Login -= OnLogin;
             DalamudContext.PlayerLocationManager.LocationStarted -= OnStartLocation;
             DalamudContext.PlayerLocationManager.LocationEnded -= OnEndLocation;
             DalamudContext.PlayerEventDispatcher.AddPlayers -= OnAddPlayers;
@@ -92,5 +107,41 @@ public static class EventDispatcher
     {
         DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnSelectPlayer(): {toadPlayer.Name}");
         ServiceContext.PlayerProcessService.AddOrUpdatePlayer(toadPlayer, isCurrent, true);
+    });
+    
+    private static void OnLogin() => EventChannel.Writer.TryWrite(() =>
+    {
+        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnLogin()");
+        LocalPlayerService.AddOrUpdateLocalPlayer(DalamudContext.ClientStateHandler.GetLocalPlayer());
+    });
+
+    private static void OnFriendListReceived(List<ToadSocialListMember> members) => EventChannel.Writer.TryWrite(() =>
+    {
+        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnFriendListReceived()");
+        SocialListService.HandleMembersList(SocialListType.FriendList, members);
+    });
+    
+    private static void OnCrossWorldLinkShellReceived(byte index, List<ToadSocialListMember> members) => EventChannel.Writer.TryWrite(() =>
+    {
+        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnCrossWorldLinkShellReceived()");
+        SocialListService.HandleMembersList(SocialListType.CrossWorldLinkShell, members, (ushort)(index + 1));
+    });
+
+    private static void OnLinkShellReceived(byte index, List<ToadSocialListMember> members) => EventChannel.Writer.TryWrite(() =>
+    {
+        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnLinkShellReceived()");
+        SocialListService.HandleMembersList(SocialListType.LinkShell, members, (ushort)(index + 1));
+    });
+
+    private static void OnBlackListReceived(List<ToadSocialListMember> members) => EventChannel.Writer.TryWrite(() =>
+    {
+        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnBlackListReceived()");
+        SocialListService.HandleMembersList(SocialListType.BlackList, members);
+    });
+    
+    private static void OnFreeCompanyReceived(byte pageCount, byte currentPage, List<ToadSocialListMember> members) => EventChannel.Writer.TryWrite(() =>
+    {
+        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnFreeCompanyReceived(): {currentPage}/{pageCount}: {members.Count}");
+        SocialListService.HandleMembersList(SocialListType.FreeCompany, members, 0, currentPage, pageCount);
     });
 }

@@ -43,6 +43,10 @@ public static class ServiceContext
     public static Localization Localization { get; set; } = null!;
 
     public static VisibilityService VisibilityService { get; set; } = null!;
+    
+    public static LocalPlayerService LocalPlayerService { get; set; } = null!;
+    
+    public static SocialListService SocialListService { get; set; } = null!;
 
     public static void Initialize()
     {
@@ -66,6 +70,8 @@ public static class ServiceContext
         PlayerConfigService = new PlayerConfigService();
         LodestoneService = new LodestoneService();
         VisibilityService = new VisibilityService();
+        LocalPlayerService = new LocalPlayerService();
+        SocialListService = new SocialListService();
         EncounterService.EnsureNoOpenEncounters();
         LodestoneService.Start();
     }

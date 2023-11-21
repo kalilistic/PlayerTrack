@@ -21,7 +21,7 @@ public class PlayerCategoryCache: IGroupedPlayerCache
             this.categoryPlayersDict = new Dictionary<int, Dictionary<int, Player>>();
             this.categoryPlayersSortedSet = new Dictionary<int, SortedSet<Player>>();
         
-            var categories = ServiceContext.CategoryService.GetAllCategories();
+            var categories = ServiceContext.CategoryService.GetCategories();
             this.categoryPlayersDict.TryAdd(0, new Dictionary<int, Player>());
             this.categoryPlayersSortedSet.TryAdd(0, new SortedSet<Player>(comparer));
             foreach (var category in categories)
@@ -123,7 +123,7 @@ public class PlayerCategoryCache: IGroupedPlayerCache
         finally
         {
             this.cacheLock.ExitReadLock();
-        }
+        } 
     }
 
     public void AddGroup(int groupId)

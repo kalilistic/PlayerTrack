@@ -69,10 +69,20 @@ public class PlayerCacheService
         this.setLock.EnterWriteLock();
         try
         {
+            var currentIds = this.playerCurrentCache.GetIds();
+            var recentIds = this.playerRecentCache.GetIds();
             Initialize();
             CopyUnsavedProperties();
             FetchDataFromDatabase();
-            PopulateCaches();
+            this.playerCurrentCache.SetIds(currentIds);
+            this.playerRecentCache.SetIds(recentIds);
+            foreach (var player in this.dbPlayers)
+            {
+                player.IsCurrent = currentIds.Contains(player.Id);
+                player.IsRecent = recentIds.Contains(player.Id);
+                PopulateDerivedFields(player);
+                AddPlayerToCaches(player);
+            }
         }
         finally
         {
@@ -157,6 +167,19 @@ public class PlayerCacheService
         try
         {
             return this.playerCache.Get(playerId);
+        }
+        finally
+        {
+            this.setLock.ExitReadLock();
+        }
+    }
+
+    public Player? GetPlayer(ulong contentId)
+    {
+        this.setLock.EnterReadLock();
+        try
+        {
+            return this.playerCache.FindFirst(p => p.ContentId == contentId);
         }
         finally
         {
@@ -648,15 +671,6 @@ public class PlayerCacheService
         this.playerRecentCache.Remove(playerToRemove);
         this.playerCategoryCache.Remove(playerToRemove);
         this.playerTagCache.Remove(playerToRemove);
-    }
-
-    private void PopulateCaches()
-    {
-        foreach (var player in this.dbPlayers)
-        {
-            PopulateDerivedFields(player);
-            AddPlayerToCaches(player);
-        }
     }
     
     private void CopyUnsavedProperties()

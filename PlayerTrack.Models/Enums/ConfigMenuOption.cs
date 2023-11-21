@@ -9,6 +9,7 @@ public enum ConfigMenuOption
     PlayerDefaults,
     Categories,
     Locations,
+    SocialLists,
     Integrations,
     Backups,
     Data,

@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using Dalamud.DrunkenToad.Core;
+using PlayerTrack.Domain.Common;
 using PlayerTrack.Infrastructure;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Domain;
 
 using System.Linq;
-using Dalamud.DrunkenToad.Caching;
 using Dalamud.DrunkenToad.Collections;
 
-public class TagService : UnsortedCacheService<Tag>
+public class TagService : CacheService<Tag>
 {
     private PlayerFilter playerTagFilter = new();
     private List<string> tagNames = new();

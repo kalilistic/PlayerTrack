@@ -20,6 +20,7 @@ public class ConfigView : PlayerTrackView, IDisposable
     private readonly PlayerDefaultsComponent playerDefaultsComponent = new();
     private readonly CategoryComponent categoryComponent = new();
     private readonly LocationComponent locationComponent = new();
+    private readonly SocialListComponent socialListComponent = new();
     private readonly IntegrationComponent integrationComponent = new();
     private readonly BackupComponent backupComponent = new();
     private readonly DataComponent dataComponent = new();
@@ -41,6 +42,7 @@ public class ConfigView : PlayerTrackView, IDisposable
         this.playerDefaultsComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.tagComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.locationComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
+        this.socialListComponent.OnPlayerConfigChanged += () => this.PlayerConfigChanged?.Invoke();
         this.windowComponent.WindowConfigComponent_WindowConfigChanged += () => this.WindowConfigChanged?.Invoke();
         DalamudContext.PluginInterface.LanguageChanged += _ => this.isLanguageChanged = true;
     }
@@ -140,6 +142,9 @@ public class ConfigView : PlayerTrackView, IDisposable
             case ConfigMenuOption.Locations:
                 this.locationComponent.Draw();
                 break;
+            case ConfigMenuOption.SocialLists:
+                this.socialListComponent.Draw();
+                break;
             case ConfigMenuOption.Integrations:
                 this.integrationComponent.Draw();
                 break;
@@ -172,6 +177,7 @@ public class ConfigView : PlayerTrackView, IDisposable
         this.playerDefaultsComponent.Dispose();
         this.tagComponent.Dispose();
         this.locationComponent.Dispose();
+        this.socialListComponent.Dispose();
         this.integrationComponent.Dispose();
         this.backupComponent.Dispose();
         GC.SuppressFinalize(this);

@@ -10,7 +10,22 @@ using Dalamud.DrunkenToad.Core;
 
 public class PlayerCategoryService
 {
+    public static void AssignCategoryToPlayers(IEnumerable<Player> playerIds, int syncedCategoryId)
+    {
+        var enumerable = playerIds.ToList();
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryService.AssignCategoryToPlayers(): {enumerable.Count}, {syncedCategoryId}");
+        foreach (var playerId in enumerable)
+        {
+            AssignCategoryToPlayerSync(playerId.Id, syncedCategoryId);
+        }
+    }
+    
     public static void AssignCategoryToPlayer(int playerId, int categoryId) => Task.Run(() =>
+    {
+        AssignCategoryToPlayerSync(playerId, categoryId);
+    });
+
+    public static void AssignCategoryToPlayerSync(int playerId, int categoryId)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryService.AssignCategoryToPlayer(): {playerId}, {categoryId}");
         var category = ServiceContext.CategoryService.GetCategoryById(categoryId);
@@ -40,7 +55,7 @@ public class PlayerCategoryService
         ServiceContext.PlayerDataService.UpdatePlayer(player);
         RepositoryContext.PlayerCategoryRepository.CreatePlayerCategory(playerId, categoryId);
         ServiceContext.PlayerDataService.RecalculatePlayerRankings();
-    });
+    }
 
     public static void UnassignCategoriesFromPlayer(int playerId) => Task.Run(() =>
     {

@@ -131,7 +131,8 @@ public class PlayerRepository : BaseRepository
             object_id = @object_id,
             world_id = @world_id,
             last_territory_type = @last_territory_type,
-            updated = @updated
+            updated = @updated,
+            content_id = @content_id
         WHERE id = @id";
             this.Connection.Execute(sql, playerDto);
             return true;
@@ -255,7 +256,8 @@ public class PlayerRepository : BaseRepository
             lodestone_id,
             object_id,
             world_id,
-            last_territory_type)
+            last_territory_type,
+            content_id)
         VALUES (
             @created,
             @updated,
@@ -273,7 +275,8 @@ public class PlayerRepository : BaseRepository
             @lodestone_id,
             @object_id,
             @world_id,
-            @last_territory_type)
+            @last_territory_type,
+            @content_id)
         RETURNING id";
 
         var newId = this.Connection.ExecuteScalar<int>(sql, playerDto);

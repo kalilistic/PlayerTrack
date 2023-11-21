@@ -10,9 +10,9 @@ namespace PlayerTrack.Domain.Caches;
 public class PlayerCurrentCache: IBasicPlayerCache
 {
     private readonly ReaderWriterLockSlim cacheLock = new();
-    private Dictionary<int, Player> currentDict = null!;
-    private SortedSet<Player> currentSortedSet = null!;
-    private HashSet<int> currentPlayerIds = null!;
+    private Dictionary<int, Player> currentDict = new();
+    private SortedSet<Player> currentSortedSet = new();
+    private HashSet<int> currentPlayerIds = new();
 
     public void Initialize(IComparer<Player> comparer)
     {
@@ -209,6 +209,41 @@ public class PlayerCurrentCache: IBasicPlayerCache
         finally
         {
             this.cacheLock.ExitWriteLock();
+        }
+    }
+
+    public void SetIds(IEnumerable<int> ids)
+    {
+        this.cacheLock.EnterWriteLock();
+        try
+        {
+            this.currentPlayerIds = new HashSet<int>(ids);
+        }
+        finally
+        {
+            this.cacheLock.ExitWriteLock();
+        }
+    }
+    
+    public int[] GetIds()
+    {
+        this.cacheLock.EnterReadLock();
+        try
+        {
+            var ids = new HashSet<int>();
+            if (currentDict.Count != 0)
+            {
+                foreach (var player in this.currentDict.Keys)
+                {
+                    ids.Add(player);
+                }
+            }
+
+            return ids.ToArray();
+        }
+        finally
+        {
+            this.cacheLock.ExitReadLock();
         }
     }
 }
