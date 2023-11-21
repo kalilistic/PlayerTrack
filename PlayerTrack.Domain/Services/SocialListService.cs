@@ -176,7 +176,10 @@ public class SocialListService
         
         // get fresh copy
         DalamudContext.PluginLog.Verbose($"HandleMembersList: Retrieving fresh copy of social list");
-        socialList = RepositoryContext.SocialListRepository.GetSocialList(contentId, listType, listNumber);
+        socialList = listType != SocialListType.CrossWorldLinkShell ? 
+            RepositoryContext.SocialListRepository.GetSocialList(contentId, listType, listNumber) : 
+            RepositoryContext.SocialListRepository.GetSocialList(contentId, listType, listNumber, dataCenter);
+        
         if (socialList == null)
         {
             DalamudContext.PluginLog.Warning("HandleMembersList: Failed to retrieve social list");
