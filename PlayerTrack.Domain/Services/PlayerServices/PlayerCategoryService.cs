@@ -10,15 +10,50 @@ using Dalamud.DrunkenToad.Core;
 
 public class PlayerCategoryService
 {
-    public static void AssignCategoryToPlayers(IEnumerable<Player> playerIds, int syncedCategoryId)
+    public static void AssignCategoriesToPlayers(IEnumerable<Player> players, int[] categoryIds) => Task.Run(() =>
     {
-        var enumerable = playerIds.ToList();
-        DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryService.AssignCategoryToPlayers(): {enumerable.Count}, {syncedCategoryId}");
-        foreach (var playerId in enumerable)
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCategoryService.AssignCategoriesToPlayers()");
+
+        var categories = new List<Category>();
+        foreach (var categoryId in categoryIds)
         {
-            AssignCategoryToPlayerSync(playerId.Id, syncedCategoryId);
+            var category = ServiceContext.CategoryService.GetCategoryById(categoryId);
+            if (category == null)
+            {
+                DalamudContext.PluginLog.Warning($"AssignCategoriesToPlayers: Category not found, categoryId: {categoryId}");
+                continue;
+            }
+
+            categories.Add(category);    
         }
-    }
+
+        if (categories.Count == 0)
+        {
+            DalamudContext.PluginLog.Warning("AssignCategoriesToPlayers: No categories found");
+            return;
+        }
+        
+        var categoryRanks = ServiceContext.CategoryService.GetCategoryRanks();
+        foreach (var player in players)
+        {
+            var assignedCategories = player.AssignedCategories;
+            foreach (var category in categories)
+            {
+                if (assignedCategories.Any(c => c.Id == category.Id))
+                {
+                    DalamudContext.PluginLog.Verbose($"Category already assigned to player, playerId: {player.Id}, categoryId: {category.Id}");
+                    continue;
+                }
+                
+                assignedCategories.Add(category);
+                SetPrimaryCategoryId(player, categoryRanks);
+                ServiceContext.PlayerDataService.UpdatePlayer(player);
+                RepositoryContext.PlayerCategoryRepository.CreatePlayerCategory(player.Id, category.Id);
+            }
+        }
+        
+        ServiceContext.PlayerDataService.RecalculatePlayerRankings();
+    });
     
     public static void AssignCategoryToPlayer(int playerId, int categoryId) => Task.Run(() =>
     {
@@ -45,7 +80,7 @@ public class PlayerCategoryService
         var assignedCategories = player.AssignedCategories;
         if (assignedCategories.Any(c => c.Id == categoryId))
         {
-            DalamudContext.PluginLog.Warning($"Category already assigned to player, playerId: {playerId}, categoryId: {categoryId}");
+            DalamudContext.PluginLog.Verbose($"Category already assigned to player, playerId: {playerId}, categoryId: {categoryId}");
             return;
         }
 

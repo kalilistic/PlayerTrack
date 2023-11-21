@@ -212,7 +212,10 @@ public class SocialListService
             if (player != null) players.Add(player);
             
         }
-
+        
+        // setup category list
+        var categoryIds = new List<int>();
+        
         // sync with dynamic category
         DalamudContext.PluginLog.Verbose($"HandleMembersList: Syncing with dynamic category");
         var syncedCategory = ServiceContext.CategoryService.GetSyncedCategory(socialList.Id);
@@ -230,7 +233,7 @@ public class SocialListService
                 }
             }
             
-            PlayerCategoryService.AssignCategoryToPlayers(players.ToArray(), syncedCategory.Id);
+            categoryIds.Add(syncedCategory.Id);
         }
         else if (syncedCategory != null)
         {
@@ -241,7 +244,7 @@ public class SocialListService
         DalamudContext.PluginLog.Verbose($"HandleMembersList: Adding to default category");
         if (socialList.DefaultCategoryId != 0)
         {
-            PlayerCategoryService.AssignCategoryToPlayers(players.ToArray(), socialList.DefaultCategoryId);
+            categoryIds.Add(socialList.DefaultCategoryId);
         }
         
         // add content id to player
@@ -249,6 +252,12 @@ public class SocialListService
         foreach (var player in players)
         {
             player.ContentId = contentId;
+        }
+        
+        // assign categories
+        if (categoryIds.Count > 0)
+        {
+            PlayerCategoryService.AssignCategoriesToPlayers(players, categoryIds.ToArray());
         }
     }
 
