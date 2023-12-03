@@ -1,4 +1,5 @@
 {
+  "AccelerateLodestoneLookup": "Accelerate Lookups (WARNING: Higher CPU & API Usage)",
   "Actions": "Acciones",
   "AddEncounters": "Añadir encuentros ",
   "AddPlayer": "Añadir Jugador",
