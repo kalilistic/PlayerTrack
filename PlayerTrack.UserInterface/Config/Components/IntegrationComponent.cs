@@ -40,6 +40,13 @@ public class IntegrationComponent : ConfigViewComponent
             ServiceContext.ConfigService.SaveConfig(this.config);
         }
 
+        var accelerateLodestoneLookup = this.config.AccelerateLodestoneLookup;
+        if (ToadGui.Checkbox("AccelerateLodestoneLookup", ref accelerateLodestoneLookup))
+        {
+            this.config.AccelerateLodestoneLookup = accelerateLodestoneLookup;
+            ServiceContext.ConfigService.SaveConfig(this.config);
+        }
+        
         var lodestoneLocale = this.config.LodestoneLocale;
         if (ToadGui.Combo("LodestoneLocale", ref lodestoneLocale, 60))
         {

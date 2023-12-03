@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
-using Dalamud.DrunkenToad.Extensions;
 using Newtonsoft.Json;
 using PlayerTrack.Infrastructure;
 using PlayerTrack.Models;
@@ -27,6 +25,7 @@ public class LodestoneService : IDisposable
     private bool isProcessing;
     private long lodestoneCallAvailableAt;
     private int lodestoneSequentialFailureCount;
+    private long overworldCallAvailableAt;
 
     public LodestoneService()
     {
@@ -61,7 +60,8 @@ public class LodestoneService : IDisposable
             Timeout = TimeSpan.FromMilliseconds(60000),
         };
         this.httpClient.DefaultRequestHeaders.Add("Application-Name", "PlayerTrack");
-        this.httpClient.DefaultRequestHeaders.Add("Application-Version", Assembly.GetExecutingAssembly().Version());
+        this.httpClient.DefaultRequestHeaders.Add("Application-Version", ServiceContext.ConfigService.GetConfig().PluginVersion.ToString());
+        this.httpClient.DefaultRequestHeaders.Add("Acceleration-Enabled", ServiceContext.ConfigService.GetConfig().AccelerateLodestoneLookup.ToString());
     }
 
     private void SetupTimer()
@@ -85,6 +85,14 @@ public class LodestoneService : IDisposable
             if (UnixTimestampHelper.CurrentTime() < this.lodestoneCallAvailableAt)
             {
                 DalamudContext.PluginLog.Verbose("Lodestone lookup not available, skipping.");
+                return;
+            }
+
+            var territoryType = DalamudContext.ClientStateHandler.TerritoryType;
+            var inOverworld = !DalamudContext.DataManager.Locations[territoryType].InContent();
+            if (inOverworld && UnixTimestampHelper.CurrentTime() < this.overworldCallAvailableAt)
+            {
+                DalamudContext.PluginLog.Verbose("Overworld lookup not available, skipping.");
                 return;
             }
 
@@ -113,7 +121,7 @@ public class LodestoneService : IDisposable
                 return;
             }
 
-            // batch requests and send (up to 50 at a time)
+            // batch requests and send (up to 10k at a time)
             var batchedRequests = this.BatchLodestoneRequests();
             this.SendBatchRequest(batchedRequests);
         }
@@ -177,7 +185,10 @@ public class LodestoneService : IDisposable
             this.lodestoneLookups.TryRemove(request.PlayerId, out _);
             RepositoryContext.LodestoneRepository.UpdateLodestoneLookup(lookup);
             PlayerLodestoneService.UpdateLodestone(lookup);
-            this.lodestoneCallAvailableAt = UnixTimestampHelper.CurrentTime() + 10000; // delay to allow for requests to build up
+            this.lodestoneCallAvailableAt = UnixTimestampHelper.CurrentTime() + 10000;
+            this.overworldCallAvailableAt = ServiceContext.ConfigService.GetConfig().AccelerateLodestoneLookup
+                ? UnixTimestampHelper.CurrentTime() + 30000
+                : UnixTimestampHelper.CurrentTime() + 3600000;
         }
     }
 
@@ -201,12 +212,7 @@ public class LodestoneService : IDisposable
 
             this.LoadPendingRequests();
             this.LoadFailedRequests();
-            if (this.lodestoneQueue.IsEmpty)
-            {
-                return false;
-            }
-
-            return true;
+            return !this.lodestoneQueue.IsEmpty;
         }
         catch (Exception)
         {
@@ -217,7 +223,7 @@ public class LodestoneService : IDisposable
     private List<LodestoneRequest> BatchLodestoneRequests()
     {
         var lodestoneRequests = new List<LodestoneRequest>();
-        while (!this.lodestoneQueue.IsEmpty && lodestoneRequests.Count < 50)
+        while (!this.lodestoneQueue.IsEmpty && lodestoneRequests.Count < 10000)
         {
             var isSuccessful = this.lodestoneQueue.TryDequeue(out var lodestoneRequest);
             if (!isSuccessful || lodestoneRequest == null)
