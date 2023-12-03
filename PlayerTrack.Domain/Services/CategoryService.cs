@@ -197,6 +197,18 @@ public class CategoryService : CacheService<Category>
 
         this.UpdateCategory(currentCategory);
         this.UpdateCategory(swapCategory);
+
+        var expectedRank = 1;
+        foreach (var category in categories.OrderBy(cat => cat.Rank))
+        {
+            if (category.Rank != expectedRank)
+            {
+                category.Rank = expectedRank;
+                this.UpdateCategory(category);
+            }
+            expectedRank++;
+        }
+        
         ServiceContext.PlayerDataService.RecalculatePlayerRankings();
     });
 
