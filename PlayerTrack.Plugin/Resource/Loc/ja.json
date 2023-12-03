@@ -1,4 +1,5 @@
 {
+  "AccelerateLodestoneLookup": "Accelerate Lookups (WARNING: Higher CPU & API Usage)",
   "Actions": "アクション",
   "AddEncounters": "エンカウンターを追加",
   "AddPlayer": "プレイヤーを追加する:",

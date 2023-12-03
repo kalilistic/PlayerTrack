@@ -1,4 +1,5 @@
 {
+  "AccelerateLodestoneLookup": "Accelerate Lookups (WARNING: Higher CPU & API Usage)",
   "Actions": "操作",
   "AddEncounters": "添加战斗",
   "AddPlayer": "添加玩家",
