@@ -81,7 +81,7 @@ public class SocialListComponent : ConfigViewComponent
             lastPlayerCount = players.Count;
         }
 
-        ToadGui.Combo("SelectPlayer", ref this.selectedPlayerIndex, playerNames, 180, false, false);
+        ToadGui.Combo("SelectPlayer", ref this.selectedPlayerIndex, playerNames, 250, false, false);
         player = players[this.selectedPlayerIndex];
     }
     

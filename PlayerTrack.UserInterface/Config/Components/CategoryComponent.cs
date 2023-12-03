@@ -44,7 +44,7 @@ public class CategoryComponent : ConfigViewComponent
         if (ImGui.BeginTabItem(tabName))
         {
             var categoryNames = categories.Select(category => category.Name).ToList();
-            ToadGui.Combo("SelectCategory", ref this.selectedCategoryIndex, categoryNames, 160);
+            ToadGui.Combo("SelectCategory", ref this.selectedCategoryIndex, categoryNames, 250);
             if (this.selectedCategoryIndex >= 0 && this.selectedCategoryIndex < categories.Count)
             {
                 this.DrawTabBar(categories[this.selectedCategoryIndex]);
