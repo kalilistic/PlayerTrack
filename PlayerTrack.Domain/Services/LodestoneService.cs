@@ -89,7 +89,7 @@ public class LodestoneService : IDisposable
             }
 
             var territoryType = DalamudContext.ClientStateHandler.TerritoryType;
-            var inOverworld = !DalamudContext.DataManager.Locations[territoryType].InContent();
+            var inOverworld = DalamudContext.DataManager.Locations.ContainsKey(territoryType) && !DalamudContext.DataManager.Locations[territoryType].InContent();
             if (inOverworld && UnixTimestampHelper.CurrentTime() < this.overworldCallAvailableAt)
             {
                 DalamudContext.PluginLog.Verbose("Overworld lookup not available, skipping.");
