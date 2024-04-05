@@ -90,4 +90,15 @@ public class PlayerChangeService
 
         return worldNames.Any() ? string.Join(", ", worldNames) : string.Empty;
     }
+
+    public static PlayerNameWorldHistory[] GetPlayerNameWorldHistories(int[] playerIds)
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.GetPlayersNameWorldHistory()");
+        var nameWorldHistories = RepositoryContext.PlayerNameWorldHistoryRepository.GetPlayerNameWorldHistories(playerIds);
+        if (nameWorldHistories == null)
+        {
+            return new PlayerNameWorldHistory[] { };
+        }
+        return nameWorldHistories;
+    }
 }

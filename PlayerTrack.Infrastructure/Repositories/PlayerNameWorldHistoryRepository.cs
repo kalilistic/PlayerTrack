@@ -80,6 +80,38 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
         }
     }
 
+    public PlayerNameWorldHistory[]? GetPlayerNameWorldHistories(int[] playerIds) 
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerNameWorldHistoryRepository.BulkGetNameWorldHistory()");
+        try 
+        {
+            string sql = "SELECT * FROM player_name_world_histories ";
+            string whereClause = $"WHERE player_id = {playerIds[0]}";
+
+            for(int i = 1; i < playerIds.Length; i++)
+            {
+                whereClause += $" OR player_id = {playerIds[i]}";
+            }
+            sql += whereClause;
+            DalamudContext.PluginLog.Debug(sql);
+
+            return this.Connection.Query<PlayerNameWorldHistoryDTO>(sql).Select(x => new PlayerNameWorldHistory()
+            {
+                PlayerId = x.player_id,
+                PlayerName = x.player_name,
+                WorldId = x.world_id,
+                Created = x.created,
+                Updated = x.updated,
+                IsMigrated = x.is_migrated
+            }).ToArray();
+        }
+        catch (Exception ex) 
+        {
+            DalamudContext.PluginLog.Error(ex, $"Failed to get bulk player name world history.");
+            return null;
+        }
+    }
+
     public bool DeleteNameWorldHistory(int playerId)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerNameWorldHistoryRepository.DeleteNameWorldHistory(): {playerId}");
