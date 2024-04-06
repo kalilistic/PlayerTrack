@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Dalamud.DrunkenToad.Core;
 using PlayerTrack.Infrastructure;
@@ -91,14 +92,14 @@ public class PlayerChangeService
         return worldNames.Any() ? string.Join(", ", worldNames) : string.Empty;
     }
 
-    public static PlayerNameWorldHistory[] GetPlayerNameWorldHistories(int[] playerIds)
+    public static List<PlayerNameWorldHistory> GetPlayerNameWorldHistories(IEnumerable<int> playerIds)
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.GetPlayersNameWorldHistory()");
-        var nameWorldHistories = RepositoryContext.PlayerNameWorldHistoryRepository.GetPlayerNameWorldHistories(playerIds);
+        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.GetPlayerNameWorldHistories()");
+        var nameWorldHistories = RepositoryContext.PlayerNameWorldHistoryRepository.GetPlayerNameWorldHistories(playerIds.ToArray());
         if (nameWorldHistories == null)
         {
-            return new PlayerNameWorldHistory[] { };
+            return new List<PlayerNameWorldHistory> { };
         }
-        return nameWorldHistories;
+        return nameWorldHistories.ToList();
     }
 }

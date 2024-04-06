@@ -1,15 +1,12 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using PlayerTrack.Domain;
+using PlayerTrack.Models;
 
 namespace PlayerTrack.API;
 
 using Dalamud.DrunkenToad.Core;
-using Dalamud.Utility;
-using PlayerTrack.Infrastructure;
-using PlayerTrack.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
 
 /// <inheritdoc cref="IPlayerTrackAPI" />
 public class PlayerTrackAPI : IPlayerTrackAPI
@@ -40,19 +37,6 @@ public class PlayerTrackAPI : IPlayerTrackAPI
     }
 
     /// <inheritdoc />
-    public uint GetPlayerLodestoneId(string name, uint worldId) {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetPlayerLodestoneId({name}, {worldId})");
-        this.CheckInitialized();
-        var player = ServiceContext.PlayerDataService.GetPlayer(name, worldId);
-        if (player == null) {
-            DalamudContext.PluginLog.Warning("Player not found");
-            return 0;
-        }
-
-        return player.LodestoneId;
-    }
-
-    /// <inheritdoc />
     public string GetPlayerNotes(string name, uint worldId)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetPlayerNotes({name}, {worldId})");
@@ -68,82 +52,39 @@ public class PlayerTrackAPI : IPlayerTrackAPI
     }
 
     /// <inheritdoc />
-    public string[] GetPlayerPreviousNames(string name, uint worldId) 
+    public ((string, uint), (string, uint)[])[] GetUniquePlayerNameWorldHistories((string, uint)[] players) 
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetPlayerPreviousNames({name}, {worldId})");
-        this.CheckInitialized();
-        var player = ServiceContext.PlayerDataService.GetPlayer(name, worldId);
-        if (player == null) 
-        {
-            //DalamudContext.PluginLog.Warning("Player not found");
-            return new string[] { };
-        }
-        var pNames = PlayerChangeService.GetPreviousNames(player.Id, player.Name);
-        DalamudContext.PluginLog.Debug($"Previous names: {pNames}");
-        return pNames.Split(",");
-    }
-
-    /// <inheritdoc />
-    public string[] GetPlayerPreviousWorlds(string name, uint worldId) 
-    {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetPlayerPreviousWorlds({name}, {worldId})");
-        this.CheckInitialized();
-        var player = ServiceContext.PlayerDataService.GetPlayer(name, worldId);
-        if (player == null) 
-        {
-            //DalamudContext.PluginLog.Warning("Player not found");
-            return new string[] { };
-        }
-
-        var pWorlds = PlayerChangeService.GetPreviousWorlds(player.Id, player.Name);
-        DalamudContext.PluginLog.Debug($"Previous worlds: {pWorlds}");
-        return pWorlds.Split(",");
-    }
-
-    public ((string, uint), string[], uint[])[] GetPlayersPreviousNamesWorlds((string, uint)[] players) 
-    {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetPlayersPreviousNamesWorlds(count: {players.Length})");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetUniquePlayerNameWorldHistories(count: {players.Length})");
         this.CheckInitialized();
         List<Player> playerObjList = new();
         playerObjList = ServiceContext.PlayerDataService.GetAllPlayers().Where(x => players.ToList().Contains((x.Name, x.WorldId))).ToList();
-
-        //foreach(var player in players)
-        //{
-        //    var playerObj = ServiceContext.PlayerDataService.GetPlayer(player.Item1, player.Item2);
-        //    if(playerObj != null)
-        //    {
-        //        playerObjList.Add(playerObj);
-        //    }
-        //}
         var playerHistories = PlayerChangeService.GetPlayerNameWorldHistories(playerObjList.Select(x => x.Id).ToArray());
-
         if (playerHistories == null) 
         {
             DalamudContext.PluginLog.Warning("No player name/world history found.");
-            return new ((string, uint), string[], uint[])[] { };
+            return new ((string, uint), (string, uint)[])[] { };
         }
 
-        Dictionary<int, (List<string>, List<uint>)> combinedResults = new();
+        Dictionary<int, List<(string, uint)>> combinedResults = new();
         foreach(var playerHistory in playerHistories)
         {
             var player = playerObjList.Where(x => x.Id == playerHistory.PlayerId).FirstOrDefault();
             if (!combinedResults.ContainsKey(playerHistory.PlayerId))
             {
-                combinedResults.Add(playerHistory.PlayerId, (new(), new()));
+                combinedResults.Add(playerHistory.PlayerId, new());
             }
-            if (!playerHistory.PlayerName.IsNullOrEmpty() && !combinedResults[playerHistory.PlayerId].Item1.Contains(playerHistory.PlayerName) && player?.Name != playerHistory.PlayerName)
+            //only add non-migrated, non-current and unique records
+            if(!playerHistory.IsMigrated
+                && !(player?.Name == playerHistory.PlayerName && player?.WorldId == playerHistory.WorldId)
+                && !combinedResults[playerHistory.PlayerId].Any(x => x.Item1 == playerHistory.PlayerName && x.Item2 == playerHistory.WorldId))
             {
-                combinedResults[playerHistory.PlayerId].Item1.Add(playerHistory.PlayerName);
-            }
-            if (playerHistory.WorldId != 0 && !combinedResults[playerHistory.PlayerId].Item2.Contains(playerHistory.WorldId) && player?.WorldId != playerHistory.WorldId)
-            {
-                combinedResults[playerHistory.PlayerId].Item2.Add(playerHistory.WorldId);
+                combinedResults[playerHistory.PlayerId].Add((playerHistory.PlayerName, playerHistory.WorldId));
             }
         }
-        //return combinedResults.Select(x => (playerObjList.Where(y => y.Id == x.Key)
-        //.Select(z => $"{z.Name} {z.WorldId}").First(), x.Value.Item1.ToArray(), x.Value.Item2.ToArray())).ToArray();
-        return combinedResults.Select(x => (playerObjList.Where(y => y.Id == x.Key)
-        .Select(y => (y.Name, y.WorldId)).First(), x.Value.Item1.ToArray(), x.Value.Item2.ToArray())).ToArray();
+        return combinedResults.Where(x => x.Value.Any()).Select(x => (
+        playerObjList.Where(y => y.Id == x.Key).Select(y => (y.Name, y.WorldId)).First(),
+        x.Value.ToArray()
+        )).ToArray();
     }
 
     private void CheckInitialized()

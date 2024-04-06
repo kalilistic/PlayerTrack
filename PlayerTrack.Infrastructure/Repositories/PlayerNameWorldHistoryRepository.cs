@@ -80,9 +80,9 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
         }
     }
 
-    public PlayerNameWorldHistory[]? GetPlayerNameWorldHistories(int[] playerIds) 
+    public IEnumerable<PlayerNameWorldHistory>? GetPlayerNameWorldHistories(int[] playerIds) 
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerNameWorldHistoryRepository.BulkGetNameWorldHistory()");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerNameWorldHistoryRepository.GetPlayerNameWorldHistories()");
         try 
         {
             string sql = "SELECT * FROM player_name_world_histories ";
@@ -93,17 +93,7 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
                 whereClause += $" OR player_id = {playerIds[i]}";
             }
             sql += whereClause;
-            DalamudContext.PluginLog.Debug(sql);
-
-            return this.Connection.Query<PlayerNameWorldHistoryDTO>(sql).Select(x => new PlayerNameWorldHistory()
-            {
-                PlayerId = x.player_id,
-                PlayerName = x.player_name,
-                WorldId = x.world_id,
-                Created = x.created,
-                Updated = x.updated,
-                IsMigrated = x.is_migrated
-            }).ToArray();
+            return this.Connection.Query<PlayerNameWorldHistoryDTO>(sql).Select(x => Mapper.Map<PlayerNameWorldHistory>(x));
         }
         catch (Exception ex) 
         {

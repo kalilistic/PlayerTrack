@@ -23,28 +23,14 @@ public class PlayerTrackProvider
     public const string LabelProviderGetPlayerCurrentNameWorld = "PlayerTrack.GetPlayerCurrentNameWorld";
 
     /// <summary>
-    /// GetPlayerLodestoneId.
-    /// </summary>
-    public const string LabelProviderGetPlayerLodestoneId = "PlayerTrack.GetPlayerLodestoneId";
-
-    /// <summary>
     /// GetPlayerNotes.
     /// </summary>
     public const string LabelProviderGetPlayerNotes = "PlayerTrack.GetPlayerNotes";
 
     /// <summary>
-    /// GetPlayerPreviousNames.
+    /// GetUniquePlayerNameWorldHistories.
     /// </summary>
-    public const string LabelProviderGetPlayerPreviousNames = "PlayerTrack.GetPlayerPreviousNames";
-
-    /// <summary>
-    /// GetPlayerPreviousWorlds.
-    /// </summary>
-    public const string LabelProviderGetPlayerPreviousWorlds = "PlayerTrack.GetPlayerPreviousWorlds";
-    /// <summary>
-    /// GetPlayerPreviousWorlds.
-    /// </summary>
-    public const string LabelProviderGetPlayersPreviousNamesWorlds = "PlayerTrack.GetPlayersPreviousNamesWorlds";
+    public const string LabelProviderGetUniquePlayerNameWorldHistories = "PlayerTrack.GetUniquePlayerNameWorldHistories";
 
     /// <summary>
     /// API.
@@ -62,29 +48,14 @@ public class PlayerTrackProvider
     public readonly ICallGateProvider<string, uint, string>? ProviderGetPlayerCurrentNameWorld;
 
     /// <summary>
-    /// GetPlayerLodestoneId.
-    /// </summary>
-    public readonly ICallGateProvider<string, uint, uint>? ProviderGetPlayerLodestoneId;
-
-    /// <summary>
     /// GetPlayerNotes.
     /// </summary>
     public readonly ICallGateProvider<string, uint, string>? ProviderGetPlayerNotes;
 
     /// <summary>
-    /// GetPlayerPreviousNames.
+    /// GetUniquePlayerNameWorldHistories.
     /// </summary>
-    public readonly ICallGateProvider<string, uint, string[]>? ProviderGetPlayerPreviousNames;
-
-    /// <summary>
-    /// GetPlayerPreviousWorlds.
-    /// </summary>
-    public readonly ICallGateProvider<string, uint, string[]>? ProviderGetPlayerPreviousWorlds;
-
-    /// <summary>
-    /// GetPlayersPreviousNamesWorlds.
-    /// </summary>
-    public readonly ICallGateProvider<(string, uint)[], ((string, uint), string[], uint[])[]>? ProviderGetPlayersPreviousNamesWorlds;
+    public readonly ICallGateProvider<(string, uint)[], ((string, uint), (string, uint)[])[]>? GetUniquePlayerNameWorldHistories;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PlayerTrackProvider"/> class.
@@ -117,17 +88,6 @@ public class PlayerTrackProvider
             DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerCurrentNameWorld}:\n{e}");
         }
 
-        try 
-        {
-            this.ProviderGetPlayerLodestoneId =
-                pluginInterface.GetIpcProvider<string, uint, uint>(LabelProviderGetPlayerLodestoneId);
-            this.ProviderGetPlayerLodestoneId.RegisterFunc(api.GetPlayerLodestoneId);
-        }
-        catch (Exception e) 
-        {
-            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerLodestoneId}:\n{e}");
-        }
-
         try
         {
             this.ProviderGetPlayerNotes =
@@ -139,37 +99,15 @@ public class PlayerTrackProvider
             DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerNotes}:\n{e}");
         }
 
-        try 
-        {
-            this.ProviderGetPlayerPreviousNames =
-                pluginInterface.GetIpcProvider<string, uint, string[]>(LabelProviderGetPlayerPreviousNames);
-            this.ProviderGetPlayerPreviousNames.RegisterFunc(api.GetPlayerPreviousNames);
-        }
-        catch (Exception e) 
-        {
-            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerPreviousNames}:\n{e}");
-        }
-
-        try 
-        {
-            this.ProviderGetPlayerPreviousWorlds =
-                pluginInterface.GetIpcProvider<string, uint, string[]>(LabelProviderGetPlayerPreviousWorlds);
-            this.ProviderGetPlayerPreviousWorlds.RegisterFunc(api.GetPlayerPreviousWorlds);
-        }
-        catch (Exception e) 
-        {
-            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerPreviousWorlds}:\n{e}");
-        }
-
         try
         {
-            this.ProviderGetPlayersPreviousNamesWorlds =
-                pluginInterface.GetIpcProvider<(string, uint)[], ((string, uint), string[], uint[])[]>(LabelProviderGetPlayersPreviousNamesWorlds);
-            this.ProviderGetPlayersPreviousNamesWorlds.RegisterFunc(api.GetPlayersPreviousNamesWorlds);
+            this.GetUniquePlayerNameWorldHistories =
+                pluginInterface.GetIpcProvider<(string, uint)[], ((string, uint), (string, uint)[])[]>(LabelProviderGetUniquePlayerNameWorldHistories);
+            this.GetUniquePlayerNameWorldHistories.RegisterFunc(api.GetUniquePlayerNameWorldHistories);
         }
         catch (Exception e)
         {
-            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayersPreviousNamesWorlds}:\n{e}");
+            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetUniquePlayerNameWorldHistories}:\n{e}");
         }
     }
 
@@ -182,8 +120,6 @@ public class PlayerTrackProvider
         this.ProviderAPIVersion?.UnregisterFunc();
         this.ProviderGetPlayerCurrentNameWorld?.UnregisterFunc();
         this.ProviderGetPlayerNotes?.UnregisterFunc();
-        this.ProviderGetPlayerPreviousNames?.UnregisterFunc();
-        this.ProviderGetPlayerPreviousWorlds?.UnregisterFunc();
-        this.ProviderGetPlayersPreviousNamesWorlds?.UnregisterFunc();
+        this.GetUniquePlayerNameWorldHistories?.UnregisterFunc();
     }
 }
