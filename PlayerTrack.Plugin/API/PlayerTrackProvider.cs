@@ -28,9 +28,9 @@ public class PlayerTrackProvider
     public const string LabelProviderGetPlayerNotes = "PlayerTrack.GetPlayerNotes";
 
     /// <summary>
-    /// GetUniquePlayerNameWorldHistories.
+    /// GetPlayerNameWorldHistories.
     /// </summary>
-    public const string LabelProviderGetUniquePlayerNameWorldHistories = "PlayerTrack.GetUniquePlayerNameWorldHistories";
+    public const string LabelProviderGetPlayerNameWorldHistories = "PlayerTrack.GetPlayerNameWorldHistories";
 
     /// <summary>
     /// API.
@@ -55,7 +55,7 @@ public class PlayerTrackProvider
     /// <summary>
     /// GetUniquePlayerNameWorldHistories.
     /// </summary>
-    public readonly ICallGateProvider<(string, uint)[], ((string, uint), (string, uint)[])[]>? GetUniquePlayerNameWorldHistories;
+    public readonly ICallGateProvider<(string, uint)[], ((string, uint), (string, uint)[])[]>? GetPlayerNameWorldHistories;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PlayerTrackProvider"/> class.
@@ -101,13 +101,13 @@ public class PlayerTrackProvider
 
         try
         {
-            this.GetUniquePlayerNameWorldHistories =
-                pluginInterface.GetIpcProvider<(string, uint)[], ((string, uint), (string, uint)[])[]>(LabelProviderGetUniquePlayerNameWorldHistories);
-            this.GetUniquePlayerNameWorldHistories.RegisterFunc(api.GetUniquePlayerNameWorldHistories);
+            this.GetPlayerNameWorldHistories =
+                pluginInterface.GetIpcProvider<(string, uint)[], ((string, uint), (string, uint)[])[]>(LabelProviderGetPlayerNameWorldHistories);
+            this.GetPlayerNameWorldHistories.RegisterFunc(api.GetPlayerNameWorldHistories);
         }
         catch (Exception e)
         {
-            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetUniquePlayerNameWorldHistories}:\n{e}");
+            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerNameWorldHistories}:\n{e}");
         }
     }
 
@@ -120,6 +120,6 @@ public class PlayerTrackProvider
         this.ProviderAPIVersion?.UnregisterFunc();
         this.ProviderGetPlayerCurrentNameWorld?.UnregisterFunc();
         this.ProviderGetPlayerNotes?.UnregisterFunc();
-        this.GetUniquePlayerNameWorldHistories?.UnregisterFunc();
+        this.GetPlayerNameWorldHistories?.UnregisterFunc();
     }
 }

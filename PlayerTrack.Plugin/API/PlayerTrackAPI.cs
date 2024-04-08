@@ -52,9 +52,9 @@ public class PlayerTrackAPI : IPlayerTrackAPI
     }
 
     /// <inheritdoc />
-    public ((string, uint), (string, uint)[])[] GetUniquePlayerNameWorldHistories((string, uint)[] players) 
+    public ((string, uint), (string, uint)[])[] GetPlayerNameWorldHistories((string, uint)[] players) 
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetUniquePlayerNameWorldHistories(count: {players.Length})");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetPlayerNameWorldHistories() (count: {players.Length})");
         this.CheckInitialized();
         List<Player> playerObjList = new();
         playerObjList = ServiceContext.PlayerDataService.GetAllPlayers().Where(x => players.ToList().Contains((x.Name, x.WorldId))).ToList();
@@ -73,13 +73,7 @@ public class PlayerTrackAPI : IPlayerTrackAPI
             {
                 combinedResults.Add(playerHistory.PlayerId, new());
             }
-            //only add non-migrated, non-current and unique records
-            if(!playerHistory.IsMigrated
-                && !(player?.Name == playerHistory.PlayerName && player?.WorldId == playerHistory.WorldId)
-                && !combinedResults[playerHistory.PlayerId].Any(x => x.Item1 == playerHistory.PlayerName && x.Item2 == playerHistory.WorldId))
-            {
-                combinedResults[playerHistory.PlayerId].Add((playerHistory.PlayerName, playerHistory.WorldId));
-            }
+            combinedResults[playerHistory.PlayerId].Add((playerHistory.PlayerName, playerHistory.WorldId));
         }
         return combinedResults.Where(x => x.Value.Any()).Select(x => (
         playerObjList.Where(y => y.Id == x.Key).Select(y => (y.Name, y.WorldId)).First(),
