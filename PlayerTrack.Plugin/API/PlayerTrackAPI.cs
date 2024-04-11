@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using PlayerTrack.Domain;
+using PlayerTrack.Models;
 
 namespace PlayerTrack.API;
 
@@ -46,6 +49,36 @@ public class PlayerTrackAPI : IPlayerTrackAPI
         }
 
         return player.Notes;
+    }
+
+    /// <inheritdoc />
+    public ((string, uint), (string, uint)[])[] GetPlayerNameWorldHistories((string, uint)[] players) 
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetPlayerNameWorldHistories() (count: {players.Length})");
+        this.CheckInitialized();
+        List<Player> playerObjList = new();
+        playerObjList = ServiceContext.PlayerDataService.GetAllPlayers().Where(x => players.ToList().Contains((x.Name, x.WorldId))).ToList();
+        var playerHistories = PlayerChangeService.GetPlayerNameWorldHistories(playerObjList.Select(x => x.Id).ToArray());
+        if (playerHistories == null) 
+        {
+            DalamudContext.PluginLog.Warning("No player name/world history found.");
+            return new ((string, uint), (string, uint)[])[] { };
+        }
+
+        Dictionary<int, List<(string, uint)>> combinedResults = new();
+        foreach(var playerHistory in playerHistories)
+        {
+            var player = playerObjList.Where(x => x.Id == playerHistory.PlayerId).FirstOrDefault();
+            if (!combinedResults.ContainsKey(playerHistory.PlayerId))
+            {
+                combinedResults.Add(playerHistory.PlayerId, new());
+            }
+            combinedResults[playerHistory.PlayerId].Add((playerHistory.PlayerName, playerHistory.WorldId));
+        }
+        return combinedResults.Where(x => x.Value.Any()).Select(x => (
+        playerObjList.Where(y => y.Id == x.Key).Select(y => (y.Name, y.WorldId)).First(),
+        x.Value.ToArray()
+        )).ToArray();
     }
 
     private void CheckInitialized()

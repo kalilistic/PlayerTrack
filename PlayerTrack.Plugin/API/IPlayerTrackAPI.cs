@@ -25,4 +25,11 @@ public interface IPlayerTrackAPI
     /// <param name="worldId">player home world id.</param>
     /// <returns>notes.</returns>
     public string GetPlayerNotes(string name, uint worldId);
+
+    /// <summary>
+    /// Returns the player names/world history for a list of players
+    /// </summary>
+    /// <param name="players">tuple array of (player name, world id)</param>
+    /// <returns>tuple array of current (player name, world id) and an array of (player name, world id) name/world changes.</returns>
+    public ((string, uint), (string, uint)[])[] GetPlayerNameWorldHistories((string, uint)[] players);
 }
