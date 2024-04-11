@@ -15,7 +15,7 @@ on:
 
 jobs:
   deploy-plugin:
-    uses: kalilistic/DalamudPluginDeploy/.github/workflows/deploy_plugin.yml@7dd6a4952a96ad4b3b5b0c61ab90e64fd09f1c4e
+    uses: kalilistic/DalamudPluginDeploy/.github/workflows/deploy_plugin.yml@master
     with:
       public_name: "PlayerTrack"
       internal_name: "PlayerTrack"
