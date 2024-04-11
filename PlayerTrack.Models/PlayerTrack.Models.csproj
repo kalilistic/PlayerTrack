@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<Title>PlayerTrack.Models</Title>
 		<Authors>kalilistic</Authors>
-		<TargetFramework>net7.0-windows</TargetFramework>
+		<TargetFramework>net8.0-windows</TargetFramework>
 		<Platforms>x64</Platforms>
 		<LangVersion>10</LangVersion>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
