@@ -82,18 +82,24 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
 
     public IEnumerable<PlayerNameWorldHistory>? GetPlayerNameWorldHistories(int[] playerIds) 
     {
+        const int maxPerQuery = 750;
         DalamudContext.PluginLog.Verbose($"Entering PlayerNameWorldHistoryRepository.GetPlayerNameWorldHistories()");
         try 
         {
-            string sql = "SELECT * FROM player_name_world_histories ";
-            string whereClause = $"WHERE player_id = {playerIds[0]}";
-
-            for(int i = 1; i < playerIds.Length; i++)
+            List<PlayerNameWorldHistory> results = new();
+            string sqlBase = "SELECT * FROM player_name_world_histories ";
+            for (int pageStart = 0; pageStart < playerIds.Length; pageStart += maxPerQuery) 
             {
-                whereClause += $" OR player_id = {playerIds[i]}";
+                string whereClause = $"WHERE player_id = {playerIds[pageStart]}";
+                for (int i = pageStart + 1; i < pageStart + maxPerQuery && i < playerIds.Length; i++) 
+                {
+                    whereClause += $" OR player_id = {playerIds[i]}";
+                }
+                string sql = sqlBase + whereClause;
+                var pageResults = this.Connection.Query<PlayerNameWorldHistoryDTO>(sql).Select(x => Mapper.Map<PlayerNameWorldHistory>(x));
+                results = results.Concat(pageResults).ToList();
             }
-            sql += whereClause;
-            return this.Connection.Query<PlayerNameWorldHistoryDTO>(sql).Select(x => Mapper.Map<PlayerNameWorldHistory>(x));
+            return results;
         }
         catch (Exception ex) 
         {
