@@ -54,9 +54,9 @@ public class PlayerActionComponent : ViewComponent
             this.presenter.HidePanel();
         }
         
-        if (LocGui.Button("ResetLodestone", buttonSize))
+        if (LocGui.Button("RefreshLodestone", buttonSize))
         {
-            PlayerLodestoneService.ResetLodestone(player.Id);
+            PlayerLodestoneService.CreateRefreshLookup(player.Id);
             this.presenter.ClosePlayer();
             this.presenter.HidePanel();
         }

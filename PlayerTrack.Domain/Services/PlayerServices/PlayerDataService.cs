@@ -27,7 +27,9 @@ public class PlayerDataService
     public Player? GetPlayer(uint playerObjectId) => ServiceContext.PlayerCacheService.GetPlayer(playerObjectId);
     
     public Player? GetPlayer(ulong contentId) => ServiceContext.PlayerCacheService.GetPlayer(contentId);
-
+    
+    public IEnumerable<Player> GetPlayers(Func<Player, bool> filter) => ServiceContext.PlayerCacheService.GetPlayers(filter);
+    
     public IEnumerable<Player> GetAllPlayers() => ServiceContext.PlayerCacheService.GetPlayers();
 
     public void DeletePlayer(int playerId)
@@ -58,7 +60,7 @@ public class PlayerDataService
         player.Id = RepositoryContext.PlayerRepository.CreatePlayer(player);
         player.PlayerConfig.PlayerId = player.Id;
         ServiceContext.PlayerCacheService.AddPlayer(player);
-        PlayerLodestoneService.CreateLodestoneLookup(player.Id, player.Name, player.WorldId);
+        PlayerLodestoneService.CreateBatchLookup(player);
         if (player.PrimaryCategoryId != 0)
         {
             PlayerCategoryService.AssignCategoryToPlayer(player.Id, player.PrimaryCategoryId);
@@ -123,12 +125,12 @@ public class PlayerDataService
         // re-parent records
         PlayerChangeService.UpdatePlayerId(newPlayer.Id, oldestPlayer.Id);
         PlayerEncounterService.UpdatePlayerId(newPlayer.Id, oldestPlayer.Id);
+        PlayerLodestoneService.UpdatePlayerId(newPlayer.Id, oldestPlayer.Id);
 
         // delete records
         PlayerConfigService.DeletePlayerConfig(newPlayer.Id);
         PlayerCategoryService.DeletePlayerCategoryByPlayerId(newPlayer.Id);
         PlayerTagService.DeletePlayerTagsByPlayerId(newPlayer.Id);
-        PlayerLodestoneService.DeleteLookupsByPlayer(newPlayer.Id);
         RepositoryContext.PlayerRepository.DeletePlayer(newPlayer.Id);
 
         // merge data into original

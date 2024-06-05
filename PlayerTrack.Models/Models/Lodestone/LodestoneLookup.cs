@@ -1,7 +1,5 @@
 ﻿namespace PlayerTrack.Models;
 
-using Dalamud.DrunkenToad.Core;
-
 public class LodestoneLookup
 {
     public int Id { get; set; }
@@ -10,44 +8,78 @@ public class LodestoneLookup
 
     public long Updated { get; set; }
 
-    public int PlayerId { get; init; }
+    public int PlayerId { get; set; }
 
-    public string PlayerName { get; set; } = string.Empty;
+    public string PlayerName { get; init; } = string.Empty;
 
-    public string WorldName { get; set; } = string.Empty;
+    public uint WorldId { get; init; }
+    
+    public string UpdatedPlayerName { get; set; } = string.Empty;
+    
+    public uint UpdatedWorldId { get; set; }
 
-    public uint LodestoneId { get; set; }
+    public uint LodestoneId { get; private set; }
 
     public int FailureCount { get; set; }
+    
+    public bool IsDone { get; private set; }
+    
+    public int? PrerequisiteLookupId { get; set; }
 
-    public LodestoneStatus LodestoneStatus { get; set; } = LodestoneStatus.Unverified;
+    public LodestoneStatus LodestoneStatus { get; private set; } = LodestoneStatus.Unverified;
 
-    public void FlagAsFailed()
+    public LodestoneLookupType LodestoneLookupType { get; init; } = LodestoneLookupType.Batch;
+
+    public void SetLodestoneStatus(LodestoneStatus lodestoneStatus)
+    {
+        this.LodestoneStatus = lodestoneStatus;
+        if (this.LodestoneStatus is 
+            LodestoneStatus.Verified or 
+            LodestoneStatus.Banned or 
+            LodestoneStatus.NotApplicable or 
+            LodestoneStatus.Cancelled or
+            LodestoneStatus.Unavailable
+            )
+        {
+            this.IsDone = true;
+        }
+    }
+    
+    public void SetLodestoneId(uint lodestoneId)
+    {
+        if (lodestoneId == 0 || this.LodestoneId != 0) return;
+        this.LodestoneId = lodestoneId;
+    }
+    
+    public void UpdateLookupAsFailed(bool allowRetry)
     {
         this.FailureCount++;
 
-        if (this.FailureCount < 3)
+        if (this.FailureCount < 3 && allowRetry)
         {
-            this.LodestoneStatus = LodestoneStatus.Failed;
-            DalamudContext.PluginLog.Verbose($"Failed to find lodestone response for {this.PlayerName} on {this.WorldName}.");
+            this.SetLodestoneStatus(LodestoneStatus.Failed);
         }
         else
         {
-            this.LodestoneStatus = LodestoneStatus.Banned;
-            DalamudContext.PluginLog.Verbose($"Banned lodestone response for {this.PlayerName} on {this.WorldName}.");
+            this.SetLodestoneStatus(LodestoneStatus.Banned);
         }
     }
 
-    public void FlagAsSuccessful(uint lodestoneId)
+    public void UpdateLookupAsUnavailable()
     {
-        this.LodestoneStatus = LodestoneStatus.Verified;
-        this.LodestoneId = lodestoneId;
-        DalamudContext.PluginLog.Verbose($"Found lodestone response for {this.PlayerName} on {this.WorldName}.");
+        this.SetLodestoneStatus(LodestoneStatus.Unavailable);
+    }
+    
+    public void UpdateLookupAsInvalid()
+    {
+        this.SetLodestoneStatus(LodestoneStatus.Invalid);
     }
 
-    public void Reset()
+    public void UpdateLookupAsSuccess(LodestoneResponse response, LodestoneStatus status)
     {
-        this.FailureCount = 0;
-        this.LodestoneStatus = LodestoneStatus.Unverified;
+        this.UpdatedPlayerName = response.PlayerName;
+        this.UpdatedWorldId = response.WorldId;
+        this.SetLodestoneId(response.LodestoneId);
+        this.SetLodestoneStatus(status);
     }
 }

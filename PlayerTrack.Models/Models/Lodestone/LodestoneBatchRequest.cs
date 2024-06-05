@@ -2,18 +2,16 @@
 
 namespace PlayerTrack.Models;
 
-public class LodestoneRequest
+public class LodestoneBatchRequest
 {
-    public LodestoneRequest(int playerId, string playerName, string worldName)
+    public LodestoneBatchRequest(int playerId, string playerName, uint worldId)
     {
         this.PlayerId = playerId;
         this.PlayerName = playerName;
-        this.WorldName = worldName;
+        this.WorldId = worldId;
     }
 
     [JsonIgnore] public int PlayerId { get; }
-
     [JsonProperty("playerName", Required = Required.Always)] public string PlayerName { get; set; }
-
-    [JsonProperty("worldName", Required = Required.Always)] public string WorldName { get; set; }
+    [JsonProperty("worldId", Required = Required.Always)] public uint WorldId { get; set; }
 }

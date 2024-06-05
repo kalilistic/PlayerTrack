@@ -155,31 +155,9 @@ public class PlayerSummaryComponent : ViewComponent
     {
         LocGui.Text("Lodestone");
         ImGuiHelpers.ScaledRelativeSameLine(this.currentOffsets[0]);
-        if (player.LodestoneStatus != LodestoneStatus.Failed && player.LodestoneStatus != LodestoneStatus.Banned)
+        LocGui.TextColored(player.Lodestone, player.LodestoneColor);
+        if (player.LodestoneStatus == LodestoneStatus.Verified)
         {
-            LocGui.TextColored(player.Lodestone, player.LodestoneColor);
-            if (player.LodestoneStatus == LodestoneStatus.Verified)
-            {
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                }
-
-                if (ImGui.IsItemClicked())
-                {
-                    PlayerLodestoneService.OpenLodestoneProfile(player.LodestoneId);
-                }
-            }
-        }
-        else
-        {
-            ImGui.BeginGroup();
-            LocGui.TextColored(player.Lodestone, player.LodestoneColor);
-            ImGui.SameLine();
-            ImGui.PushFont(UiBuilder.IconFont);
-            ImGui.TextColored(ImGuiColors.DPSRed, FontAwesomeIcon.Redo.ToIconString());
-            ImGui.PopFont();
-            ImGui.EndGroup();
             if (ImGui.IsItemHovered())
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -187,10 +165,7 @@ public class PlayerSummaryComponent : ViewComponent
 
             if (ImGui.IsItemClicked())
             {
-                player.LodestoneStatus = LodestoneStatus.Unverified;
-                player.Lodestone = ServiceContext.Localization.GetString(player.LodestoneStatus.ToString());
-                player.LodestoneColor = ImGuiColors.DalamudWhite;
-                PlayerLodestoneService.ResetLodestone(player.Id);
+                PlayerLodestoneService.OpenLodestoneProfile(player.LodestoneId);
             }
         }
     }

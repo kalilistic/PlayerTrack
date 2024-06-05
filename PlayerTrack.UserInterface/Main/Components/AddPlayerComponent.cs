@@ -104,7 +104,7 @@ public class AddPlayerComponent : ViewComponent
         }
         else if (this.showSuccessMessage)
         {
-            LocGui.TextColored("AddedPlayerSuccessfully", ImGuiColors.HealerGreen);
+            LocGui.TextColored("PlayerAddedSuccessfully", ImGuiColors.HealerGreen);
         }
 
         ImGui.EndChild();

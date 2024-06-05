@@ -5,7 +5,6 @@ using PlayerTrack.Domain;
 
 namespace PlayerTrack.UserInterface.Config.Components;
 
-using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 
 public class IntegrationComponent : ConfigViewComponent
@@ -37,13 +36,6 @@ public class IntegrationComponent : ConfigViewComponent
         if (ToadGui.Checkbox("EnableLodestoneLookup", ref lodestoneEnableLookup))
         {
             this.config.LodestoneEnableLookup = lodestoneEnableLookup;
-            ServiceContext.ConfigService.SaveConfig(this.config);
-        }
-
-        var accelerateLodestoneLookup = this.config.AccelerateLodestoneLookup;
-        if (ToadGui.Checkbox("AccelerateLodestoneLookup", ref accelerateLodestoneLookup))
-        {
-            this.config.AccelerateLodestoneLookup = accelerateLodestoneLookup;
             ServiceContext.ConfigService.SaveConfig(this.config);
         }
         

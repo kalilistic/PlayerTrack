@@ -79,6 +79,21 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
             return null;
         }
     }
+    
+    public IEnumerable<PlayerNameWorldHistory> GetPlayerNameWorldHistories(int playerId)
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerNameWorldHistoryRepository.GetPlayerNameWorldHistories(): {playerId}");
+        try
+        {
+            const string sql = "SELECT * FROM player_name_world_histories WHERE player_id = @player_id ORDER BY updated DESC";
+            return this.Connection.Query<PlayerNameWorldHistoryDTO>(sql, new { player_id = playerId }).Select(x => Mapper.Map<PlayerNameWorldHistory>(x));
+        }
+        catch (Exception ex)
+        {
+            DalamudContext.PluginLog.Error(ex, $"Failed to get player name world history for PlayerID {playerId}");
+            return new List<PlayerNameWorldHistory>();
+        }
+    }
 
     public IEnumerable<PlayerNameWorldHistory>? GetPlayerNameWorldHistories(int[] playerIds) 
     {

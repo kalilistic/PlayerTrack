@@ -19,13 +19,13 @@ public class Combined : PlayerTrackView, IViewWithPanel
     private bool isPendingSizeUpdate;
     private Vector2 lastSize;
 
-    public Combined(string name, PluginConfig config, PlayerComponent playerComponent, AddPlayerComponent addPlayerComponent, IMainPresenter presenter, ImGuiWindowFlags flags = ImGuiWindowFlags.None)
+    public Combined(string name, PluginConfig config, PlayerComponent playerComponent, AddPlayerComponent addPlayerComponent, LodestoneComponent lodestoneComponent, IMainPresenter presenter, ImGuiWindowFlags flags = ImGuiWindowFlags.None)
         : base(name, config, flags)
     {
         this.presenter = presenter;
         this.playerListComponent = new PlayerListComponent(this.presenter);
         this.playerListComponent.PlayerListComponent_OpenConfig += () => this.OpenConfig?.Invoke();
-        this.panelComponent = new PanelComponent(playerComponent, addPlayerComponent);
+        this.panelComponent = new PanelComponent(playerComponent, addPlayerComponent, lodestoneComponent);
     }
 
     public delegate void OpenConfigDelegate();

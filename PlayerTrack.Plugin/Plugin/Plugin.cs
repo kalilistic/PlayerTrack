@@ -88,6 +88,7 @@ public class Plugin : IDalamudPlugin
             return;
         }
 
+        EncounterService.EnsureNoOpenEncounters();
         ServiceContext.ConfigService.SyncIcons();
         ServiceContext.PlayerCacheService.LoadPlayers();
         ServiceContext.VisibilityService.Initialize();
@@ -103,5 +104,6 @@ public class Plugin : IDalamudPlugin
         DalamudContext.SocialListHandler.Start();
         this.PlayerTrackProvider = new PlayerTrackProvider(DalamudContext.PluginInterface, new PlayerTrackAPI());
         PlayerProcessService.CheckForDuplicates();
+        ServiceContext.LodestoneService.Start();
     });
 }

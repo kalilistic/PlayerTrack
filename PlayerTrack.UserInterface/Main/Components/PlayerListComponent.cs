@@ -181,6 +181,11 @@ public class PlayerListComponent : ViewComponent
             {
                 this.presenter.TogglePanel(PanelType.AddPlayer);
             }
+            
+            if (LocGui.MenuItem("OpenLodestoneService"))
+            {
+                this.presenter.TogglePanel(PanelType.Lodestone);
+            }
 
             if (LocGui.MenuItem("OpenSettings"))
             {

@@ -72,8 +72,6 @@ public static class ServiceContext
         VisibilityService = new VisibilityService();
         LocalPlayerService = new LocalPlayerService();
         SocialListService = new SocialListService();
-        EncounterService.EnsureNoOpenEncounters();
-        LodestoneService.Start();
     }
 
     public static void Dispose()

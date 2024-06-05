@@ -139,7 +139,7 @@ public class PlayerRepository : BaseRepository
         }
         catch (Exception ex)
         {
-            DalamudContext.PluginLog.Error(ex, $"Failed to update player with PlayerID {player.Id}.", player);
+            DalamudContext.PluginLog.Error(ex, $"Failed to update player with PlayerID {player.Id} ({player.Key}).");
             return false;
         }
     }
@@ -172,6 +172,22 @@ public class PlayerRepository : BaseRepository
         catch (Exception ex)
         {
             DalamudContext.PluginLog.Error(ex, $"Failed to fetch player by ObjectID {objectId}.");
+            return null;
+        }
+    }
+    
+    public Player? GetPlayerById(int playerId)
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.GetPlayerById(): {playerId}");
+        try
+        {
+            const string sql = @"SELECT * FROM players WHERE id = @player_id";
+            var playerDTO = this.Connection.QueryFirstOrDefault<PlayerDTO>(sql, new { player_id = playerId });
+            return playerDTO == null ? null : this.Mapper.Map<Player>(playerDTO);
+        }
+        catch (Exception ex)
+        {
+            DalamudContext.PluginLog.Error(ex, $"Failed to fetch player by PlayerID {playerId}.");
             return null;
         }
     }

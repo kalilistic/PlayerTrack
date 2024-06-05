@@ -29,7 +29,7 @@ public static class PlayerViewMapper
             FreeCompany = GetFreeCompany(player.FreeCompany),
             LodestoneId = player.LodestoneId,
             Lodestone = ServiceContext.Localization.GetString(player.LodestoneStatus.ToString()),
-            LodestoneColor = GetLodestoneColor(player.LodestoneStatus),
+            LodestoneColor = ColorHelper.GetColorByStatus(player.LodestoneStatus),
             LodestoneStatus = player.LodestoneStatus,
             Appearance = GetAppearance(player.Customize),
             FirstSeen = player.SeenCount != 0 && player.Created != 0 ? player.Created.ToTimeSpan() : na,
@@ -73,23 +73,6 @@ public static class PlayerViewMapper
             case FreeCompanyState.Unknown:
             default:
                 return na;
-        }
-    }
-
-    private static Vector4 GetLodestoneColor(LodestoneStatus lodeStoneStatus)
-    {
-        switch (lodeStoneStatus)
-        {
-            case LodestoneStatus.Unverified:
-                return ImGuiColors.DalamudGrey;
-            case LodestoneStatus.Verified:
-                return ImGuiColors.HealerGreen;
-            case LodestoneStatus.NotApplicable:
-                return ImGuiColors.DalamudYellow;
-            case LodestoneStatus.Failed:
-            case LodestoneStatus.Banned:
-            default:
-                return ImGuiColors.DPSRed;
         }
     }
 

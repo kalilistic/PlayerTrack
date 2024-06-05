@@ -15,6 +15,20 @@ public class PlayerChangeService
         RepositoryContext.PlayerNameWorldHistoryRepository.UpdatePlayerId(oldestPlayerId, newPlayerId);
         RepositoryContext.PlayerCustomizeHistoryRepository.UpdatePlayerId(oldestPlayerId, newPlayerId);
     }
+    
+    public static void HandleNameWorldChange(Player player, string playerName, uint worldId)
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.HandleNameWorldChange(): {player.Name}@{player.WorldId}, {playerName}@{worldId}");
+        if (!player.Name.Equals(playerName, StringComparison.OrdinalIgnoreCase) || player.WorldId != worldId)
+        {
+            RepositoryContext.PlayerNameWorldHistoryRepository.CreatePlayerNameWorldHistory(new PlayerNameWorldHistory
+            {
+                PlayerId = player.Id,
+                PlayerName = player.Name,
+                WorldId = player.WorldId,
+            });
+        }
+    }
 
     public static void HandleNameWorldChange(Player oldestPlayer, Player newPlayer)
     {
