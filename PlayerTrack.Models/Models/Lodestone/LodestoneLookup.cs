@@ -33,16 +33,12 @@ public class LodestoneLookup
     public void SetLodestoneStatus(LodestoneStatus lodestoneStatus)
     {
         this.LodestoneStatus = lodestoneStatus;
-        if (this.LodestoneStatus is 
+        this.IsDone = this.LodestoneStatus is 
             LodestoneStatus.Verified or 
             LodestoneStatus.Banned or 
             LodestoneStatus.NotApplicable or 
             LodestoneStatus.Cancelled or
-            LodestoneStatus.Unavailable
-            )
-        {
-            this.IsDone = true;
-        }
+            LodestoneStatus.Unavailable;
     }
     
     public void SetLodestoneId(uint lodestoneId)

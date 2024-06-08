@@ -86,6 +86,7 @@ public class PlayerLodestoneService
             }
         
             var existingLookups = RepositoryContext.LodestoneRepository.GetLodestoneLookupsByPlayerId(player.Id);
+            var anyShouldRefresh = false;
             foreach (var lookup in existingLookups)
             {
                 if (!lookup.IsDone)
@@ -93,8 +94,15 @@ public class PlayerLodestoneService
                     DalamudContext.PluginLog.Debug($"Cancelled in-progress lookup for refresh: {lookup.PlayerName}@{lookup.WorldId}");
                     lookup.SetLodestoneStatus(LodestoneStatus.Cancelled);
                     player.LodestoneStatus = LodestoneStatus.Cancelled;
-                    UpdatePlayerAndLookup(player, lookup);
+                    var shouldRefresh = UpdatePlayerAndLookup(player, lookup);
+                    if (shouldRefresh) anyShouldRefresh = true;
                 }
+            }
+            
+            if (anyShouldRefresh)
+            {
+                DalamudContext.PluginLog.Debug("Refreshing all players due to lodestone lookup.");
+                ServiceContext.PlayerDataService.RefreshAllPlayers();
             }
 
             var newLookup = new LodestoneLookup
@@ -208,8 +216,9 @@ public class PlayerLodestoneService
         return player.Name != lookup.UpdatedPlayerName || player.WorldId != lookup.UpdatedWorldId;
     }
     
-    private static void UpdatePlayerAndLookup(Player player, LodestoneLookup lookup)
+    private static bool UpdatePlayerAndLookup(Player player, LodestoneLookup lookup)
     {
+        var shouldRefresh = false;
         DalamudContext.PluginLog.Verbose($"Entering PlayerLodestoneService.UpdatePlayerAndLodestone(): " +
                                          $"{player.Name}@{player.WorldId}, " +
                                          $"{lookup.UpdatedPlayerName}@{lookup.UpdatedWorldId}, " +
@@ -219,8 +228,10 @@ public class PlayerLodestoneService
         if (lookup.LodestoneStatus == LodestoneStatus.Verified)
         {
             RemoveLookupAsPreReq(lookup);
-            ServiceContext.PlayerDataService.RefreshAllPlayers();
+            shouldRefresh = true;
         }
+        
+        return shouldRefresh;
     }
 
     private static Player? getExistingPlayerWithNameWorld(int playerId, string playerName, uint worldId)
@@ -280,4 +291,19 @@ public class PlayerLodestoneService
     private static bool HasOpenLookup(Player player) => RepositoryContext.LodestoneRepository.GetLodestoneLookupsByPlayerId(player.Id).Any(lookup => !lookup.IsDone);
     private static bool IsTestDC(Player player) => DalamudContext.DataManager.IsTestDC(player.WorldId);
     private static bool IsMissingNameOrWorld(Player player) => string.IsNullOrEmpty(player.Name) || player.WorldId == 0;
+
+    public static void ResetLodestone(int playerId)
+    {
+        var latestLookup = RepositoryContext.LodestoneRepository.GetLodestoneLookupsByPlayerId(playerId).MaxBy(lookup => lookup.Updated);
+        if (latestLookup == null)
+        {
+            var player = ServiceContext.PlayerDataService.GetPlayer(playerId);
+            if (player == null) return;
+            CreateBatchLookup(player);
+            return;
+        }
+        latestLookup.SetLodestoneStatus(LodestoneStatus.Unverified);
+        latestLookup.FailureCount = 0;
+        RepositoryContext.LodestoneRepository.UpdateLodestoneLookup(latestLookup);
+    }
 }

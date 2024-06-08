@@ -80,8 +80,11 @@ public class LodestoneService : IDisposable
         {
             Timeout = TimeSpan.FromMilliseconds(60000),
         };
+        
+        var pluginVersion = ServiceContext.ConfigService.GetConfig().PluginVersion.ToString();
         this.httpClient.DefaultRequestHeaders.Add("Application-Name", "PlayerTrack");
-        this.httpClient.DefaultRequestHeaders.Add("Application-Version", ServiceContext.ConfigService.GetConfig().PluginVersion.ToString());
+        this.httpClient.DefaultRequestHeaders.Add("Application-Version", pluginVersion);
+        this.httpClient.DefaultRequestHeaders.Add("User-Agent", $"PlayerTrack/{pluginVersion} (Dalamud)");
     }
 
     private void SetupTimer()

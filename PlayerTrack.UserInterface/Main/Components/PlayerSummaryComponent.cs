@@ -9,6 +9,7 @@ using ImGuiNET;
 using PlayerTrack.Domain;
 using PlayerTrack.Models;
 using PlayerTrack.UserInterface.Components;
+using PlayerTrack.UserInterface.Helpers;
 using PlayerTrack.UserInterface.Main.Presenters;
 
 namespace PlayerTrack.UserInterface.Main.Components;
@@ -155,9 +156,31 @@ public class PlayerSummaryComponent : ViewComponent
     {
         LocGui.Text("Lodestone");
         ImGuiHelpers.ScaledRelativeSameLine(this.currentOffsets[0]);
-        LocGui.TextColored(player.Lodestone, player.LodestoneColor);
-        if (player.LodestoneStatus == LodestoneStatus.Verified)
+        if (player.LodestoneStatus != LodestoneStatus.Banned && player.LodestoneStatus != LodestoneStatus.Unavailable)
         {
+            LocGui.TextColored(player.Lodestone, player.LodestoneColor);
+            if (player.LodestoneStatus == LodestoneStatus.Verified)
+            {
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
+                }
+
+                if (ImGui.IsItemClicked())
+                {
+                    PlayerLodestoneService.OpenLodestoneProfile(player.LodestoneId);
+                }
+            }
+        }
+        else
+        {
+            ImGui.BeginGroup();
+            LocGui.TextColored(player.Lodestone, player.LodestoneColor);
+            ImGui.SameLine();
+            ImGui.PushFont(UiBuilder.IconFont);
+            ImGui.TextColored(player.LodestoneColor, FontAwesomeIcon.Redo.ToIconString());
+            ImGui.PopFont();
+            ImGui.EndGroup();
             if (ImGui.IsItemHovered())
             {
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -165,7 +188,10 @@ public class PlayerSummaryComponent : ViewComponent
 
             if (ImGui.IsItemClicked())
             {
-                PlayerLodestoneService.OpenLodestoneProfile(player.LodestoneId);
+                player.LodestoneStatus = LodestoneStatus.Unverified;
+                player.Lodestone = ServiceContext.Localization.GetString(player.LodestoneStatus.ToString());
+                player.LodestoneColor = ColorHelper.GetColorByStatus(player.LodestoneStatus);
+                PlayerLodestoneService.ResetLodestone(player.Id);
             }
         }
     }
