@@ -1,6 +1,7 @@
 name: Sync with Crowdin
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
