@@ -380,7 +380,14 @@ public class LodestoneService : IDisposable
 
     private void AddRequest(LodestoneLookup lookup)
     {
-        if (lookup.LodestoneLookupType == LodestoneLookupType.Batch)
+        if (string.IsNullOrEmpty(lookup.PlayerName) || lookup.WorldId == 0)
+        {
+            DalamudContext.PluginLog.Warning($"Invalid lodestone lookup for player {lookup.PlayerName}@{lookup.WorldId}");
+            lookup.UpdateLookupAsInvalid();
+            RepositoryContext.LodestoneRepository.UpdateLodestoneLookup(lookup);
+            PlayerLodestoneService.UpdatePlayerFromLodestone(lookup);
+        }
+        else if (lookup.LodestoneLookupType == LodestoneLookupType.Batch)
         {
             var request = new LodestoneBatchRequest(lookup.PlayerId, lookup.PlayerName, lookup.WorldId);
             var isAdded = this.lodestoneBatchLookups.TryAdd(lookup.PlayerId, lookup);
