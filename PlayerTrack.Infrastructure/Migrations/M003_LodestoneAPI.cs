@@ -38,11 +38,6 @@ public class M003_LodestoneAPI : Migration
             SET lookup_status = 6, is_done = 'true'
             WHERE world_id = 0
         ");
-        this.Execute.Sql(@"
-            UPDATE lodestone_lookups
-            SET world_name = ''
-            WHERE world_Name != ''
-        ");
     }
     
     public override void Down()
