@@ -10,9 +10,9 @@
       },
       "Dalamud.DrunkenToad": {
         "type": "Direct",
-        "requested": "[1.8.15, )",
-        "resolved": "1.8.15",
-        "contentHash": "biuHkQR0qmIMWEsa14CcWtUH4f6G7sOTQMDZZKws2MhzTYl/3sw2lDS3z6bBOPd17I1UPtmkFBBn0QbQEpO4PA==",
+        "requested": "[1.9.2, )",
+        "resolved": "1.9.2",
+        "contentHash": "fT7ntQ1swV+U9H9I1TI6hJVXVSKxifzXex9D5EOdxqk3ZoHDwTLaKjKxWBrGOI+NI12UjgYWC7DPW39oJfqIfg==",
         "dependencies": {
           "Dalamud.Loc": "1.1.2",
           "Microsoft.Extensions.DependencyInjection": "7.0.0"
@@ -564,7 +564,7 @@
       "playertrack.domain": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.8.15, )",
+          "Dalamud.DrunkenToad": "[1.9.2, )",
           "Dalamud.Loc": "[1.1.2, )",
           "FlexConfig": "[1.0.0, )",
           "PlayerTrack.Infrastructure": "[1.0.0, )",
@@ -575,7 +575,7 @@
         "type": "Project",
         "dependencies": {
           "AutoMapper": "[12.0.1, )",
-          "Dalamud.DrunkenToad": "[1.8.15, )",
+          "Dalamud.DrunkenToad": "[1.9.2, )",
           "Dalamud.Loc": "[1.1.2, )",
           "Dapper": "[2.0.123, )",
           "FlexConfig": "[1.0.0, )",
@@ -590,7 +590,7 @@
       "playertrack.models": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.8.15, )",
+          "Dalamud.DrunkenToad": "[1.9.2, )",
           "Dalamud.Loc": "[1.1.2, )",
           "Dapper.Contrib": "[2.0.78, )"
         }
@@ -598,7 +598,7 @@
       "playertrack.userinterface": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.8.15, )",
+          "Dalamud.DrunkenToad": "[1.9.2, )",
           "Dalamud.Loc": "[1.1.2, )",
           "FlexConfig": "[1.0.0, )",
           "PlayerTrack.Domain": "[1.0.0, )",

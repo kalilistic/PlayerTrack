@@ -31,6 +31,7 @@ public class LodestoneService : IDisposable
     private readonly object locker = new();
     private HttpClient httpClient = null!;
     private Timer processTimer = null!;
+    private bool isProcessTimerStarted;
     private bool isProcessing;
     private long serviceCallAvailableAt;
     private int serviceSequentialFailureCount;
@@ -44,16 +45,24 @@ public class LodestoneService : IDisposable
 
     public bool IsUp()
     {
-        return UnixTimestampHelper.CurrentTime() > this.serviceCallAvailableAt - 60000;
+        return this.isProcessTimerStarted && UnixTimestampHelper.CurrentTime() > this.serviceCallAvailableAt - 60000;
     }
     
-    public void Start() => this.processTimer.Start();
+    public void Start(bool shouldStart)
+    {
+        if (shouldStart)
+        {
+            this.processTimer.Start();
+            this.isProcessTimerStarted = true;
+        }
+    }
 
     public void Stop()
     {
         DalamudContext.PluginLog.Verbose("Entering LodestoneService.Stop()");
         this.processTimer.Elapsed -= this.ProcessRequests;
         this.processTimer.Stop();
+        this.isProcessTimerStarted = false;
     }
 
     public void Dispose()

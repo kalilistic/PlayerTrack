@@ -1,8 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Extensions;
+using Dalamud.DrunkenToad.Helpers;
 using Dalamud.Plugin;
 using FluentDapperLite.Runner;
 using PlayerTrack.API;
@@ -43,6 +45,7 @@ public class Plugin : IDalamudPlugin
         GC.SuppressFinalize(this);
         try
         {
+            PluginInstanceLock.ReleaseLock();
             ServiceContext.LodestoneService.Stop();
             this.PlayerTrackProvider?.Dispose();
             LiteDBMigrator.Dispose();
@@ -104,6 +107,6 @@ public class Plugin : IDalamudPlugin
         DalamudContext.SocialListHandler.Start();
         this.PlayerTrackProvider = new PlayerTrackProvider(DalamudContext.PluginInterface, new PlayerTrackAPI());
         PlayerProcessService.CheckForDuplicates();
-        ServiceContext.LodestoneService.Start();
+        ServiceContext.LodestoneService.Start(PluginInstanceLock.AcquireLock());
     });
 }
