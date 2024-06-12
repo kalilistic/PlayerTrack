@@ -30,4 +30,19 @@ public static class ColorHelper
                 return ImGuiColors.DalamudWhite;
         }
     }
+
+    public static Vector4 GetColorByStatus(LodestoneServiceStatus status)
+    {
+        switch (status)
+        {
+            case LodestoneServiceStatus.ServiceAvailable:
+                return ImGuiColors.HealerGreen;
+            case LodestoneServiceStatus.ServiceUnavailable:
+                return ImGuiColors.DPSRed;
+            case LodestoneServiceStatus.ServiceDisabled:
+                return ImGuiColors.ParsedPink;
+            default:
+                return ImGuiColors.DalamudWhite;
+        }
+    }
 }

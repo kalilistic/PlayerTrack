@@ -22,6 +22,7 @@ public class LodestoneService : IDisposable
     private const int processInterval = 60000;
     private const int sequentialFailureLimit = 2;
     private const int serviceCooldownMs = 3600000;
+    private const long retryInterval = 172800000;
     private const string api_uri = "https://api.kal-xiv.net/v2/lodestone";
     private readonly ConcurrentDictionary<int, LodestoneLookup> lodestoneBatchLookups = new();
     private readonly ConcurrentQueue<LodestoneBatchRequest> lodestoneBatchQueue = new();
@@ -43,9 +44,17 @@ public class LodestoneService : IDisposable
         this.LoadRequests();
     }
 
-    public bool IsUp()
+    public LodestoneServiceStatus GetServiceStatus()
     {
-        return this.isProcessTimerStarted && UnixTimestampHelper.CurrentTime() > this.serviceCallAvailableAt - 60000;
+        var config = ServiceContext.ConfigService.GetConfig();
+        if (!config.LodestoneEnableLookup || !this.isProcessTimerStarted)
+        {
+            return LodestoneServiceStatus.ServiceDisabled;
+        }
+
+        return UnixTimestampHelper.CurrentTime() > this.serviceCallAvailableAt - 60000 
+            ? LodestoneServiceStatus.ServiceAvailable 
+            : LodestoneServiceStatus.ServiceUnavailable;
     }
     
     public void Start(bool shouldStart)
@@ -79,6 +88,19 @@ public class LodestoneService : IDisposable
         {
             DalamudContext.PluginLog.Error(ex, "Failed to dispose lodestone service.");
         }
+    }
+
+    public static long GetMillisecondsUntilRetry(long updatedTime)
+    {
+        var currentTime = UnixTimestampHelper.CurrentTime();
+        var retryTime = updatedTime + retryInterval;
+    
+        if (currentTime >= retryTime)
+        {
+            return 0;
+        }
+    
+        return retryTime - currentTime;
     }
 
     private void SetupHttpClient()
@@ -379,10 +401,9 @@ public class LodestoneService : IDisposable
         var failedLookups =
             RepositoryContext.LodestoneRepository.GetRequestsByStatus(LodestoneStatus.Failed) ??
             new List<LodestoneLookup>();
-        var currentTime = UnixTimestampHelper.CurrentTime();
         foreach (var lookup in failedLookups)
         {
-            if (currentTime <= lookup.Updated + 172800000) continue;
+            if (GetMillisecondsUntilRetry(lookup.Updated) > 0) continue;
             AddRequest(lookup);
         }
     }

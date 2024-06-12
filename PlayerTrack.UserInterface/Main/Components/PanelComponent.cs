@@ -7,13 +7,13 @@ public class PanelComponent : ViewComponent
 {
     private readonly PlayerComponent playerComponent;
     private readonly AddPlayerComponent addPlayerComponent;
-    private readonly LodestoneComponent lodestoneComponent;
+    private readonly LodestoneServiceComponent _lodestoneServiceComponent;
 
-    public PanelComponent(PlayerComponent playerComponent, AddPlayerComponent addPlayerComponent, LodestoneComponent lodestoneComponent)
+    public PanelComponent(PlayerComponent playerComponent, AddPlayerComponent addPlayerComponent, LodestoneServiceComponent lodestoneServiceComponent)
     {
         this.playerComponent = playerComponent;
         this.addPlayerComponent = addPlayerComponent;
-        this.lodestoneComponent = lodestoneComponent;
+        this._lodestoneServiceComponent = lodestoneServiceComponent;
     }
 
     public override void Draw()
@@ -27,7 +27,7 @@ public class PanelComponent : ViewComponent
                 this.addPlayerComponent.Draw();
                 break;
             case PanelType.Lodestone:
-                this.lodestoneComponent.Draw();
+                this._lodestoneServiceComponent.Draw();
                 break;
             case PanelType.None:
             default:

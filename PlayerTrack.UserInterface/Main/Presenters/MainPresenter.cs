@@ -25,7 +25,7 @@ public class MainPresenter : IMainPresenter
     private bool isPlayerLoading;
     private PlayerComponent playerComponent = null!;
     private AddPlayerComponent addPlayerComponent = null!;
-    private LodestoneComponent lodestoneComponent = null!;
+    private LodestoneServiceComponent _lodestoneServiceComponent = null!;
     private bool isPlayerCacheStale;
     private bool isPlayerCountCacheStale;
     private long playerCacheLastUpdated;
@@ -243,16 +243,16 @@ public class MainPresenter : IMainPresenter
     {
         this.playerComponent = new PlayerComponent(this);
         this.addPlayerComponent = new AddPlayerComponent();
-        this.lodestoneComponent = new LodestoneComponent();
+        this._lodestoneServiceComponent = new LodestoneServiceComponent();
     }
 
     private void BuildViews()
     {
-        this.Combined = new Combined($"PlayerTrack##Combined", this.config, this.playerComponent, this.addPlayerComponent, this.lodestoneComponent, this)
+        this.Combined = new Combined($"PlayerTrack##Combined", this.config, this.playerComponent, this.addPlayerComponent, this._lodestoneServiceComponent, this)
         {
             IsOpen = this.config is { IsWindowCombined: true, PreserveMainWindowState: true },
         };
-        this.PanelView = new PanelView($"PlayerTrack##PanelView", this.config, this.playerComponent, this.addPlayerComponent, this.lodestoneComponent, this)
+        this.PanelView = new PanelView($"PlayerTrack##PanelView", this.config, this.playerComponent, this.addPlayerComponent, this._lodestoneServiceComponent, this)
         {
             IsOpen = this.config is { IsWindowCombined: false, PreserveMainWindowState: true },
         };
