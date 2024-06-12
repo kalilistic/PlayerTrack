@@ -21,8 +21,8 @@ public class LodestoneService : IDisposable
     private const int hourly_refresh_limit = 15;
     private const int processInterval = 60000;
     private const int sequentialFailureLimit = 2;
-    private const int serviceCooldownMs = 3600000;
-    private const long retryInterval = 172800000;
+    private const int serviceCooldownMs = 900000; // 15 minutes
+    private const long retryInterval = 172800000; // 48 hours
     private const string api_uri = "https://api.kal-xiv.net/v2/lodestone";
     private readonly ConcurrentDictionary<int, LodestoneLookup> lodestoneBatchLookups = new();
     private readonly ConcurrentQueue<LodestoneBatchRequest> lodestoneBatchQueue = new();
@@ -190,6 +190,7 @@ public class LodestoneService : IDisposable
         if (forceCooldown || this.serviceSequentialFailureCount > sequentialFailureLimit)
         {
             this.serviceCallAvailableAt = UnixTimestampHelper.CurrentTime() + serviceCooldownMs;
+            DalamudContext.PluginLog.Warning($"Lodestone service is on cooldown until {this.serviceCallAvailableAt}");
         }
 
         throw new HttpRequestException($"Failed response from lodestone request: {response?.StatusCode}");
