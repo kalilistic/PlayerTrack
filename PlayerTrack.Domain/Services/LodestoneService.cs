@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
+using Dalamud.Utility;
 using Newtonsoft.Json;
 using PlayerTrack.Infrastructure;
 using PlayerTrack.Models;
@@ -411,7 +412,7 @@ public class LodestoneService : IDisposable
 
     private void AddRequest(LodestoneLookup lookup)
     {
-        if (string.IsNullOrEmpty(lookup.PlayerName) || lookup.WorldId == 0)
+        if (!lookup.PlayerName.IsValidCharacterName() || lookup.WorldId == 0)
         {
             DalamudContext.PluginLog.Warning($"Invalid lodestone lookup for player {lookup.PlayerName}@{lookup.WorldId}");
             lookup.UpdateLookupAsInvalid();
