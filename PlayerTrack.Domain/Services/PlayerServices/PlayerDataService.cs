@@ -93,7 +93,7 @@ public class PlayerDataService
             }
             catch (Exception ex)
             {
-                DalamudContext.PluginLog.Debug(ex, "PlayerDataService.RecalculatePlayerRankings()");
+                DalamudContext.PluginLog.Verbose(ex, "PlayerDataService.RecalculatePlayerRankings()");
             }
         });
     }

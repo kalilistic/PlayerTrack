@@ -51,7 +51,7 @@ public class LodestoneLookup
     {
         this.FailureCount++;
 
-        if (this.FailureCount < 3 && allowRetry)
+        if (this.FailureCount < 4 && allowRetry)
         {
             this.SetLodestoneStatus(LodestoneStatus.Failed);
         }

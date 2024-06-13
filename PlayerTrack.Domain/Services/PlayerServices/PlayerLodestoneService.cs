@@ -91,7 +91,7 @@ public class PlayerLodestoneService
             {
                 if (!lookup.IsDone)
                 {
-                    DalamudContext.PluginLog.Debug($"Cancelled in-progress lookup for refresh: {lookup.PlayerName}@{lookup.WorldId}");
+                    DalamudContext.PluginLog.Verbose($"Cancelled in-progress lookup for refresh: {lookup.PlayerName}@{lookup.WorldId}");
                     lookup.SetLodestoneStatus(LodestoneStatus.Cancelled);
                     player.LodestoneStatus = LodestoneStatus.Cancelled;
                     var shouldRefresh = UpdatePlayerAndLookup(player, lookup);
@@ -101,7 +101,7 @@ public class PlayerLodestoneService
             
             if (anyShouldRefresh)
             {
-                DalamudContext.PluginLog.Debug("Refreshing all players due to lodestone lookup.");
+                DalamudContext.PluginLog.Verbose("Refreshing all players due to lodestone lookup.");
                 ServiceContext.PlayerDataService.RefreshAllPlayers();
             }
 
@@ -249,11 +249,11 @@ public class PlayerLodestoneService
         {
             if (NameWorldChanged(player, lookup))
             {
-                DalamudContext.PluginLog.Debug($"Player name and world don't match on lodestone lookup, need to update: {player.Name}@{player.WorldId} -> {lookup.UpdatedPlayerName}@{lookup.UpdatedWorldId}");
+                DalamudContext.PluginLog.Verbose($"Player name and world don't match on lodestone lookup, need to update: {player.Name}@{player.WorldId} -> {lookup.UpdatedPlayerName}@{lookup.UpdatedWorldId}");
                 var existingPlayer = getExistingPlayerWithNameWorld(player.Id, lookup.UpdatedPlayerName, lookup.UpdatedWorldId);
                 if (existingPlayer != null)
                 {
-                    DalamudContext.PluginLog.Debug($"Player name and world on lodestone lookup already exist, need to refresh original player: {existingPlayer.Name}@{existingPlayer.WorldId}");
+                    DalamudContext.PluginLog.Verbose($"Player name and world on lodestone lookup already exist, need to refresh original player: {existingPlayer.Name}@{existingPlayer.WorldId}");
                     var prerequisiteLookupId = CreateRefreshLookup(existingPlayer.Id);
                     if (prerequisiteLookupId == 0)
                     {
@@ -263,7 +263,7 @@ public class PlayerLodestoneService
                     }
                     else
                     {
-                        DalamudContext.PluginLog.Debug($"Setting pre-requisite for lookup {lookup.Id} to {prerequisiteLookupId}");
+                        DalamudContext.PluginLog.Verbose($"Setting pre-requisite for lookup {lookup.Id} to {prerequisiteLookupId}");
                         player.LodestoneStatus = LodestoneStatus.Blocked;
                         lookup.SetLodestoneStatus(LodestoneStatus.Blocked);
                         lookup.PrerequisiteLookupId = prerequisiteLookupId;

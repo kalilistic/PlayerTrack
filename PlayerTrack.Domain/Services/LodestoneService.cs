@@ -17,12 +17,12 @@ using Dalamud.DrunkenToad.Helpers;
 
 public class LodestoneService : IDisposable
 {
-    private const int batch_size = 30;
+    private const int batch_size = 100;
     private const int hourly_refresh_limit = 15;
     private const int processInterval = 60000;
     private const int sequentialFailureLimit = 2;
-    private const int serviceCooldownMs = 900000; // 15 minutes
-    private const long retryInterval = 172800000; // 48 hours
+    private const int serviceCooldownMs = 600000; // 10 minutes
+    private const long retryInterval = 129600000; // 36 hours
     private const string api_uri = "https://api.kal-xiv.net/v2/lodestone";
     private readonly ConcurrentDictionary<int, LodestoneLookup> lodestoneBatchLookups = new();
     private readonly ConcurrentQueue<LodestoneBatchRequest> lodestoneBatchQueue = new();
@@ -173,7 +173,7 @@ public class LodestoneService : IDisposable
         }
         catch (Exception ex)
         {
-            DalamudContext.PluginLog.Error(ex, "Failed to process lodestone requests.");
+            DalamudContext.PluginLog.Verbose(ex, "Failed to process lodestone requests.");
         }
         finally
         {
@@ -210,10 +210,10 @@ public class LodestoneService : IDisposable
             DalamudContext.PluginLog.Verbose($"Sending refresh request for player {request.LodestoneId}");
             var response = this.GetRefreshedCharacterAsync(request.LodestoneId).Result;
             var responsePayload = response.Content.ReadAsStringAsync().Result;
-            DalamudContext.PluginLog.Debug($"Lodestone refresh response payload: {responsePayload}");
+            DalamudContext.PluginLog.Verbose($"Lodestone refresh response payload: {responsePayload}");
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                DalamudContext.PluginLog.Error($"Failed to get lodestone refresh response: {response.StatusCode}");
+                DalamudContext.PluginLog.Verbose($"Failed to get lodestone refresh response: {response.StatusCode}");
                 var forceCoolDown = response.StatusCode is HttpStatusCode.BadGateway or HttpStatusCode.TooManyRequests;
                 HandleRequestFailure(response, forceCoolDown);
             }
@@ -286,7 +286,7 @@ public class LodestoneService : IDisposable
         this.serviceSequentialFailureCount = 0;
 
         var responsePayload = response.Content.ReadAsStringAsync().Result;
-        DalamudContext.PluginLog.Debug($"Lodestone batch response payload: {responsePayload}");
+        DalamudContext.PluginLog.Verbose($"Lodestone batch response payload: {responsePayload}");
         var responseObjects = JsonConvert.DeserializeObject<LodestoneResponse[]>(responsePayload);
         if (responseObjects == null)
         {
