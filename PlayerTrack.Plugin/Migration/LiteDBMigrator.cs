@@ -18,6 +18,9 @@ using PlayerTrack.Infrastructure;
 using PlayerTrack.Models;
 using PlayerTrack.Models.Structs;
 
+// ReSharper disable InconsistentNaming
+// ReSharper disable CanSimplifyDictionaryTryGetValueWithGetValueOrDefault
+// ReSharper disable UseCollectionExpression
 namespace PlayerTrack.Migration;
 
 using System.Data;

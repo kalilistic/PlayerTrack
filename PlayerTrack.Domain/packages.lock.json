@@ -2,21 +2,11 @@
   "version": 1,
   "dependencies": {
     "net8.0-windows7.0": {
-      "Dalamud.DrunkenToad": {
-        "type": "Direct",
-        "requested": "[1.9.2, )",
-        "resolved": "1.9.2",
-        "contentHash": "fT7ntQ1swV+U9H9I1TI6hJVXVSKxifzXex9D5EOdxqk3ZoHDwTLaKjKxWBrGOI+NI12UjgYWC7DPW39oJfqIfg==",
-        "dependencies": {
-          "Dalamud.Loc": "1.1.2",
-          "Microsoft.Extensions.DependencyInjection": "7.0.0"
-        }
-      },
       "Dalamud.Loc": {
         "type": "Direct",
-        "requested": "[1.1.2, )",
-        "resolved": "1.1.2",
-        "contentHash": "Sy7ooP1+mGtoCCPltgUNATz3UbnRFihVcDfg9wB2rdsfY5FDfCW/k3jpLZiJZc3xXHyttzwttJeVC3tE3JsEGw=="
+        "requested": "[1.2.1, )",
+        "resolved": "1.2.1",
+        "contentHash": "zOSjsstzBtgyCyjYbvGHoW+VH4APoivJZiWLaCKGecBqCySC3r2TcYhWt1s7xZLxA39SrsScNagFkPnnv4c8aw=="
       },
       "FlexConfig": {
         "type": "Direct",
@@ -511,12 +501,18 @@
           "System.Drawing.Common": "4.7.0"
         }
       },
+      "drunkentoad": {
+        "type": "Project",
+        "dependencies": {
+          "Dalamud.Loc": "[1.2.1, )",
+          "Microsoft.Extensions.DependencyInjection": "[7.0.0, )"
+        }
+      },
       "playertrack.infrastructure": {
         "type": "Project",
         "dependencies": {
           "AutoMapper": "[12.0.1, )",
-          "Dalamud.DrunkenToad": "[1.9.2, )",
-          "Dalamud.Loc": "[1.1.2, )",
+          "Dalamud.Loc": "[1.2.1, )",
           "Dapper": "[2.0.123, )",
           "FlexConfig": "[1.0.0, )",
           "FluentDapperLite": "[0.0.7, )",
@@ -530,9 +526,9 @@
       "playertrack.models": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.9.2, )",
-          "Dalamud.Loc": "[1.1.2, )",
-          "Dapper.Contrib": "[2.0.78, )"
+          "Dalamud.Loc": "[1.2.1, )",
+          "Dapper.Contrib": "[2.0.78, )",
+          "DrunkenToad": "[1.0.0, )"
         }
       }
     }

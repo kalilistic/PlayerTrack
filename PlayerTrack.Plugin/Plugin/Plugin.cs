@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using Dalamud.DrunkenToad.Core;
@@ -18,7 +17,7 @@ using System.Threading.Tasks;
 
 public class Plugin : IDalamudPlugin
 {
-    public Plugin(DalamudPluginInterface pluginInterface)
+    public Plugin(IDalamudPluginInterface pluginInterface)
     {
         if (!DalamudContext.Initialize(pluginInterface)) return;
 

@@ -2,33 +2,17 @@
   "version": 1,
   "dependencies": {
     "net8.0-windows7.0": {
-      "Dalamud.ContextMenu": {
-        "type": "Direct",
-        "requested": "[1.3.1, )",
-        "resolved": "1.3.1",
-        "contentHash": "ptAxut5PiLnzZ4G/KQdHJVcyklC/BF3otHJ7zYVUPiKBjsOCoF0n/6h2jK7e+8ev2Y1yAY3Wtx2GuXLFQgt9Uw=="
-      },
-      "Dalamud.DrunkenToad": {
-        "type": "Direct",
-        "requested": "[1.9.2, )",
-        "resolved": "1.9.2",
-        "contentHash": "fT7ntQ1swV+U9H9I1TI6hJVXVSKxifzXex9D5EOdxqk3ZoHDwTLaKjKxWBrGOI+NI12UjgYWC7DPW39oJfqIfg==",
-        "dependencies": {
-          "Dalamud.Loc": "1.1.2",
-          "Microsoft.Extensions.DependencyInjection": "7.0.0"
-        }
-      },
       "Dalamud.Loc": {
         "type": "Direct",
-        "requested": "[1.1.2, )",
-        "resolved": "1.1.2",
-        "contentHash": "Sy7ooP1+mGtoCCPltgUNATz3UbnRFihVcDfg9wB2rdsfY5FDfCW/k3jpLZiJZc3xXHyttzwttJeVC3tE3JsEGw=="
+        "requested": "[1.2.1, )",
+        "resolved": "1.2.1",
+        "contentHash": "zOSjsstzBtgyCyjYbvGHoW+VH4APoivJZiWLaCKGecBqCySC3r2TcYhWt1s7xZLxA39SrsScNagFkPnnv4c8aw=="
       },
       "DalamudPackager": {
         "type": "Direct",
-        "requested": "[2.1.12, )",
-        "resolved": "2.1.12",
-        "contentHash": "Sc0PVxvgg4NQjcI8n10/VfUQBAS4O+Fw2pZrAqBdRMbthYGeogzu5+xmIGCGmsEZ/ukMOBuAqiNiB5qA3MRalg=="
+        "requested": "[2.1.13, )",
+        "resolved": "2.1.13",
+        "contentHash": "rMN1omGe8536f4xLMvx9NwfvpAc9YFFfeXJ1t4P4PE6Gu8WCIoFliR1sh07hM+bfODmesk/dvMbji7vNI+B/pQ=="
       },
       "LiteHelper": {
         "type": "Direct",
@@ -42,12 +26,6 @@
           "Serilog.Extensions.Logging": "3.1.0",
           "Serilog.Sinks.File": "5.0.0"
         }
-      },
-      "Pilz.Dalamud": {
-        "type": "Direct",
-        "requested": "[0.5.2.1, )",
-        "resolved": "0.5.2.1",
-        "contentHash": "Sy4eMnNwRMCNgiJnsIZ55le1XRe/K9dJfIVn+yLXj7zzUCTN99obCxfEHvHu2OxIP2DiXOaiZjHBwydidv0Y6Q=="
       },
       "AutoMapper": {
         "type": "Transitive",
@@ -561,11 +539,17 @@
           "System.Drawing.Common": "4.7.0"
         }
       },
+      "drunkentoad": {
+        "type": "Project",
+        "dependencies": {
+          "Dalamud.Loc": "[1.2.1, )",
+          "Microsoft.Extensions.DependencyInjection": "[7.0.0, )"
+        }
+      },
       "playertrack.domain": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.9.2, )",
-          "Dalamud.Loc": "[1.1.2, )",
+          "Dalamud.Loc": "[1.2.1, )",
           "FlexConfig": "[1.0.0, )",
           "PlayerTrack.Infrastructure": "[1.0.0, )",
           "PlayerTrack.Models": "[1.0.0, )"
@@ -575,8 +559,7 @@
         "type": "Project",
         "dependencies": {
           "AutoMapper": "[12.0.1, )",
-          "Dalamud.DrunkenToad": "[1.9.2, )",
-          "Dalamud.Loc": "[1.1.2, )",
+          "Dalamud.Loc": "[1.2.1, )",
           "Dapper": "[2.0.123, )",
           "FlexConfig": "[1.0.0, )",
           "FluentDapperLite": "[0.0.7, )",
@@ -590,16 +573,15 @@
       "playertrack.models": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.9.2, )",
-          "Dalamud.Loc": "[1.1.2, )",
-          "Dapper.Contrib": "[2.0.78, )"
+          "Dalamud.Loc": "[1.2.1, )",
+          "Dapper.Contrib": "[2.0.78, )",
+          "DrunkenToad": "[1.0.0, )"
         }
       },
       "playertrack.userinterface": {
         "type": "Project",
         "dependencies": {
-          "Dalamud.DrunkenToad": "[1.9.2, )",
-          "Dalamud.Loc": "[1.1.2, )",
+          "Dalamud.Loc": "[1.2.1, )",
           "FlexConfig": "[1.0.0, )",
           "PlayerTrack.Domain": "[1.0.0, )",
           "PlayerTrack.Models": "[1.0.0, )"

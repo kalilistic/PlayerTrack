@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using PlayerTrack.Domain;
 using PlayerTrack.Models;
 
+// ReSharper disable UseCollectionExpression
+// ReSharper disable RedundantAssignment
+// ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+// ReSharper disable ReplaceWithSingleCallToFirstOrDefault
+// ReSharper disable UnusedVariable
+// ReSharper disable InconsistentNaming
 namespace PlayerTrack.API;
 
 using Dalamud.DrunkenToad.Core;
 
 /// <inheritdoc cref="IPlayerTrackAPI" />
+[SuppressMessage("Performance", "CA1854:Prefer the \'IDictionary.TryGetValue(TKey, out TValue)\' method")]
 public class PlayerTrackAPI : IPlayerTrackAPI
 {
     private readonly bool initialized;
@@ -56,7 +64,7 @@ public class PlayerTrackAPI : IPlayerTrackAPI
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetPlayerNameWorldHistories() (count: {players.Length})");
         this.CheckInitialized();
-        List<Player> playerObjList = new();
+        List<Player> playerObjList = new ();
         playerObjList = ServiceContext.PlayerDataService.GetAllPlayers().Where(x => players.ToList().Contains((x.Name, x.WorldId))).ToList();
         var playerHistories = PlayerChangeService.GetPlayerNameWorldHistories(playerObjList.Select(x => x.Id).ToArray());
         if (playerHistories == null) 

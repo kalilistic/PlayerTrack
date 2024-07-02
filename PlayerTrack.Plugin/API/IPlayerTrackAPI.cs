@@ -1,4 +1,5 @@
-﻿namespace PlayerTrack.API;
+﻿// ReSharper disable InconsistentNaming
+namespace PlayerTrack.API;
 
 /// <summary>
 /// Interface to communicate with PlayerTrack.

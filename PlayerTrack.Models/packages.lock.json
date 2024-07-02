@@ -2,21 +2,11 @@
   "version": 1,
   "dependencies": {
     "net8.0-windows7.0": {
-      "Dalamud.DrunkenToad": {
-        "type": "Direct",
-        "requested": "[1.9.2, )",
-        "resolved": "1.9.2",
-        "contentHash": "fT7ntQ1swV+U9H9I1TI6hJVXVSKxifzXex9D5EOdxqk3ZoHDwTLaKjKxWBrGOI+NI12UjgYWC7DPW39oJfqIfg==",
-        "dependencies": {
-          "Dalamud.Loc": "1.1.2",
-          "Microsoft.Extensions.DependencyInjection": "7.0.0"
-        }
-      },
       "Dalamud.Loc": {
         "type": "Direct",
-        "requested": "[1.1.2, )",
-        "resolved": "1.1.2",
-        "contentHash": "Sy7ooP1+mGtoCCPltgUNATz3UbnRFihVcDfg9wB2rdsfY5FDfCW/k3jpLZiJZc3xXHyttzwttJeVC3tE3JsEGw=="
+        "requested": "[1.2.1, )",
+        "resolved": "1.2.1",
+        "contentHash": "zOSjsstzBtgyCyjYbvGHoW+VH4APoivJZiWLaCKGecBqCySC3r2TcYhWt1s7xZLxA39SrsScNagFkPnnv4c8aw=="
       },
       "Dapper.Contrib": {
         "type": "Direct",
@@ -44,6 +34,13 @@
         "type": "Transitive",
         "resolved": "7.0.0",
         "contentHash": "h3j/QfmFN4S0w4C2A6X7arXij/M/OVw3uQHSOFxnND4DyAzO1F9eMX7Eti7lU/OkSthEE0WzRsfT/Dmx86jzCw=="
+      },
+      "drunkentoad": {
+        "type": "Project",
+        "dependencies": {
+          "Dalamud.Loc": "[1.2.1, )",
+          "Microsoft.Extensions.DependencyInjection": "[7.0.0, )"
+        }
       }
     }
   }

@@ -3,6 +3,7 @@
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 
+// ReSharper disable InconsistentNaming
 namespace PlayerTrack.API;
 
 using Dalamud.DrunkenToad.Core;
@@ -62,7 +63,7 @@ public class PlayerTrackProvider
     /// </summary>
     /// <param name="pluginInterface">plugin interface.</param>
     /// <param name="api">plugin api.</param>
-    public PlayerTrackProvider(DalamudPluginInterface pluginInterface, IPlayerTrackAPI api)
+    public PlayerTrackProvider(IDalamudPluginInterface pluginInterface, IPlayerTrackAPI api)
     {
         DalamudContext.PluginLog.Verbose("Entering PlayerTrackProvider");
         this.API = api;

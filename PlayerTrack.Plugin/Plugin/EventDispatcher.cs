@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Core.Models;
 using Dalamud.DrunkenToad.Extensions;
-using Newtonsoft.Json;
 using PlayerTrack.Domain;
 using PlayerTrack.Models;
 
