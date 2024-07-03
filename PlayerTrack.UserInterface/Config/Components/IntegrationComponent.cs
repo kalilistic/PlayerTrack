@@ -31,14 +31,6 @@ public class IntegrationComponent : ConfigViewComponent
 
     private void DrawLodestoneTab()
     {
-        ImGuiHelpers.ScaledDummy(1f);
-        var lodestoneEnableLookup = this.config.LodestoneEnableLookup;
-        if (ToadGui.Checkbox("EnableLodestoneLookup", ref lodestoneEnableLookup))
-        {
-            this.config.LodestoneEnableLookup = lodestoneEnableLookup;
-            ServiceContext.ConfigService.SaveConfig(this.config);
-        }
-        
         var lodestoneLocale = this.config.LodestoneLocale;
         if (ToadGui.Combo("LodestoneLocale", ref lodestoneLocale, 60))
         {

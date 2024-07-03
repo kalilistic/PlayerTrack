@@ -54,13 +54,6 @@ public class PlayerActionComponent : ViewComponent
             this.presenter.HidePanel();
         }
         
-        if (LocGui.Button("RefreshLodestone", buttonSize))
-        {
-            PlayerLodestoneService.CreateRefreshLookup(player.Id);
-            this.presenter.ClosePlayer();
-            this.presenter.HidePanel();
-        }
-        
         if (LocGui.Button("DeleteHistory", buttonSize))
         {
             ServiceContext.PlayerDataService.DeleteHistory(player.Id);

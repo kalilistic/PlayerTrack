@@ -15,13 +15,7 @@ public class PlayerView
     public string FreeCompany { get; set; } = null!;
 
     public uint LodestoneId { get; set; }
-
-    public string Lodestone { get; set; } = null!;
-
-    public Vector4 LodestoneColor { get; set; }
-
-    public LodestoneStatus LodestoneStatus { get; set; }
-
+    
     public string FirstSeen { get; set; } = null!;
 
     public string LastSeen { get; set; } = null!;

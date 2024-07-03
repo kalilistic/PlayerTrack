@@ -151,7 +151,7 @@ public class DataComponent : ConfigViewComponent
             return;
         }
 
-        this.sqlResult = RepositoryContext.ExecuteSQLQuery(this.sqlQuery);
+        this.sqlResult = RepositoryContext.ExecuteSqlQuery(this.sqlQuery);
         this.sqlResultDisplay = this.sqlResult.Length > 1000 ? this.sqlResult[..1000] : this.sqlResult;
     }
 

@@ -24,8 +24,6 @@ public static class ServiceContext
 
     public static PlayerCategoryService PlayerCategoryService { get; set; } = null!;
 
-    public static PlayerLodestoneService PlayerLodestoneService { get; set; } = null!;
-
     public static PlayerTagService PlayerTagService { get; set; } = null!;
 
     public static PlayerChangeService PlayerChangeService { get; set; } = null!;
@@ -59,7 +57,6 @@ public static class ServiceContext
         EncounterService = new EncounterService();
         PlayerNameplateService = new PlayerNameplateService();
         PlayerCategoryService = new PlayerCategoryService();
-        PlayerLodestoneService = new PlayerLodestoneService();
         PlayerTagService = new PlayerTagService();
         PlayerChangeService = new PlayerChangeService();
         PlayerCacheService = new PlayerCacheService();
@@ -82,7 +79,6 @@ public static class ServiceContext
             PlayerCacheService.Dispose();
             PlayerProcessService.Dispose();
             EncounterService.Dispose();
-            LodestoneService.Dispose();
             VisibilityService.Dispose();
         }
         catch (Exception)

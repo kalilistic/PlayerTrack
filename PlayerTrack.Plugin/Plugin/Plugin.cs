@@ -45,7 +45,6 @@ public class Plugin : IDalamudPlugin
         try
         {
             PluginInstanceLock.ReleaseLock();
-            ServiceContext.LodestoneService.Stop();
             this.PlayerTrackProvider?.Dispose();
             LiteDBMigrator.Dispose();
             CommandHandler.Dispose();
@@ -105,7 +104,5 @@ public class Plugin : IDalamudPlugin
         DalamudContext.PlayerEventDispatcher.Start();
         DalamudContext.SocialListHandler.Start();
         this.PlayerTrackProvider = new PlayerTrackProvider(DalamudContext.PluginInterface, new PlayerTrackAPI());
-        PlayerProcessService.CheckForDuplicates();
-        ServiceContext.LodestoneService.Start(PluginInstanceLock.AcquireLock());
     });
 }

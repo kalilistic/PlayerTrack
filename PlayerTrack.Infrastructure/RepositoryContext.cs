@@ -21,8 +21,6 @@ public static class RepositoryContext
 
     public static EncounterRepository EncounterRepository { get; set; } = null!;
 
-    public static LodestoneLookupRepository LodestoneRepository { get; set; } = null!;
-
     public static PlayerRepository PlayerRepository { get; set; } = null!;
 
     public static ConfigRepository ConfigRepository { get; set; } = null!;
@@ -60,7 +58,6 @@ public static class RepositoryContext
         BackupRepository = new BackupRepository(Database, Mapper);
         CategoryRepository = new CategoryRepository(Database, Mapper);
         EncounterRepository = new EncounterRepository(Database, Mapper);
-        LodestoneRepository = new LodestoneLookupRepository(Database, Mapper);
         PlayerRepository = new PlayerRepository(Database, Mapper);
         ConfigRepository = new ConfigRepository(Database, Mapper);
         PlayerEncounterRepository = new PlayerEncounterRepository(Database, Mapper);
@@ -121,7 +118,7 @@ public static class RepositoryContext
         DalamudContext.PluginLog.Verbose("Exiting RepositoryContext.RunMaintenance()");
     }
 
-    public static string ExecuteSQLQuery(string sql)
+    public static string ExecuteSqlQuery(string sql)
     {
         DalamudContext.PluginLog.Debug($"Executing SQL query: {sql}.");
         try
@@ -162,7 +159,6 @@ public static class RepositoryContext
             cfg.AddProfile<BackupMappingProfile>();
             cfg.AddProfile<CategoryMappingProfile>();
             cfg.AddProfile<EncounterMappingProfile>();
-            cfg.AddProfile<LodestoneLookupMappingProfile>();
             cfg.AddProfile<PlayerCustomizeHistoryMappingProfile>();
             cfg.AddProfile<PlayerEncounterMappingProfile>();
             cfg.AddProfile<PlayerMappingProfile>();

@@ -86,9 +86,8 @@ public class PlayerSummaryComponent : ViewComponent
         this.DrawLastSeen(player);
         this.DrawFreeCompany(player);
         this.DrawLastLocation(player);
-        this.DrawLodestone(player);
-        this.DrawSeenCount(player);
         this.DrawAppearance(player);
+        this.DrawSeenCount(player);
         this.DrawCategoryTagHeadings();
         this.DrawCategoryTagAssignment(player);
         this.DrawCategoryTagAssignments(player);
@@ -150,50 +149,6 @@ public class PlayerSummaryComponent : ViewComponent
         LocGui.Text("SeenCount");
         ImGuiHelpers.ScaledRelativeSameLine(this.currentOffsets[2]);
         LocGui.Text(player.SeenCount);
-    }
-
-    private void DrawLodestone(PlayerView player)
-    {
-        LocGui.Text("Lodestone");
-        ImGuiHelpers.ScaledRelativeSameLine(this.currentOffsets[0]);
-        if (player.LodestoneStatus != LodestoneStatus.Banned && player.LodestoneStatus != LodestoneStatus.Unavailable)
-        {
-            LocGui.TextColored(player.Lodestone, player.LodestoneColor);
-            if (player.LodestoneStatus == LodestoneStatus.Verified)
-            {
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-                }
-
-                if (ImGui.IsItemClicked())
-                {
-                    PlayerLodestoneService.OpenLodestoneProfile(player.LodestoneId);
-                }
-            }
-        }
-        else
-        {
-            ImGui.BeginGroup();
-            LocGui.TextColored(player.Lodestone, player.LodestoneColor);
-            ImGui.SameLine();
-            ImGui.PushFont(UiBuilder.IconFont);
-            ImGui.TextColored(player.LodestoneColor, FontAwesomeIcon.Redo.ToIconString());
-            ImGui.PopFont();
-            ImGui.EndGroup();
-            if (ImGui.IsItemHovered())
-            {
-                ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
-            }
-
-            if (ImGui.IsItemClicked())
-            {
-                player.LodestoneStatus = LodestoneStatus.Unverified;
-                player.Lodestone = ServiceContext.Localization.GetString(player.LodestoneStatus.ToString());
-                player.LodestoneColor = ColorHelper.GetColorByStatus(player.LodestoneStatus);
-                PlayerLodestoneService.ResetLodestone(player.Id);
-            }
-        }
     }
 
     private void DrawLastLocation(PlayerView player)

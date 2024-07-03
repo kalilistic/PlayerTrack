@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using Dalamud.DrunkenToad.Core;
-using Dalamud.Interface.Colors;
 using PlayerTrack.Domain;
 using PlayerTrack.Models;
 using PlayerTrack.Models.Structs;
@@ -28,9 +26,6 @@ public static class PlayerViewMapper
             HomeWorld = GetHomeWorld(player.WorldId),
             FreeCompany = GetFreeCompany(player.FreeCompany),
             LodestoneId = player.LodestoneId,
-            Lodestone = ServiceContext.Localization.GetString(player.LodestoneStatus.ToString()),
-            LodestoneColor = ColorHelper.GetColorByStatus(player.LodestoneStatus),
-            LodestoneStatus = player.LodestoneStatus,
             Appearance = GetAppearance(player.Customize),
             FirstSeen = player.SeenCount != 0 && player.Created != 0 ? player.Created.ToTimeSpan() : na,
             LastSeen = player.SeenCount != 0 && player.LastSeen != 0 ? player.LastSeen.ToTimeSpan() : na,

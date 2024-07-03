@@ -15,12 +15,12 @@ public class PanelView : PlayerTrackView
     private readonly IMainPresenter presenter;
     private readonly PanelComponent panelComponent;
 
-    public PanelView(string name, PluginConfig config, PlayerComponent playerComponent, AddPlayerComponent addPlayerComponent, LodestoneServiceComponent lodestoneServiceComponent, IMainPresenter presenter, ImGuiWindowFlags flags = ImGuiWindowFlags.None)
+    public PanelView(string name, PluginConfig config, PlayerComponent playerComponent, AddPlayerComponent addPlayerComponent, IMainPresenter presenter, ImGuiWindowFlags flags = ImGuiWindowFlags.None)
         : base(name, config, flags)
     {
         this.Size = new Vector2(730f, 380f);
         this.presenter = presenter;
-        this.panelComponent = new PanelComponent(playerComponent, addPlayerComponent, lodestoneServiceComponent);
+        this.panelComponent = new PanelComponent(playerComponent, addPlayerComponent);
     }
 
     public override bool DrawConditions()

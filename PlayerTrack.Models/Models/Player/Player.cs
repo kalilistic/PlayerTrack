@@ -81,43 +81,5 @@ public class Player
         return this.GetHashCode() == player.GetHashCode();
     }
 
-    public void Merge(Player player)
-    {
-        // override
-        this.Key = player.Key;
-        this.Name = player.Name;
-        this.WorldId = player.WorldId;
-        this.PrimaryCategoryId = player.PrimaryCategoryId;
-        this.PreviousNames = player.PreviousNames;
-        this.PreviousWorlds = player.PreviousWorlds;
-        this.PlayerConfig = player.PlayerConfig;
-        this.AssignedTags = player.AssignedTags;
-        this.AssignedCategories = player.AssignedCategories;
-        
-        // combine
-        this.SeenCount += player.SeenCount;
-        this.Notes = (string.IsNullOrEmpty(this.Notes) ? "" : this.Notes + " ") + (string.IsNullOrEmpty(player.Notes) ? "" : player.Notes);
-        
-        // true if either is true
-        this.IsCurrent = player.IsCurrent || this.IsCurrent;
-        this.IsRecent = player.IsRecent || this.IsRecent;
-        
-        // use the most recent timestamp
-        this.LastAlertSent = Math.Max(this.LastAlertSent, player.LastAlertSent);
-        this.LastSeen = Math.Max(this.LastSeen, player.LastSeen);
-        
-        // use from latest player if set
-        this.Customize = player.Customize?.Length > 0 ? player.Customize : this.Customize;
-        this.LastTerritoryType = player.LastTerritoryType != 0 ? player.LastTerritoryType : this.LastTerritoryType;
-        this.FreeCompany = player.FreeCompany.Key != FreeCompanyState.Unknown ? player.FreeCompany : this.FreeCompany;
-        this.ObjectId = player.ObjectId != 0 ? player.ObjectId : this.ObjectId;
-        if (this.LodestoneStatus != LodestoneStatus.Verified)
-        {
-            this.LodestoneId = player.LodestoneId;
-            this.LodestoneStatus = player.LodestoneStatus;
-            this.LodestoneVerifiedOn = player.LodestoneVerifiedOn;
-        }
-    }
-
     public List<PlayerConfig> GetCategoryPlayerConfigs() => this.AssignedCategories.OrderBy(cat => cat.Rank).Select(cat => cat.PlayerConfig).ToList();
 }

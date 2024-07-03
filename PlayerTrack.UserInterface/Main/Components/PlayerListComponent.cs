@@ -11,6 +11,7 @@ using PlayerTrack.Models;
 using PlayerTrack.UserInterface.Components;
 using PlayerTrack.UserInterface.Main.Presenters;
 
+// ReSharper disable InconsistentNaming
 namespace PlayerTrack.UserInterface.Main.Components;
 
 using Dalamud.DrunkenToad.Helpers;
@@ -181,11 +182,6 @@ public class PlayerListComponent : ViewComponent
             {
                 this.presenter.TogglePanel(PanelType.AddPlayer);
             }
-            
-            if (LocGui.MenuItem("OpenLodestoneService"))
-            {
-                this.presenter.TogglePanel(PanelType.Lodestone);
-            }
 
             if (LocGui.MenuItem("OpenSettings"))
             {
@@ -270,12 +266,9 @@ public class PlayerListComponent : ViewComponent
                 }
             }
 
-            if (player.LodestoneStatus == LodestoneStatus.Verified)
+            if (LocGui.MenuItem("OpenLodestone"))
             {
-                if (LocGui.MenuItem("OpenLodestone"))
-                {
-                    PlayerLodestoneService.OpenLodestoneProfile(player.LodestoneId);
-                }
+                PlayerLodestoneService.OpenLodestoneProfile(player.LodestoneId);
             }
 
             // sub menu for selecting category

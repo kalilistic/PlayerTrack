@@ -4,15 +4,10 @@ namespace PlayerTrack.Domain;
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Common;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Core.Models;
 using Dalamud.DrunkenToad.Helpers;
-
-using Infrastructure;
 using Models;
 
 public class PlayerProcessService
@@ -65,49 +60,7 @@ public class PlayerProcessService
             DalamudContext.PluginLog.Error(ex, "Failed to reconcile current players.");
         }
     }
-
-    public static void HandleDuplicatePlayers(List<Player> players)
-    {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerMergeService.HandleDuplicatePlayers(): {players.Count}");
-        if (players.Count < 2)
-        {
-            return;
-        }
-
-        var sortedPlayers = new List<Player>(
-            players.OrderBy(p => p.LodestoneVerifiedOn)
-                .ThenBy(p => p.Created)
-                .ThenBy(p => p.Id));
-        var oldestPlayer = sortedPlayers[0];
-        var newestPlayers = sortedPlayers.Skip(1).ToList();
-
-        foreach (var newPlayer in newestPlayers)
-        {
-            ServiceContext.PlayerDataService.MergePlayers(oldestPlayer, newPlayer.Id);
-        }
-    }
-
-    public static void CheckForDuplicates() => Task.Run(() =>
-    {
-        DalamudContext.PluginLog.Verbose("Entering PlayerMergeService.CheckForDuplicates()");
-        var allPlayers = ServiceContext.PlayerDataService.GetAllPlayers();
-        var groupedPlayers = allPlayers.Where(p => p.LodestoneId > 0)
-            .GroupBy(p => p.LodestoneId);
-
-        foreach (var group in groupedPlayers)
-        {
-            HandleDuplicatePlayers(group.ToList());
-        }
-    });
-
-    public static void CheckForDuplicates(Player player) => Task.Run(() =>
-    {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerMergeService.CheckForDuplicates(): {player.Id}");
-        if (player.LodestoneId <= 0) return;
-        var players = RepositoryContext.PlayerRepository.GetPlayersByLodestoneId(player.LodestoneId) ?? new List<Player>();
-        HandleDuplicatePlayers(players);
-    });
-
+    
     public static void CreateNewPlayer(string name, uint worldId, ulong contentId = 0)
     {
         var key = PlayerKeyBuilder.Build(name, worldId);

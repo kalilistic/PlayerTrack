@@ -144,22 +144,6 @@ public class PlayerRepository : BaseRepository
         }
     }
 
-    public List<Player>? GetPlayersByLodestoneId(uint lodestoneId)
-    {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.GetPlayersByLodestoneId(): {lodestoneId}");
-        try
-        {
-            const string sql = @"SELECT * FROM players WHERE lodestone_id = @lodestone_id";
-            var playerDTOs = this.Connection.Query<PlayerDTO>(sql, new { lodestone_id = lodestoneId }).ToList();
-            return playerDTOs.Select(dto => this.Mapper.Map<Player>(dto)).ToList();
-        }
-        catch (Exception ex)
-        {
-            DalamudContext.PluginLog.Error(ex, $"Failed to fetch players by LodestoneID {lodestoneId}.");
-            return null;
-        }
-    }
-
     public Player? GetPlayerByObjectId(uint objectId)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerRepository.GetPlayerByObjectId(): {objectId}");
