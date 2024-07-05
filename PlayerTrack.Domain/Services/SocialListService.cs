@@ -19,8 +19,8 @@ public class SocialListService
         DalamudContext.PluginLog.Verbose($"Entering SocialListService.HandleMembersList: {listType}");
         
         // get content id
-        var contentId = DalamudContext.ClientStateHandler.LocalContentId;
-        if (contentId == 0)
+        var localPlayerContentId = DalamudContext.ClientStateHandler.LocalContentId;
+        if (localPlayerContentId == 0)
         {
             DalamudContext.PluginLog.Warning("HandleMembersList: LocalContentId is 0");
             return;
@@ -44,10 +44,10 @@ public class SocialListService
         
         // retrieve or create social list
         // use dc for cwls since you have a different set per dc
-        DalamudContext.PluginLog.Verbose($"HandleMembersList: Retrieving social list for {contentId} {listType} {listNumber}");
+        DalamudContext.PluginLog.Verbose($"HandleMembersList: Retrieving social list for {localPlayerContentId} {listType} {listNumber}");
         var socialList = listType != SocialListType.CrossWorldLinkShell ? 
-            RepositoryContext.SocialListRepository.GetSocialList(contentId, listType, listNumber) : 
-            RepositoryContext.SocialListRepository.GetSocialList(contentId, listType, listNumber, dataCenter);
+            RepositoryContext.SocialListRepository.GetSocialList(localPlayerContentId, listType, listNumber) : 
+            RepositoryContext.SocialListRepository.GetSocialList(localPlayerContentId, listType, listNumber, dataCenter);
         
         // check if list already exists
         if (socialList == null)
@@ -55,7 +55,7 @@ public class SocialListService
             // create new list
             socialList = new SocialList
             {
-                ContentId = contentId,
+                ContentId = localPlayerContentId,
                 ListType = listType,
             };
             
@@ -102,7 +102,7 @@ public class SocialListService
         var existingMembers = RepositoryContext.SocialListMemberRepository.GetSocialListMembers(socialList.Id);
         
         // remove self
-        toadMembers.RemoveAll(x => x.ContentId == contentId);
+        toadMembers.RemoveAll(x => x.ContentId == localPlayerContentId);
         
         // loop through incoming list
         DalamudContext.PluginLog.Verbose($"HandleMembersList: Looping through {toadMembers.Count} members");
@@ -159,7 +159,7 @@ public class SocialListService
         DalamudContext.PluginLog.Verbose($"HandleMembersList: Removing members from deleted pages");
         if (listType == SocialListType.FreeCompany)
         {
-            var fcList = RepositoryContext.SocialListRepository.GetSocialList(contentId, SocialListType.FreeCompany);
+            var fcList = RepositoryContext.SocialListRepository.GetSocialList(localPlayerContentId, SocialListType.FreeCompany);
             if (fcList != null)
             {
                 var fcMembers = RepositoryContext.SocialListMemberRepository.GetSocialListMembers(fcList.Id);
@@ -177,8 +177,8 @@ public class SocialListService
         // get fresh copy
         DalamudContext.PluginLog.Verbose($"HandleMembersList: Retrieving fresh copy of social list");
         socialList = listType != SocialListType.CrossWorldLinkShell ? 
-            RepositoryContext.SocialListRepository.GetSocialList(contentId, listType, listNumber) : 
-            RepositoryContext.SocialListRepository.GetSocialList(contentId, listType, listNumber, dataCenter);
+            RepositoryContext.SocialListRepository.GetSocialList(localPlayerContentId, listType, listNumber) : 
+            RepositoryContext.SocialListRepository.GetSocialList(localPlayerContentId, listType, listNumber, dataCenter);
         
         if (socialList == null)
         {
@@ -226,7 +226,7 @@ public class SocialListService
         {
             if (syncedCategory == null)
             {
-                ServiceContext.CategoryService.CreateCategory(GetCategoryName(contentId, listType, listNumber), socialList.Id);
+                ServiceContext.CategoryService.CreateCategory(GetCategoryName(localPlayerContentId, listType, listNumber), socialList.Id);
                 syncedCategory = ServiceContext.CategoryService.GetSyncedCategory(socialList.Id);
 
                 if (syncedCategory == null)
@@ -248,13 +248,6 @@ public class SocialListService
         if (socialList.DefaultCategoryId != 0)
         {
             categoryIds.Add(socialList.DefaultCategoryId);
-        }
-        
-        // add content id to player
-        DalamudContext.PluginLog.Verbose($"HandleMembersList: Adding content id to players");
-        foreach (var player in players)
-        {
-            player.ContentId = contentId;
         }
         
         // assign categories
