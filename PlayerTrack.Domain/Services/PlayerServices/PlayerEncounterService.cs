@@ -26,7 +26,7 @@ public class PlayerEncounterService
 
     public static int CreatePlayerEncounter(ToadPlayer toadPlayer, Player player)
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerEncounterService.CreatePlayerEncounter(): {toadPlayer.Id}, {player.Id}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerEncounterService.CreatePlayerEncounter(): {toadPlayer.ContentId}, {player.Id}");
         if (player.Id == 0)
         {
             DalamudContext.PluginLog.Warning("Player Id is 0, cannot create player encounter.");

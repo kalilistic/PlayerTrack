@@ -76,10 +76,10 @@ public class PlayerProcessService
         ServiceContext.PlayerDataService.AddPlayer(player);
     }
 
-    public void RemoveCurrentPlayer(uint playerObjectId)
+    public void RemoveCurrentPlayer(ulong playerContentId)
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerProcessService.RemoveCurrentPlayer(): {playerObjectId}");
-        var player = ServiceContext.PlayerDataService.GetPlayer(playerObjectId);
+        DalamudContext.PluginLog.Verbose($"Entering PlayerProcessService.RemoveCurrentPlayer(): {playerContentId}");
+        var player = ServiceContext.PlayerDataService.GetPlayer(playerContentId);
         if (player == null)
         {
             DalamudContext.PluginLog.Verbose("Player not found.");
@@ -106,7 +106,7 @@ public class PlayerProcessService
 
     public void AddOrUpdatePlayer(ToadPlayer toadPlayer, bool isCurrent = true, bool isUserRequest = false)
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerProcessService.AddOrUpdatePlayer(): {toadPlayer.Id}, {toadPlayer.Name}, {toadPlayer.HomeWorld}, {isUserRequest}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerProcessService.AddOrUpdatePlayer(): {toadPlayer.ContentId}, {toadPlayer.Name}, {toadPlayer.HomeWorld}, {isUserRequest}");
         var enc = ServiceContext.EncounterService.GetCurrentEncounter();
 
         if (enc == null)
@@ -175,7 +175,7 @@ public class PlayerProcessService
         var player = new Player
         {
             Key = key,
-            ObjectId = toadPlayer.Id,
+            ObjectId = toadPlayer.EntityId,
             Name = toadPlayer.Name,
             WorldId = toadPlayer.HomeWorld,
             PrimaryCategoryId = categoryId,
@@ -205,7 +205,7 @@ public class PlayerProcessService
 
             player.Customize = toadPlayer.Customize;
             player.FreeCompany = PlayerFCHelper.CheckFreeCompany(toadPlayer.CompanyTag, player.FreeCompany, loc.InContent());
-            player.ObjectId = toadPlayer.Id;
+            player.ObjectId = toadPlayer.EntityId;
             player.SeenCount += 1;
             player.LastTerritoryType = loc.TerritoryId;
             player.LastSeen = UnixTimestampHelper.CurrentTime();

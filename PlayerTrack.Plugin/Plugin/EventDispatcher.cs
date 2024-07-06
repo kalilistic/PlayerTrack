@@ -93,12 +93,12 @@ public static class EventDispatcher
         }
     });
 
-    private static void OnRemovePlayers(List<uint> playerObjectIds) => EventChannel.Writer.TryWrite(() =>
+    private static void OnRemovePlayers(List<ulong> playerContentIds) => EventChannel.Writer.TryWrite(() =>
     {
-        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnRemovePlayers(): {playerObjectIds.Count}");
-        foreach (var playerObjectId in playerObjectIds)
+        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnRemovePlayers(): {playerContentIds.Count}");
+        foreach (var playerContentId in playerContentIds)
         {
-            ServiceContext.PlayerProcessService.RemoveCurrentPlayer(playerObjectId);
+            ServiceContext.PlayerProcessService.RemoveCurrentPlayer(playerContentId);
         }
     });
 
