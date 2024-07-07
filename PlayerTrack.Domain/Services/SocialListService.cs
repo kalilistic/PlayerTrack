@@ -192,18 +192,14 @@ public class SocialListService
         var players = new List<Player>();
         foreach (var socialListMember in socialListMembers)
         {
-            var isUnableToRetrieve = string.IsNullOrEmpty(socialListMember.Name);
-            var player = !isUnableToRetrieve ? 
-                ServiceContext.PlayerDataService.GetPlayer(socialListMember.Key) : 
-                ServiceContext.PlayerDataService.GetPlayer(socialListMember.ContentId);
-
+            var player = ServiceContext.PlayerDataService.GetPlayer(socialListMember.ContentId, socialListMember.Name, socialListMember.WorldId);
             if (player == null)
             {
                 if (socialList.AddPlayers)
                 {
-                    if (isUnableToRetrieve) continue;
+                    if (string.IsNullOrEmpty(socialListMember.Name)) continue;
                     PlayerProcessService.CreateNewPlayer(socialListMember.Name, socialListMember.WorldId, socialListMember.ContentId);
-                    player = ServiceContext.PlayerDataService.GetPlayer(socialListMember.Key);
+                    player = ServiceContext.PlayerDataService.GetPlayer(socialListMember.ContentId, socialListMember.Name, socialListMember.WorldId);
                 }
             }
             else if (player.ContentId == 0)

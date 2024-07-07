@@ -205,7 +205,7 @@ public class VisibilityService
                 if (players.All(p => p.Key != key))
                 {
                     PlayerProcessService.CreateNewPlayer(value.Name, value.HomeWorldId);
-                    var player = ServiceContext.PlayerDataService.GetPlayer(key);
+                    var player = ServiceContext.PlayerDataService.GetPlayer(value.Name, value.HomeWorldId);
                     if (player == null)
                     {
                         DalamudContext.PluginLog.Warning($"Failed to create voided player from visibility, key: {key}");
@@ -232,7 +232,7 @@ public class VisibilityService
                 if (players.All(p => p.Key != key))
                 {
                     PlayerProcessService.CreateNewPlayer(value.Name, value.HomeWorldId);
-                    var player = ServiceContext.PlayerDataService.GetPlayer(key);
+                    var player = ServiceContext.PlayerDataService.GetPlayer(value.Name, value.HomeWorldId);
                     if (player == null)
                     {
                         DalamudContext.PluginLog.Warning($"Failed to create whitelisted player from visibility, key: {key}");

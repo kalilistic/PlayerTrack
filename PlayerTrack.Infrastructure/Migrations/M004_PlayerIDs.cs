@@ -27,6 +27,10 @@ public class M004_ContentId: Migration
             SET content_id = 0
             WHERE content_id != 0
         ");
+        
+        // recreate key index as non-unique
+        this.Execute.Sql("DROP INDEX IF EXISTS idx_players_key");
+        this.Execute.Sql("CREATE INDEX idx_players_key ON players (key ASC)");
     }
     
     public override void Down()

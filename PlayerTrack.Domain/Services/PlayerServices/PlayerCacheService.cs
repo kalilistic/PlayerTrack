@@ -187,12 +187,12 @@ public class PlayerCacheService
         }
     }
 
-    public Player? GetPlayer(string name, uint worldId)
+    public List<Player> GetPlayers(string name, uint worldId)
     {
         this.setLock.EnterReadLock();
         try
         {
-            return this.playerCache.FindFirst(p => p.Name == name && p.WorldId == worldId);
+            return this.playerCache.Get(p => p.Name == name && p.WorldId == worldId);
         }
         finally
         {

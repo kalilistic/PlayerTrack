@@ -190,10 +190,10 @@ public class PlayerRepository : BaseRepository
         }
     }
 
-    public int CreatePlayer(Player player, bool setTimestamps = true)
+    public int CreatePlayer(Player player, ulong contentId, bool setTimestamps = true)
     {
-        const string checkExistenceSql = "SELECT id FROM players WHERE key = @key";
-        var existingId = this.Connection.ExecuteScalar<int?>(checkExistenceSql, new { key = player.Key });
+        const string checkExistenceSql = "SELECT id FROM players WHERE key = @key AND content_id = @content_id";
+        var existingId = this.Connection.ExecuteScalar<int?>(checkExistenceSql, new { key = player.Key, content_id = contentId });
 
         if (existingId.HasValue)
         {

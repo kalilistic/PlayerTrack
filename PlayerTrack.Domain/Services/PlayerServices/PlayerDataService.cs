@@ -10,7 +10,6 @@ using System;
 using System.Threading.Tasks;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Helpers;
-using Newtonsoft.Json;
 
 public class PlayerDataService
 {
@@ -18,20 +17,43 @@ public class PlayerDataService
     private const long NinetyDaysInMilliseconds = 7776000000;
     private const int MaxBatchSize = 500;
 
-    public Player? GetPlayer(int playerId) => ServiceContext.PlayerCacheService.GetPlayer(playerId);
-
-    public Player? GetPlayer(string name, uint worldId) => ServiceContext.PlayerCacheService.GetPlayer(name, worldId);
-
-    public Player? GetPlayer(string playerKey) => ServiceContext.PlayerCacheService.GetPlayer(playerKey);
-
-    public Player? GetPlayer(uint playerObjectId) => ServiceContext.PlayerCacheService.GetPlayer(playerObjectId);
-    
-    public Player? GetPlayer(ulong contentId) => ServiceContext.PlayerCacheService.GetPlayer(contentId);
-    
-    public IEnumerable<Player> GetPlayers(Func<Player, bool> filter) => ServiceContext.PlayerCacheService.GetPlayers(filter);
-    
     public IEnumerable<Player> GetAllPlayers() => ServiceContext.PlayerCacheService.GetPlayers();
+    
+    public Player? GetPlayer(int playerId) => ServiceContext.PlayerCacheService.GetPlayer(playerId);
+    
+    public Player? GetPlayer(ulong contentId)
+    {
+        return contentId == 0 ? null : ServiceContext.PlayerCacheService.GetPlayer(contentId);
+    }
 
+    public Player? GetPlayer(string name, uint worldId)
+    {
+        var players = ServiceContext.PlayerCacheService.GetPlayers(name, worldId);
+        return players.Count switch
+        {
+            0 => null,
+            1 => players.First(),
+            _ => players.OrderByDescending(p => p.Created).First()
+        };
+    }
+    
+    public Player? GetPlayer(ulong contentId, string name, uint worldId)
+    {
+        if (contentId != 0)
+        {
+            var playerFromContentId = GetPlayer(contentId);
+            if (playerFromContentId != null)
+            {
+                DalamudContext.PluginLog.Debug($"PlayerDataService.GetPlayer(): Found player by content id: {contentId}");
+                return playerFromContentId;
+            }
+            var playerFromNameWorldId = GetPlayer(name, worldId);
+            return playerFromNameWorldId?.ContentId == 0 ? playerFromNameWorldId : null;
+        }
+    
+        return GetPlayer(name, worldId);
+    }
+    
     public void DeletePlayer(int playerId)
     {
         DalamudContext.PluginLog.Verbose($"PlayerDataService.DeletePlayer(): {playerId}");
@@ -56,7 +78,7 @@ public class PlayerDataService
     public void AddPlayer(Player player)
     {
         DalamudContext.PluginLog.Verbose($"PlayerDataService.AddPlayer(): {player.Id}");
-        player.Id = RepositoryContext.PlayerRepository.CreatePlayer(player);
+        player.Id = RepositoryContext.PlayerRepository.CreatePlayer(player, player.ContentId);
         player.PlayerConfig.PlayerId = player.Id;
         ServiceContext.PlayerCacheService.AddPlayer(player);
         if (player.PrimaryCategoryId != 0)

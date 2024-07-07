@@ -22,10 +22,8 @@ public class PlayerComparer : IComparer<Player>
             if (ReferenceEquals(null, y)) return 1;
             if (ReferenceEquals(null, x)) return -1;
 
-            var xRank = this.CategoryRanks.TryGetValue(x.PrimaryCategoryId, out var rank) ? rank : DefaultRank;
-            var yRank = this.CategoryRanks.TryGetValue(y.PrimaryCategoryId, out var categoryRank)
-                ? categoryRank
-                : DefaultRank;
+            var xRank = this.CategoryRanks.GetValueOrDefault(x.PrimaryCategoryId, DefaultRank);
+            var yRank = this.CategoryRanks.GetValueOrDefault(y.PrimaryCategoryId, DefaultRank);
 
             var categoryComparison = xRank.CompareTo(yRank);
             if (categoryComparison != 0)
@@ -34,11 +32,25 @@ public class PlayerComparer : IComparer<Player>
             }
 
             var nameComparison = string.Compare(x.Name, y.Name, StringComparison.OrdinalIgnoreCase);
-            return nameComparison != 0 ? nameComparison : x.WorldId.CompareTo(y.WorldId);
+            if (nameComparison != 0)
+            {
+                return nameComparison;
+            }
+
+            var worldComparison = x.WorldId.CompareTo(y.WorldId);
+            
+            // ReSharper disable once ConvertIfStatementToReturnStatement
+            if (worldComparison != 0)
+            {
+                return worldComparison;
+            }
+
+            return x.Created.CompareTo(y.Created);
         }
         catch (Exception)
         {
             return 0;
         }
     }
+
 }

@@ -102,8 +102,6 @@ public class PlayerProcessService
         this.PlayerSelected?.Invoke(player);
     }
 
-    public void RegisterCurrentPlayer(Player player) => this.CurrentPlayerAdded?.Invoke(player);
-
     public void AddOrUpdatePlayer(ToadPlayer toadPlayer, bool isCurrent = true, bool isUserRequest = false)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerProcessService.AddOrUpdatePlayer(): {toadPlayer.ContentId}, {toadPlayer.Name}, {toadPlayer.HomeWorld}, {isUserRequest}");
@@ -120,16 +118,16 @@ public class PlayerProcessService
             DalamudContext.PluginLog.Verbose("Encounter is not set to save players.");
             return;
         }
-
-        var key = PlayerKeyBuilder.Build(toadPlayer.Name, toadPlayer.HomeWorld);
-        var player = ServiceContext.PlayerDataService.GetPlayer(key);
+        
+        var player = ServiceContext.PlayerDataService.GetPlayer(toadPlayer.ContentId, toadPlayer.Name, toadPlayer.HomeWorld);
         var loc = PlayerEncounterService.GetEncounterLocation();
 
         if (player == null)
         {
             DalamudContext.PluginLog.Verbose("Player not found, creating new player.");
+            var key = PlayerKeyBuilder.Build(toadPlayer.Name, toadPlayer.HomeWorld);
             this.CreateNewPlayer(toadPlayer, key, isCurrent, enc.CategoryId, loc);
-            player = ServiceContext.PlayerDataService.GetPlayer(key);
+            player = ServiceContext.PlayerDataService.GetPlayer(toadPlayer.ContentId, toadPlayer.Name, toadPlayer.HomeWorld);
             if (player != null)
             {
                 if (isUserRequest)
@@ -176,6 +174,7 @@ public class PlayerProcessService
         {
             Key = key,
             EntityId = toadPlayer.EntityId,
+            ContentId = toadPlayer.ContentId,
             Name = toadPlayer.Name,
             WorldId = toadPlayer.HomeWorld,
             PrimaryCategoryId = categoryId,
@@ -203,9 +202,13 @@ public class PlayerProcessService
                 PlayerChangeService.AddCustomizeHistory(player.Id, player.Customize);
             }
 
+            player.Key = PlayerKeyBuilder.Build(toadPlayer.Name, toadPlayer.HomeWorld);
+            player.Name = toadPlayer.Name;
+            player.WorldId = toadPlayer.HomeWorld;
             player.Customize = toadPlayer.Customize;
             player.FreeCompany = PlayerFCHelper.CheckFreeCompany(toadPlayer.CompanyTag, player.FreeCompany, loc.InContent());
             player.EntityId = toadPlayer.EntityId;
+            player.ContentId = toadPlayer.ContentId;
             player.SeenCount += 1;
             player.LastTerritoryType = loc.TerritoryId;
             player.LastSeen = UnixTimestampHelper.CurrentTime();
