@@ -12,6 +12,9 @@ public class M004_ContentId: Migration
         this.Alter.Table("players")
             .AddColumn("entity_id").AsUInt32("entity_id").NotNullable().WithDefaultValue(0);
         
+        this.Alter.Table("player_name_world_histories")
+            .AddColumn("source").AsInt32().NotNullable().WithDefaultValue(0);
+        
         // copy old data from object_id to new entity_id
         this.Execute.Sql(@"
             UPDATE players
@@ -28,6 +31,13 @@ public class M004_ContentId: Migration
             WHERE content_id != 0
         ");
         
+        // set existing source properties to lodestone
+        this.Execute.Sql(@"
+            UPDATE player_name_world_histories
+            SET source = 1
+            WHERE source = 0
+        ");
+                                
         // recreate key index as non-unique
         this.Execute.Sql("DROP INDEX IF EXISTS idx_players_key");
         this.Execute.Sql("CREATE INDEX idx_players_key ON players (key ASC)");

@@ -44,7 +44,6 @@ public class PlayerDataService
             var playerFromContentId = GetPlayer(contentId);
             if (playerFromContentId != null)
             {
-                DalamudContext.PluginLog.Debug($"PlayerDataService.GetPlayer(): Found player by content id: {contentId}");
                 return playerFromContentId;
             }
             var playerFromNameWorldId = GetPlayer(name, worldId);

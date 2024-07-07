@@ -201,6 +201,11 @@ public class PlayerProcessService
             {
                 PlayerChangeService.AddCustomizeHistory(player.Id, player.Customize);
             }
+            
+            if (player.Name != toadPlayer.Name || player.WorldId != toadPlayer.HomeWorld)
+            {
+                PlayerChangeService.AddNameWorldHistory(player.Id, player.Name, player.WorldId);
+            }
 
             player.Key = PlayerKeyBuilder.Build(toadPlayer.Name, toadPlayer.HomeWorld);
             player.Name = toadPlayer.Name;

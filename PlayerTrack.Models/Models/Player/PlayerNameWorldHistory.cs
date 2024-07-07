@@ -9,6 +9,8 @@ public class PlayerNameWorldHistory
     public long Updated { get; set; }
 
     public bool IsMigrated { get; set; }
+    
+    public PlayerHistorySource Source { get; set; }
 
     public int PlayerId { get; set; }
 

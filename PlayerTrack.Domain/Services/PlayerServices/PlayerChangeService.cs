@@ -9,56 +9,12 @@ namespace PlayerTrack.Domain;
 
 public class PlayerChangeService
 {
-    public static void UpdatePlayerId(int oldestPlayerId, int newPlayerId)
+    public static void AddNameWorldHistory(int playerId, string playerName, uint worldId) => RepositoryContext.PlayerNameWorldHistoryRepository.CreatePlayerNameWorldHistory(new PlayerNameWorldHistory
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.UpdatePlayerId(): {oldestPlayerId}, {newPlayerId}");
-        RepositoryContext.PlayerNameWorldHistoryRepository.UpdatePlayerId(oldestPlayerId, newPlayerId);
-        RepositoryContext.PlayerCustomizeHistoryRepository.UpdatePlayerId(oldestPlayerId, newPlayerId);
-    }
-    
-    public static void HandleNameWorldChange(Player player, string playerName, uint worldId)
-    {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.HandleNameWorldChange(): {player.Name}@{player.WorldId}, {playerName}@{worldId}");
-        if (!player.Name.Equals(playerName, StringComparison.OrdinalIgnoreCase) || player.WorldId != worldId)
-        {
-            RepositoryContext.PlayerNameWorldHistoryRepository.CreatePlayerNameWorldHistory(new PlayerNameWorldHistory
-            {
-                PlayerId = player.Id,
-                PlayerName = player.Name,
-                WorldId = player.WorldId,
-            });
-        }
-    }
-
-    public static void HandleNameWorldChange(Player oldestPlayer, Player newPlayer)
-    {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.HandleNameWorldChange(): {oldestPlayer.Name}, {newPlayer.Name}");
-        var nameChanged = !oldestPlayer.Name.Equals(newPlayer.Name, StringComparison.OrdinalIgnoreCase);
-        var worldChanged = oldestPlayer.WorldId != newPlayer.WorldId;
-
-        if (nameChanged || worldChanged)
-        {
-            RepositoryContext.PlayerNameWorldHistoryRepository.CreatePlayerNameWorldHistory(new PlayerNameWorldHistory
-            {
-                PlayerId = oldestPlayer.Id,
-                PlayerName = oldestPlayer.Name,
-                WorldId = oldestPlayer.WorldId,
-            });
-        }
-    }
-
-    public static void HandleCustomizeChange(Player oldestPlayer, Player newPlayer)
-    {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.HandleCustomizeChange(): {oldestPlayer.Name}, {newPlayer.Name}");
-        if (oldestPlayer.Customize != newPlayer.Customize && oldestPlayer.Customize != null)
-        {
-            RepositoryContext.PlayerCustomizeHistoryRepository.CreatePlayerCustomizeHistory(new PlayerCustomizeHistory
-            {
-                PlayerId = oldestPlayer.Id,
-                Customize = oldestPlayer.Customize,
-            });
-        }
-    }
+        PlayerId = playerId,
+        PlayerName = playerName,
+        WorldId = worldId,
+    });
 
     public static void AddCustomizeHistory(int playerId, byte[] playerCustomize) => RepositoryContext.PlayerCustomizeHistoryRepository.CreatePlayerCustomizeHistory(new PlayerCustomizeHistory
     {
@@ -112,7 +68,7 @@ public class PlayerChangeService
         var nameWorldHistories = RepositoryContext.PlayerNameWorldHistoryRepository.GetPlayerNameWorldHistories(playerIds.ToArray());
         if (nameWorldHistories == null)
         {
-            return new List<PlayerNameWorldHistory> { };
+            return new List<PlayerNameWorldHistory>();
         }
         return nameWorldHistories.ToList();
     }
