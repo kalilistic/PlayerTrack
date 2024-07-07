@@ -205,6 +205,7 @@ public class PlayerProcessService
             if (player.Name != toadPlayer.Name || player.WorldId != toadPlayer.HomeWorld)
             {
                 PlayerChangeService.AddNameWorldHistory(player.Id, player.Name, player.WorldId);
+                ServiceContext.PlayerAlertService.SendPlayerNameWorldChangeAlert(player, player.Name, player.WorldId, toadPlayer.Name, toadPlayer.HomeWorld);
             }
 
             player.Key = PlayerKeyBuilder.Build(toadPlayer.Name, toadPlayer.HomeWorld);

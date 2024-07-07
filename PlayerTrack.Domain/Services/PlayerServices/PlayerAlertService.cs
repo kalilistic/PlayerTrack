@@ -8,7 +8,6 @@ using PlayerTrack.Models;
 namespace PlayerTrack.Domain;
 
 using System;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Dalamud.DrunkenToad.Helpers;
@@ -20,34 +19,52 @@ public class PlayerAlertService
     private static readonly Regex ProximityRegex = new(@"^(?<playerName>[A-Z][a-zA-Z'-]*\s[A-Z][a-zA-Z'-]*)(?<worldName>[A-Z][a-zA-Z]*)\s.*", RegexOptions.Compiled);
     private static readonly Regex NameWorldChangeRegex = new(@".*》\s*(?<playerName>[A-Z][a-zA-Z'-]*\s[A-Z][a-zA-Z'-]*)(?<worldName>[A-Z][a-zA-Z]*)$", RegexOptions.Compiled);
 
-    public PlayerAlertService() => this.OpenPlayerTrackChatLinkHandler = DalamudContext.PluginInterface.AddChatLinkHandler((uint)ChatLinkHandler.OpenPlayerTrack, OnChatLinkClick);
+    private DalamudLinkPayload OpenPlayerTrackChatLinkHandler { get; set; } = 
+        DalamudContext.PluginInterface.AddChatLinkHandler(
+            (uint)ChatLinkHandler.OpenPlayerTrack, OnChatLinkClick);
 
-    private DalamudLinkPayload OpenPlayerTrackChatLinkHandler { get; set; }
-
-    public static void SendNameWorldChangeAlert(IEnumerable<Payload> payloads) => DalamudContext.ChatGuiHandler.PluginPrintNotice(payloads);
-
-    public List<Payload> CreatePlayerNameWorldChangeAlert(Player oldestPlayer, Player newPlayer)
+    public void SendPlayerNameWorldChangeAlert(
+        Player player, 
+        string previousPlayerName, uint previousWorldId,
+        string newPlayerName, uint newWorldId) => 
+        Task.Run(() =>
     {
         DalamudContext.PluginLog.Verbose(
-            $"Entering PlayerAlertService.SendPlayerNameWorldChangeAlert(): {oldestPlayer.Name}, {newPlayer.Name}");
-        var shouldSendNameAlert = oldestPlayer.Name != newPlayer.Name && IsNameChangeAlertEnabled(oldestPlayer);
-        var shouldSendWorldAlert = oldestPlayer.WorldId != newPlayer.WorldId && IsWorldTransferAlertEnabled(oldestPlayer);
+            $"Entering PlayerAlertService.SendPlayerNameWorldChangeAlert(): {previousPlayerName}, {previousWorldId}");
+        var shouldSendNameAlert = previousPlayerName != newPlayerName && IsNameChangeAlertEnabled(player);
+        var shouldSendWorldAlert = previousWorldId != newWorldId && IsWorldTransferAlertEnabled(player);
+        if (!shouldSendNameAlert && !shouldSendWorldAlert) return;
+        
+        var payloads = new List<Payload>
+        {
+            this.OpenPlayerTrackChatLinkHandler,
+            new TextPayload(previousPlayerName),
+            new IconPayload(BitmapFontIcon.CrossWorld),
+            new TextPayload(DalamudContext.DataManager.GetWorldNameById(previousWorldId)),
+            new TextPayload(" 》 "),
+            new TextPayload(newPlayerName),
+            new IconPayload(BitmapFontIcon.CrossWorld),
+            new TextPayload(DalamudContext.DataManager.GetWorldNameById(newWorldId)),
+            RawPayload.LinkTerminator
+        };
+        if (payloads.Count == 0)
+        {
+            DalamudContext.PluginLog.Warning("Skipping empty alert for name/world change.");
+            try
+            {
+                DalamudContext.PluginLog.Warning($"Player: {JsonConvert.SerializeObject(player)}");
+            }
+            catch (Exception ex)
+            {
+                DalamudContext.PluginLog.Error(ex, "Failed to serialize player.");
+            }
 
-        var payloads = new List<Payload>();
-        if (!shouldSendNameAlert && !shouldSendWorldAlert) return payloads;
-        payloads.Add(this.OpenPlayerTrackChatLinkHandler);
-        payloads.Add(new TextPayload(oldestPlayer.Name));
-        payloads.Add(new IconPayload(BitmapFontIcon.CrossWorld));
-        payloads.Add(new TextPayload(DalamudContext.DataManager.GetWorldNameById(oldestPlayer.WorldId)));
-        payloads.Add(new TextPayload(" 》 "));
-        payloads.Add(new TextPayload(newPlayer.Name));
-        payloads.Add(new IconPayload(BitmapFontIcon.CrossWorld));
-        payloads.Add(new TextPayload(DalamudContext.DataManager.GetWorldNameById(newPlayer.WorldId)));
-        payloads.Add(RawPayload.LinkTerminator);
-
-        return payloads;
-    }
-
+            return;
+        }
+        
+        DalamudContext.ChatGuiHandler.PluginPrintNotice(payloads);
+    });
+    
     public void SendProximityAlert(Player player) => Task.Run(() =>
     {
         var payloads = new List<Payload>();
@@ -62,7 +79,7 @@ public class PlayerAlertService
         payloads.Add(new TextPayload(DalamudContext.DataManager.GetWorldNameById(player.WorldId)));
         payloads.Add(new TextPayload($" {ServiceContext.Localization.GetString("ProximityAlertMessage")}"));
         payloads.Add(RawPayload.LinkTerminator);
-        if (!payloads.Any())
+        if (payloads.Count == 0)
         {
             DalamudContext.PluginLog.Warning("Skipping empty alert for proximity.");
             try
