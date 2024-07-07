@@ -5,40 +5,57 @@ using FluentMigrator;
 namespace PlayerTrack.Repositories.Migrations;
 
 [Migration(20240705200000)]
-public class M004_ContentId: Migration
+public class M004_PlayerIDs: Migration
 {
+
     public override void Up()
+    {
+        AddNewFields();
+        DeleteObjectId();
+        FixContentId();
+        SetNameHistorySource();
+        RemovePlayerKeyUniqueConstraint();
+    }
+    
+    private void AddNewFields()
     {
         this.Alter.Table("players")
             .AddColumn("entity_id").AsUInt32("entity_id").NotNullable().WithDefaultValue(0);
-        
         this.Alter.Table("player_name_world_histories")
             .AddColumn("source").AsInt32().NotNullable().WithDefaultValue(0);
-        
-        // copy old data from object_id to new entity_id
+    }
+
+    private void DeleteObjectId()
+    {
         this.Execute.Sql(@"
             UPDATE players
             SET entity_id = object_id
             WHERE object_id != 0");
-        
-        // delete old object_id column
         this.Execute.Sql("ALTER TABLE players DROP COLUMN object_id");
-        
-        // clear bad content ids from bugs
+    }
+
+    private void FixContentId()
+    {
+        this.Execute.Sql("DROP INDEX IF EXISTS idx_players_content_id");
         this.Execute.Sql(@"
             UPDATE players
             SET content_id = 0
-            WHERE content_id != 0
+            WHERE content_id IS NULL OR content_id != 0
         ");
-        
-        // set existing source properties to lodestone
+        this.Execute.Sql("CREATE INDEX idx_players_content_id ON players (content_id ASC)");
+    }
+
+    private void SetNameHistorySource()
+    {
         this.Execute.Sql(@"
             UPDATE player_name_world_histories
             SET source = 1
             WHERE source = 0
         ");
-                                
-        // recreate key index as non-unique
+    }
+    
+    private void RemovePlayerKeyUniqueConstraint()
+    {
         this.Execute.Sql("DROP INDEX IF EXISTS idx_players_key");
         this.Execute.Sql("CREATE INDEX idx_players_key ON players (key ASC)");
     }
