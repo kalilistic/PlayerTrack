@@ -24,7 +24,7 @@ public class PlayerMappingProfile : Profile
             .ForMember(dest => dest.name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.notes, opt => opt.MapFrom(src => src.Notes))
             .ForMember(dest => dest.lodestone_id, opt => opt.MapFrom(src => src.LodestoneId))
-            .ForMember(dest => dest.object_id, opt => opt.MapFrom(src => src.ObjectId))
+            .ForMember(dest => dest.entity_id, opt => opt.MapFrom(src => src.EntityId))
             .ForMember(dest => dest.world_id, opt => opt.MapFrom(src => src.WorldId))
             .ForMember(dest => dest.last_territory_type, opt => opt.MapFrom(src => src.LastTerritoryType))
             .ForMember(dest => dest.content_id, opt => opt.MapFrom(src => src.ContentId));
@@ -44,7 +44,7 @@ public class PlayerMappingProfile : Profile
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.name))
             .ForMember(dest => dest.Notes, opt => opt.MapFrom(src => src.notes))
             .ForMember(dest => dest.LodestoneId, opt => opt.MapFrom(src => src.lodestone_id))
-            .ForMember(dest => dest.ObjectId, opt => opt.MapFrom(src => src.object_id))
+            .ForMember(dest => dest.EntityId, opt => opt.MapFrom(src => src.entity_id))
             .ForMember(dest => dest.WorldId, opt => opt.MapFrom(src => src.world_id))
             .ForMember(dest => dest.LastTerritoryType, opt => opt.MapFrom(src => src.last_territory_type))
             .ForMember(dest => dest.ContentId, opt => opt.MapFrom(src => src.content_id));

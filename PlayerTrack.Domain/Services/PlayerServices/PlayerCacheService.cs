@@ -200,12 +200,12 @@ public class PlayerCacheService
         }
     }
 
-    public Player? GetPlayer(uint objectId)
+    public Player? GetPlayer(uint entityId)
     {
         this.setLock.EnterReadLock();
         try
         {
-            return this.playerCache.FindFirst(p => p.ObjectId == objectId);
+            return this.playerCache.FindFirst(p => p.EntityId == entityId);
         }
         finally
         {

@@ -175,7 +175,7 @@ public class PlayerProcessService
         var player = new Player
         {
             Key = key,
-            ObjectId = toadPlayer.EntityId,
+            EntityId = toadPlayer.EntityId,
             Name = toadPlayer.Name,
             WorldId = toadPlayer.HomeWorld,
             PrimaryCategoryId = categoryId,
@@ -205,7 +205,7 @@ public class PlayerProcessService
 
             player.Customize = toadPlayer.Customize;
             player.FreeCompany = PlayerFCHelper.CheckFreeCompany(toadPlayer.CompanyTag, player.FreeCompany, loc.InContent());
-            player.ObjectId = toadPlayer.EntityId;
+            player.EntityId = toadPlayer.EntityId;
             player.SeenCount += 1;
             player.LastTerritoryType = loc.TerritoryId;
             player.LastSeen = UnixTimestampHelper.CurrentTime();

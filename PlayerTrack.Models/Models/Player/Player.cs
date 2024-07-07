@@ -39,7 +39,7 @@ public class Player
 
     public long LodestoneVerifiedOn { get; set; }
 
-    public uint ObjectId { get; set; }
+    public uint EntityId { get; set; }
 
     public uint WorldId { get; set; }
 

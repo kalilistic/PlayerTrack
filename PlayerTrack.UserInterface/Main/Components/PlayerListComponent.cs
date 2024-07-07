@@ -252,17 +252,17 @@ public class PlayerListComponent : ViewComponent
             {
                 if (LocGui.MenuItem("TargetPlayer"))
                 {
-                    DalamudContext.TargetManager.SetTarget(player.ObjectId);
+                    DalamudContext.TargetManager.SetTarget(player.EntityId);
                 }
 
                 if (LocGui.MenuItem("FocusTargetPlayer"))
                 {
-                    DalamudContext.TargetManager.SetFocusTarget(player.ObjectId);
+                    DalamudContext.TargetManager.SetFocusTarget(player.EntityId);
                 }
 
                 if (LocGui.MenuItem("OpenPlayerPlate"))
                 {
-                    DalamudContext.TargetManager.OpenPlateWindow(player.ObjectId);
+                    DalamudContext.TargetManager.OpenPlateWindow(player.EntityId);
                 }
             }
 

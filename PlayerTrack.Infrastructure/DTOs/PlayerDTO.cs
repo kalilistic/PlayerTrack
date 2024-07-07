@@ -1,6 +1,7 @@
 ﻿using FluentDapperLite.Repository;
 using PlayerTrack.Models;
 
+// ReSharper disable InconsistentNaming
 namespace PlayerTrack.Infrastructure;
 
 public class PlayerDTO : DTO
@@ -29,7 +30,7 @@ public class PlayerDTO : DTO
 
     public uint lodestone_id { get; set; }
 
-    public uint object_id { get; set; }
+    public uint entity_id { get; set; }
 
     public uint world_id { get; set; }
 
