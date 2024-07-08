@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Dalamud.DrunkenToad.Core;
+using Dalamud.DrunkenToad.Helpers;
 using PlayerTrack.Domain;
 using PlayerTrack.Models;
 using PlayerTrack.Models.Structs;
@@ -149,7 +150,7 @@ public static class PlayerViewMapper
                 {
                     Id = pEnc.Id,
                     Time = pEnc.Created.ToTimeSpan(),
-                    Duration = pEnc.Ended == 0 ? (pEnc.Updated - pEnc.Created).ToDuration() : (pEnc.Ended - pEnc.Created).ToDuration(),
+                    Duration = pEnc.Ended == 0 ? (UnixTimestampHelper.CurrentTime() - pEnc.Created).ToDuration() : (pEnc.Ended - pEnc.Created).ToDuration(),
                     Job = DalamudContext.DataManager.ClassJobs[pEnc.JobId].Code,
                     Level = pEnc.JobLvl.ToString(),
                     Location = GetLastLocation(enc.TerritoryTypeId)

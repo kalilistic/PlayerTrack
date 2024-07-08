@@ -95,6 +95,7 @@ public class EncounterService
 
         this.CurrentEncounter.Ended = UnixTimestampHelper.CurrentTime();
         UpdateEncounter(this.CurrentEncounter);
+        PlayerEncounterService.EndPlayerEncounters(this.CurrentEncounter.Id);
         this.CurrentEncounter = null;
     }
 

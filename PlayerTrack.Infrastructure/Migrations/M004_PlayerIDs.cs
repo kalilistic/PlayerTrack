@@ -13,6 +13,7 @@ public class M004_PlayerIDs: Migration
         AddNewFields();
         DeleteObjectId();
         FixContentId();
+        FixPlayerEncounterEnded();
         SetNameHistorySource();
         RemovePlayerKeyUniqueConstraint();
     }
@@ -43,6 +44,19 @@ public class M004_PlayerIDs: Migration
             WHERE content_id IS NULL OR content_id != 0
         ");
         this.Execute.Sql("CREATE INDEX idx_players_content_id ON players (content_id ASC)");
+    }
+    
+    private void FixPlayerEncounterEnded()
+    {
+        this.Execute.Sql(@"
+            UPDATE player_encounters
+            SET ended = (
+                SELECT encounters.ended
+                FROM encounters
+                WHERE player_encounters.encounter_id = encounters.id
+            )
+            WHERE player_encounters.ended = 0;
+        ");
     }
 
     private void SetNameHistorySource()
