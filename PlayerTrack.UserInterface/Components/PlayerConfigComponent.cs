@@ -146,6 +146,14 @@ public static class PlayerConfigComponent
             if (LocGui.BeginTabItem("Integrations"))
             {
                 ImGuiHelpers.ScaledDummy(2f);
+                ImGui.PushFont(UiBuilder.IconFont);
+                ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
+                ImGui.Text(FontAwesomeIcon.ExclamationCircle.ToIconString());
+                ImGui.PopStyleColor();
+                ImGui.PopFont();
+                ImGui.SameLine();
+                ImGui.Text("Visibility integration to be removed next update since VoidList is deprecated.");
+                ImGuiHelpers.ScaledDummy(2f);
                 DrawCombo("VisibilityType", playerConfigSet, pc => pc.VisibilityType, ref playerConfigSet.CurrentPlayerConfig.VisibilityType, ref playerConfigSet.CurrentPlayerConfig.IsChanged, false);
 
                 ImGui.EndTabItem();
