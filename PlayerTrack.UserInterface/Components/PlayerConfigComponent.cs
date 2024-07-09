@@ -4,6 +4,7 @@ using System.Linq;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Gui;
 using Dalamud.Interface;
+using Dalamud.Interface.Colors;
 using Dalamud.Loc.ImGui;
 using ImGuiNET;
 using PlayerTrack.Domain;
@@ -92,33 +93,40 @@ public static class PlayerConfigComponent
         if (LocGui.BeginTabItem("Nameplate"))
         {
             ImGuiHelpers.ScaledDummy(1f);
+            ImGui.PushFont(UiBuilder.IconFont);
+            ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
+            ImGui.Text(FontAwesomeIcon.ExclamationCircle.ToIconString());
+            ImGui.PopStyleColor();
+            ImGui.PopFont();
+            ImGui.SameLine();
+            ImGui.Text("Nameplates are currently disabled until a future Dalamud update.");
 
-            ToadGui.Section("NameplateColors", () =>
-            {
-                DrawCheckbox("NameplateUseColor", playerConfigSet, pc => pc.NameplateUseColor, ref playerConfigSet.CurrentPlayerConfig.NameplateUseColor, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-                DrawCheckbox("NameplateUseColorIfDead", playerConfigSet, pc => pc.NameplateUseColorIfDead, ref playerConfigSet.CurrentPlayerConfig.NameplateUseColorIfDead, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-
-                if (playerConfigSet.CurrentPlayerConfig.NameplateUseColor.Value)
-                {
-                    DrawColorPicker("NameplateColor", playerConfigSet, pc => pc.NameplateColor, ref playerConfigSet.CurrentPlayerConfig.NameplateColor, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-                }
-            });
-
-            ToadGui.Section("NameplateTitle", () =>
-            {
-                DrawCombo("NameplateTitle", playerConfigSet, pc => pc.NameplateTitleType, ref playerConfigSet.CurrentPlayerConfig.NameplateTitleType, ref playerConfigSet.CurrentPlayerConfig.IsChanged, true);
-                if (playerConfigSet.CurrentPlayerConfig.NameplateTitleType.Value == NameplateTitleType.CustomTitle)
-                {
-                    DrawTextConfig("CustomTitle", playerConfigSet, pc => pc.NameplateCustomTitle, ref playerConfigSet.CurrentPlayerConfig.NameplateCustomTitle, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-                }
-            });
-
-            ToadGui.Section("NameplateConditions", () =>
-            {
-                DrawCheckbox("ShowInOverworld", playerConfigSet, pc => pc.NameplateShowInOverworld, ref playerConfigSet.CurrentPlayerConfig.NameplateShowInOverworld, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-                DrawCheckbox("ShowInContent", playerConfigSet, pc => pc.NameplateShowInContent, ref playerConfigSet.CurrentPlayerConfig.NameplateShowInContent, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-                DrawCheckbox("ShowInHighEndContent", playerConfigSet, pc => pc.NameplateShowInHighEndContent, ref playerConfigSet.CurrentPlayerConfig.NameplateShowInHighEndContent, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-            });
+            // ToadGui.Section("NameplateColors", () =>
+            // {
+            //     DrawCheckbox("NameplateUseColor", playerConfigSet, pc => pc.NameplateUseColor, ref playerConfigSet.CurrentPlayerConfig.NameplateUseColor, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
+            //     DrawCheckbox("NameplateUseColorIfDead", playerConfigSet, pc => pc.NameplateUseColorIfDead, ref playerConfigSet.CurrentPlayerConfig.NameplateUseColorIfDead, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
+            //
+            //     if (playerConfigSet.CurrentPlayerConfig.NameplateUseColor.Value)
+            //     {
+            //         DrawColorPicker("NameplateColor", playerConfigSet, pc => pc.NameplateColor, ref playerConfigSet.CurrentPlayerConfig.NameplateColor, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
+            //     }
+            // });
+            //
+            // ToadGui.Section("NameplateTitle", () =>
+            // {
+            //     DrawCombo("NameplateTitle", playerConfigSet, pc => pc.NameplateTitleType, ref playerConfigSet.CurrentPlayerConfig.NameplateTitleType, ref playerConfigSet.CurrentPlayerConfig.IsChanged, true);
+            //     if (playerConfigSet.CurrentPlayerConfig.NameplateTitleType.Value == NameplateTitleType.CustomTitle)
+            //     {
+            //         DrawTextConfig("CustomTitle", playerConfigSet, pc => pc.NameplateCustomTitle, ref playerConfigSet.CurrentPlayerConfig.NameplateCustomTitle, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
+            //     }
+            // });
+            //
+            // ToadGui.Section("NameplateConditions", () =>
+            // {
+            //     DrawCheckbox("ShowInOverworld", playerConfigSet, pc => pc.NameplateShowInOverworld, ref playerConfigSet.CurrentPlayerConfig.NameplateShowInOverworld, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
+            //     DrawCheckbox("ShowInContent", playerConfigSet, pc => pc.NameplateShowInContent, ref playerConfigSet.CurrentPlayerConfig.NameplateShowInContent, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
+            //     DrawCheckbox("ShowInHighEndContent", playerConfigSet, pc => pc.NameplateShowInHighEndContent, ref playerConfigSet.CurrentPlayerConfig.NameplateShowInHighEndContent, ref playerConfigSet.CurrentPlayerConfig.IsChanged);
+            // });
 
             ImGui.EndTabItem();
         }
@@ -171,6 +179,7 @@ public static class PlayerConfigComponent
         }
     }
 
+    // ReSharper disable once UnusedMember.Local
     private static void DrawTextConfig<T>(
         string key,
         PlayerConfigSet playerConfigSet,
