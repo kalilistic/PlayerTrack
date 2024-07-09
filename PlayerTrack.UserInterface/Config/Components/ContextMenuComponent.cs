@@ -26,13 +26,5 @@ public class ContextMenuComponent : ConfigViewComponent
             this.config.ShowOpenLodestone = showOpenInLodestone;
             ServiceContext.ConfigService.SaveConfig(this.config);
         }
-
-        var showContextMenuIndicator = this.config.ShowContextMenuIndicator;
-        if (ToadGui.Checkbox("ShowContextMenuIndicator", ref showContextMenuIndicator))
-        {
-            this.config.ShowContextMenuIndicator = showContextMenuIndicator;
-            ServiceContext.ConfigService.SaveConfig(this.config);
-            this.UpdateContextMenu?.Invoke();
-        }
     }
 }
