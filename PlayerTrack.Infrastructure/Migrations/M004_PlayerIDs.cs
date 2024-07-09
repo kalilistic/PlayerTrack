@@ -4,7 +4,7 @@ using FluentMigrator;
 
 namespace PlayerTrack.Repositories.Migrations;
 
-[Migration(20240705200000)]
+[Migration(20240709120000)]
 public class M004_PlayerIDs: Migration
 {
 
