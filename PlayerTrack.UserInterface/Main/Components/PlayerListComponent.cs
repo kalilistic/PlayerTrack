@@ -268,7 +268,7 @@ public class PlayerListComponent : ViewComponent
 
             if (LocGui.MenuItem("OpenLodestone"))
             {
-                PlayerLodestoneService.OpenLodestoneProfile(player.LodestoneId);
+                ServiceContext.LodestoneService.OpenLodestoneProfile(player.Name, player.WorldId);
             }
 
             // sub menu for selecting category

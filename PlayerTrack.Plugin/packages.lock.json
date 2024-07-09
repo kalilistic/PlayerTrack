@@ -249,6 +249,19 @@
           "System.Security.Permissions": "4.7.0"
         }
       },
+      "HtmlAgilityPack": {
+        "type": "Transitive",
+        "resolved": "1.11.46",
+        "contentHash": "dLMn4EVfJBHWmWK4Uh0XGD76FPLHI0qr2Tm0s1m/xmgiHb1JUb9zB8AzO8HtrkBBlMN6JfCUBYddhqC0hZNR+g=="
+      },
+      "Karashiiro.HtmlAgilityPack.CssSelectors.NetCoreFork": {
+        "type": "Transitive",
+        "resolved": "0.0.2",
+        "contentHash": "+7cqe/+tN7gDW36pgrefSeyAQvhqznM34D0uTwnETgU25iAC6boPtblxbrMluW5rA9o6MzjEg4qZK7WrnT+tSw==",
+        "dependencies": {
+          "HtmlAgilityPack": "1.11.46"
+        }
+      },
       "LiteDB": {
         "type": "Transitive",
         "resolved": "5.0.16",
@@ -400,10 +413,20 @@
           "Microsoft.NETCore.Platforms": "3.1.0"
         }
       },
+      "NetStone": {
+        "type": "Transitive",
+        "resolved": "1.2.0",
+        "contentHash": "zrWySMD0Vfl+8EulE4B2kKGPzqS3s3fK1fzfucx24JJEEmYb+1eIyatm196bwzp8HoP5XymQWq9C0LnNFVw+eA==",
+        "dependencies": {
+          "HtmlAgilityPack": "1.11.46",
+          "Karashiiro.HtmlAgilityPack.CssSelectors.NetCoreFork": "0.0.2",
+          "Newtonsoft.Json": "13.0.3"
+        }
+      },
       "Newtonsoft.Json": {
         "type": "Transitive",
-        "resolved": "13.0.1",
-        "contentHash": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A=="
+        "resolved": "13.0.3",
+        "contentHash": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ=="
       },
       "Serilog": {
         "type": "Transitive",
@@ -551,6 +574,7 @@
         "dependencies": {
           "Dalamud.Loc": "[1.2.1, )",
           "FlexConfig": "[1.0.0, )",
+          "NetStone": "[1.2.0, )",
           "PlayerTrack.Infrastructure": "[1.0.0, )",
           "PlayerTrack.Models": "[1.0.0, )"
         }

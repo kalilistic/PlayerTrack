@@ -90,6 +90,7 @@ public class Plugin : IDalamudPlugin
         }
 
         EncounterService.EnsureNoOpenEncounters();
+        ServiceContext.LodestoneService.Start();
         ServiceContext.ConfigService.SyncIcons();
         ServiceContext.PlayerCacheService.LoadPlayers();
         ServiceContext.VisibilityService.Initialize();

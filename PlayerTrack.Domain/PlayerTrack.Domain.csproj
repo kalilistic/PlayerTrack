@@ -40,6 +40,7 @@
 	<ItemGroup>
 		<PackageReference Include="Dalamud.Loc" Version="1.2.1" />
 		<PackageReference Include="FlexConfig" Version="1.0.0" />
+		<PackageReference Include="NetStone" Version="1.2.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Dalamud">
