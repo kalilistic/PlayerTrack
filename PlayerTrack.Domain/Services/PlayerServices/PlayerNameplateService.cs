@@ -1,5 +1,6 @@
 ﻿using Dalamud.DrunkenToad.Core.Enums;
-using Dalamud.DrunkenToad.Core.Models;
+using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.Game.Text.SeStringHandling.Payloads;
 using PlayerTrack.Models;
 
 namespace PlayerTrack.Domain;
@@ -8,12 +9,12 @@ using Dalamud.DrunkenToad.Core;
 
 public class PlayerNameplateService
 {
-    public static PlayerNameplate GetPlayerNameplate(Player player, ToadLocation loc)
+    public static PlayerNameplate GetPlayerNameplate(Player player, ToadLocationType locationType)
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerNameplateService.GetPlayerNameplate(): {player.Id}, {loc.LocationType}");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerNameplateService.GetPlayerNameplate(): {player.Id}, {locationType}");
         var nameplate = new PlayerNameplate
         {
-            CustomizeNameplate = loc.LocationType switch
+            CustomizeNameplate = locationType switch
             {
                 ToadLocationType.Overworld => PlayerConfigService.GetNameplateShowInOverworld(player),
                 ToadLocationType.Content => PlayerConfigService.GetNameplateShowInContent(player),
@@ -24,13 +25,20 @@ public class PlayerNameplateService
 
         if (!nameplate.CustomizeNameplate)
         {
+            DalamudContext.PluginLog.Debug($"CustomizeNameplate is false for {player.Name}");
             return nameplate;
         }
 
         var isColorEnabled = PlayerConfigService.GetNameplateUseColor(player);
+        ushort color = 0;
         if (isColorEnabled)
         {
-            nameplate.Color = PlayerConfigService.GetNameplateColor(player);
+            color = (ushort)PlayerConfigService.GetNameplateColor(player);
+            nameplate.TitleLeftQuote = new SeString().Append(new UIForegroundPayload(color)).Append("《");
+            nameplate.TitleRightQuote = new SeString().Append("》").Append(UIForegroundPayload.UIForegroundOff);
+            nameplate.NameTextWrap = (new SeString(new UIForegroundPayload(color)), new SeString(UIForegroundPayload.UIForegroundOff));
+            nameplate.FreeCompanyLeftQuote = new SeString().Append(new UIForegroundPayload(color)).Append("《");
+            nameplate.FreeCompanyRightQuote = new SeString().Append("》").Append(UIForegroundPayload.UIForegroundOff);
         }
 
         nameplate.NameplateUseColorIfDead = PlayerConfigService.GetNameplateUseColorIfDead(player);
@@ -52,7 +60,7 @@ public class PlayerNameplateService
             nameplate.HasCustomTitle = true;
         }
 
-        if ((!isColorEnabled || nameplate.Color == 0) && !nameplate.HasCustomTitle)
+        if ((!isColorEnabled || color == 0) && !nameplate.HasCustomTitle)
         {
             nameplate.CustomizeNameplate = false;
         }
