@@ -102,11 +102,20 @@ public static class NameplateHandler
                 if (handler.PlayerCharacter.IsDead && !nameplate.NameplateUseColorIfDead) continue;
     
                 // apply color
-                handler.TitleParts.LeftQuote = nameplate.TitleLeftQuote;
-                handler.TitleParts.RightQuote = nameplate.TitleRightQuote;
+                if (!string.IsNullOrEmpty(handler.Title.TextValue))
+                {
+                    handler.TitleParts.LeftQuote = nameplate.TitleLeftQuote;
+                    handler.TitleParts.RightQuote = nameplate.TitleRightQuote;
+                }
+
+                if (!string.IsNullOrEmpty(handler.FreeCompanyTag.TextValue))
+                {
+                    handler.FreeCompanyTagParts.LeftQuote = nameplate.FreeCompanyLeftQuote;
+                    handler.FreeCompanyTagParts.RightQuote = nameplate.FreeCompanyRightQuote;
+                }
+                
                 handler.NameParts.TextWrap = nameplate.NameTextWrap;
-                handler.FreeCompanyTagParts.LeftQuote = nameplate.FreeCompanyLeftQuote;
-                handler.FreeCompanyTagParts.RightQuote = nameplate.FreeCompanyRightQuote;
+
             }
         }
     }
