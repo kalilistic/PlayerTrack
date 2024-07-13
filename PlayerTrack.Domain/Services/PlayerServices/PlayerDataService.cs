@@ -26,6 +26,11 @@ public class PlayerDataService
         return contentId == 0 ? null : ServiceContext.PlayerCacheService.GetPlayer(contentId);
     }
 
+    public Player? GetPlayer(uint entityId)
+    {
+        return ServiceContext.PlayerCacheService.GetPlayer(entityId);
+    }
+
     public Player? GetPlayer(string name, uint worldId)
     {
         var players = ServiceContext.PlayerCacheService.GetPlayers(name, worldId);
