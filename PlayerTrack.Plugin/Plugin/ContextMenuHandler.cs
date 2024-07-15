@@ -45,22 +45,25 @@ public static class ContextMenuHandler
     {
         var selectedPlayer = menuItemClickedArgs.GetPlayer();
         if (selectedPlayer == null) return;
-        var currentPlayer = DalamudContext.PlayerEventDispatcher.GetPlayerByContentId(selectedPlayer.ContentId);
-        if (currentPlayer != null)
+        DalamudContext.GameFramework.RunOnFrameworkThread(() =>
         {
-            SelectPlayer?.Invoke(currentPlayer, true);
-        }
-        else
-        {
-            SelectPlayer?.Invoke(selectedPlayer, false);
-        }
+            var currentPlayer = DalamudContext.ObjectCollection.GetPlayerByContentId(selectedPlayer.ContentId);
+            if (currentPlayer != null)
+            {
+                SelectPlayer?.Invoke(currentPlayer, true);
+            }
+            else
+            {
+                SelectPlayer?.Invoke(selectedPlayer, false);
+            }
+        });
     }
     
     private static void OpenLodestone(IMenuItemClickedArgs menuItemClickedArgs)
     {
         var selectedPlayer = menuItemClickedArgs.GetPlayer();
         if (selectedPlayer == null) return;
-        ServiceContext.LodestoneService.OpenLodestoneProfile(selectedPlayer.Name, selectedPlayer.HomeWorld);
+        _ = ServiceContext.LodestoneService.OpenLodestoneProfile(selectedPlayer.Name, selectedPlayer.HomeWorld);
     }
 
     public static void Restart()

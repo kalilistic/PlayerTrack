@@ -26,11 +26,9 @@ public static class EventDispatcher
         Task.Run(() => ProcessChannelAsync(EventChannel.Reader, Cts.Token));
         DalamudContext.PlayerLocationManager.LocationStarted += OnStartLocation;
         DalamudContext.PlayerLocationManager.LocationEnded += OnEndLocation;
-        DalamudContext.PlayerEventDispatcher.AddPlayers += OnAddPlayers;
-        DalamudContext.PlayerEventDispatcher.RemovePlayers += OnRemovePlayers;
         ContextMenuHandler.SelectPlayer += OnSelectPlayer;
         DalamudContext.ClientStateHandler.Login += OnLogin;
-        if (DalamudContext.ClientStateHandler.IsLoggedIn) OnLogin();
+        if (DalamudContext.ClientStateHandler.IsLoggedIn) DalamudContext.GameFramework.RunOnFrameworkThread(OnLogin);
         DalamudContext.SocialListHandler.FriendListReceived += OnFriendListReceived;
         DalamudContext.SocialListHandler.FreeCompanyReceived += OnFreeCompanyReceived;
         DalamudContext.SocialListHandler.BlackListReceived += OnBlackListReceived;
@@ -51,8 +49,6 @@ public static class EventDispatcher
             DalamudContext.ClientStateHandler.Login -= OnLogin;
             DalamudContext.PlayerLocationManager.LocationStarted -= OnStartLocation;
             DalamudContext.PlayerLocationManager.LocationEnded -= OnEndLocation;
-            DalamudContext.PlayerEventDispatcher.AddPlayers -= OnAddPlayers;
-            DalamudContext.PlayerEventDispatcher.RemovePlayers -= OnRemovePlayers;
             ContextMenuHandler.SelectPlayer -= OnSelectPlayer;
             Cts.Cancel();
             EventChannel.Writer.Complete();
@@ -84,24 +80,6 @@ public static class EventDispatcher
         ServiceContext.EncounterService.EndCurrentEncounter();
     });
 
-    private static void OnAddPlayers(List<ToadPlayer> players) => EventChannel.Writer.TryWrite(() =>
-    {
-        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnAddPlayers(): {players.Count}");
-        foreach (var player in players)
-        {
-            ServiceContext.PlayerProcessService.AddOrUpdatePlayer(player);
-        }
-    });
-
-    private static void OnRemovePlayers(List<ulong> playerContentIds) => EventChannel.Writer.TryWrite(() =>
-    {
-        DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnRemovePlayers(): {playerContentIds.Count}");
-        foreach (var playerContentId in playerContentIds)
-        {
-            ServiceContext.PlayerProcessService.RemoveCurrentPlayer(playerContentId);
-        }
-    });
-
     private static void OnSelectPlayer(ToadPlayer toadPlayer, bool isCurrent) => EventChannel.Writer.TryWrite(() =>
     {
         DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnSelectPlayer(): {toadPlayer.Name}");
@@ -111,7 +89,7 @@ public static class EventDispatcher
     private static void OnLogin() => EventChannel.Writer.TryWrite(() =>
     {
         DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnLogin()");
-        LocalPlayerService.AddOrUpdateLocalPlayer(DalamudContext.ClientStateHandler.GetLocalPlayer());
+        DalamudContext.GameFramework.RunOnFrameworkThread(DalamudContext.ClientStateHandler.GetLocalPlayer);
     });
 
     private static void OnFriendListReceived(List<ToadSocialListMember> members) => EventChannel.Writer.TryWrite(() =>

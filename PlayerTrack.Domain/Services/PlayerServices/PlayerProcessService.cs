@@ -1,4 +1,7 @@
-﻿using System.Timers;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using System.Timers;
+using Dalamud.DrunkenToad.Extensions;
 
 namespace PlayerTrack.Domain;
 
@@ -22,8 +25,8 @@ public class PlayerProcessService
 
     public PlayerProcessService()
     {
-        this.reconcileCurrentPlayerTimer = new Timer(30000);
-        this.reconcileCurrentPlayerTimer.Elapsed += this.ReconcileCurrentPlayersTimerOnElapsed;
+        this.reconcileCurrentPlayerTimer = new Timer(5000);
+        this.reconcileCurrentPlayerTimer.Elapsed += this.ProcessCurrentPlayers;
         this.reconcileCurrentPlayerTimer.Start();
     }
 
@@ -33,27 +36,49 @@ public class PlayerProcessService
         this.reconcileCurrentPlayerTimer.Dispose();
     }
     
-    private void ReconcileCurrentPlayersTimerOnElapsed(object? sender, ElapsedEventArgs e)
+    private void ProcessCurrentPlayers(object? sender, ElapsedEventArgs elapsedEventArgs)
     {
         DalamudContext.PluginLog.Verbose("Entering PlayerProcessService.ReconcileCurrentPlayerTimerOnElapsed()");
         try
         {
-            if (ServiceContext.ConfigService.GetConfig().PlayerListFilter == PlayerListFilter.CurrentPlayers)
+            DalamudContext.GameFramework.RunOnFrameworkThread(() =>
             {
-                var currentPlayers = ServiceContext.PlayerCacheService.GetCurrentPlayers();
-                if (currentPlayers.Count > 0)
+                // get players in object table
+                var objectPlayers = DalamudContext.ObjectCollection.GetPlayers().ToList();
+            
+                // run async
+                Task.Run(() =>
                 {
-                    foreach (var player in currentPlayers)
+                    // Check for players that are no longer in the object table
+                    var currentPlayers = ServiceContext.PlayerCacheService.GetCurrentPlayers();
+                    if (currentPlayers.Count > 0)
                     {
-                        var toadPlayer = DalamudContext.PlayerEventDispatcher.GetPlayerByNameAndWorldId(player.Name, player.WorldId);
-                        if (toadPlayer == null)
+                        foreach (var currentPlayer in currentPlayers)
                         {
-                            DalamudContext.PluginLog.Verbose($"Player not found, removing from current players: {player.Name}, {player.WorldId}");
-                            this.RemoveCurrentPlayer(player);
+                            // check if player is in object table players
+                            if (objectPlayers.All(p => p.ContentId != currentPlayer.ContentId))
+                            {
+                                DalamudContext.PluginLog.Verbose($"Removing current player: {currentPlayer.ContentId}, {currentPlayer.Name}@{currentPlayer.WorldId}");
+                                this.RemoveCurrentPlayer(currentPlayer);
+                            }
                         }
                     }
-                }
-            }
+            
+                    // Check for players that are in the object table but not in the current players
+                    if (objectPlayers.Count > 0)
+                    {
+                        foreach (var objectPlayer in objectPlayers)
+                        {
+                            var currentPlayer = currentPlayers.FirstOrDefault(p => p.ContentId == objectPlayer.ContentId);
+                            if (currentPlayer == null)
+                            {
+                                DalamudContext.PluginLog.Verbose($"Adding current player: {objectPlayer.ContentId}, {objectPlayer.Name}");
+                                this.AddOrUpdatePlayer(objectPlayer);
+                            }
+                        }
+                    }
+                });
+            });
         }
         catch (Exception ex)
         {
