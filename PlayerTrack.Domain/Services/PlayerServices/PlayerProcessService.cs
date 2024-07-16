@@ -129,22 +129,23 @@ public class PlayerProcessService
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerProcessService.AddOrUpdatePlayer(): {toadPlayer.ContentId}, {toadPlayer.Name}, {toadPlayer.HomeWorld}, {isUserRequest}");
         var enc = ServiceContext.EncounterService.GetCurrentEncounter();
-
+        var player = ServiceContext.PlayerDataService.GetPlayer(toadPlayer.ContentId, toadPlayer.Name, toadPlayer.HomeWorld);
+        
         if (enc == null)
         {
+            HandleContentIdUpdateOnly(player, toadPlayer);
             DalamudContext.PluginLog.Verbose("Encounter is missing.");
             return;
         }
 
         if (!enc.SavePlayers && !isUserRequest)
         {
+            HandleContentIdUpdateOnly(player, toadPlayer);
             DalamudContext.PluginLog.Verbose("Encounter is not set to save players.");
             return;
         }
-        
-        var player = ServiceContext.PlayerDataService.GetPlayer(toadPlayer.ContentId, toadPlayer.Name, toadPlayer.HomeWorld);
-        var loc = PlayerEncounterService.GetEncounterLocation();
 
+        var loc = PlayerEncounterService.GetEncounterLocation();
         if (player == null)
         {
             DalamudContext.PluginLog.Verbose("Player not found, creating new player.");
@@ -181,6 +182,14 @@ public class PlayerProcessService
         }
     }
 
+    private static void HandleContentIdUpdateOnly(Player? player, ToadPlayer toadPlayer)
+    {
+        if (player is not { ContentId: 0 }) return;
+        player.ContentId = toadPlayer.ContentId;
+        DalamudContext.PluginLog.Verbose($"Player content id updated: {player.Name}@{player.WorldId}");
+        ServiceContext.PlayerDataService.UpdatePlayer(player);
+    }
+    
     private void RemoveCurrentPlayer(Player player)
     {
         PlayerEncounterService.EndPlayerEncounter(player, ServiceContext.EncounterService.GetCurrentEncounter());
