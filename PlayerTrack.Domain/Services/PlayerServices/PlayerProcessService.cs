@@ -112,19 +112,6 @@ public class PlayerProcessService
         ServiceContext.PlayerDataService.AddPlayer(player);
     }
 
-    public void RemoveCurrentPlayer(ulong playerContentId)
-    {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerProcessService.RemoveCurrentPlayer(): {playerContentId}");
-        var player = ServiceContext.PlayerDataService.GetPlayer(playerContentId);
-        if (player == null)
-        {
-            DalamudContext.PluginLog.Verbose("Player not found.");
-            return;
-        }
-
-        RemoveCurrentPlayer(player);
-    }
-
     public void SelectPlayer(string name, string worldName)
     {
         var worldId = DalamudContext.DataManager.GetWorldIdByName(worldName);
