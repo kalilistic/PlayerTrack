@@ -22,15 +22,15 @@ public class PlayerProcessService
     public event Action<Player>? CurrentPlayerAdded;
     public event Action<Player>? CurrentPlayerRemoved;
     
-    public PlayerProcessService()
-    {
-        DalamudContext.GameFramework.Update += this.ProcessCurrentPlayers;
-    }
-
     public void Dispose()
     {
         DalamudContext.GameFramework.Update -= this.ProcessCurrentPlayers;
         locker.Dispose();
+    }
+
+    public void Start()
+    {
+        DalamudContext.GameFramework.Update += this.ProcessCurrentPlayers;
     }
     
     private void ProcessCurrentPlayers(IFramework framework)

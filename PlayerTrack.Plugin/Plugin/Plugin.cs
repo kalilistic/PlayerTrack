@@ -103,6 +103,7 @@ public class Plugin : IDalamudPlugin
         CommandHandler.Start();
         DalamudContext.PlayerLocationManager.Start();
         DalamudContext.SocialListHandler.Start();
+        ServiceContext.PlayerProcessService.Start();
         this.PlayerTrackProvider = new PlayerTrackProvider(DalamudContext.PluginInterface, new PlayerTrackAPI());
     });
 }
