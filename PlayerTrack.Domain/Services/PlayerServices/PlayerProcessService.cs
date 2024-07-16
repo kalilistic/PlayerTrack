@@ -1,7 +1,8 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using Dalamud.DrunkenToad.Extensions;
+using Dalamud.Plugin.Services;
 
 namespace PlayerTrack.Domain;
 
@@ -15,47 +16,50 @@ using Models;
 
 public class PlayerProcessService
 {
+    private volatile bool isProcessing;
+    private readonly ReaderWriterLockSlim locker = new ();
     public event Action<Player>? PlayerSelected;
-
     public event Action<Player>? CurrentPlayerAdded;
-
     public event Action<Player>? CurrentPlayerRemoved;
     
-    private readonly Timer reconcileCurrentPlayerTimer;
-
     public PlayerProcessService()
     {
-        this.reconcileCurrentPlayerTimer = new Timer(5000);
-        this.reconcileCurrentPlayerTimer.Elapsed += this.ProcessCurrentPlayers;
-        this.reconcileCurrentPlayerTimer.Start();
+        DalamudContext.GameFramework.Update += this.ProcessCurrentPlayers;
     }
 
     public void Dispose()
     {
-        this.reconcileCurrentPlayerTimer.Stop();
-        this.reconcileCurrentPlayerTimer.Dispose();
+        DalamudContext.GameFramework.Update -= this.ProcessCurrentPlayers;
+        locker.Dispose();
     }
     
-    private void ProcessCurrentPlayers(object? sender, ElapsedEventArgs elapsedEventArgs)
+    private void ProcessCurrentPlayers(IFramework framework)
     {
         DalamudContext.PluginLog.Verbose("Entering PlayerProcessService.ReconcileCurrentPlayerTimerOnElapsed()");
+        locker.EnterWriteLock();
         try
         {
-            DalamudContext.GameFramework.RunOnFrameworkThread(() =>
+            if (isProcessing) return;
+            isProcessing = true;
+        }
+        finally
+        {
+            locker.ExitWriteLock();
+        }
+        
+        DalamudContext.GameFramework.RunOnFrameworkThread(() =>
+        {
+            var objectPlayers = DalamudContext.ObjectCollection.GetPlayers().ToList();
+
+            Task.Run(() =>
             {
-                // get players in object table
-                var objectPlayers = DalamudContext.ObjectCollection.GetPlayers().ToList();
-            
-                // run async
-                Task.Run(() =>
+                try
                 {
-                    // Check for players that are no longer in the object table
                     var currentPlayers = ServiceContext.PlayerCacheService.GetCurrentPlayers();
                     if (currentPlayers.Count > 0)
                     {
                         foreach (var currentPlayer in currentPlayers)
                         {
-                            // check if player is in object table players
                             if (objectPlayers.All(p => p.ContentId != currentPlayer.ContentId))
                             {
                                 DalamudContext.PluginLog.Verbose($"Removing current player: {currentPlayer.ContentId}, {currentPlayer.Name}@{currentPlayer.WorldId}");
@@ -63,8 +67,7 @@ public class PlayerProcessService
                             }
                         }
                     }
-            
-                    // Check for players that are in the object table but not in the current players
+
                     if (objectPlayers.Count > 0)
                     {
                         foreach (var objectPlayer in objectPlayers)
@@ -77,15 +80,23 @@ public class PlayerProcessService
                             }
                         }
                     }
-                });
+                }
+                finally
+                {
+                    locker.EnterWriteLock();
+                    try
+                    {
+                        isProcessing = false;
+                    }
+                    finally
+                    {
+                        locker.ExitWriteLock();
+                    }
+                }
             });
-        }
-        catch (Exception ex)
-        {
-            DalamudContext.PluginLog.Error(ex, "Failed to reconcile current players.");
-        }
+        });
     }
-    
+        
     public static void CreateNewPlayer(string name, uint worldId, ulong contentId = 0)
     {
         var key = PlayerKeyBuilder.Build(name, worldId);
