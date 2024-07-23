@@ -67,6 +67,7 @@ public class ConfigView : PlayerTrackView, IDisposable
     {
         this.ConfigMenuOptions = Enum.GetNames(typeof(ConfigMenuOption));
         this.SelectedMenuOption = this.config.SelectedConfigOption;
+        this.dataComponent.Initialize();
     }
 
     public override void OnOpen()

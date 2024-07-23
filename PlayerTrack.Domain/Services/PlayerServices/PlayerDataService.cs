@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using PlayerTrack.Infrastructure;
 using PlayerTrack.Models;
@@ -164,6 +165,80 @@ public class PlayerDataService
         player.Notes = notes;
         RepositoryContext.PlayerRepository.UpdatePlayer(player);
         ServiceContext.PlayerCacheService.UpdatePlayer(player);
+    }
+    
+    public void MergePlayers(Player playerToDelete, Player playerToUpdate)
+    {
+        DalamudContext.PluginLog.Verbose($"PlayerDataService.MergePlayer(): {playerToDelete.Id} into {playerToUpdate.Id}");
+
+        // save state before changing
+        var isCurrent = playerToDelete.IsCurrent;
+
+        // remove players from cache
+        ServiceContext.PlayerProcessService.RemoveCurrentPlayer(playerToDelete.EntityId);
+        ServiceContext.PlayerCacheService.RemovePlayer(playerToUpdate.Id);
+        ServiceContext.PlayerCacheService.RemovePlayer(playerToDelete.Id);
+
+        // handle name/world change
+        if (playerToDelete.Name != playerToUpdate.Name || playerToDelete.WorldId != playerToUpdate.WorldId)
+        {
+            PlayerChangeService.AddNameWorldHistory(playerToUpdate.Id, playerToDelete.Name, playerToDelete.WorldId);
+        }
+        
+        // handle customize change
+        if (playerToDelete.Customize != null && playerToUpdate.Customize != null && 
+            !StructuralComparisons.StructuralEqualityComparer.Equals(
+                playerToDelete.Customize, playerToUpdate.Customize))
+        {
+            PlayerChangeService.AddCustomizeHistory(playerToUpdate.Id,
+                playerToUpdate.LastSeen > playerToDelete.LastSeen
+                    ? playerToDelete.Customize
+                    : playerToUpdate.Customize);
+        }
+
+        // re-parent records
+        PlayerChangeService.UpdatePlayerId(playerToDelete.Id, playerToUpdate.Id);
+        PlayerEncounterService.UpdatePlayerId(playerToDelete.Id, playerToUpdate.Id);
+        
+        // assign categories not already assigned
+        foreach (var category in playerToDelete.AssignedCategories)
+        {
+            if (playerToUpdate.AssignedCategories.All(c => c.Id != category.Id))
+            {
+                playerToUpdate.AssignedCategories.Add(category);
+                RepositoryContext.PlayerCategoryRepository.CreatePlayerCategory(playerToUpdate.Id, category.Id);
+            }
+        }
+        
+        // assign tags not already assigned
+        foreach (var tag in playerToDelete.AssignedTags)
+        {
+            if (playerToUpdate.AssignedTags.All(t => t.Id != tag.Id))
+            {
+                playerToUpdate.AssignedTags.Add(tag);
+                RepositoryContext.PlayerTagRepository.CreatePlayerTag(playerToUpdate.Id, tag.Id);
+            }
+        }
+
+        // delete records
+        PlayerConfigService.DeletePlayerConfig(playerToDelete.Id);
+        PlayerCategoryService.DeletePlayerCategoryByPlayerId(playerToDelete.Id);
+        PlayerTagService.DeletePlayerTagsByPlayerId(playerToDelete.Id);
+        RepositoryContext.PlayerRepository.DeletePlayer(playerToDelete.Id);
+
+        // merge player data
+        playerToUpdate.Merge(playerToDelete);
+
+        // add to current players if needed
+        playerToUpdate.IsCurrent = isCurrent;
+        if (playerToUpdate.IsCurrent)
+        {
+            ServiceContext.PlayerProcessService.RegisterCurrentPlayer(playerToUpdate);
+        }
+
+        // update player in repo & cache
+        RepositoryContext.PlayerRepository.UpdatePlayer(playerToUpdate);
+        ServiceContext.PlayerCacheService.AddPlayer(playerToUpdate);
     }
 
     private List<Player> GetPlayersForDeletion()

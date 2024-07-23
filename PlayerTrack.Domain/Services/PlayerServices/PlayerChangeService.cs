@@ -9,6 +9,13 @@ namespace PlayerTrack.Domain;
 
 public class PlayerChangeService
 {
+    public static void UpdatePlayerId(int originalPlayerId, int newPlayerId)
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.UpdatePlayerId(): {originalPlayerId}, {newPlayerId}");
+        RepositoryContext.PlayerNameWorldHistoryRepository.UpdatePlayerId(originalPlayerId, newPlayerId);
+        RepositoryContext.PlayerCustomizeHistoryRepository.UpdatePlayerId(originalPlayerId, newPlayerId);
+    }
+    
     public static void AddNameWorldHistory(int playerId, string playerName, uint worldId) => RepositoryContext.PlayerNameWorldHistoryRepository.CreatePlayerNameWorldHistory(new PlayerNameWorldHistory
     {
         PlayerId = playerId,

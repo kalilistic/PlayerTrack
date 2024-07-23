@@ -10,6 +10,8 @@ using Dalamud.DrunkenToad.Helpers;
 
 public class PlayerEncounterService
 {
+    public static void UpdatePlayerId(int originalPlayerId, int newPlayerId) => RepositoryContext.PlayerEncounterRepository.UpdatePlayerId(originalPlayerId, newPlayerId);
+    
     public static List<PlayerEncounter>? GetPlayerEncountersByPlayer(int playerId)
     {
         return RepositoryContext.PlayerEncounterRepository.GetAllByPlayerId(playerId);
@@ -29,7 +31,7 @@ public class PlayerEncounterService
         var encId = ServiceContext.EncounterService.CurrentEncounter?.Id ?? 0;
         if (encId == 0)
         {
-            DalamudContext.PluginLog.Warning("Encounter Id is 0, cannot create player encounter.");
+            DalamudContext.PluginLog.Verbose("Encounter Id is 0, cannot create player encounter.");
             return 0;
         }
 
@@ -74,7 +76,7 @@ public class PlayerEncounterService
         DalamudContext.PluginLog.Verbose($"Entering PlayerEncounterService.EndPlayerEncounter(): {player.Id}, {encounter?.Id}");
         if (encounter == null || encounter.Id == 0)
         {
-            DalamudContext.PluginLog.Warning("Encounter Id is 0, cannot end player encounter.");
+            DalamudContext.PluginLog.Verbose("Encounter Id is 0, cannot end player encounter.");
             return;
         }
 

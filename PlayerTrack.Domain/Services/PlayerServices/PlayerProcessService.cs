@@ -22,6 +22,8 @@ public class PlayerProcessService
     public event Action<Player>? CurrentPlayerAdded;
     public event Action<Player>? CurrentPlayerRemoved;
     
+    public void RegisterCurrentPlayer(Player player) => this.CurrentPlayerAdded?.Invoke(player);
+    
     public void Dispose()
     {
         DalamudContext.GameFramework.Update -= this.ProcessCurrentPlayers;
@@ -125,6 +127,17 @@ public class PlayerProcessService
         this.PlayerSelected?.Invoke(player);
     }
 
+    public void SelectPlayer(int playerId)
+    {
+        var player = ServiceContext.PlayerDataService.GetPlayer(playerId);
+        if (player == null)
+        {
+            DalamudContext.PluginLog.Verbose("Player not found.");
+            return;
+        }
+        this.PlayerSelected?.Invoke(player);
+    }
+
     public void AddOrUpdatePlayer(ToadPlayer toadPlayer, bool isCurrent = true, bool isUserRequest = false)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerProcessService.AddOrUpdatePlayer(): {toadPlayer.ContentId}, {toadPlayer.Name}, {toadPlayer.HomeWorld}, {isUserRequest}");
@@ -181,16 +194,21 @@ public class PlayerProcessService
             }
         }
     }
-
-    private static void HandleContentIdUpdateOnly(Player? player, ToadPlayer toadPlayer)
+    
+    internal void RemoveCurrentPlayer(uint entityId)
     {
-        if (player is not { ContentId: 0 }) return;
-        player.ContentId = toadPlayer.ContentId;
-        DalamudContext.PluginLog.Verbose($"Player content id updated: {player.Name}@{player.WorldId}");
-        ServiceContext.PlayerDataService.UpdatePlayer(player);
+        DalamudContext.PluginLog.Verbose($"Entering PlayerProcessService.RemoveCurrentPlayer(): {entityId}");
+        var player = ServiceContext.PlayerDataService.GetPlayer(entityId);
+        if (player == null)
+        {
+            DalamudContext.PluginLog.Verbose("Player not found.");
+            return;
+        }
+
+        RemoveCurrentPlayer(player);
     }
     
-    private void RemoveCurrentPlayer(Player player)
+    internal void RemoveCurrentPlayer(Player player)
     {
         PlayerEncounterService.EndPlayerEncounter(player, ServiceContext.EncounterService.GetCurrentEncounter());
         player.IsCurrent = false;
@@ -198,6 +216,14 @@ public class PlayerProcessService
         player.OpenPlayerEncounterId = 0;
         ServiceContext.PlayerDataService.UpdatePlayer(player);
         this.CurrentPlayerRemoved?.Invoke(player);
+    }
+
+    private static void HandleContentIdUpdateOnly(Player? player, ToadPlayer toadPlayer)
+    {
+        if (player is not { ContentId: 0 }) return;
+        player.ContentId = toadPlayer.ContentId;
+        DalamudContext.PluginLog.Verbose($"Player content id updated: {player.Name}@{player.WorldId}");
+        ServiceContext.PlayerDataService.UpdatePlayer(player);
     }
     
     private void CreateNewPlayer(ToadPlayer toadPlayer, string key, bool isCurrent, int categoryId, ToadLocation loc)

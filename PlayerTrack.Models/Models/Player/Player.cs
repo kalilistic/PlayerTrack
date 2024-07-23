@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Dalamud.DrunkenToad.Core;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dapper.Contrib.Extensions;
@@ -82,4 +83,54 @@ public class Player
     }
 
     public List<PlayerConfig> GetCategoryPlayerConfigs() => this.AssignedCategories.OrderBy(cat => cat.Rank).Select(cat => cat.PlayerConfig).ToList();
+
+    public string WorldName()
+    {
+        return DalamudContext.DataManager.GetWorldNameById(this.WorldId);
+    }
+    
+    public string FullyQualifiedName()
+    {
+        return $"{Name}@{WorldName()} (#{Id})";
+    }
+    
+    public void Merge(Player player)
+    {
+        // combine
+        this.SeenCount += player.SeenCount;
+        this.Notes = string.IsNullOrEmpty(this.Notes) 
+            ? player.Notes 
+            : (string.IsNullOrEmpty(player.Notes) 
+                ? this.Notes 
+                : this.Notes + " | " + player.Notes);
+        
+        // true if either is true
+        this.IsCurrent = player.IsCurrent || this.IsCurrent;
+        this.IsRecent = player.IsRecent || this.IsRecent;
+        
+        // use from latest player if set
+        if (player.LastSeen > this.LastSeen)
+        {
+            this.Customize = player.Customize?.Length > 0 ? player.Customize : this.Customize;
+            this.LastTerritoryType = player.LastTerritoryType != 0 ? player.LastTerritoryType : this.LastTerritoryType;
+            this.FreeCompany = player.FreeCompany.Key != FreeCompanyState.Unknown ? player.FreeCompany : this.FreeCompany;
+            this.EntityId = player.EntityId != 0 ? player.EntityId : this.EntityId;
+        }
+        
+        // use the most recent timestamp
+        this.LastAlertSent = Math.Max(this.LastAlertSent, player.LastAlertSent);
+        this.LastSeen = Math.Max(this.LastSeen, player.LastSeen);
+        
+        // set fields if not set
+        if (ContentId == 0)
+        {
+            this.ContentId = player.ContentId;
+        }
+        if (this.LodestoneStatus != LodestoneStatus.Verified)
+        {
+            this.LodestoneId = player.LodestoneId;
+            this.LodestoneStatus = player.LodestoneStatus;
+            this.LodestoneVerifiedOn = player.LodestoneVerifiedOn;
+        }
+    }
 }

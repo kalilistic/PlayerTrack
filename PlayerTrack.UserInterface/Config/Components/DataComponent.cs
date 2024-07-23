@@ -1,4 +1,7 @@
-﻿using Dalamud.DrunkenToad.Gui.Enums;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Dalamud.DrunkenToad.Gui.Enums;
+using Dalamud.DrunkenToad.Gui.Widgets;
 using Dalamud.Interface;
 
 namespace PlayerTrack.UserInterface.Config.Components;
@@ -18,6 +21,12 @@ using Models;
 
 public class DataComponent : ConfigViewComponent
 {
+    private Player? deletePlayer;
+    private Player? updatePlayer;
+    private FilterComboBox deletePlayerComboBox = null!;
+    private FilterComboBox updatePlayerComboBox = null!;
+    private List<Player> players = [];
+    private List<string> playerDisplayNames = [];
     private int selectedActionIndex;
     private int itemsToDeleteCount;
     private int totalItemsCount;
@@ -37,7 +46,8 @@ public class DataComponent : ConfigViewComponent
         if (ImGui.BeginTabBar("###Data_TabBar", ImGuiTabBarFlags.None))
         {
             this.DrawPurge();
-            this.DrawSQLExecutor();
+            this.DrawMerge();
+            this.DrawSqlExecutor();
             this.DrawLocalPlayers();
         }
     }
@@ -46,8 +56,8 @@ public class DataComponent : ConfigViewComponent
     {
         if (LocGui.BeginTabItem("LocalPlayers"))
         {
-            var players = LocalPlayerService.GetLocalPlayers();
-            if (players.Count == 0)
+            var localPlayers = LocalPlayerService.GetLocalPlayers();
+            if (localPlayers.Count == 0)
             {
                 LocGui.TextColored("NoLocalPlayers", ImGuiColors.DalamudYellow);
             }
@@ -55,7 +65,7 @@ public class DataComponent : ConfigViewComponent
             {
                 LocGui.TextColored("LocalPlayers", ImGuiColors.DalamudViolet);
                 ImGui.Spacing();
-                foreach (var player in players)
+                foreach (var player in localPlayers)
                 {
                     var playerName = LocalPlayerService.GetLocalPlayerFullName(player.ContentId);
                     ImGui.Text(playerName);
@@ -68,9 +78,9 @@ public class DataComponent : ConfigViewComponent
         }
     }
     
-    private void HandleLocalPlayerDeletion(LocalPlayer LocalPlayer)
+    private void HandleLocalPlayerDeletion(LocalPlayer localPlayer)
     {
-        ToadGui.Confirm(LocalPlayer, FontAwesomeIcon.Trash, "ConfirmDelete", ref this.localPlayerToDelete);
+        ToadGui.Confirm(localPlayer, FontAwesomeIcon.Trash, "ConfirmDelete", ref this.localPlayerToDelete);
         if (this.localPlayerToDelete?.Item1 == ActionRequest.Confirmed)
         {
             DeleteLocalPlayer();
@@ -106,7 +116,108 @@ public class DataComponent : ConfigViewComponent
         }
     }
 
-    private void DrawSQLExecutor()
+
+    public void Initialize()
+    {
+        players = ServiceContext.PlayerCacheService.GetPlayers();
+        if (players.Count == 0) return;
+
+        playerDisplayNames = players.Select(player => player.FullyQualifiedName()).ToList();
+        deletePlayerComboBox = new FilterComboBox(playerDisplayNames, "SearchPlayersInputHint", "NoPlayersFound");
+        updatePlayerComboBox = new FilterComboBox(playerDisplayNames, "SearchPlayersInputHint", "NoPlayersFound");
+        deletePlayer = null;
+        updatePlayer = null;
+    }
+
+    private void DrawMerge()
+    {
+        if (LocGui.BeginTabItem("Merge"))
+        {
+            DrawMergeInstructions();
+            DrawPlayerToDelete();
+            DrawPlayerToUpdate();
+            DrawMergeConfirmation();
+            ImGui.EndTabItem();
+        }
+    }
+    private static void DrawMergeInstructions()
+    {
+        LocGui.TextColored("MergePlayersInstructions", ImGuiColors.DalamudViolet);
+        ImGui.Spacing();
+    }
+
+    private void DrawPlayerToDelete()
+    {
+        DrawPlayer(ref deletePlayer, deletePlayerComboBox, "SelectPlayerToDelete");
+    }
+
+    private void DrawPlayerToUpdate()
+    {
+        DrawPlayer(ref updatePlayer, updatePlayerComboBox, "SelectPlayerToUpdate");
+    }
+    
+    private void DrawPlayer(ref Player? selectedPlayer, FilterComboBox comboBox, string label)
+    {
+        var isPlayerSelected = selectedPlayer != null;
+        if (!isPlayerSelected)
+        {
+            ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudGrey);
+        }
+        ImGui.BeginGroup();
+        ImGui.PushFont(UiBuilder.IconFont);
+        ImGui.Text(FontAwesomeIcon.ArrowUpRightFromSquare.ToIconString());
+        ImGui.PopFont();
+        ImGui.EndGroup();
+        if (ImGui.IsItemClicked() && isPlayerSelected)
+        {
+            OpenPlayer(selectedPlayer);
+        }
+        if (!isPlayerSelected)
+        {
+            ImGui.PopStyleColor();
+        }
+
+        ImGui.SameLine();
+        var selectedIndex = comboBox.Draw(label, 300f);
+        if (selectedIndex.HasValue)
+        {
+            selectedPlayer = players[selectedIndex.Value];
+        }
+    }
+    
+    private static void OpenPlayer(Player? player)
+    {
+        if (player != null)
+        {
+            ServiceContext.PlayerProcessService.SelectPlayer(player.Id);
+        }
+    }
+
+    private void DrawMergeConfirmation()
+    {
+        ImGui.Spacing();
+        var areBothSelected = this.deletePlayer != null && this.updatePlayer != null;
+        var isDupeSelected = areBothSelected && this.deletePlayer!.Id == this.updatePlayer!.Id;
+        var isDisabled = !areBothSelected || isDupeSelected;
+        
+        if (LocGui.Button("ResetPlayers")) Initialize();
+        ImGui.SameLine();
+        ImGui.BeginDisabled(isDisabled);
+        if (LocGui.Button("MergePlayers") && !isDisabled)
+        {
+            ServiceContext.PlayerDataService.MergePlayers(this.deletePlayer!, this.updatePlayer!);
+            OpenPlayer(this.updatePlayer);
+            Initialize();
+        }
+        ImGui.EndDisabled();
+        if (isDupeSelected)
+        {
+            ImGui.Spacing();
+            LocGui.TextColored("MergePlayersDupe", ImGuiColors.DalamudYellow);
+        }
+    }
+
+    private void DrawSqlExecutor()
     {
         if (LocGui.BeginTabItem("SQLExecutor"))
         {
@@ -128,7 +239,7 @@ public class DataComponent : ConfigViewComponent
             ImGuiHelpers.ScaledDummy(1f);
             if (LocGui.Button("Execute"))
             {
-                this.ExecuteSQL();
+                this.ExecuteSql();
             }
 
             ImGui.SameLine();
@@ -142,7 +253,7 @@ public class DataComponent : ConfigViewComponent
         }
     }
 
-    private void ExecuteSQL()
+    private void ExecuteSql()
     {
         this.sqlResult = string.Empty;
         this.sqlResultDisplay = string.Empty;

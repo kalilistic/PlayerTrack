@@ -33,19 +33,19 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
         return newId;
     }
 
-    public int UpdatePlayerId(int oldestPlayerId, int newPlayerId)
+    public int UpdatePlayerId(int originalPlayerId, int newPlayerId)
     {
         DalamudContext.PluginLog.Verbose("Entering PlayerNameWorldHistoryRepository.UpdatePlayerId()");
         try
         {
-            const string updateSql = "UPDATE player_name_world_histories SET player_id = @newPlayerId WHERE player_id = @oldestPlayerId";
+            const string updateSql = "UPDATE player_name_world_histories SET player_id = @newPlayerId WHERE player_id = @originalPlayerId";
 
-            var numberOfUpdatedRecords = this.Connection.Execute(updateSql, new { newPlayerId, oldestPlayerId });
+            var numberOfUpdatedRecords = this.Connection.Execute(updateSql, new { newPlayerId, originalPlayerId });
             return numberOfUpdatedRecords;
         }
         catch (Exception ex)
         {
-            DalamudContext.PluginLog.Error(ex, $"Failed to update playerIds from {oldestPlayerId} to {newPlayerId}.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to update playerIds from {originalPlayerId} to {newPlayerId}.");
             return 0;
         }
     }
