@@ -20,6 +20,7 @@ public class Player
 
     public long LastAlertSent { get; set; }
 
+    public long FirstSeen { get; set; }
     public long LastSeen { get; set; }
 
     public byte[]? Customize { get; set; }
@@ -111,6 +112,9 @@ public class Player
         // use from latest player if set
         if (player.LastSeen > this.LastSeen)
         {
+            this.Name = player.Name;
+            this.WorldId = player.WorldId;
+            this.Key = string.Concat(this.Name.Replace(' ', '_').ToUpperInvariant(), "_", this.WorldId);
             this.Customize = player.Customize?.Length > 0 ? player.Customize : this.Customize;
             this.LastTerritoryType = player.LastTerritoryType != 0 ? player.LastTerritoryType : this.LastTerritoryType;
             this.FreeCompany = player.FreeCompany.Key != FreeCompanyState.Unknown ? player.FreeCompany : this.FreeCompany;
@@ -120,6 +124,19 @@ public class Player
         // use the most recent timestamp
         this.LastAlertSent = Math.Max(this.LastAlertSent, player.LastAlertSent);
         this.LastSeen = Math.Max(this.LastSeen, player.LastSeen);
+        
+        // use the oldest timestamp
+        this.Created = Math.Min(this.Created, player.Created);
+        
+        // use first seen if set
+        if (this.FirstSeen == 0)
+        {
+            this.FirstSeen = player.FirstSeen;
+        }
+        else if (player.FirstSeen != 0)
+        {
+            this.FirstSeen = Math.Min(this.FirstSeen, player.FirstSeen);
+        }
         
         // set fields if not set
         if (ContentId == 0)

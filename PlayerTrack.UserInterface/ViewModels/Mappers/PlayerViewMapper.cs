@@ -28,7 +28,7 @@ public static class PlayerViewMapper
             FreeCompany = GetFreeCompany(player.FreeCompany),
             LodestoneId = player.LodestoneId,
             Appearance = GetAppearance(player.Customize),
-            FirstSeen = player.SeenCount != 0 && player.Created != 0 ? player.Created.ToTimeSpan() : na,
+            FirstSeen = player.SeenCount != 0 && player.FirstSeen != 0 ? player.FirstSeen.ToTimeSpan() : na,
             LastSeen = player.SeenCount != 0 && player.LastSeen != 0 ? player.LastSeen.ToTimeSpan() : na,
             LastLocation = GetLastLocation(player.LastTerritoryType),
             SeenCount = player.SeenCount != 0 ? $"{player.SeenCount}x" : na,

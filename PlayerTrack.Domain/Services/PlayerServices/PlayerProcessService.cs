@@ -99,7 +99,7 @@ public class PlayerProcessService
         });
     }
         
-    public static void CreateNewPlayer(string name, uint worldId, ulong contentId = 0)
+    public static void CreateNewPlayer(string name, uint worldId, ulong contentId = 0, bool isSeen = true)
     {
         var key = PlayerKeyBuilder.Build(name, worldId);
         var player = new Player
@@ -110,6 +110,11 @@ public class PlayerProcessService
             ContentId = contentId,
             Created = UnixTimestampHelper.CurrentTime(),
         };
+        
+        if (isSeen)
+        {
+            player.FirstSeen = player.Created;
+        }
 
         ServiceContext.PlayerDataService.AddPlayer(player);
     }
@@ -205,6 +210,12 @@ public class PlayerProcessService
             return;
         }
 
+        if (!player.IsCurrent)
+        {
+            DalamudContext.PluginLog.Verbose("Player is not current.");
+            return;
+        }
+
         RemoveCurrentPlayer(player);
     }
     
@@ -228,6 +239,7 @@ public class PlayerProcessService
     
     private void CreateNewPlayer(ToadPlayer toadPlayer, string key, bool isCurrent, int categoryId, ToadLocation loc)
     {
+        var currentTime = UnixTimestampHelper.CurrentTime();
         var player = new Player
         {
             Key = key,
@@ -239,7 +251,8 @@ public class PlayerProcessService
             FreeCompany = PlayerFCHelper.CheckFreeCompany(toadPlayer.CompanyTag, loc.InContent()),
             Customize = toadPlayer.Customize,
             LastTerritoryType = (ushort)(isCurrent ? loc.TerritoryId : 0),
-            Created = UnixTimestampHelper.CurrentTime(),
+            Created = currentTime,
+            FirstSeen = currentTime,
             IsCurrent = isCurrent,
             IsRecent = isCurrent,
             LastSeen = isCurrent ? UnixTimestampHelper.CurrentTime() : 0,
@@ -266,6 +279,7 @@ public class PlayerProcessService
                 ServiceContext.PlayerAlertService.SendPlayerNameWorldChangeAlert(player, player.Name, player.WorldId, toadPlayer.Name, toadPlayer.HomeWorld);
             }
 
+            var currentTime = UnixTimestampHelper.CurrentTime();
             player.Key = PlayerKeyBuilder.Build(toadPlayer.Name, toadPlayer.HomeWorld);
             player.Name = toadPlayer.Name;
             player.WorldId = toadPlayer.HomeWorld;
@@ -275,9 +289,11 @@ public class PlayerProcessService
             player.ContentId = toadPlayer.ContentId;
             player.SeenCount += 1;
             player.LastTerritoryType = loc.TerritoryId;
-            player.LastSeen = UnixTimestampHelper.CurrentTime();
+            player.LastSeen = currentTime;
             player.IsCurrent = true;
             player.IsRecent = true;
+            if (player.FirstSeen == 0) player.FirstSeen = currentTime;
+            
             ServiceContext.PlayerDataService.UpdatePlayer(player);
         }
 

@@ -78,7 +78,7 @@ public class AddPlayerComponent : ViewComponent
                 }
                 else
                 {
-                    PlayerProcessService.CreateNewPlayer(this.addPlayerInput, worldId);
+                    PlayerProcessService.CreateNewPlayer(this.addPlayerInput, worldId, 0, false);
                     this.addPlayerInput = string.Empty;
                     this.showSuccessMessage = true;
                 }

@@ -198,7 +198,8 @@ public class SocialListService
                 if (socialList.AddPlayers)
                 {
                     if (string.IsNullOrEmpty(socialListMember.Name)) continue;
-                    PlayerProcessService.CreateNewPlayer(socialListMember.Name, socialListMember.WorldId, socialListMember.ContentId);
+                    PlayerProcessService.CreateNewPlayer(socialListMember.Name, socialListMember.WorldId,
+                        socialListMember.ContentId, false);
                     player = ServiceContext.PlayerDataService.GetPlayer(socialListMember.ContentId, socialListMember.Name, socialListMember.WorldId);
                 }
             }

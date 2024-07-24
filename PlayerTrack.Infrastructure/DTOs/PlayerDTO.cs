@@ -9,6 +9,8 @@ public class PlayerDTO : DTO
     public long last_alert_sent { get; set; }
 
     public long last_seen { get; set; }
+    
+    public long first_seen { get; set; }
 
     public byte[]? customize { get; set; }
 

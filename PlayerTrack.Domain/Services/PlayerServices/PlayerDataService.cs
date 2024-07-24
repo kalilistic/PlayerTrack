@@ -182,18 +182,17 @@ public class PlayerDataService
         // handle name/world change
         if (playerToDelete.Name != playerToUpdate.Name || playerToDelete.WorldId != playerToUpdate.WorldId)
         {
-            PlayerChangeService.AddNameWorldHistory(playerToUpdate.Id, playerToDelete.Name, playerToDelete.WorldId);
+            var name = playerToDelete.LastSeen > playerToUpdate.LastSeen ? playerToUpdate.Name : playerToDelete.Name;
+            var worldId = playerToDelete.LastSeen > playerToUpdate.LastSeen ? playerToUpdate.WorldId : playerToDelete.WorldId;
+            PlayerChangeService.AddNameWorldHistory(playerToUpdate.Id, name, worldId);
         }
         
         // handle customize change
-        if (playerToDelete.Customize != null && playerToUpdate.Customize != null && 
-            !StructuralComparisons.StructuralEqualityComparer.Equals(
-                playerToDelete.Customize, playerToUpdate.Customize))
+        if (playerToDelete.Customize != null && playerToUpdate.Customize != null &&
+            !StructuralComparisons.StructuralEqualityComparer.Equals(playerToDelete.Customize, playerToUpdate.Customize))
         {
-            PlayerChangeService.AddCustomizeHistory(playerToUpdate.Id,
-                playerToUpdate.LastSeen > playerToDelete.LastSeen
-                    ? playerToDelete.Customize
-                    : playerToUpdate.Customize);
+            var customize = playerToDelete.LastSeen > playerToUpdate.LastSeen ? playerToUpdate.Customize : playerToDelete.Customize;
+            PlayerChangeService.AddCustomizeHistory(playerToUpdate.Id, customize);
         }
 
         // re-parent records
