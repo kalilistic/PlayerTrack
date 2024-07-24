@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Gui.Enums;
 using Dalamud.DrunkenToad.Gui.Widgets;
 using Dalamud.Interface;
@@ -136,7 +137,7 @@ public class DataComponent : ConfigViewComponent
             DrawMergeInstructions();
             DrawPlayerToDelete();
             DrawPlayerToUpdate();
-            DrawMergeConfirmation();
+            DrawMergeControls();
             ImGui.EndTabItem();
         }
     }
@@ -159,23 +160,14 @@ public class DataComponent : ConfigViewComponent
     private void DrawPlayer(ref Player? selectedPlayer, FilterComboBox comboBox, string label)
     {
         var isPlayerSelected = selectedPlayer != null;
-        if (!isPlayerSelected)
-        {
-            ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudGrey);
-        }
-        ImGui.BeginGroup();
-        ImGui.PushFont(UiBuilder.IconFont);
-        ImGui.Text(FontAwesomeIcon.ArrowUpRightFromSquare.ToIconString());
-        ImGui.PopFont();
-        ImGui.EndGroup();
-        if (ImGui.IsItemClicked() && isPlayerSelected)
+        var buttonLabel = DalamudContext.LocManager.GetString("OpenPlayer");
+
+        ImGui.BeginDisabled(!isPlayerSelected);
+        if (ImGui.Button($"{buttonLabel}##{selectedPlayer?.Id ?? '0'}") && isPlayerSelected)
         {
             OpenPlayer(selectedPlayer);
         }
-        if (!isPlayerSelected)
-        {
-            ImGui.PopStyleColor();
-        }
+        ImGui.EndDisabled();
 
         ImGui.SameLine();
         var selectedIndex = comboBox.Draw(label, 300f);
@@ -193,9 +185,11 @@ public class DataComponent : ConfigViewComponent
         }
     }
 
-    private void DrawMergeConfirmation()
+    private void DrawMergeControls()
     {
-        ImGui.Spacing();
+        ImGuiHelpers.ScaledDummy(2f);
+        ImGui.Separator();
+        ImGuiHelpers.ScaledDummy(2f);
         var areBothSelected = this.deletePlayer != null && this.updatePlayer != null;
         var isDupeSelected = areBothSelected && this.deletePlayer!.Id == this.updatePlayer!.Id;
         var isDisabled = !areBothSelected || isDupeSelected;
