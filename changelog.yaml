@@ -1,0 +1,14 @@
+changelog_version: "1.0"
+
+stable:
+  - version: "3.4.7.0"
+    date: "2024-07-28"
+    is_critical: false
+    headline:
+    added:
+    changed:
+    deprecated:
+    fixed:
+      - Use correct arrows for FC tag in nameplates.
+    removed:
+    technical:
