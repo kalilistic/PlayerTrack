@@ -37,8 +37,8 @@ public class PlayerNameplateService
             nameplate.TitleLeftQuote = new SeString().Append(new UIForegroundPayload(color)).Append("《");
             nameplate.TitleRightQuote = new SeString().Append("》").Append(UIForegroundPayload.UIForegroundOff);
             nameplate.NameTextWrap = (new SeString(new UIForegroundPayload(color)), new SeString(UIForegroundPayload.UIForegroundOff));
-            nameplate.FreeCompanyLeftQuote = new SeString().Append(new UIForegroundPayload(color)).Append("《");
-            nameplate.FreeCompanyRightQuote = new SeString().Append("》").Append(UIForegroundPayload.UIForegroundOff);
+            nameplate.FreeCompanyLeftQuote = new SeString().Append(new UIForegroundPayload(color)).Append(" «");
+            nameplate.FreeCompanyRightQuote = new SeString().Append("»").Append(UIForegroundPayload.UIForegroundOff);
         }
 
         nameplate.NameplateUseColorIfDead = PlayerConfigService.GetNameplateUseColorIfDead(player);
