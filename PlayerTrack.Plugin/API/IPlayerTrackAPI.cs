@@ -30,6 +30,6 @@ public interface IPlayerTrackAPI
     /// <summary>
     /// Retrieves all player names/world history records.
     /// </summary>
-    /// <returns>tuple array of current (player name, world id) and an array of (player name, world id) name/world changes.</returns>
+    /// <returns>tuple array of current (player name, world id) and an array of all previous (player name, world id) combos.</returns>
     public ((string, uint), (string, uint)[])[] GetAllPlayerNameWorldHistories();
 }
