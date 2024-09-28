@@ -29,9 +29,9 @@ public class PlayerTrackProvider
     public const string LabelProviderGetPlayerNotes = "PlayerTrack.GetPlayerNotes";
 
     /// <summary>
-    /// GetPlayerNameWorldHistories.
+    /// GetAllPlayerNameWorldHistories.
     /// </summary>
-    public const string LabelProviderGetPlayerNameWorldHistories = "PlayerTrack.GetPlayerNameWorldHistories";
+    public const string LabelProviderGetAllPlayerNameWorldHistories = "PlayerTrack.GetAllPlayerNameWorldHistories";
 
     /// <summary>
     /// API.
@@ -54,9 +54,9 @@ public class PlayerTrackProvider
     public readonly ICallGateProvider<string, uint, string>? ProviderGetPlayerNotes;
 
     /// <summary>
-    /// GetUniquePlayerNameWorldHistories.
+    /// ProviderGetAllPlayerNameWorldHistories.
     /// </summary>
-    public readonly ICallGateProvider<(string, uint)[], ((string, uint), (string, uint)[])[]>? GetPlayerNameWorldHistories;
+    public readonly ICallGateProvider<((string, uint), (string, uint)[])[]>? ProviderGetAllPlayerNameWorldHistories;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PlayerTrackProvider"/> class.
@@ -102,13 +102,13 @@ public class PlayerTrackProvider
 
         try
         {
-            this.GetPlayerNameWorldHistories =
-                pluginInterface.GetIpcProvider<(string, uint)[], ((string, uint), (string, uint)[])[]>(LabelProviderGetPlayerNameWorldHistories);
-            this.GetPlayerNameWorldHistories.RegisterFunc(api.GetPlayerNameWorldHistories);
+            this.ProviderGetAllPlayerNameWorldHistories =
+                pluginInterface.GetIpcProvider<((string, uint), (string, uint)[])[]>(LabelProviderGetAllPlayerNameWorldHistories);
+            this.ProviderGetAllPlayerNameWorldHistories.RegisterFunc(api.GetAllPlayerNameWorldHistories);
         }
         catch (Exception e)
         {
-            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerNameWorldHistories}:\n{e}");
+            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetAllPlayerNameWorldHistories}:\n{e}");
         }
     }
 
@@ -121,6 +121,6 @@ public class PlayerTrackProvider
         this.ProviderAPIVersion?.UnregisterFunc();
         this.ProviderGetPlayerCurrentNameWorld?.UnregisterFunc();
         this.ProviderGetPlayerNotes?.UnregisterFunc();
-        this.GetPlayerNameWorldHistories?.UnregisterFunc();
+        this.ProviderGetAllPlayerNameWorldHistories?.UnregisterFunc();
     }
 }

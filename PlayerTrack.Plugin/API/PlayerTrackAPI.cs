@@ -60,33 +60,37 @@ public class PlayerTrackAPI : IPlayerTrackAPI
     }
 
     /// <inheritdoc />
-    public ((string, uint), (string, uint)[])[] GetPlayerNameWorldHistories((string, uint)[] players) 
+    public ((string, uint), (string, uint)[])[] GetAllPlayerNameWorldHistories() 
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetPlayerNameWorldHistories() (count: {players.Length})");
+        DalamudContext.PluginLog.Verbose($"Entering PlayerTrackAPI.GetAllPlayerNameWorldHistories()");
         this.CheckInitialized();
-        List<Player> playerObjList = new ();
-        playerObjList = ServiceContext.PlayerDataService.GetAllPlayers().Where(x => players.ToList().Contains((x.Name, x.WorldId))).ToList();
-        var playerHistories = PlayerChangeService.GetPlayerNameWorldHistories(playerObjList.Select(x => x.Id).ToArray());
+        var playerHistories = PlayerChangeService.GetAllPlayerNameWorldHistories();
         if (playerHistories == null) 
         {
             DalamudContext.PluginLog.Warning("No player name/world history found.");
-            return new ((string, uint), (string, uint)[])[] { };
+            return [];
         }
-
-        Dictionary<int, List<(string, uint)>> combinedResults = new();
+        Dictionary<int, List<(string, uint)>> combinedResults = [];
         foreach(var playerHistory in playerHistories)
         {
-            var player = playerObjList.Where(x => x.Id == playerHistory.PlayerId).FirstOrDefault();
             if (!combinedResults.ContainsKey(playerHistory.PlayerId))
             {
-                combinedResults.Add(playerHistory.PlayerId, new());
+                combinedResults.Add(playerHistory.PlayerId, []);
             }
             combinedResults[playerHistory.PlayerId].Add((playerHistory.PlayerName, playerHistory.WorldId));
         }
-        return combinedResults.Where(x => x.Value.Any()).Select(x => (
-        playerObjList.Where(y => y.Id == x.Key).Select(y => (y.Name, y.WorldId)).First(),
-        x.Value.ToArray()
-        )).ToArray();
+
+        var playerObjList = ServiceContext.PlayerDataService.GetAllPlayers().Where(x => combinedResults.ContainsKey(x.Id)).ToList();
+        List<((string, uint), (string, uint)[])> toReturn = [];
+        foreach(var result in combinedResults) 
+        {
+            var player = playerObjList.Where(player => player.Id == result.Key).FirstOrDefault();
+            if(player != null) {
+                toReturn.Add(((player.Name, player.WorldId), result.Value.ToArray()));
+            }
+        }
+
+        return [.. toReturn];
     }
 
     private void CheckInitialized()

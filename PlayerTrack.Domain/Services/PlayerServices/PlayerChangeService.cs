@@ -69,10 +69,10 @@ public class PlayerChangeService
         return worldNames.Any() ? string.Join(", ", worldNames) : string.Empty;
     }
 
-    public static List<PlayerNameWorldHistory> GetPlayerNameWorldHistories(IEnumerable<int> playerIds)
+    public static List<PlayerNameWorldHistory> GetAllPlayerNameWorldHistories()
     {
-        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.GetPlayerNameWorldHistories()");
-        var nameWorldHistories = RepositoryContext.PlayerNameWorldHistoryRepository.GetPlayerNameWorldHistories(playerIds.ToArray());
+        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.GetAllPlayerNameWorldHistories()");
+        var nameWorldHistories = RepositoryContext.PlayerNameWorldHistoryRepository.GetAllPlayerNameWorldHistories();
         if (nameWorldHistories == null)
         {
             return new List<PlayerNameWorldHistory>();

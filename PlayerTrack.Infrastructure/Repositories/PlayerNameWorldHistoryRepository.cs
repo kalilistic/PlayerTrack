@@ -123,6 +123,17 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
         }
     }
 
+    public IEnumerable<PlayerNameWorldHistory>? GetAllPlayerNameWorldHistories() {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerNameWorldHistoryRepository.GetPlayerNameWorldHistories()");
+        try {
+            return this.Connection.Query<PlayerNameWorldHistoryDTO>("SELECT * from player_name_world_histories").Select(x => Mapper.Map<PlayerNameWorldHistory>(x));
+        }
+        catch (Exception ex) {
+            DalamudContext.PluginLog.Error(ex, $"Failed to get bulk player name world history.");
+            return null;
+        }
+    }
+
     public bool DeleteNameWorldHistory(int playerId)
     {
         DalamudContext.PluginLog.Verbose($"Entering PlayerNameWorldHistoryRepository.DeleteNameWorldHistory(): {playerId}");
