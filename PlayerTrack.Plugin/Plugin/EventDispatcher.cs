@@ -90,6 +90,7 @@ public static class EventDispatcher
     {
         DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnLogin()");
         DalamudContext.GameFramework.RunOnFrameworkThread(DalamudContext.ClientStateHandler.GetLocalPlayer);
+        LocalPlayerService.AddOrUpdateLocalPlayer(DalamudContext.ClientStateHandler.GetLocalPlayer());
     });
 
     private static void OnFriendListReceived(List<ToadSocialListMember> members) => EventChannel.Writer.TryWrite(() =>
