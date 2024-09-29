@@ -28,9 +28,8 @@ public interface IPlayerTrackAPI
     public string GetPlayerNotes(string name, uint worldId);
 
     /// <summary>
-    /// Returns the player names/world history for a list of players
+    /// Retrieves all player names/world history records.
     /// </summary>
-    /// <param name="players">tuple array of (player name, world id)</param>
-    /// <returns>tuple array of current (player name, world id) and an array of (player name, world id) name/world changes.</returns>
-    public ((string, uint), (string, uint)[])[] GetPlayerNameWorldHistories((string, uint)[] players);
+    /// <returns>tuple array of current (player name, world id) and an array of all previous (player name, world id) combos.</returns>
+    public ((string, uint), (string, uint)[])[] GetAllPlayerNameWorldHistories();
 }

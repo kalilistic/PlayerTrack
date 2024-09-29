@@ -118,7 +118,19 @@ public class PlayerNameWorldHistoryRepository : BaseRepository
         }
         catch (Exception ex) 
         {
-            DalamudContext.PluginLog.Error(ex, $"Failed to get bulk player name world history.");
+            DalamudContext.PluginLog.Error(ex, $"Failed to get bulk player name world history");
+            return null;
+        }
+    }
+
+    public IEnumerable<PlayerNameWorldHistory>? GetAllPlayerNameWorldHistories() {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerNameWorldHistoryRepository.GetPlayerNameWorldHistories()");
+        try {
+            const string sql = "SELECT * from player_name_world_histories";
+            return this.Connection.Query<PlayerNameWorldHistoryDTO>(sql).Select(x => Mapper.Map<PlayerNameWorldHistory>(x));
+        }
+        catch (Exception ex) {
+            DalamudContext.PluginLog.Error(ex, $"Failed to get all player name world histories");
             return null;
         }
     }
