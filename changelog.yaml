@@ -1,6 +1,21 @@
 changelog_version: "1.0"
 
 stable:
+  - version: "3.4.8.0"
+    date: "2024-09-29"
+    is_critical: false
+    headline:
+    added:
+    changed:
+      - Update fr/es localization.
+    deprecated:
+    fixed:
+      - Create local player as expected (try re-logging after update).
+    removed:
+    technical:
+      - Rename addon api from obsolete.
+      - Refactor IPC method GetPlayerNameWorldHistories (wrath16).
+      - Use internal name for world lookups.
   - version: "3.4.7.0"
     date: "2024-07-28"
     is_critical: false
