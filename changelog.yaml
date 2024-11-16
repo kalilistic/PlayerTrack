@@ -1,6 +1,17 @@
 changelog_version: "1.0"
 
 stable:
+  - version: "3.4.9.0"
+    date: "2024-11-15"
+    is_critical: false
+    headline:
+    added:
+    changed:
+      - Update for api11.
+    deprecated:
+    fixed:
+    removed:
+    technical:
   - version: "3.4.8.0"
     date: "2024-09-29"
     is_critical: false

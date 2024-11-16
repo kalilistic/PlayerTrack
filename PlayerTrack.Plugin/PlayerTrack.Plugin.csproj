@@ -45,7 +45,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Dalamud.Loc" Version="1.2.1" />
-		<PackageReference Include="DalamudPackager" Version="2.1.13" />
+		<PackageReference Include="DalamudPackager" Version="11.0.0" />
 		<PackageReference Include="LiteHelper" Version="0.0.6" />
 	</ItemGroup>
 	<ItemGroup>
