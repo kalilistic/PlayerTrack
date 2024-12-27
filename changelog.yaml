@@ -38,3 +38,22 @@ stable:
       - Use correct arrows for FC tag in nameplates.
     removed:
     technical:
+
+testing:
+  - version: "3.4.10.0"
+    date: "2024-12-26"
+    is_critical: false
+    headline: Minor bug fixes including avoiding adding players during replays.
+    added:
+    changed:
+        - Update chinese/spanish localization.
+        - Migrate to the dalamud nameplate service.
+    deprecated:
+    fixed:
+        - Don't process player data during replays.
+        - Hide serilog version warnings.
+        - Handle error when with empty db on merge screen (thakyZ).
+        - Prevent database from being locked on crash (thakyZ).
+        - Fix compiler warning for player retrieval function (thakyZ).
+    removed:
+    technical:
