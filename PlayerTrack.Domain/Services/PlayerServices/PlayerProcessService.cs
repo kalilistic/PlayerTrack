@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Dalamud.DrunkenToad.Extensions;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 
 namespace PlayerTrack.Domain;
@@ -51,6 +52,12 @@ public class PlayerProcessService
         
         DalamudContext.GameFramework.RunOnFrameworkThread(() =>
         {
+
+            if (DalamudContext.ConditionHandler.Any(ConditionFlag.DutyRecorderPlayback))
+            {
+                return;
+            }
+            
             var objectPlayers = DalamudContext.ObjectCollection.GetPlayers().ToList();
 
             Task.Run(() =>
