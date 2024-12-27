@@ -21,7 +21,10 @@ public class LodestoneService
         SetupClient().Wait();
     }
 
-    public async Task OpenLodestoneProfile(string playerName, uint worldId)
+    // Replaced with void to ignore compiler warning CS4014 in
+    // PlayerTracker.UserInterface.Main.Components.PlayerListComponent.DrawPlayer
+    // Line-in-method: 75
+    public void OpenLodestoneProfile(string playerName, uint worldId)
     {
         if (!isStarted) return;
 
@@ -32,27 +35,47 @@ public class LodestoneService
             var lodestoneId = player?.LodestoneId ?? 0;
             var shouldUpdate = false;
 
-            if (lodestoneId == 0)
-            {
-                lodestoneId = await GetLodestoneIdAsync(playerName, worldName).ConfigureAwait(false);
-                shouldUpdate = true;
-            }
+            // Since the only part for asynchronous methods is at the call to method:
+            // GetLodestoneIdAsync
+            //
+            // We can just have the rest of this method as a separate task. Because the call to:
+            //
+            // DalamudContext.DataManager.GetWorldNameById(uint)
+            // and
+            // ServiceContext.PlayerDataService.GetPlayer(string, uint)
+            //
+            // require to be ran on the same thread as the plugin's base thread.
+            Task.Run(async () => {
+                try
+                {
+                    if (lodestoneId == 0)
+                    {
+                        lodestoneId = await GetLodestoneIdAsync(playerName, worldName).ConfigureAwait(false);
+                        shouldUpdate = true;
+                    }
 
-            var lodestoneUrl = BuildLodestoneUrl(playerName, worldName, lodestoneId);
+                    var lodestoneUrl = BuildLodestoneUrl(playerName, worldName, lodestoneId);
 
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = lodestoneUrl,
-                UseShellExecute = true,
+                    // Process is a IDispoable type, best be safe disposing it after the method call.
+                    using var _ = Process.Start(new ProcessStartInfo
+                    {
+                        FileName = lodestoneUrl,
+                        UseShellExecute = true,
+                    });
+
+                    if (player != null && shouldUpdate && lodestoneId > 0)
+                    {
+                        player.LodestoneId = lodestoneId;
+                        player.LodestoneStatus = LodestoneStatus.Verified;
+                        player.LodestoneVerifiedOn = UnixTimestampHelper.CurrentTime();
+                        ServiceContext.PlayerDataService.UpdatePlayer(player);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    DalamudContext.PluginLog.Error(ex, "Failed to open lodestone profile");
+                }
             });
-
-            if (player != null && shouldUpdate && lodestoneId > 0)
-            {
-                player.LodestoneId = lodestoneId;
-                player.LodestoneStatus = LodestoneStatus.Verified;
-                player.LodestoneVerifiedOn = UnixTimestampHelper.CurrentTime();
-                ServiceContext.PlayerDataService.UpdatePlayer(player);
-            }
         }
         catch (Exception ex)
         {
