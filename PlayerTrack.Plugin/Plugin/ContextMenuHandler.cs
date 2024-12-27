@@ -63,7 +63,7 @@ public static class ContextMenuHandler
     {
         var selectedPlayer = menuItemClickedArgs.GetPlayer();
         if (selectedPlayer == null) return;
-        _ = ServiceContext.LodestoneService.OpenLodestoneProfile(selectedPlayer.Name, selectedPlayer.HomeWorld);
+        ServiceContext.LodestoneService.OpenLodestoneProfile(selectedPlayer.Name, selectedPlayer.HomeWorld);
     }
 
     public static void Restart()
