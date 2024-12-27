@@ -120,6 +120,8 @@ public class PluginConfig : IPluginConfig
 
     public bool OnlyShowWindowWhenLoggedIn { get; set; }
 
+    public NoCategoryPlacement NoCategoryPlacement { get; set; } = NoCategoryPlacement.Bottom;
+
     public TrackingLocationConfig GetTrackingLocationConfig(ToadLocationType locType) => locType switch
     {
         ToadLocationType.Overworld => this.Overworld,

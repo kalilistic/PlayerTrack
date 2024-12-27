@@ -6,12 +6,13 @@ namespace PlayerTrack.Models.Comparers;
 public class PlayerComparer : IComparer<Player>
 {
     public readonly Dictionary<int, int> CategoryRanks;
-    private const int DefaultRank = 99;
+    public readonly int DefaultRank;
 
-    public PlayerComparer(Dictionary<int, int> categoryRanks)
+    public PlayerComparer(Dictionary<int, int> categoryRanks, int defaultRank)
     {
         this.CategoryRanks = categoryRanks;
-        this.CategoryRanks.Add(0, DefaultRank);
+        this.CategoryRanks.Add(0, defaultRank);
+        this.DefaultRank = defaultRank;
     }
 
     public int Compare(Player? x, Player? y)

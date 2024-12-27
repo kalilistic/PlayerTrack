@@ -78,7 +78,19 @@ public class CategoryComponent : ConfigViewComponent
         if (LocGui.BeginTabItem("Categories"))
         {
             this.DrawCategoriesAndNewInput(categories);
+            this.DrawNoCategoryPlacement();
             ImGui.EndTabItem();
+        }
+    }
+
+    private void DrawNoCategoryPlacement()
+    {
+        var noCategoryPlacement = this.config.NoCategoryPlacement;
+        if (ToadGui.Combo("NoCategoryPlacement", ref noCategoryPlacement, 80))
+        {
+            this.config.NoCategoryPlacement = noCategoryPlacement;
+            ServiceContext.ConfigService.SaveConfig(this.config);
+            this.NotifyConfigChanged();
         }
     }
 
