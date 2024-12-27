@@ -56,6 +56,8 @@ public class PluginConfig : IPluginConfig
     public bool ShowOpenLodestone { get; set; } = true;
 
     public bool ShowPlayerFilter { get; set; } = true;
+    
+    public bool ShowPlayerCountInFilter { get; set; } = true;
 
     public bool ShowSearchBox { get; set; } = true;
 

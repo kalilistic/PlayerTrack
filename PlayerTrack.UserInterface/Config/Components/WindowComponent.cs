@@ -93,6 +93,13 @@ public class WindowComponent : ConfigViewComponent
                 this.config.ShowPlayerFilter = showPlayerFilter;
                 ServiceContext.ConfigService.SaveConfig(this.config);
             }
+            
+            var showPlayerCountInFilter = this.config.ShowPlayerCountInFilter;
+            if (ToadGui.Checkbox("ShowPlayerCountInFilter", ref showPlayerCountInFilter))
+            {
+                this.config.ShowPlayerCountInFilter = showPlayerCountInFilter;
+                ServiceContext.ConfigService.SaveConfig(this.config);
+            }
 
             var showSearchBox = this.config.ShowSearchBox;
             if (ToadGui.Checkbox("ShowSearchBox", ref showSearchBox))

@@ -37,12 +37,12 @@ public class PlayerListComponent : ViewComponent
     {
         this.categories = ServiceContext.CategoryService.GetCategories(false);
         this.categoryNames = ServiceContext.CategoryService.GetCategoryNames(false, false);
+        var playersCount = this.presenter.GetPlayersCount();
         ImGui.BeginChild("###LeftPanel", new Vector2(205 * ImGuiHelpers.GlobalScale, 0), false);
-        this.DrawControls();
+        this.DrawControls(playersCount);
         ImGui.BeginChild("###PlayerList", new Vector2(205 * ImGuiHelpers.GlobalScale, 0), true);
 
         this.SetupClipper();
-        var playersCount = this.presenter.GetPlayersCount();
         this.clipper.Begin(playersCount);
         var shouldShowSeparator = this.config.ShowCategorySeparator && string.IsNullOrEmpty(this.config.SearchInput);
         while (this.clipper.Step())
@@ -73,7 +73,16 @@ public class PlayerListComponent : ViewComponent
 
     private unsafe void SetupClipper() => this.clipper = new ImGuiListClipperPtr(ImGuiNative.ImGuiListClipper_ImGuiListClipper());
 
-    private void DrawControls()
+
+    private void onPlayerFilterSelect(PlayerListFilter playerListFilter)
+    {
+        this.config.PlayerListFilter = playerListFilter;
+        ServiceContext.ConfigService.SaveConfig(this.config);
+        ServiceContext.PlayerCacheService.Resort();
+        this.presenter.ClearCache(); 
+    }
+    
+    private void DrawControls(int playersCount)
     {
         ImGui.BeginGroup();
 
@@ -81,12 +90,20 @@ public class PlayerListComponent : ViewComponent
         if (this.config.ShowPlayerFilter)
         {
             var playerListFilter = this.config.PlayerListFilter;
-            if (ToadGui.Combo("###PlayerList_Filter", ref playerListFilter, -1, false))
+            if (this.config.ShowPlayerCountInFilter)
             {
-                this.config.PlayerListFilter = playerListFilter;
-                ServiceContext.ConfigService.SaveConfig(this.config);
-                ServiceContext.PlayerCacheService.Resort();
-                this.presenter.ClearCache();
+                var playerCountString = $"({playersCount.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)})";
+                if (ToadGui.Combo("###PlayerList_Filter", ref playerListFilter, playerCountString))
+                {
+                    onPlayerFilterSelect(playerListFilter);
+                }
+            }
+            else
+            {
+                if (ToadGui.Combo("###PlayerList_Filter", ref playerListFilter, -1, false))
+                {
+                    onPlayerFilterSelect(playerListFilter);
+                }
             }
         }
 
