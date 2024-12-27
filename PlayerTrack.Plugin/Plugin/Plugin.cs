@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Reflection;
 using Dalamud.DrunkenToad.Core;
@@ -73,11 +73,22 @@ public class Plugin : IDalamudPlugin
 
     private static bool LoadDatabase()
     {
-        DalamudContext.PluginLog.Verbose("Entering Plugin.LoadDatabase()");
-        var dataSource = Path.Combine(DalamudContext.PluginInterface.GetPluginConfigDirectory(), "data.db");
-        var assemblyWithMigrations = Assembly.Load("PlayerTrack.Infrastructure");
-        SQLiteFluentMigratorRunner.Run(dataSource, assemblyWithMigrations);
-        return true;
+        try
+        {
+            DalamudContext.PluginLog.Verbose("Entering Plugin.LoadDatabase()");
+            var dataSource = Path.Combine(DalamudContext.PluginInterface.GetPluginConfigDirectory(), "data.db");
+            var assemblyWithMigrations = Assembly.Load("PlayerTrack.Infrastructure");
+            SQLiteFluentMigratorRunner.Run(dataSource, assemblyWithMigrations);
+            return true;
+        }
+        catch (Exception exception)
+        {
+            // Log the error to the console and then return false,
+            // originally, this method would not return anything if an exception thrown.
+            // This method still has the same result if an uncaught error was thrown.
+            DalamudContext.PluginLog.Error(exception, "Failed to load database.");
+            return false;
+        }
     }
 
     private void RunPostStartup() => Task.Run(() =>

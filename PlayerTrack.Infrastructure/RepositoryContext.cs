@@ -102,13 +102,24 @@ public static class RepositoryContext
 
         if (currentTime - config.MaintenanceLastRunOn >= weekInMillis || forceCheck)
         {
-            DalamudContext.PluginLog.Verbose($"It's been a week since the last maintenance. Current time: {currentTime}, Last run: {config.MaintenanceLastRunOn}");
-            SQLiteDbMaintenance.Reindex(Database);
-            SQLiteDbMaintenance.Vacuum(Database);
-            SQLiteDbMaintenance.Analyze(Database);
-            SQLiteDbMaintenance.Optimize(Database);
-            config.MaintenanceLastRunOn = currentTime;
-            ConfigRepository.UpdatePluginConfig(config);
+            try
+            {
+                DalamudContext.PluginLog.Verbose($"It's been a week since the last maintenance. Current time: {currentTime}, Last run: {config.MaintenanceLastRunOn}");
+                SQLiteDbMaintenance.Reindex(Database);
+                SQLiteDbMaintenance.Vacuum(Database);
+                SQLiteDbMaintenance.Analyze(Database);
+                SQLiteDbMaintenance.Optimize(Database);
+                config.MaintenanceLastRunOn = currentTime;
+                ConfigRepository.UpdatePluginConfig(config);
+            }
+            catch
+            {
+                // If the database fails to load, we will want to dispose of it if it is loaded,
+                // we also do a null check just in case the Database object is null.
+                // This is so we can delete/alter/repair the database file while the game is running.
+                Database?.Dispose();
+                throw;
+            }
         }
         else
         {
