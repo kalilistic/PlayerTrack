@@ -96,6 +96,9 @@ public class SocialListService
             socialList.PageCount = pageCount;
             RepositoryContext.SocialListRepository.UpdateSocialList(socialList);
         }
+        
+        // get synced category
+        var syncedCategory = ServiceContext.CategoryService.GetSyncedCategory(socialList.Id);
 
         // retrieve existing members
         DalamudContext.PluginLog.Verbose($"HandleMembersList: Retrieving existing members for {socialList.Id}");
@@ -152,6 +155,13 @@ public class SocialListService
             {
                 DalamudContext.PluginLog.Verbose($"HandleMembersList: Removing member {socialListMember.Name} from page {socialListMember.PageNumber}");
                 RepositoryContext.SocialListMemberRepository.DeleteSocialListMember(socialListMember.Id);
+                
+                // remove from synced category
+                if (syncedCategory != null)
+                {
+                    DalamudContext.PluginLog.Verbose($"HandleMembersList: Removing player {socialListMember.Name} from dynamic category {syncedCategory.Id}");
+                    PlayerCategoryService.UnassignCategoryFromPlayer(socialListMember.Id, syncedCategory.Id);
+                }
             }
         }
         
@@ -218,7 +228,6 @@ public class SocialListService
         
         // sync with dynamic category
         DalamudContext.PluginLog.Verbose($"HandleMembersList: Syncing with dynamic category");
-        var syncedCategory = ServiceContext.CategoryService.GetSyncedCategory(socialList.Id);
         if (socialList.SyncWithCategory)
         {
             if (syncedCategory == null)
@@ -230,6 +239,17 @@ public class SocialListService
                 {
                     DalamudContext.PluginLog.Warning("HandleMembersList: Failed to create synced category");
                     return;
+                }
+            }
+    
+            // Remove stale players
+            var playersInCategory = ServiceContext.PlayerCacheService.GetCategoryPlayers(syncedCategory.Id);
+            foreach (var player in playersInCategory)
+            {
+                if (!players.Contains(player))
+                {
+                    DalamudContext.PluginLog.Verbose($"HandleMembersList: Removing player {player.Name} from dynamic category {syncedCategory.Id}");
+                    PlayerCategoryService.UnassignCategoryFromPlayer(player.Id, syncedCategory.Id);
                 }
             }
             
