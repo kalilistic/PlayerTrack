@@ -40,6 +40,20 @@ stable:
     technical:
 
 testing:
+  - version: "3.4.11.0"
+    date: "2024-12-27"
+    is_critical: false
+    headline: Fix for social list categories not updating correctly and some minor improvements.
+    added:
+        - Player count now shows in filter list (can turn off in Window/Player List settings).
+        - You can now show players without categories at the top of the list (see Categories settings).
+    changed:
+        - You can now use tabs and ctrl+enter for new lines in player notes.
+    deprecated:
+    fixed:
+        - Players are now consistently removed from social list categories upon removal.
+    removed:
+    technical:
   - version: "3.4.10.0"
     date: "2024-12-26"
     is_critical: false
