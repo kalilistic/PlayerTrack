@@ -2,22 +2,20 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dalamud.DrunkenToad.Core;
+using Dalamud.Game.Gui.NamePlate;
 using PlayerTrack.Domain;
 using PlayerTrack.Models;
-using PlayerTrack.Nameplates;
 
 namespace PlayerTrack.Plugin;
 
 public static class NameplateHandler
 {
     private static readonly ConcurrentDictionary<uint, PlayerNameplate> Nameplates = new();
-    private static NamePlateGui? namePlateGuiHandler;
     
     public static void Start()
     {
         DalamudContext.PluginLog.Verbose("Entering NameplateHandler.Start()");
-        namePlateGuiHandler = new NamePlateGui();
-        namePlateGuiHandler.OnNamePlateUpdate += UpdateNameplates;
+        DalamudContext.NamePlateGuiHandler.OnNamePlateUpdate += UpdateNameplates;
         ServiceContext.PlayerProcessService.CurrentPlayerAdded += player => UpdateNameplate(player.EntityId, player);
         ServiceContext.PlayerProcessService.CurrentPlayerRemoved += player => RemoveNameplate(player.EntityId);
         ServiceContext.PlayerDataService.PlayerUpdated += player => UpdateNameplate(player.EntityId, player);
@@ -45,12 +43,7 @@ public static class NameplateHandler
 
     public static void Dispose()
     {
-        if (namePlateGuiHandler != null)
-        {
-            namePlateGuiHandler.Dispose();
-            namePlateGuiHandler.OnNamePlateUpdate -= UpdateNameplates;
-            namePlateGuiHandler = null;
-        }
+        DalamudContext.NamePlateGuiHandler.OnNamePlateUpdate -= UpdateNameplates;
     }
      
 
@@ -78,7 +71,7 @@ public static class NameplateHandler
         }
     });
 
-    private static void UpdateNameplates(INamePlateUpdateContext context, IReadOnlyList<INamePlateUpdateHandler> handlers)
+    private static void UpdateNameplates(INamePlateUpdateContext namePlateUpdateContext, IReadOnlyList<INamePlateUpdateHandler> handlers)
     {
         foreach (var handler in handlers) {
 
