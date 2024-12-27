@@ -23,7 +23,7 @@
 		<RootNamespace>PlayerTrack</RootNamespace>
 		<PackageVersion>$(Version)</PackageVersion>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
-		<NoWarn>CS1591</NoWarn>
+		<NoWarn>CS1591;MSB3277</NoWarn>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugSymbols>true</DebugSymbols>
