@@ -157,7 +157,7 @@ public class DataComponent : ConfigViewComponent
         DrawPlayer(ref updatePlayer, updatePlayerComboBox, "SelectPlayerToUpdate");
     }
     
-    private void DrawPlayer(ref Player? selectedPlayer, FilterComboBox comboBox, string label)
+    private void DrawPlayer(ref Player? selectedPlayer, FilterComboBox? comboBox, string? label)
     {
         var isPlayerSelected = selectedPlayer != null;
         var buttonLabel = DalamudContext.LocManager.GetString("OpenPlayer");
@@ -170,7 +170,7 @@ public class DataComponent : ConfigViewComponent
         ImGui.EndDisabled();
 
         ImGui.SameLine();
-        var selectedIndex = comboBox.Draw(label, 300f);
+        var selectedIndex = comboBox?.Draw(label ?? "null", 300f);
         if (selectedIndex.HasValue)
         {
             selectedPlayer = players[selectedIndex.Value];
