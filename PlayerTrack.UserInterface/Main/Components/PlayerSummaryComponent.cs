@@ -105,7 +105,8 @@ public class PlayerSummaryComponent : ViewComponent
                 2000,
                 new Vector2(
                     x: ImGui.GetWindowSize().X - (5f * ImGuiHelpers.GlobalScale),
-                    y: -1 - (5f * ImGuiHelpers.GlobalScale))))
+                    y: -1 - (5f * ImGuiHelpers.GlobalScale)),
+                ImGuiInputTextFlags.CtrlEnterForNewLine | ImGuiInputTextFlags.AllowTabInput))
         {
             player.Notes = notes;
             ServiceContext.PlayerDataService.UpdatePlayerNotes(player.Id, notes);
