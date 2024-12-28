@@ -50,6 +50,7 @@ public class DataComponent : ConfigViewComponent
             this.DrawMerge();
             this.DrawSqlExecutor();
             this.DrawLocalPlayers();
+            ImGui.EndTabBar();
         }
     }
 

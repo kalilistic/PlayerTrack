@@ -21,6 +21,7 @@ public class LocationComponent : ConfigViewComponent
             this.DrawLocationTab("Overworld", this.config.Overworld, categoryNames);
             this.DrawLocationTab("Content", this.config.Content, categoryNames);
             this.DrawLocationTab("HighEndContent", this.config.HighEndContent, categoryNames);
+            ImGui.EndTabBar();
         }
     }
 

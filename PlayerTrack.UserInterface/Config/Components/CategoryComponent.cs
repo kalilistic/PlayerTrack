@@ -28,9 +28,8 @@ public class CategoryComponent : ConfigViewComponent
             var categories = ServiceContext.CategoryService.GetCategories();
             this.DrawCategoryManagementTab(categories);
             this.DrawEditCategoriesTab(categories);
+            ImGui.EndTabBar();
         }
-
-        ImGui.EndTabBar();
     }
 
     private void DrawEditCategoriesTab(IReadOnlyList<Category> categories)
@@ -68,9 +67,8 @@ public class CategoryComponent : ConfigViewComponent
                 PlayerConfigService.UpdateCategoryConfig(category.Id, category.PlayerConfig);
                 this.NotifyConfigChanged();
             }
+            ImGui.EndTabBar();
         }
-
-        ImGui.EndTabBar();
     }
 
     private void DrawCategoryManagementTab(IEnumerable<Category> categories)

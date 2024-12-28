@@ -40,9 +40,8 @@ public class SocialListComponent : ConfigViewComponent
             this.DrawSocialListTab("FL/BL/FC", SocialListType.FriendList, SocialListType.BlackList, SocialListType.FreeCompany);
             this.DrawSocialListTab("LS", SocialListType.LinkShell);
             this.DrawSocialListTab("CWLS", SocialListType.CrossWorldLinkShell);
+            ImGui.EndTabBar();
         }
-
-        ImGui.EndTabBar();
     }
 
     private void Initialize()

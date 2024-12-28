@@ -18,8 +18,7 @@ public class PlayerDefaultsComponent : ConfigViewComponent
                 ServiceContext.PlayerDataService.RefreshAllPlayers();
                 this.NotifyConfigChanged();
             }
+            ImGui.EndTabBar();
         }
-
-        ImGui.EndTabBar();
     }
 }

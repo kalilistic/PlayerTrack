@@ -21,6 +21,7 @@ public class WindowComponent : ConfigViewComponent
             this.DrawGeneralTab();
             this.DrawPlayerListTab();
             this.DrawSettingsTab();
+            ImGui.EndTabBar();
         }
     }
 
