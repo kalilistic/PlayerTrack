@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using Dalamud.DrunkenToad.Core;
@@ -17,17 +18,16 @@ namespace PlayerTrack.UserInterface.Main.Components;
 using Dalamud.DrunkenToad.Helpers;
 using Dalamud.Interface.Utility;
 
-public class PlayerListComponent : ViewComponent
+[SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
+public class PlayerListComponent(IMainPresenter presenter) : ViewComponent
 {
     private const int DebounceTime = 300;
-    private readonly IMainPresenter presenter;
     private List<Category> categories = null!;
     private List<string> categoryNames = null!;
     private ImGuiListClipperPtr clipper;
+    private bool pendingFilterUpdate;
     private long lastInputTime;
     private bool isSearchDirty;
-
-    public PlayerListComponent(IMainPresenter presenter) => this.presenter = presenter;
 
     public delegate void PlayerListComponent_OpenConfigDelegate();
 
@@ -35,26 +35,47 @@ public class PlayerListComponent : ViewComponent
 
     public override void Draw()
     {
+        if (this.pendingFilterUpdate)
+        {
+            this.pendingFilterUpdate = false;
+            ServiceContext.ConfigService.SaveConfig(this.config);
+            ServiceContext.PlayerCacheService.Resort();
+            presenter.ClearCache();
+        }
+
         this.categories = ServiceContext.CategoryService.GetCategories(false);
         this.categoryNames = ServiceContext.CategoryService.GetCategoryNames(false, false);
-        var playersCount = this.presenter.GetPlayersCount();
+        var playersCount = presenter.GetPlayersCount();
+
         ImGui.BeginChild("###LeftPanel", new Vector2(205 * ImGuiHelpers.GlobalScale, 0), false);
         this.DrawControls(playersCount);
         ImGui.BeginChild("###PlayerList", new Vector2(205 * ImGuiHelpers.GlobalScale, 0), true);
 
+        if (playersCount == 0)
+        {
+            ImGui.EndChild();
+            ImGui.EndChild();
+            return;
+        }
+
         this.SetupClipper();
         this.clipper.Begin(playersCount);
         var shouldShowSeparator = this.config.ShowCategorySeparator && string.IsNullOrEmpty(this.config.SearchInput);
+
         while (this.clipper.Step())
         {
-            var players = this.presenter.GetPlayers(this.clipper.DisplayStart, this.clipper.DisplayEnd);
+            var players = presenter.GetPlayers(this.clipper.DisplayStart, this.clipper.DisplayEnd);
             for (var i = 0; i < players.Count; i++)
             {
                 ImGui.BeginGroup();
-                var player = players.ElementAtOrDefault(i);
+
+                var player = players[i];
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
                 if (player != null)
                 {
-                    if (shouldShowSeparator && i > 0 && i < players.Count && player.PrimaryCategoryId != players[i - 1].PrimaryCategoryId)
+                    if (shouldShowSeparator &&
+                        i > 0 && i < players.Count &&
+                        player.PrimaryCategoryId != players[i - 1].PrimaryCategoryId)
                     {
                         ImGui.Separator();
                     }
@@ -71,15 +92,15 @@ public class PlayerListComponent : ViewComponent
         ImGui.EndChild();
     }
 
-    private unsafe void SetupClipper() => this.clipper = new ImGuiListClipperPtr(ImGuiNative.ImGuiListClipper_ImGuiListClipper());
-
+    private unsafe void SetupClipper()
+    {
+        this.clipper = new ImGuiListClipperPtr(ImGuiNative.ImGuiListClipper_ImGuiListClipper());
+    }
 
     private void onPlayerFilterSelect(PlayerListFilter playerListFilter)
     {
         this.config.PlayerListFilter = playerListFilter;
-        ServiceContext.ConfigService.SaveConfig(this.config);
-        ServiceContext.PlayerCacheService.Resort();
-        this.presenter.ClearCache(); 
+        this.pendingFilterUpdate = true;
     }
     
     private void DrawControls(int playersCount)
@@ -92,7 +113,8 @@ public class PlayerListComponent : ViewComponent
             var playerListFilter = this.config.PlayerListFilter;
             if (this.config.ShowPlayerCountInFilter)
             {
-                var playerCountString = $"({playersCount.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)})";
+                var playerCountString =
+                    $"({playersCount.ToString("N0", System.Globalization.CultureInfo.CurrentCulture)})";
                 if (ToadGui.Combo("###PlayerList_Filter", ref playerListFilter, playerCountString))
                 {
                     onPlayerFilterSelect(playerListFilter);
@@ -111,50 +133,42 @@ public class PlayerListComponent : ViewComponent
         if (this.config.PlayerListFilter == PlayerListFilter.PlayersByCategory)
         {
             var categoryFilters = ServiceContext.CategoryService.GetCategoryFilters();
-
-            if (categoryFilters.TotalFilters == 0)
-            {
-                ImGui.BeginDisabled();
-            }
+            if (categoryFilters.TotalFilters == 0) ImGui.BeginDisabled();
 
             var filterCategoryIndex = this.config.FilterCategoryIndex;
-            if (ToadGui.Combo("###PlayerList_CategoryFilter", ref filterCategoryIndex, categoryFilters.FilterNames, -1, false))
+            if (ToadGui.Combo("###PlayerList_CategoryFilter",
+                    ref filterCategoryIndex,
+                    categoryFilters.FilterNames,
+                    -1,
+                    false))
             {
                 this.config.FilterCategoryIndex = filterCategoryIndex;
                 this.config.FilterCategoryId = categoryFilters.FilterIds[this.config.FilterCategoryIndex];
-                ServiceContext.ConfigService.SaveConfig(this.config);
-                this.presenter.ClearCache();
+                this.pendingFilterUpdate = true;
             }
 
-            if (categoryFilters.TotalFilters == 0)
-            {
-                ImGui.EndDisabled();
-            }
+            if (categoryFilters.TotalFilters == 0) ImGui.EndDisabled();
         }
 
         // Tag Filter
         if (this.config.PlayerListFilter == PlayerListFilter.PlayersByTag)
         {
             var tagFilters = ServiceContext.TagService.GetTagFilters();
-
-            if (tagFilters.TotalFilters == 0)
-            {
-                ImGui.BeginDisabled();
-            }
+            if (tagFilters.TotalFilters == 0) ImGui.BeginDisabled();
 
             var filterTagIndex = this.config.FilterTagIndex;
-            if (ToadGui.Combo("###PlayerList_TagFilter", ref filterTagIndex, tagFilters.FilterNames, -1, false))
+            if (ToadGui.Combo("###PlayerList_TagFilter",
+                    ref filterTagIndex,
+                    tagFilters.FilterNames,
+                    -1,
+                    false))
             {
                 this.config.FilterTagIndex = filterTagIndex;
                 this.config.FilterTagId = tagFilters.FilterIds[this.config.FilterTagIndex];
-                ServiceContext.ConfigService.SaveConfig(this.config);
-                this.presenter.ClearCache();
+                this.pendingFilterUpdate = true;
             }
 
-            if (tagFilters.TotalFilters == 0)
-            {
-                ImGui.EndDisabled();
-            }
+            if (tagFilters.TotalFilters == 0) ImGui.EndDisabled();
         }
 
         // Search Box
@@ -170,11 +184,11 @@ public class PlayerListComponent : ViewComponent
                 this.isSearchDirty = true;
             }
 
-            if (this.isSearchDirty && UnixTimestampHelper.CurrentTime() - this.lastInputTime > DebounceTime)
+            if (this.isSearchDirty &&
+                UnixTimestampHelper.CurrentTime() - this.lastInputTime > DebounceTime)
             {
-                ServiceContext.ConfigService.SaveConfig(this.config);
-                this.presenter.ClearCache();
                 this.isSearchDirty = false;
+                this.pendingFilterUpdate = true;
             }
         }
 
@@ -197,7 +211,7 @@ public class PlayerListComponent : ViewComponent
         {
             if (LocGui.MenuItem("AddPlayer"))
             {
-                this.presenter.TogglePanel(PanelType.AddPlayer);
+                presenter.TogglePanel(PanelType.AddPlayer);
             }
 
             if (LocGui.MenuItem("OpenSettings"))
@@ -212,20 +226,22 @@ public class PlayerListComponent : ViewComponent
     private void DrawPlayer(Player player)
     {
         ImGui.BeginGroup();
-        if (ImGui.Selectable("###PlayerSelectable" + player.Id, this.presenter.GetSelectedPlayer()?.Id == player.Id))
+
+        var isSelected = (presenter.GetSelectedPlayer()?.Id == player.Id);
+        if (ImGui.Selectable("###PlayerSelectable" + player.Id, isSelected))
         {
             // hide right subWindow if clicking same user while already open
-            if (this.presenter.GetSelectedPlayer()?.Id == player.Id && this.config.PanelType == PanelType.Player)
+            if (isSelected && this.config.PanelType == PanelType.Player)
             {
-                this.presenter.ClosePlayer();
-                this.presenter.HidePanel();
+                presenter.ClosePlayer();
+                presenter.HidePanel();
             }
 
             // open selectedPlayer in right subWindow
             else
             {
-                this.presenter.SelectPlayer(player);
-                this.presenter.ShowPanel(PanelType.Player);
+                presenter.SelectPlayer(player);
+                presenter.ShowPanel(PanelType.Player);
             }
         }
 
@@ -248,20 +264,20 @@ public class PlayerListComponent : ViewComponent
         // pop up for selected player
         if (ImGui.BeginPopup("###PlayerList_Popup_" + player.Id))
         {
-            if (this.presenter.GetSelectedPlayer()?.Id == player.Id)
+            if (isSelected)
             {
                 if (LocGui.MenuItem("ClosePlayer"))
                 {
-                    this.presenter.ClosePlayer();
-                    this.presenter.HidePanel();
+                    presenter.ClosePlayer();
+                    presenter.HidePanel();
                 }
             }
             else
             {
                 if (LocGui.MenuItem("OpenPlayer"))
                 {
-                    this.presenter.SelectPlayer(player);
-                    this.presenter.ShowPanel(PanelType.Player);
+                    presenter.SelectPlayer(player);
+                    presenter.ShowPanel(PanelType.Player);
                 }
             }
 
@@ -296,14 +312,10 @@ public class PlayerListComponent : ViewComponent
                     var playerCategoryIds = player.AssignedCategories.Select(cat => cat.Id).ToArray();
                     for (var j = 0; j < this.categoryNames.Count; j++)
                     {
-                        var isSelected = playerCategoryIds.Contains(this.categories[j].Id);
-                        if (ImGui.MenuItem(
-                                this.categoryNames[j],
-                                string.Empty,
-                                isSelected,
-                                true))
+                        var isCatSelected = playerCategoryIds.Contains(this.categories[j].Id);
+                        if (ImGui.MenuItem(this.categoryNames[j], string.Empty, isCatSelected, true))
                         {
-                            if (isSelected)
+                            if (isCatSelected)
                             {
                                 PlayerCategoryService.UnassignCategoryFromPlayer(player.Id, this.categories[j].Id);
                             }
