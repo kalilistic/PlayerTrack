@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Dalamud.DrunkenToad.Core;
 using Dalamud.DrunkenToad.Core.Models;
 using Dalamud.DrunkenToad.Extensions;
@@ -34,7 +35,14 @@ public class SocialListService
             return;
         }
         
-        // get data center
+        // kick off rest of processing async
+        Task.Run(() => HandleMembersListInternal(listType, toadMembers, listNumber, page, pageCount, localPlayer, localPlayerContentId));
+    }
+
+    private static void HandleMembersListInternal(SocialListType listType, List<ToadSocialListMember> toadMembers, 
+        ushort listNumber, ushort page, ushort pageCount, ToadLocalPlayer localPlayer, ulong localPlayerContentId)
+    {
+         // get data center
         var dataCenter = DalamudContext.DataManager.Worlds.Values.FirstOrDefault(x => x.Id == localPlayer.HomeWorld)?.DataCenterId ?? 0;
         if (dataCenter == 0)
         {

@@ -28,7 +28,6 @@ public static class EventDispatcher
         DalamudContext.PlayerLocationManager.LocationEnded += OnEndLocation;
         ContextMenuHandler.SelectPlayer += OnSelectPlayer;
         DalamudContext.ClientStateHandler.Login += OnLogin;
-        if (DalamudContext.ClientStateHandler.IsLoggedIn) DalamudContext.GameFramework.RunOnFrameworkThread(OnLogin);
         DalamudContext.SocialListHandler.FriendListReceived += OnFriendListReceived;
         DalamudContext.SocialListHandler.FreeCompanyReceived += OnFreeCompanyReceived;
         DalamudContext.SocialListHandler.BlackListReceived += OnBlackListReceived;
@@ -90,36 +89,36 @@ public static class EventDispatcher
     {
         DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnLogin()");
         DalamudContext.GameFramework.RunOnFrameworkThread(DalamudContext.ClientStateHandler.GetLocalPlayer);
-        LocalPlayerService.AddOrUpdateLocalPlayer(DalamudContext.ClientStateHandler.GetLocalPlayer());
+        DalamudContext.GameFramework.RunOnTick(() => LocalPlayerService.AddOrUpdateLocalPlayer(DalamudContext.ClientStateHandler.GetLocalPlayer()));
     });
 
     private static void OnFriendListReceived(List<ToadSocialListMember> members) => EventChannel.Writer.TryWrite(() =>
     {
         DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnFriendListReceived()");
-        SocialListService.HandleMembersList(SocialListType.FriendList, members);
+        DalamudContext.GameFramework.RunOnTick(() => SocialListService.HandleMembersList(SocialListType.FriendList, members));
     });
     
     private static void OnCrossWorldLinkShellReceived(byte index, List<ToadSocialListMember> members) => EventChannel.Writer.TryWrite(() =>
     {
         DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnCrossWorldLinkShellReceived()");
-        SocialListService.HandleMembersList(SocialListType.CrossWorldLinkShell, members, (ushort)(index + 1));
+        DalamudContext.GameFramework.RunOnTick(() => SocialListService.HandleMembersList(SocialListType.CrossWorldLinkShell, members, (ushort)(index + 1)));
     });
 
     private static void OnLinkShellReceived(byte index, List<ToadSocialListMember> members) => EventChannel.Writer.TryWrite(() =>
     {
         DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnLinkShellReceived()");
-        SocialListService.HandleMembersList(SocialListType.LinkShell, members, (ushort)(index + 1));
+        DalamudContext.GameFramework.RunOnTick(() => SocialListService.HandleMembersList(SocialListType.LinkShell, members, (ushort)(index + 1)));
     });
 
     private static void OnBlackListReceived(List<ToadSocialListMember> members) => EventChannel.Writer.TryWrite(() =>
     {
         DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnBlackListReceived()");
-        SocialListService.HandleMembersList(SocialListType.BlackList, members);
+        DalamudContext.GameFramework.RunOnTick(() => SocialListService.HandleMembersList(SocialListType.BlackList, members));
     });
     
     private static void OnFreeCompanyReceived(byte pageCount, byte currentPage, List<ToadSocialListMember> members) => EventChannel.Writer.TryWrite(() =>
     {
         DalamudContext.PluginLog.Verbose($"Entering EventDispatcher.OnFreeCompanyReceived(): {currentPage}/{pageCount}: {members.Count}");
-        SocialListService.HandleMembersList(SocialListType.FreeCompany, members, 0, currentPage, pageCount);
+        DalamudContext.GameFramework.RunOnTick(() => SocialListService.HandleMembersList(SocialListType.FreeCompany, members, 0, currentPage, pageCount));
     });
 }
