@@ -40,6 +40,22 @@ stable:
     technical:
 
 testing:
+  - version: "3.4.12.0"
+    date: "2024-12-29"
+    is_critical: false
+    headline: Search gets a boost and fixes for a bunch of stability/log spam issues.
+    added:
+        - Add special search commands like "fc:uwu" to search for FC tags - see Settings->Help for more info.
+    changed:
+        - You can now use tabs and ctrl+enter for new lines in player notes.
+    deprecated:
+    fixed:
+        - Add some missing localization from last release.
+        - Fix imgui assert errors for pop/push.
+        - Fix imgui assert errors for calc item height.
+        - Fix object table outside thread warnings.
+    removed:
+    technical:
   - version: "3.4.11.0"
     date: "2024-12-27"
     is_critical: false
