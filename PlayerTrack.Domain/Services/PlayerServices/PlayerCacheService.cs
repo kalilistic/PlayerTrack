@@ -346,7 +346,7 @@ public class PlayerCacheService
         this.setLock.EnterReadLock();
         try
         {
-            return this.playerCache.Get(GetSearchFilter(name, searchType), start, count);
+            return this.playerCache.Get(PlayerSearchService.GetSearchFilter(name, searchType), start, count);
         }
         finally
         {
@@ -372,7 +372,7 @@ public class PlayerCacheService
         this.setLock.EnterReadLock();
         try
         {
-            return this.playerCache.Count(GetSearchFilter(name, searchType));
+            return this.playerCache.Count(PlayerSearchService.GetSearchFilter(name, searchType));
         }
         finally
         {
@@ -411,7 +411,7 @@ public class PlayerCacheService
         this.setLock.EnterReadLock();
         try
         {
-            return this.playerCurrentCache.Get(GetSearchFilter(name, searchType), start, count);
+            return this.playerCurrentCache.Get(PlayerSearchService.GetSearchFilter(name, searchType), start, count);
         }
         finally
         {
@@ -437,7 +437,7 @@ public class PlayerCacheService
         this.setLock.EnterReadLock();
         try
         {
-            return this.playerCurrentCache.Count(GetSearchFilter(name, searchType));
+            return this.playerCurrentCache.Count(PlayerSearchService.GetSearchFilter(name, searchType));
         }
         finally
         {
@@ -463,7 +463,7 @@ public class PlayerCacheService
         this.setLock.EnterReadLock();
         try
         {
-            return this.playerRecentCache.Get(GetSearchFilter(name, searchType), start, count);
+            return this.playerRecentCache.Get(PlayerSearchService.GetSearchFilter(name, searchType), start, count);
         }
         finally
         {
@@ -489,7 +489,7 @@ public class PlayerCacheService
         this.setLock.EnterReadLock();
         try
         {
-            return this.playerRecentCache.Count(GetSearchFilter(name, searchType));
+            return this.playerRecentCache.Count(PlayerSearchService.GetSearchFilter(name, searchType));
         }
         finally
         {
@@ -528,7 +528,7 @@ public class PlayerCacheService
         this.setLock.EnterReadLock();
         try
         {
-            return this.playerCategoryCache.Get(categoryId, GetSearchFilter(name, searchType), start, count);
+            return this.playerCategoryCache.Get(categoryId, PlayerSearchService.GetSearchFilter(name, searchType), start, count);
         }
         finally
         {
@@ -554,7 +554,7 @@ public class PlayerCacheService
         this.setLock.EnterReadLock();
         try
         {
-            return this.playerCategoryCache.Count(categoryId, GetSearchFilter(name, searchType));
+            return this.playerCategoryCache.Count(categoryId, PlayerSearchService.GetSearchFilter(name, searchType));
         }
         finally
         {
@@ -580,7 +580,7 @@ public class PlayerCacheService
         this.setLock.EnterReadLock();
         try
         {
-            return this.playerTagCache.Get(tagId, GetSearchFilter(name, searchType), start, count);
+            return this.playerTagCache.Get(tagId, PlayerSearchService.GetSearchFilter(name, searchType), start, count);
         }
         finally
         {
@@ -606,7 +606,7 @@ public class PlayerCacheService
         this.setLock.EnterReadLock();
         try
         {
-            return this.playerTagCache.Count(tagId, GetSearchFilter(name, searchType));
+            return this.playerTagCache.Count(tagId, PlayerSearchService.GetSearchFilter(name, searchType));
         }
         finally
         {
@@ -723,23 +723,7 @@ public class PlayerCacheService
         playerCategoryCache.Add(player);
         playerTagCache.Add(player);
     }
-    
-    private static Func<Player, bool> GetSearchFilter(string name, SearchType searchType)
-    {
-        return Filter;
-
-        bool Filter(Player player)
-        {
-            return searchType switch
-            {
-                SearchType.Contains => player.Name.Contains(name, StringComparison.OrdinalIgnoreCase),
-                SearchType.StartsWith => player.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase),
-                SearchType.Exact => player.Name.Equals(name, StringComparison.OrdinalIgnoreCase),
-                _ => throw new ArgumentException($"Invalid search type: {searchType}"),
-            };
-        }
-    }
-    
+   
     private List<Player> GetPlayersForDeletion()
     {
         var playersWithEncounters = RepositoryContext.PlayerEncounterRepository.GetPlayersWithEncounters();

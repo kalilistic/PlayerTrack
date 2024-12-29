@@ -130,6 +130,11 @@ public class MainPresenter : IMainPresenter
 
     public List<Player> GetPlayers(int displayStart, int displayEnd)
     {
+        if (!PlayerSearchService.IsValidSearch(this.config.SearchInput))
+        {
+            return []; // Return empty if the search input is invalid
+        }
+        
         InvalidateCacheIfStale(this.playerCache, ref this.playerCacheLastUpdated, ref this.isPlayerCacheStale);
         this.InvalidateCacheIfSearchChanged();
 

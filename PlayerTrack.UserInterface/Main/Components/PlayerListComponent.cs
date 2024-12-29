@@ -12,6 +12,7 @@ using PlayerTrack.Models;
 using PlayerTrack.UserInterface.Components;
 using PlayerTrack.UserInterface.Main.Presenters;
 
+// ReSharper disable ConvertToPrimaryConstructor
 // ReSharper disable InconsistentNaming
 namespace PlayerTrack.UserInterface.Main.Components;
 
@@ -19,25 +20,39 @@ using Dalamud.DrunkenToad.Helpers;
 using Dalamud.Interface.Utility;
 
 [SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
-public class PlayerListComponent(IMainPresenter presenter) : ViewComponent
+public class PlayerListComponent : ViewComponent
 {
-    private const int DebounceTime = 300;
+    private const int DebounceTime = 1000;
+    private readonly IMainPresenter presenter;
     private List<Category> categories = null!;
     private List<string> categoryNames = null!;
-    private ImGuiListClipperPtr clipper;
     private bool pendingFilterUpdate;
     private long lastInputTime;
     private bool isSearchDirty;
 
+    public PlayerListComponent(IMainPresenter presenter) => this.presenter = presenter;
+    
     public delegate void PlayerListComponent_OpenConfigDelegate();
 
     public event PlayerListComponent_OpenConfigDelegate? PlayerListComponent_OpenConfig;
 
-    public override void Draw()
+    public override unsafe void Draw()
     {
-        if (this.pendingFilterUpdate)
+        if (!PlayerSearchService.IsValidSearch(this.config.SearchInput))
+        {
+            presenter.ClearCache();
+            ImGui.BeginChild("###LeftPanel", new Vector2(205 * ImGuiHelpers.GlobalScale, 0), false);
+            this.DrawControls(0);
+            ImGui.EndChild();
+            return;
+        }
+
+        if (this.pendingFilterUpdate
+            || (this.isSearchDirty
+                && UnixTimestampHelper.CurrentTime() - this.lastInputTime > DebounceTime))
         {
             this.pendingFilterUpdate = false;
+            this.isSearchDirty = false;
             ServiceContext.ConfigService.SaveConfig(this.config);
             ServiceContext.PlayerCacheService.Resort();
             presenter.ClearCache();
@@ -53,18 +68,21 @@ public class PlayerListComponent(IMainPresenter presenter) : ViewComponent
 
         if (playersCount == 0)
         {
+            ImGui.Text("");
             ImGui.EndChild();
             ImGui.EndChild();
             return;
         }
 
-        this.SetupClipper();
-        this.clipper.Begin(playersCount);
+        var clipper = new ImGuiListClipperPtr(ImGuiNative.ImGuiListClipper_ImGuiListClipper());
+        clipper.Begin(playersCount);
         var shouldShowSeparator = this.config.ShowCategorySeparator && string.IsNullOrEmpty(this.config.SearchInput);
 
-        while (this.clipper.Step())
+        while (clipper.Step())
         {
-            var players = presenter.GetPlayers(this.clipper.DisplayStart, this.clipper.DisplayEnd);
+            var players = presenter.GetPlayers(clipper.DisplayStart, clipper.DisplayEnd);
+            var anyPlayerDrawn = false;
+
             for (var i = 0; i < players.Count; i++)
             {
                 ImGui.BeginGroup();
@@ -81,28 +99,30 @@ public class PlayerListComponent(IMainPresenter presenter) : ViewComponent
                     }
 
                     this.DrawPlayer(player);
+                    anyPlayerDrawn = true;
                 }
 
                 ImGui.EndGroup();
             }
+
+            if (!anyPlayerDrawn)
+            {
+                ImGui.Text("");
+            }
         }
 
-        this.clipper.End();
+        clipper.End();
         ImGui.EndChild();
         ImGui.EndChild();
     }
 
-    private unsafe void SetupClipper()
-    {
-        this.clipper = new ImGuiListClipperPtr(ImGuiNative.ImGuiListClipper_ImGuiListClipper());
-    }
 
     private void onPlayerFilterSelect(PlayerListFilter playerListFilter)
     {
         this.config.PlayerListFilter = playerListFilter;
         this.pendingFilterUpdate = true;
     }
-    
+
     private void DrawControls(int playersCount)
     {
         ImGui.BeginGroup();
@@ -128,47 +148,55 @@ public class PlayerListComponent(IMainPresenter presenter) : ViewComponent
                 }
             }
         }
-
+        
         // Category Filter
         if (this.config.PlayerListFilter == PlayerListFilter.PlayersByCategory)
         {
             var categoryFilters = ServiceContext.CategoryService.GetCategoryFilters();
-            if (categoryFilters.TotalFilters == 0) ImGui.BeginDisabled();
+
+            if (categoryFilters.TotalFilters == 0)
+            {
+                ImGui.BeginDisabled();
+            }
 
             var filterCategoryIndex = this.config.FilterCategoryIndex;
-            if (ToadGui.Combo("###PlayerList_CategoryFilter",
-                    ref filterCategoryIndex,
-                    categoryFilters.FilterNames,
-                    -1,
-                    false))
+            if (ToadGui.Combo("###PlayerList_CategoryFilter", ref filterCategoryIndex, categoryFilters.FilterNames, -1, false))
             {
                 this.config.FilterCategoryIndex = filterCategoryIndex;
                 this.config.FilterCategoryId = categoryFilters.FilterIds[this.config.FilterCategoryIndex];
-                this.pendingFilterUpdate = true;
+                ServiceContext.ConfigService.SaveConfig(this.config);
+                this.presenter.ClearCache();
             }
 
-            if (categoryFilters.TotalFilters == 0) ImGui.EndDisabled();
+            if (categoryFilters.TotalFilters == 0)
+            {
+                ImGui.EndDisabled();
+            }
         }
 
         // Tag Filter
         if (this.config.PlayerListFilter == PlayerListFilter.PlayersByTag)
         {
             var tagFilters = ServiceContext.TagService.GetTagFilters();
-            if (tagFilters.TotalFilters == 0) ImGui.BeginDisabled();
+
+            if (tagFilters.TotalFilters == 0)
+            {
+                ImGui.BeginDisabled();
+            }
 
             var filterTagIndex = this.config.FilterTagIndex;
-            if (ToadGui.Combo("###PlayerList_TagFilter",
-                    ref filterTagIndex,
-                    tagFilters.FilterNames,
-                    -1,
-                    false))
+            if (ToadGui.Combo("###PlayerList_TagFilter", ref filterTagIndex, tagFilters.FilterNames, -1, false))
             {
                 this.config.FilterTagIndex = filterTagIndex;
                 this.config.FilterTagId = tagFilters.FilterIds[this.config.FilterTagIndex];
-                this.pendingFilterUpdate = true;
+                ServiceContext.ConfigService.SaveConfig(this.config);
+                this.presenter.ClearCache();
             }
 
-            if (tagFilters.TotalFilters == 0) ImGui.EndDisabled();
+            if (tagFilters.TotalFilters == 0)
+            {
+                ImGui.EndDisabled();
+            }
         }
 
         // Search Box
@@ -179,9 +207,29 @@ public class PlayerListComponent(IMainPresenter presenter) : ViewComponent
 
             if (LocGui.InputTextWithHint("###PlayerList_Search", "SearchPlayersHint", ref searchInput, 30))
             {
-                this.config.SearchInput = searchInput;
-                this.lastInputTime = UnixTimestampHelper.CurrentTime();
-                this.isSearchDirty = true;
+                // Reset logic for empty input
+                if (string.IsNullOrWhiteSpace(searchInput))
+                {
+                    this.config.SearchInput = string.Empty;
+                    this.isSearchDirty = true;
+                    this.pendingFilterUpdate = true;
+                    presenter.ClearCache();
+                }
+                else if (IsValidInput(searchInput))
+                {
+                    this.config.SearchInput = searchInput;
+                    this.lastInputTime = UnixTimestampHelper.CurrentTime();
+
+                    if (PlayerSearchService.IsValidSearch(this.config.SearchInput))
+                    {
+                        this.isSearchDirty = true;
+                    }
+                    else
+                    {
+                        this.isSearchDirty = false;
+                        this.pendingFilterUpdate = false;
+                    }
+                }
             }
 
             if (this.isSearchDirty &&
@@ -221,6 +269,24 @@ public class PlayerListComponent(IMainPresenter presenter) : ViewComponent
 
             ImGui.EndPopup();
         }
+    }
+
+
+    private static bool IsValidInput(string input)
+    {
+        var colonIndex = input.IndexOf(':');
+        if (colonIndex == input.Length - 1) return false;
+        if (colonIndex == -1) return !input.Contains('!') && !input.Contains('*');
+        
+        for (var i = 0; i < colonIndex; i++)
+        {
+            if (input[i] == '!' || input[i] == '*')
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private void DrawPlayer(Player player)

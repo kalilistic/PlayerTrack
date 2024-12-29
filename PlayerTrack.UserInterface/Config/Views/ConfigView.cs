@@ -25,6 +25,7 @@ public class ConfigView : PlayerTrackView, IDisposable
     private readonly BackupComponent backupComponent = new();
     private readonly DataComponent dataComponent = new();
     private readonly ContributeComponent contributeComponent = new();
+    private readonly HelpComponent helpComponent = new();
     private float navMaxWidth;
     private bool isLanguageChanged = true;
 
@@ -157,6 +158,9 @@ public class ConfigView : PlayerTrackView, IDisposable
                 break;
             case ConfigMenuOption.Contribute:
                 this.contributeComponent.Draw();
+                break;
+            case ConfigMenuOption.Help:
+                this.helpComponent.Draw();
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
