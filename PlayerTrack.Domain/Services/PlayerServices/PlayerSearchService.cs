@@ -22,6 +22,22 @@ public static class PlayerSearchService
                 (p, v) => MatchPrefix(p.Notes, v),
                 p => !string.IsNullOrEmpty(p.Notes)
             ),
+            ["race"] = (
+                (p, v) => MatchPrefix(p.RaceName(), v),
+                p => !string.IsNullOrEmpty(p.RaceName().ToString())
+            ),
+            ["gender"] = (
+                (p, v) => MatchPrefix(p.GenderName(), v),
+                p => !string.IsNullOrEmpty(p.GenderName().ToString())
+            ),
+            ["world"] = (
+                (p, v) => MatchPrefix(p.WorldName(), v),
+                p => !string.IsNullOrEmpty(p.WorldName().ToString())
+            ),
+            ["dc"] = (
+                (p, v) => MatchPrefix(p.DataCenterName(), v),
+                p => !string.IsNullOrEmpty(p.DataCenterName().ToString())
+            ),
         };
 
     public static Func<Player, bool> GetSearchFilter(string searchString, SearchType searchType)

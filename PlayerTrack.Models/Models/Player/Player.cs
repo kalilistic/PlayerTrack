@@ -5,6 +5,7 @@ using Dalamud.DrunkenToad.Core;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dapper.Contrib.Extensions;
+using PlayerTrack.Models.Structs;
 
 namespace PlayerTrack.Models;
 
@@ -89,11 +90,53 @@ public class Player
     {
         return DalamudContext.DataManager.GetWorldNameById(this.WorldId);
     }
+
+    public string DataCenterName()
+    {
+        return DalamudContext.DataManager.GetDataCenterNameByWorldId(this.WorldId);
+    }
     
     public string FullyQualifiedName()
     {
         return $"{Name}@{WorldName()} (#{Id})";
     }
+
+    public string RaceName()
+    {
+        var customizeArr = this.Customize;
+        if (customizeArr is { Length: > 0 })
+        {
+            var customize = CharaCustomizeData.MapCustomizeData(customizeArr);
+            var gender = customize.Gender;
+            return gender switch
+            {
+                0 => DalamudContext.DataManager.Races[customize.Race].MasculineName,
+                1 => DalamudContext.DataManager.Races[customize.Race].FeminineName,
+                _ => string.Empty
+            };
+        }
+
+        return string.Empty;
+    }
+
+    public string GenderName()
+    {
+        var customizeArr = this.Customize;
+        if (customizeArr is { Length: > 0 })
+        {
+            var customize = CharaCustomizeData.MapCustomizeData(customizeArr);
+            var gender = customize.Gender;
+            return gender switch
+            {
+                0 => DalamudContext.LocManager.GetString("Male"),
+                1 => DalamudContext.LocManager.GetString("Female"),
+                _ => string.Empty
+            };
+        }
+
+        return string.Empty;
+    }
+    
     
     public void Merge(Player player)
     {

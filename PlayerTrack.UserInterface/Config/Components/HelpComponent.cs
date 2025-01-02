@@ -26,6 +26,10 @@ public class HelpComponent : ConfigViewComponent
                         "SearchOptionsExplanationNotes",
                         "SearchOptionsExplanationFC",
                         "SearchOptionsExplanationTags",
+                        "SearchOptionsExplanationRace",
+                        "SearchOptionsExplanationGender",
+                        "SearchOptionsExplanationWorld",
+                        "SearchOptionsExplanationDC",
                         "SearchOptionsExplanationDefault"
                     ]);
 
