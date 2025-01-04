@@ -68,6 +68,17 @@ public class PlayerChangeService
 
         return worldNames.Any() ? string.Join(", ", worldNames) : string.Empty;
     }
+    
+    public static List<PlayerNameWorldHistory> GetPlayerNameWorldHistory(int playerId)
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.GetPlayerNameWorldHistory(): {playerId}");
+        var nameWorldHistories = RepositoryContext.PlayerNameWorldHistoryRepository.GetPlayerNameWorldHistories(playerId);
+        if (nameWorldHistories == null)
+        {
+            return new List<PlayerNameWorldHistory>();
+        }
+        return nameWorldHistories.ToList();
+    }
 
     public static List<PlayerNameWorldHistory> GetAllPlayerNameWorldHistories()
     {
@@ -78,5 +89,16 @@ public class PlayerChangeService
             return new List<PlayerNameWorldHistory>();
         }
         return nameWorldHistories.ToList();
+    }
+    
+    public static List<PlayerCustomizeHistory> GetPlayerCustomizeHistory(int playerId)
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerChangeService.GetPlayerCustomizeHistory(): {playerId}");
+        var customizeHistories = RepositoryContext.PlayerCustomizeHistoryRepository.GetPlayerCustomizeHistories(playerId);
+        if (customizeHistories == null)
+        {
+            return new List<PlayerCustomizeHistory>();
+        }
+        return customizeHistories.ToList();
     }
 }

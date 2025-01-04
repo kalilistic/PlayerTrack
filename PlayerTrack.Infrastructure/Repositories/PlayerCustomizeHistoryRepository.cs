@@ -100,4 +100,20 @@ public class PlayerCustomizeHistoryRepository : BaseRepository
             return false;
         }
     }
+
+    public List<PlayerCustomizeHistory> GetPlayerCustomizeHistories(int playerId)
+    {
+        DalamudContext.PluginLog.Verbose($"Entering PlayerCustomizeHistoryRepository.GetPlayerCustomizeHistories(): {playerId}.");
+        try
+        {
+            const string sql = "SELECT * FROM player_customize_histories WHERE player_id = @player_id";
+            var playerCustomizeHistories = this.Connection.Query<PlayerCustomizeHistoryDTO>(sql, new { player_id = playerId });
+            return playerCustomizeHistories.Select(history => this.Mapper.Map<PlayerCustomizeHistory>(history)).ToList();
+        }
+        catch (Exception ex)
+        {
+            DalamudContext.PluginLog.Error(ex, $"Failed to get player customize histories for player id {playerId}.");
+            return new List<PlayerCustomizeHistory>();
+        }
+    }
 }

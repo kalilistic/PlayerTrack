@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using Dalamud.DrunkenToad.Core;
 using Dalamud.Loc.ImGui;
 using ImGuiNET;
 using PlayerTrack.Domain;
@@ -11,25 +10,17 @@ namespace PlayerTrack.UserInterface.Main.Components;
 
 using Dalamud.Interface.Utility;
 
-public class PlayerComponent
+public class PlayerComponent(IMainPresenter presenter)
 {
-    private readonly IMainPresenter presenter;
-    private readonly PlayerSummaryComponent playerSummaryComponent;
-    private readonly PlayerEncounterComponent playerEncounterComponent;
-    private readonly PlayerActionComponent playerActionComponent;
-
-    public PlayerComponent(IMainPresenter presenter)
-    {
-        this.presenter = presenter;
-        this.playerSummaryComponent = new PlayerSummaryComponent(presenter);
-        this.playerEncounterComponent = new PlayerEncounterComponent(presenter);
-        this.playerActionComponent = new PlayerActionComponent(presenter);
-    }
+    private readonly PlayerSummaryComponent playerSummaryComponent = new(presenter);
+    private readonly PlayerEncounterComponent playerEncounterComponent = new(presenter);
+    private readonly PlayerHistoryComponent playerHistoryComponent = new(presenter);
+    private readonly PlayerActionComponent playerActionComponent = new(presenter);
 
     public void Draw()
     {
-        var player = this.presenter.GetSelectedPlayer();
-        var isLoadingPlayer = this.presenter.IsPlayerLoading();
+        var player = presenter.GetSelectedPlayer();
+        var isLoadingPlayer = presenter.IsPlayerLoading();
         if (player == null)
         {
             return;
@@ -48,6 +39,12 @@ public class PlayerComponent
             if (LocGui.BeginTabItem("Encounters"))
             {
                 this.playerEncounterComponent.Draw();
+                ImGui.EndTabItem();
+            }
+            
+            if (LocGui.BeginTabItem("History"))
+            {
+                this.playerHistoryComponent.Draw();
                 ImGui.EndTabItem();
             }
 

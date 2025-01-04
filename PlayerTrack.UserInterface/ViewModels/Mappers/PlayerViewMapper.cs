@@ -34,12 +34,13 @@ public static class PlayerViewMapper
             SeenCount = player.SeenCount != 0 ? $"{player.SeenCount}x" : na,
             Notes = player.Notes,
             PreviousNames = PlayerChangeService.GetPreviousNames(player.Id, player.Name),
-            PreviousWorlds = PlayerChangeService.GetPreviousWorlds(player.Id, GetHomeWorld(player.WorldId)),
+            PreviousWorlds = PlayerChangeService.GetPreviousWorlds(player.Id, GetHomeWorld(player.WorldId))
         };
-
+        
         AddTags(player.AssignedTags, playerView);
         AddCategories(player.AssignedCategories, playerView);
         AddEncounters(player.Id, playerView);
+        AddPlayerHistory(player.Id, playerView);
 
         return playerView;
     }
@@ -156,6 +157,68 @@ public static class PlayerViewMapper
                     Location = GetLastLocation(enc.TerritoryTypeId)
                 };
                 playerView.Encounters.Add(pEncView);
+            }
+        }
+    }
+    
+    private static void AddPlayerHistory(int playerId, PlayerView playerView)
+    {
+        var nameWorldHistories = PlayerChangeService.GetPlayerNameWorldHistory(playerId);
+        if (nameWorldHistories.Count == 0)
+        {
+            playerView.PlayerNameWorldHistories = [];
+        }
+        else
+        {
+            foreach (var nameWorldHistory in nameWorldHistories)
+            {
+                var playerHistory = new PlayerNameWorldHistoryView
+                {
+                    Time = nameWorldHistory.Created.ToTimeSpan(),
+                };
+                if (nameWorldHistory.IsMigrated)
+                {
+                    if (nameWorldHistory.WorldId == 0)
+                    {
+                        playerHistory.NameWorld = $"{nameWorldHistory.PlayerName}@{DalamudContext.LocManager.GetString("NotAvailable")}";
+                    }
+                    else if (string.IsNullOrEmpty(nameWorldHistory.PlayerName))
+                    {
+                        playerHistory.NameWorld = $"{DalamudContext.LocManager.GetString("NotAvailable")}@{GetHomeWorld(nameWorldHistory.WorldId)}";
+                    }
+                }
+                else
+                {
+                    playerHistory.NameWorld = $"{nameWorldHistory.PlayerName}@{GetHomeWorld(nameWorldHistory.WorldId)}";
+                }
+                playerView.PlayerNameWorldHistories.Add(playerHistory);
+            }
+        }
+        
+        var customizedHistories = PlayerChangeService.GetPlayerCustomizeHistory(playerId);
+        if (customizedHistories.Count == 0)
+        {
+            playerView.PlayerCustomizeHistories = [];
+        }
+        else
+        {
+            foreach (var customizedHistory in customizedHistories)
+            {
+                var playerHistory = new PlayerCustomizeHistoryView
+                {
+                    Time = customizedHistory.Created.ToTimeSpan(),
+                    Appearance = GetAppearance(customizedHistory.Customize)
+                };
+
+                if (playerView.PlayerCustomizeHistories.Count > 0)
+                {
+                    var lastAppearance = playerView.PlayerCustomizeHistories.Last();
+                    if (lastAppearance.Appearance == playerHistory.Appearance)
+                    {
+                        continue;
+                    }
+                }
+                playerView.PlayerCustomizeHistories.Add(playerHistory);
             }
         }
     }

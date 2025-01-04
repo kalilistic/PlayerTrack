@@ -45,4 +45,8 @@ public class PlayerView
     public PlayerConfig PlayerConfig { get; set; } = null!;
 
     public List<PlayerEncounterView> Encounters { get; set; } = new();
+    
+    public List<PlayerNameWorldHistoryView> PlayerNameWorldHistories { get; set; } = new();
+    
+    public List<PlayerCustomizeHistoryView> PlayerCustomizeHistories { get; set; } = new();
 }
