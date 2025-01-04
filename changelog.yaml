@@ -40,6 +40,20 @@ stable:
     technical:
 
 testing:
+  - version: "3.4.14.0"
+    date: "2025-01-04"
+    is_critical: false
+    headline: Examine players and a new player history screen.
+    added:
+      - Add player history screen with past name/worlds and appearance. 
+        As a note, very old migrated data may have missing data ("N/As") and timestamps will be the migration date.
+      - Add examine player for current players (gone since 6.2!).
+    changed:
+        - Increase search box input size limit so you can type longer queries.
+    deprecated:
+    fixed:
+    removed:
+    technical:
   - version: "3.4.13.0"
     date: "2025-01-02"
     is_critical: false
