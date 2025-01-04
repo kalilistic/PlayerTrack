@@ -205,7 +205,7 @@ public class PlayerListComponent : ViewComponent
             ImGui.SetNextItemWidth(-1);
             var searchInput = this.config.SearchInput;
 
-            if (LocGui.InputTextWithHint("###PlayerList_Search", "SearchPlayersHint", ref searchInput, 30))
+            if (LocGui.InputTextWithHint("###PlayerList_Search", "SearchPlayersHint", ref searchInput, 1000))
             {
                 // Reset logic for empty input
                 if (string.IsNullOrWhiteSpace(searchInput))
