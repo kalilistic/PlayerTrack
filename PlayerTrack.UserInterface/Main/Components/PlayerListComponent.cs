@@ -358,6 +358,11 @@ public class PlayerListComponent : ViewComponent
                 {
                     DalamudContext.TargetManager.SetFocusTarget(player.EntityId);
                 }
+                
+                if (LocGui.MenuItem("ExaminePlayer"))
+                {
+                    DalamudContext.TargetManager.ExamineTarget(player.EntityId);
+                }
 
                 if (LocGui.MenuItem("OpenPlayerPlate"))
                 {

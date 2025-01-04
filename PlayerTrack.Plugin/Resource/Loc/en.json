@@ -67,6 +67,7 @@
   "Duration": "Duration",
   "Encounters": "Encounters",
   "Exact": "Exact",
+  "ExaminePlayer": "Examine Player",
   "ExamplesExplanation": "Here are some examples to help you get started:",
   "ExamplesExplanation1": "notes:! => Find players without any notes.",
   "ExamplesExplanation2": "notes:* => Find players with any notes.",
