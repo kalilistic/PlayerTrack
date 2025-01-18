@@ -40,6 +40,17 @@ stable:
     technical:
 
 testing:
+  - version: "3.4.15.0"
+    date: "2025-01-18"
+    is_critical: false
+    headline: Bug fix.
+    added:
+    changed:
+    deprecated:
+    fixed:
+        - Fix issue where you can't start the plugin without any categories.
+    removed:
+    technical:
   - version: "3.4.14.0"
     date: "2025-01-04"
     is_critical: false

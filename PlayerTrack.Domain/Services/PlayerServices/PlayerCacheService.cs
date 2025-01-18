@@ -706,12 +706,16 @@ public class PlayerCacheService
     {
         var categoryRanks = ServiceContext.CategoryService.GetCategoryRanks();
         var noCategoryPlacement = ServiceContext.ConfigService.GetConfig().NoCategoryPlacement;
-        var noCategoryRank = noCategoryPlacement switch
+        var noCategoryRank = 0;
+        if (categoryRanks.Count != 0)
         {
-            NoCategoryPlacement.Top => categoryRanks.Values.Min() - 1,
-            NoCategoryPlacement.Bottom => categoryRanks.Values.Max() + 1,
-            _ => 0
-        };
+            noCategoryRank = noCategoryPlacement switch
+            {
+                NoCategoryPlacement.Top => categoryRanks.Values.Min() - 1,
+                NoCategoryPlacement.Bottom => categoryRanks.Values.Max() + 1,
+                _ => 0
+            };
+        }
         this.comparer = new PlayerComparer(ServiceContext.CategoryService.GetCategoryRanks(), noCategoryRank);
     }
     
