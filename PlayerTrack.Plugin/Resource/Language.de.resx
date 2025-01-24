@@ -1,0 +1,887 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Actions" xml:space="preserve">
+        <value>Aktionen</value>
+    </data>
+    <data name="AddEncounters" xml:space="preserve">
+        <value>Begegnungen hinzufügen</value>
+    </data>
+    <data name="AddPlayer" xml:space="preserve">
+        <value>Spieler hinzufügen</value>
+    </data>
+    <data name="AddPlayerInstructions" xml:space="preserve">
+        <value>Spieler manuell zu deiner Liste hinzufügen.</value>
+    </data>
+    <data name="AddPlayers" xml:space="preserve">
+        <value>Spieler hinzufügen</value>
+    </data>
+    <data name="AdvancedMatchingExplanation" xml:space="preserve">
+        <value>Use these symbols to refine your search:</value>
+    </data>
+    <data name="AdvancedMatchingExplanationContains" xml:space="preserve">
+        <value>*text*: Match anything containing 'text'.</value>
+    </data>
+    <data name="AdvancedMatchingExplanationEnd" xml:space="preserve">
+        <value>*text: Match anything ending with 'text'.</value>
+    </data>
+    <data name="AdvancedMatchingExplanationExact" xml:space="preserve">
+        <value>text: Match exactly.</value>
+    </data>
+    <data name="AdvancedMatchingExplanationExclude" xml:space="preserve">
+        <value>!text: Exclude matches with 'text'.</value>
+    </data>
+    <data name="AdvancedMatchingExplanationStart" xml:space="preserve">
+        <value>text*: Match anything starting with 'text'.</value>
+    </data>
+    <data name="AdvancedMatchingTitle" xml:space="preserve">
+        <value>Advanced Matching for Special Commands</value>
+    </data>
+    <data name="Ago" xml:space="preserve">
+        <value>vor</value>
+    </data>
+    <data name="Alerts" xml:space="preserve">
+        <value>Warnungen</value>
+    </data>
+    <data name="AllPlayers" xml:space="preserve">
+        <value>Alle Spieler</value>
+    </data>
+    <data name="Appearance" xml:space="preserve">
+        <value>Aussehen</value>
+    </data>
+    <data name="AssignPlayerCategory" xml:space="preserve">
+        <value>Kategorie zuweisen</value>
+    </data>
+    <data name="Automatic" xml:space="preserve">
+        <value>Automatisch</value>
+    </data>
+    <data name="BackupErrorMessage" xml:space="preserve">
+        <value>Etwas ist schief gelaufen. Starten Sie Ihren Computer neu und versuchen Sie es erneut.</value>
+    </data>
+    <data name="Backups" xml:space="preserve">
+        <value>Sicherungen</value>
+    </data>
+    <data name="Banned" xml:space="preserve">
+        <value>Gebannt</value>
+    </data>
+    <data name="BlackList" xml:space="preserve">
+        <value>Blacklist</value>
+    </data>
+    <data name="BlackList_Abbreviation" xml:space="preserve">
+        <value>BL</value>
+    </data>
+    <data name="Blocked" xml:space="preserve">
+        <value>Blocked</value>
+    </data>
+    <data name="Bottom" xml:space="preserve">
+        <value>Bottom</value>
+    </data>
+    <data name="Byte" xml:space="preserve">
+        <value>B</value>
+    </data>
+    <data name="CWLS" xml:space="preserve">
+        <value>CWLS</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>Abbrechen</value>
+    </data>
+    <data name="Cancelled" xml:space="preserve">
+        <value>Cancelled</value>
+    </data>
+    <data name="Categories" xml:space="preserve">
+        <value>Kategorien</value>
+    </data>
+    <data name="CategoryName" xml:space="preserve">
+        <value>Kategoriename</value>
+    </data>
+    <data name="CategorySpecificSetting" xml:space="preserve">
+        <value>Von Kategorie {o} übernommen</value>
+    </data>
+    <data name="ClosePlayer" xml:space="preserve">
+        <value>Spieler schließen</value>
+    </data>
+    <data name="CombineWindows" xml:space="preserve">
+        <value>Fenster kombinieren</value>
+    </data>
+    <data name="ConfirmDelete" xml:space="preserve">
+        <value>Löschen?</value>
+    </data>
+    <data name="ConfirmUnsync" xml:space="preserve">
+        <value>This will delete synced category. OK?</value>
+    </data>
+    <data name="Confirmation" xml:space="preserve">
+        <value>Bestätigung</value>
+    </data>
+    <data name="ConfirmationQuestion" xml:space="preserve">
+        <value>Möchten Sie wirklich fortfahren?</value>
+    </data>
+    <data name="Contains" xml:space="preserve">
+        <value>Enthält</value>
+    </data>
+    <data name="Content" xml:space="preserve">
+        <value>Inhalt</value>
+    </data>
+    <data name="ContextMenu" xml:space="preserve">
+        <value>Kontextmenü</value>
+    </data>
+    <data name="Contribute" xml:space="preserve">
+        <value>Contribute</value>
+    </data>
+    <data name="ContributionUsage" xml:space="preserve">
+        <value>Most contributions will go towards covering server and coffee costs.</value>
+    </data>
+    <data name="CopyToClipboard" xml:space="preserve">
+        <value>Copy to Clipboard</value>
+    </data>
+    <data name="Created" xml:space="preserve">
+        <value>Erstellt</value>
+    </data>
+    <data name="CrossWorldLinkShell" xml:space="preserve">
+        <value>Cross-world Linkshell</value>
+    </data>
+    <data name="CrossWorldLinkShell_Abbreviation" xml:space="preserve">
+        <value>CWLS</value>
+    </data>
+    <data name="CrowdinProject" xml:space="preserve">
+        <value>I've set up a project on Crowdin for anyone interested.</value>
+    </data>
+    <data name="CurrentPlayers" xml:space="preserve">
+        <value>Derzeitige Spieler</value>
+    </data>
+    <data name="CustomTitle" xml:space="preserve">
+        <value>Individueller Titel</value>
+    </data>
+    <data name="Data" xml:space="preserve">
+        <value>Daten</value>
+    </data>
+    <data name="Day" xml:space="preserve">
+        <value>d</value>
+    </data>
+    <data name="DefaultCategory" xml:space="preserve">
+        <value>Standard-Kategorie</value>
+    </data>
+    <data name="DefaultSetting" xml:space="preserve">
+        <value>Von Spieler-Standardwerten übernommen</value>
+    </data>
+    <data name="Delete" xml:space="preserve">
+        <value>Löschen</value>
+    </data>
+    <data name="DeleteEncounters" xml:space="preserve">
+        <value>Begegnungen löschen</value>
+    </data>
+    <data name="DeleteHistory" xml:space="preserve">
+        <value>Delete History</value>
+    </data>
+    <data name="DeletePlayerSettings" xml:space="preserve">
+        <value>Spielereinstellungen löschen</value>
+    </data>
+    <data name="DeletePlayers" xml:space="preserve">
+        <value>Spieler löschen</value>
+    </data>
+    <data name="DeleteRecordsInProgress" xml:space="preserve">
+        <value>Entferne Einträge ...</value>
+    </data>
+    <data name="DeleteRecordsSuccess" xml:space="preserve">
+        <value>Einträge erfolgreich gelöscht.</value>
+    </data>
+    <data name="DiscordRoleInfo" xml:space="preserve">
+        <value>Join Discord and choose the 'Translator' role to learn more.</value>
+    </data>
+    <data name="Display" xml:space="preserve">
+        <value>Anzeige</value>
+    </data>
+    <data name="DonationsAppreciated" xml:space="preserve">
+        <value>Donations are always appreciated but never required.</value>
+    </data>
+    <data name="DuplicatePlayerError" xml:space="preserve">
+        <value>Spieler existiert bereits.</value>
+    </data>
+    <data name="Duration" xml:space="preserve">
+        <value>Dauer</value>
+    </data>
+    <data name="Encounters" xml:space="preserve">
+        <value>Begegnungen</value>
+    </data>
+    <data name="Exact" xml:space="preserve">
+        <value>Exakt</value>
+    </data>
+    <data name="ExaminePlayer" xml:space="preserve">
+        <value>Examine Player</value>
+    </data>
+    <data name="ExamplesExplanation" xml:space="preserve">
+        <value>Here are some examples to help you get started:</value>
+    </data>
+    <data name="ExamplesExplanation1" xml:space="preserve">
+        <value>notes:! =&gt; Find players without any notes.</value>
+    </data>
+    <data name="ExamplesExplanation2" xml:space="preserve">
+        <value>notes:* =&gt; Find players with any notes.</value>
+    </data>
+    <data name="ExamplesExplanation3" xml:space="preserve">
+        <value>fc:uwu =&gt; Find players in the Free Company 'uwu'.</value>
+    </data>
+    <data name="ExamplesTitle" xml:space="preserve">
+        <value>Examples</value>
+    </data>
+    <data name="Execute" xml:space="preserve">
+        <value>Execute</value>
+    </data>
+    <data name="FL_BL_FC" xml:space="preserve">
+        <value>FL/BL/FC</value>
+    </data>
+    <data name="Failed" xml:space="preserve">
+        <value>Fehler</value>
+    </data>
+    <data name="Female" xml:space="preserve">
+        <value>Female</value>
+    </data>
+    <data name="FirstSeen" xml:space="preserve">
+        <value>Erstmals gesehen</value>
+    </data>
+    <data name="FocusTargetPlayer" xml:space="preserve">
+        <value>Spieler fokussieren</value>
+    </data>
+    <data name="ForDevelopersTitle" xml:space="preserve">
+        <value>For Developers</value>
+    </data>
+    <data name="ForEveryoneTitle" xml:space="preserve">
+        <value>For Everyone</value>
+    </data>
+    <data name="ForTranslatorsTitle" xml:space="preserve">
+        <value>For Translators</value>
+    </data>
+    <data name="FreeCompany" xml:space="preserve">
+        <value>Freie Gesellschaft</value>
+    </data>
+    <data name="FreeCompany_Abbreviation" xml:space="preserve">
+        <value>FC</value>
+    </data>
+    <data name="FriendList" xml:space="preserve">
+        <value>Friend List</value>
+    </data>
+    <data name="FriendList_Abbreviation" xml:space="preserve">
+        <value>FL</value>
+    </data>
+    <data name="FromNow" xml:space="preserve">
+        <value>ab jetzt</value>
+    </data>
+    <data name="General" xml:space="preserve">
+        <value>Allgemein</value>
+    </data>
+    <data name="Gigabyte" xml:space="preserve">
+        <value>GB</value>
+    </data>
+    <data name="Help" xml:space="preserve">
+        <value>Help</value>
+    </data>
+    <data name="HelpWithTranslation" xml:space="preserve">
+        <value>You can help submit or proofread translations for PlayerTrack.</value>
+    </data>
+    <data name="HighEndContent" xml:space="preserve">
+        <value>High-End Inhalte</value>
+    </data>
+    <data name="History" xml:space="preserve">
+        <value>History</value>
+    </data>
+    <data name="Homeworld" xml:space="preserve">
+        <value>Heimatwelt</value>
+    </data>
+    <data name="Hour" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="HowToSearchExplanation" xml:space="preserve">
+        <value>You can search by name or using special commands.</value>
+    </data>
+    <data name="HowToSearchTitle" xml:space="preserve">
+        <value>How to Search</value>
+    </data>
+    <data name="Icon" xml:space="preserve">
+        <value>Symbol</value>
+    </data>
+    <data name="Icons" xml:space="preserve">
+        <value>Symbole</value>
+    </data>
+    <data name="Inherit" xml:space="preserve">
+        <value>Übernehmen</value>
+    </data>
+    <data name="Integrations" xml:space="preserve">
+        <value>Integrationen</value>
+    </data>
+    <data name="InvalidNameError" xml:space="preserve">
+        <value>Bitte geben einen gültigen Namen ein.</value>
+    </data>
+    <data name="Job" xml:space="preserve">
+        <value>Job</value>
+    </data>
+    <data name="KeepEncounters" xml:space="preserve">
+        <value>Begegnungen beibehalten</value>
+    </data>
+    <data name="KeepEncountersFromLast90Days" xml:space="preserve">
+        <value>von den letzten 90 Tagen</value>
+    </data>
+    <data name="KeepEncountersInHighEndContent" xml:space="preserve">
+        <value>in High-End Inhalten</value>
+    </data>
+    <data name="KeepEncountersInNormalContent" xml:space="preserve">
+        <value>in normalen Inhalten</value>
+    </data>
+    <data name="KeepEncountersInOverworld" xml:space="preserve">
+        <value>in der Welt</value>
+    </data>
+    <data name="KeepPlayerSettings" xml:space="preserve">
+        <value>Einstellungen für Spieler beibehalten</value>
+    </data>
+    <data name="KeepPlayers" xml:space="preserve">
+        <value>Spieler beibehalten</value>
+    </data>
+    <data name="KeepPlayersSeenInLast90Days" xml:space="preserve">
+        <value>in den letzten 90 Tagen gesehen</value>
+    </data>
+    <data name="KeepPlayersWithAnySettings" xml:space="preserve">
+        <value>mit beliebigen Einstellungen</value>
+    </data>
+    <data name="KeepPlayersWithCategories" xml:space="preserve">
+        <value>mit Kategorien</value>
+    </data>
+    <data name="KeepPlayersWithEncounters" xml:space="preserve">
+        <value>mit Begegnungen</value>
+    </data>
+    <data name="KeepPlayersWithNotes" xml:space="preserve">
+        <value>Mit Anmerkungen</value>
+    </data>
+    <data name="KeepSettingsForPlayersSeenInLast90Days" xml:space="preserve">
+        <value>in den letzten 90 Tagen gesehen</value>
+    </data>
+    <data name="KeepSettingsForPlayersWithAnySettings" xml:space="preserve">
+        <value>mit beliebigen Einstellungen</value>
+    </data>
+    <data name="KeepSettingsForPlayersWithCategories" xml:space="preserve">
+        <value>mit Kategorien</value>
+    </data>
+    <data name="KeepSettingsForPlayersWithEncounters" xml:space="preserve">
+        <value>mit Begegnungen</value>
+    </data>
+    <data name="KeepSettingsForPlayersWithNotes" xml:space="preserve">
+        <value>Mit Anmerkungen</value>
+    </data>
+    <data name="Kilobyte" xml:space="preserve">
+        <value>KB</value>
+    </data>
+    <data name="LS" xml:space="preserve">
+        <value>LS</value>
+    </data>
+    <data name="LargeFeatureDiscussion" xml:space="preserve">
+        <value>If you're considering a larger feature, please reach out beforehand to discuss.</value>
+    </data>
+    <data name="LastLocation" xml:space="preserve">
+        <value>Letzter Standort</value>
+    </data>
+    <data name="LastSeen" xml:space="preserve">
+        <value>Zuletzt gesehen</value>
+    </data>
+    <data name="LastUpdated" xml:space="preserve">
+        <value>Last Updated</value>
+    </data>
+    <data name="LastUpdatedNever" xml:space="preserve">
+        <value>Never</value>
+    </data>
+    <data name="Level" xml:space="preserve">
+        <value>Lvl</value>
+    </data>
+    <data name="LinkShell" xml:space="preserve">
+        <value>Linkshell</value>
+    </data>
+    <data name="LinkShell_Abbreviation" xml:space="preserve">
+        <value>LS</value>
+    </data>
+    <data name="LocalPlayers" xml:space="preserve">
+        <value>Your Characters</value>
+    </data>
+    <data name="Location" xml:space="preserve">
+        <value>Ort</value>
+    </data>
+    <data name="Locations" xml:space="preserve">
+        <value>Orte</value>
+    </data>
+    <data name="LockWindowPosition" xml:space="preserve">
+        <value>Fensterposition sperren</value>
+    </data>
+    <data name="LockWindowSize" xml:space="preserve">
+        <value>Fenstergröße sperren</value>
+    </data>
+    <data name="Lodestone" xml:space="preserve">
+        <value>Lodestone</value>
+    </data>
+    <data name="LodestoneLocale" xml:space="preserve">
+        <value>Lodestone-Sprache</value>
+    </data>
+    <data name="Male" xml:space="preserve">
+        <value>Male</value>
+    </data>
+    <data name="Manual" xml:space="preserve">
+        <value>Anleitung</value>
+    </data>
+    <data name="Megabyte" xml:space="preserve">
+        <value>MB</value>
+    </data>
+    <data name="Merge" xml:space="preserve">
+        <value>Merge</value>
+    </data>
+    <data name="MergePlayers" xml:space="preserve">
+        <value>Merge Players</value>
+    </data>
+    <data name="MergePlayersDupe" xml:space="preserve">
+        <value>You can't merge a player with themselves.</value>
+    </data>
+    <data name="MergePlayersInstructions" xml:space="preserve">
+        <value>Select players to merge. This will copy over notes, encounters, and history.</value>
+    </data>
+    <data name="Minute" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="Name" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="NameChangeAlert" xml:space="preserve">
+        <value>Namensänderungs-Alarm</value>
+    </data>
+    <data name="NameColor" xml:space="preserve">
+        <value>Namensfarbe</value>
+    </data>
+    <data name="NameWorld" xml:space="preserve">
+        <value>Name@World</value>
+    </data>
+    <data name="Nameplate" xml:space="preserve">
+        <value>Namensschild</value>
+    </data>
+    <data name="NameplateColor" xml:space="preserve">
+        <value>Farbe des Namensschildes</value>
+    </data>
+    <data name="NameplateColors" xml:space="preserve">
+        <value>Farbe der Namensschilder</value>
+    </data>
+    <data name="NameplateConditions" xml:space="preserve">
+        <value>Namensschild-Bedingungen</value>
+    </data>
+    <data name="NameplateTitle" xml:space="preserve">
+        <value>Namensschildtitel</value>
+    </data>
+    <data name="NameplateUseColor" xml:space="preserve">
+        <value>Farbe des Namensschildes verwenden</value>
+    </data>
+    <data name="NameplateUseColorIfDead" xml:space="preserve">
+        <value>Verwende Namensschild-Farbe wenn Tot</value>
+    </data>
+    <data name="NewCategoryHint" xml:space="preserve">
+        <value>Eine neue Kategorie erstellen</value>
+    </data>
+    <data name="NewTagHint" xml:space="preserve">
+        <value>Einen neuen Tag eingeben</value>
+    </data>
+    <data name="No" xml:space="preserve">
+        <value>Nein</value>
+    </data>
+    <data name="NoBackupsMessage" xml:space="preserve">
+        <value>Keine Backups gefunden.</value>
+    </data>
+    <data name="NoCategoryPlacement" xml:space="preserve">
+        <value>Placement for players with no category</value>
+    </data>
+    <data name="NoChange" xml:space="preserve">
+        <value>Keine Änderung</value>
+    </data>
+    <data name="NoEncountersMessage" xml:space="preserve">
+        <value>Keine Begegnungen gefunden.</value>
+    </data>
+    <data name="NoHistoryMessage" xml:space="preserve">
+        <value>No history found.</value>
+    </data>
+    <data name="NoIconsEnabledMessage" xml:space="preserve">
+        <value>Keine Symbole aktiviert.</value>
+    </data>
+    <data name="NoLocalPlayers" xml:space="preserve">
+        <value>No player characters found.</value>
+    </data>
+    <data name="NoPlayersFound" xml:space="preserve">
+        <value>No players found.</value>
+    </data>
+    <data name="NoRecordsToDelete" xml:space="preserve">
+        <value>Keine Einträge zu löschen.</value>
+    </data>
+    <data name="NoSpecialPerks" xml:space="preserve">
+        <value>There are no special perks for donating, except my gratitude.</value>
+    </data>
+    <data name="NoWorldError" xml:space="preserve">
+        <value>Bitte geben eine Welt ein.</value>
+    </data>
+    <data name="None" xml:space="preserve">
+        <value>Nichts</value>
+    </data>
+    <data name="NotApplicable" xml:space="preserve">
+        <value>N/A</value>
+    </data>
+    <data name="NotAvailable" xml:space="preserve">
+        <value>Keine Angaben</value>
+    </data>
+    <data name="Notes" xml:space="preserve">
+        <value>Notizen</value>
+    </data>
+    <data name="Now" xml:space="preserve">
+        <value>Jetzt</value>
+    </data>
+    <data name="NumberOfRecordsToBeDeleted" xml:space="preserve">
+        <value>Zu löschende Datensätze: {0}/{1} ({2}%%)</value>
+    </data>
+    <data name="OK" xml:space="preserve">
+        <value>Ok</value>
+    </data>
+    <data name="OnlyShowEnabledIcons" xml:space="preserve">
+        <value>Nur aktivierte Symbole anzeigen</value>
+    </data>
+    <data name="OnlyShowLoggedIn" xml:space="preserve">
+        <value>Nur eingeloggte anzeigen</value>
+    </data>
+    <data name="OpenForDevHelp" xml:space="preserve">
+        <value>I'm always open for help with development.</value>
+    </data>
+    <data name="OpenLodestone" xml:space="preserve">
+        <value>Lodestone öffnen</value>
+    </data>
+    <data name="OpenPlayer" xml:space="preserve">
+        <value>Spieler öffnen</value>
+    </data>
+    <data name="OpenPlayerPlate" xml:space="preserve">
+        <value>Spieler-Platte öffnen</value>
+    </data>
+    <data name="OpenPlayerTrack" xml:space="preserve">
+        <value>PlayerTrack Öffnen</value>
+    </data>
+    <data name="OpenSettings" xml:space="preserve">
+        <value>Einstellungen öffnen</value>
+    </data>
+    <data name="Override" xml:space="preserve">
+        <value>Überschreiben</value>
+    </data>
+    <data name="Overworld" xml:space="preserve">
+        <value>Welt</value>
+    </data>
+    <data name="PitchInIntro" xml:space="preserve">
+        <value>Looking to pitch in? Here are a couple of ways you can help out.</value>
+    </data>
+    <data name="Player" xml:space="preserve">
+        <value>Player</value>
+    </data>
+    <data name="PlayerAddedSuccessfully" xml:space="preserve">
+        <value>Spieler erfolgreich hinzugefügt.</value>
+    </data>
+    <data name="PlayerDefaults" xml:space="preserve">
+        <value>Spieler-Standardeinstellungen</value>
+    </data>
+    <data name="PlayerInfo" xml:space="preserve">
+        <value>Spielerinfo</value>
+    </data>
+    <data name="PlayerList" xml:space="preserve">
+        <value>Spieler Liste</value>
+    </data>
+    <data name="PlayerName" xml:space="preserve">
+        <value>Spielername</value>
+    </data>
+    <data name="PlayerStats" xml:space="preserve">
+        <value>Spielerstatistiken</value>
+    </data>
+    <data name="PlayerSummary" xml:space="preserve">
+        <value>Spieler-Zusammenfassung</value>
+    </data>
+    <data name="PlayerWorld" xml:space="preserve">
+        <value>Spieler-Welt</value>
+    </data>
+    <data name="Players" xml:space="preserve">
+        <value>Spieler</value>
+    </data>
+    <data name="PlayersByCategory" xml:space="preserve">
+        <value>Spieler nach Kategorie</value>
+    </data>
+    <data name="PlayersByTag" xml:space="preserve">
+        <value>Players by Tag</value>
+    </data>
+    <data name="PreserveConfigState" xml:space="preserve">
+        <value>Preserve Config Window State on Next Load</value>
+    </data>
+    <data name="PreserveMainWindowState" xml:space="preserve">
+        <value>Preserve Main Window State on Next Load</value>
+    </data>
+    <data name="PreviouslyKnownAs" xml:space="preserve">
+        <value>Zuvor bekannt als {0}</value>
+    </data>
+    <data name="PreviouslyOn" xml:space="preserve">
+        <value>Zuvor auf {0}</value>
+    </data>
+    <data name="ProximityAlert" xml:space="preserve">
+        <value>Näherungsalarm</value>
+    </data>
+    <data name="ProximityAlertMessage" xml:space="preserve">
+        <value>ist in der Nähe.</value>
+    </data>
+    <data name="Purge" xml:space="preserve">
+        <value>Purge</value>
+    </data>
+    <data name="RecentPlayers" xml:space="preserve">
+        <value>Recent Players</value>
+    </data>
+    <data name="RecentPlayersThreshold" xml:space="preserve">
+        <value>Recent Players Threshold (in Minutes)</value>
+    </data>
+    <data name="ReplaceGameTitleWithCategoryName" xml:space="preserve">
+        <value>Spieltitel durch Kategoriename ersetzen</value>
+    </data>
+    <data name="ReplaceGameTitleWithCustomTitle" xml:space="preserve">
+        <value>Spieltitel durch eigenen Titel ersetzen</value>
+    </data>
+    <data name="ReportFindings" xml:space="preserve">
+        <value>You can report any findings through feedback, Discord, or GitHub.</value>
+    </data>
+    <data name="Reset" xml:space="preserve">
+        <value>Zurücksetzen</value>
+    </data>
+    <data name="ResetCategoryTooltip" xml:space="preserve">
+        <value>Reset category name to {0}</value>
+    </data>
+    <data name="ResetLodestone" xml:space="preserve">
+        <value>Reset Lodestone</value>
+    </data>
+    <data name="ResetPlayers" xml:space="preserve">
+        <value>Reset Players</value>
+    </data>
+    <data name="ReviewGitHub" xml:space="preserve">
+        <value>Review the GitHub issues for any bugs or features you want to work on.</value>
+    </data>
+    <data name="RunAction" xml:space="preserve">
+        <value>Aktion ausführen</value>
+    </data>
+    <data name="RunBackup" xml:space="preserve">
+        <value>Sicherung starten</value>
+    </data>
+    <data name="RunBackupBeforeDataActions" xml:space="preserve">
+        <value>Sicherung vorher starten</value>
+    </data>
+    <data name="RunBackupCleanup" xml:space="preserve">
+        <value>Sicherungen bereinigen</value>
+    </data>
+    <data name="SQLExecutor" xml:space="preserve">
+        <value>SQL Executor</value>
+    </data>
+    <data name="SQLExecutorRestriction" xml:space="preserve">
+        <value>Only PRAGMA and SELECT statements are allowed.</value>
+    </data>
+    <data name="Search" xml:space="preserve">
+        <value>Search</value>
+    </data>
+    <data name="SearchIconsHint" xml:space="preserve">
+        <value>Symbole suchen</value>
+    </data>
+    <data name="SearchOptionsExplanation" xml:space="preserve">
+        <value>Use these options to narrow your search:</value>
+    </data>
+    <data name="SearchOptionsExplanationDC" xml:space="preserve">
+        <value>dc: Find players by their data center.</value>
+    </data>
+    <data name="SearchOptionsExplanationDefault" xml:space="preserve">
+        <value>(default): Search by name if no option is provided.</value>
+    </data>
+    <data name="SearchOptionsExplanationFC" xml:space="preserve">
+        <value>fc: Find players in a specific Free Company.</value>
+    </data>
+    <data name="SearchOptionsExplanationGender" xml:space="preserve">
+        <value>gender: Search for players by character gender.</value>
+    </data>
+    <data name="SearchOptionsExplanationNotes" xml:space="preserve">
+        <value>notes: Look for players with specific notes.</value>
+    </data>
+    <data name="SearchOptionsExplanationRace" xml:space="preserve">
+        <value>race: Search for players with by character race.</value>
+    </data>
+    <data name="SearchOptionsExplanationTags" xml:space="preserve">
+        <value>tags: Search for players with specific tags.</value>
+    </data>
+    <data name="SearchOptionsExplanationWorld" xml:space="preserve">
+        <value>world: Find players by their home world.</value>
+    </data>
+    <data name="SearchOptionsTitle" xml:space="preserve">
+        <value>Search Options</value>
+    </data>
+    <data name="SearchPlayersHint" xml:space="preserve">
+        <value>Spieler suchen</value>
+    </data>
+    <data name="SearchPlayersInputHint" xml:space="preserve">
+        <value>Start typing...</value>
+    </data>
+    <data name="SearchType" xml:space="preserve">
+        <value>Suchmodus</value>
+    </data>
+    <data name="SeenCount" xml:space="preserve">
+        <value>So oft gesehen</value>
+    </data>
+    <data name="SelectCategory" xml:space="preserve">
+        <value>Kategorie auswählen</value>
+    </data>
+    <data name="SelectPlayerToDelete" xml:space="preserve">
+        <value>Select player to delete</value>
+    </data>
+    <data name="SelectPlayerToUpdate" xml:space="preserve">
+        <value>Select player to update</value>
+    </data>
+    <data name="Settings" xml:space="preserve">
+        <value>Einstellungen</value>
+    </data>
+    <data name="ShowCategories" xml:space="preserve">
+        <value>Kategorien anzeigen</value>
+    </data>
+    <data name="ShowCategorySeparator" xml:space="preserve">
+        <value>Kategorietrennzeichen anzeigen</value>
+    </data>
+    <data name="ShowHidePlayerTrack" xml:space="preserve">
+        <value>PlayerTrack ein-/ausblenden</value>
+    </data>
+    <data name="ShowHidePlayerTrackConfig" xml:space="preserve">
+        <value>PlayerTrack Einstellungen ein-/ausblenden</value>
+    </data>
+    <data name="ShowInContent" xml:space="preserve">
+        <value>In Inhalten anzeigen</value>
+    </data>
+    <data name="ShowInHighEndContent" xml:space="preserve">
+        <value>In High End Inhalten anzeigen</value>
+    </data>
+    <data name="ShowInOverworld" xml:space="preserve">
+        <value>In Welt anzeigen</value>
+    </data>
+    <data name="ShowOpenLodestone" xml:space="preserve">
+        <value>Lodestone Öffnen anzeigen</value>
+    </data>
+    <data name="ShowOpenPlayerTracker" xml:space="preserve">
+        <value>PlayerTrack Öffnen anzeigen</value>
+    </data>
+    <data name="ShowPlayerCountInFilter" xml:space="preserve">
+        <value>Show Player Count in Filter</value>
+    </data>
+    <data name="ShowPlayerFilter" xml:space="preserve">
+        <value>Spielerfilter anzeigen</value>
+    </data>
+    <data name="ShowSearchBox" xml:space="preserve">
+        <value>Suchfeld anzeigen</value>
+    </data>
+    <data name="ShowTags" xml:space="preserve">
+        <value>Tags anzeigen</value>
+    </data>
+    <data name="SignUpTest" xml:space="preserve">
+        <value>Sign up for test releases to help find bugs before they go live.</value>
+    </data>
+    <data name="Size" xml:space="preserve">
+        <value>Größe</value>
+    </data>
+    <data name="SocialListAddPlayersHelpText" xml:space="preserve">
+        <value>This will add players found on social lists to PlayerTrack. With this unchecked, only players already in your list will be updated.</value>
+    </data>
+    <data name="SocialListDefaultCategoryHelpText" xml:space="preserve">
+        <value>Assign a category of your choosing when a new player is added to a social list. The player won't be automatically removed if they leave the social list.</value>
+    </data>
+    <data name="SocialListSyncCategoryHelpText" xml:space="preserve">
+        <value>Keep list automatically synced with a category. These are special categories that you can't add/remove from manually.</value>
+    </data>
+    <data name="SocialListWarning" xml:space="preserve">
+        <value>Social Lists update at specific times. All lists will refresh when you open their respective screen. In addition, the Friends and Blacklist will update on login. For large Free Companies, ensure you open and fully load each of the three pages in the bottom right to update the list.</value>
+    </data>
+    <data name="SocialLists" xml:space="preserve">
+        <value>Social Lists</value>
+    </data>
+    <data name="StableExperience" xml:space="preserve">
+        <value>This helps ensure a stable experience for everyone.</value>
+    </data>
+    <data name="StartsWith" xml:space="preserve">
+        <value>Beginnt mit</value>
+    </data>
+    <data name="Status" xml:space="preserve">
+        <value>Status</value>
+    </data>
+    <data name="SupportFurtherTitle" xml:space="preserve">
+        <value>Want to Support Further?</value>
+    </data>
+    <data name="SyncWithCategory" xml:space="preserve">
+        <value>Sync with Dynamic Category</value>
+    </data>
+    <data name="SyncWithVisibility" xml:space="preserve">
+        <value>Mit Visibility synchronisieren</value>
+    </data>
+    <data name="Tags" xml:space="preserve">
+        <value>Tags</value>
+    </data>
+    <data name="TargetPlayer" xml:space="preserve">
+        <value>Spieler anvisieren</value>
+    </data>
+    <data name="Terabyte" xml:space="preserve">
+        <value>TB</value>
+    </data>
+    <data name="Time" xml:space="preserve">
+        <value>Zeit</value>
+    </data>
+    <data name="Top" xml:space="preserve">
+        <value>Top</value>
+    </data>
+    <data name="Type" xml:space="preserve">
+        <value>Typ</value>
+    </data>
+    <data name="UnassignCategoryTooltip" xml:space="preserve">
+        <value>klicken, um die Kategorie von diesem Spieler zu entfernen</value>
+    </data>
+    <data name="UnassignDynamicCategoryTooltip" xml:space="preserve">
+        <value>This is a dynamic category and can't be manually unassigned.</value>
+    </data>
+    <data name="Unavailable" xml:space="preserve">
+        <value>Unavailable</value>
+    </data>
+    <data name="Unknown" xml:space="preserve">
+        <value>Unbekannt</value>
+    </data>
+    <data name="Unverified" xml:space="preserve">
+        <value>Nicht verifiziert</value>
+    </data>
+    <data name="Upgrade" xml:space="preserve">
+        <value>Aktualisieren</value>
+    </data>
+    <data name="Verified" xml:space="preserve">
+        <value>Verifiziert</value>
+    </data>
+    <data name="Visibility" xml:space="preserve">
+        <value>Sichtbarkeit</value>
+    </data>
+    <data name="VisibilityType" xml:space="preserve">
+        <value>Sichtbarkeit</value>
+    </data>
+    <data name="Voidlist" xml:space="preserve">
+        <value>Voidlist</value>
+    </data>
+    <data name="WarningZone" xml:space="preserve">
+        <value>Warnung: Dies ist die Gefahrenzone. Diese Aktionen können nicht rückgängig gemacht werden!</value>
+    </data>
+    <data name="Whitelist" xml:space="preserve">
+        <value>Whitelist</value>
+    </data>
+    <data name="Window" xml:space="preserve">
+        <value>Fenster</value>
+    </data>
+    <data name="WorldTransferAlert" xml:space="preserve">
+        <value>Welt-Transfer Alarm</value>
+    </data>
+    <data name="Yes" xml:space="preserve">
+        <value>Ja</value>
+    </data>
+</root>

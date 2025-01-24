@@ -6,8 +6,6 @@ using Dalamud.Plugin.Ipc;
 // ReSharper disable InconsistentNaming
 namespace PlayerTrack.API;
 
-using Dalamud.DrunkenToad.Core;
-
 /// <summary>
 /// IPC for PlayerTrack plugin.
 /// </summary>
@@ -65,50 +63,47 @@ public class PlayerTrackProvider
     /// <param name="api">plugin api.</param>
     public PlayerTrackProvider(IDalamudPluginInterface pluginInterface, IPlayerTrackAPI api)
     {
-        DalamudContext.PluginLog.Verbose("Entering PlayerTrackProvider");
-        this.API = api;
+        Plugin.PluginLog.Verbose("Entering PlayerTrackProvider");
+        API = api;
 
         try
         {
-            this.ProviderAPIVersion = pluginInterface.GetIpcProvider<int>(LabelProviderApiVersion);
-            this.ProviderAPIVersion.RegisterFunc(() => api.APIVersion);
+            ProviderAPIVersion = pluginInterface.GetIpcProvider<int>(LabelProviderApiVersion);
+            ProviderAPIVersion.RegisterFunc(() => api.APIVersion);
         }
         catch (Exception ex)
         {
-            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderApiVersion}:\n{ex}");
+            Plugin.PluginLog.Error($"Error registering IPC provider for {LabelProviderApiVersion}:\n{ex}");
         }
 
         try
         {
-            this.ProviderGetPlayerCurrentNameWorld =
-                pluginInterface.GetIpcProvider<string, uint, string>(LabelProviderGetPlayerCurrentNameWorld);
-            this.ProviderGetPlayerCurrentNameWorld.RegisterFunc(api.GetPlayerCurrentNameWorld);
+            ProviderGetPlayerCurrentNameWorld = pluginInterface.GetIpcProvider<string, uint, string>(LabelProviderGetPlayerCurrentNameWorld);
+            ProviderGetPlayerCurrentNameWorld.RegisterFunc(api.GetPlayerCurrentNameWorld);
         }
         catch (Exception e)
         {
-            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerCurrentNameWorld}:\n{e}");
+            Plugin.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerCurrentNameWorld}:\n{e}");
         }
 
         try
         {
-            this.ProviderGetPlayerNotes =
-                pluginInterface.GetIpcProvider<string, uint, string>(LabelProviderGetPlayerNotes);
-            this.ProviderGetPlayerNotes.RegisterFunc(api.GetPlayerNotes);
+            ProviderGetPlayerNotes = pluginInterface.GetIpcProvider<string, uint, string>(LabelProviderGetPlayerNotes);
+            ProviderGetPlayerNotes.RegisterFunc(api.GetPlayerNotes);
         }
         catch (Exception e)
         {
-            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerNotes}:\n{e}");
+            Plugin.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetPlayerNotes}:\n{e}");
         }
 
         try
         {
-            this.ProviderGetAllPlayerNameWorldHistories =
-                pluginInterface.GetIpcProvider<((string, uint), (string, uint)[])[]>(LabelProviderGetAllPlayerNameWorldHistories);
-            this.ProviderGetAllPlayerNameWorldHistories.RegisterFunc(api.GetAllPlayerNameWorldHistories);
+            ProviderGetAllPlayerNameWorldHistories = pluginInterface.GetIpcProvider<((string, uint), (string, uint)[])[]>(LabelProviderGetAllPlayerNameWorldHistories);
+            ProviderGetAllPlayerNameWorldHistories.RegisterFunc(api.GetAllPlayerNameWorldHistories);
         }
         catch (Exception e)
         {
-            DalamudContext.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetAllPlayerNameWorldHistories}:\n{e}");
+            Plugin.PluginLog.Error($"Error registering IPC provider for {LabelProviderGetAllPlayerNameWorldHistories}:\n{e}");
         }
     }
 
@@ -117,10 +112,10 @@ public class PlayerTrackProvider
     /// </summary>
     public void Dispose()
     {
-        DalamudContext.PluginLog.Verbose("Entering PlayerTrackProvider.Dispose");
-        this.ProviderAPIVersion?.UnregisterFunc();
-        this.ProviderGetPlayerCurrentNameWorld?.UnregisterFunc();
-        this.ProviderGetPlayerNotes?.UnregisterFunc();
-        this.ProviderGetAllPlayerNameWorldHistories?.UnregisterFunc();
+        Plugin.PluginLog.Verbose("Entering PlayerTrackProvider.Dispose");
+        ProviderAPIVersion?.UnregisterFunc();
+        ProviderGetPlayerCurrentNameWorld?.UnregisterFunc();
+        ProviderGetPlayerNotes?.UnregisterFunc();
+        ProviderGetAllPlayerNameWorldHistories?.UnregisterFunc();
     }
 }

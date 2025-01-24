@@ -14,7 +14,6 @@ Customization options include colors, icons, nameplates, and alerts.
 ## Libraries Used
 - [AutoMapper](https://github.com/AutoMapper/AutoMapper)
 - [Dalamud.ContextMenu](https://github.com/kalilistic/Dalamud.ContextMenu)
-- [Dalamud.DrunkenToad](https://github.com/kalilistic/Dalamud.DrunkenToad)
 - [Dalamud.Loc](https://github.com/kalilistic/Dalamud.Loc)
 - [Dapper](https://github.com/DapperLib/Dapper)
 - [FlexConfig](https://github.com/kalilistic/FlexConfig)

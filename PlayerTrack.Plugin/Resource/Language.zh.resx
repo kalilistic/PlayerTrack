@@ -1,0 +1,887 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Actions" xml:space="preserve">
+        <value>操作</value>
+    </data>
+    <data name="AddEncounters" xml:space="preserve">
+        <value>添加战斗</value>
+    </data>
+    <data name="AddPlayer" xml:space="preserve">
+        <value>添加玩家</value>
+    </data>
+    <data name="AddPlayerInstructions" xml:space="preserve">
+        <value>手动添加玩家至列表</value>
+    </data>
+    <data name="AddPlayers" xml:space="preserve">
+        <value>批量添加玩家</value>
+    </data>
+    <data name="AdvancedMatchingExplanation" xml:space="preserve">
+        <value>Use these symbols to refine your search:</value>
+    </data>
+    <data name="AdvancedMatchingExplanationContains" xml:space="preserve">
+        <value>*text*: Match anything containing 'text'.</value>
+    </data>
+    <data name="AdvancedMatchingExplanationEnd" xml:space="preserve">
+        <value>*text: Match anything ending with 'text'.</value>
+    </data>
+    <data name="AdvancedMatchingExplanationExact" xml:space="preserve">
+        <value>text: Match exactly.</value>
+    </data>
+    <data name="AdvancedMatchingExplanationExclude" xml:space="preserve">
+        <value>!text: Exclude matches with 'text'.</value>
+    </data>
+    <data name="AdvancedMatchingExplanationStart" xml:space="preserve">
+        <value>text*: Match anything starting with 'text'.</value>
+    </data>
+    <data name="AdvancedMatchingTitle" xml:space="preserve">
+        <value>Advanced Matching for Special Commands</value>
+    </data>
+    <data name="Ago" xml:space="preserve">
+        <value>前</value>
+    </data>
+    <data name="Alerts" xml:space="preserve">
+        <value>警告</value>
+    </data>
+    <data name="AllPlayers" xml:space="preserve">
+        <value>全部玩家</value>
+    </data>
+    <data name="Appearance" xml:space="preserve">
+        <value>外观</value>
+    </data>
+    <data name="AssignPlayerCategory" xml:space="preserve">
+        <value>指定类别</value>
+    </data>
+    <data name="Automatic" xml:space="preserve">
+        <value>自动</value>
+    </data>
+    <data name="BackupErrorMessage" xml:space="preserve">
+        <value>发生错误，请重启你的电脑以重试。</value>
+    </data>
+    <data name="Backups" xml:space="preserve">
+        <value>备份</value>
+    </data>
+    <data name="Banned" xml:space="preserve">
+        <value>已禁用</value>
+    </data>
+    <data name="BlackList" xml:space="preserve">
+        <value>黑名单</value>
+    </data>
+    <data name="BlackList_Abbreviation" xml:space="preserve">
+        <value>黑名单</value>
+    </data>
+    <data name="Blocked" xml:space="preserve">
+        <value>已屏蔽</value>
+    </data>
+    <data name="Bottom" xml:space="preserve">
+        <value>Bottom</value>
+    </data>
+    <data name="Byte" xml:space="preserve">
+        <value>B</value>
+    </data>
+    <data name="CWLS" xml:space="preserve">
+        <value>跨服通讯贝</value>
+    </data>
+    <data name="Cancel" xml:space="preserve">
+        <value>取消</value>
+    </data>
+    <data name="Cancelled" xml:space="preserve">
+        <value>已取消</value>
+    </data>
+    <data name="Categories" xml:space="preserve">
+        <value>类别</value>
+    </data>
+    <data name="CategoryName" xml:space="preserve">
+        <value>类别名</value>
+    </data>
+    <data name="CategorySpecificSetting" xml:space="preserve">
+        <value>从类别 {0} 继承 </value>
+    </data>
+    <data name="ClosePlayer" xml:space="preserve">
+        <value>关闭玩家</value>
+    </data>
+    <data name="CombineWindows" xml:space="preserve">
+        <value>窗口合并显示</value>
+    </data>
+    <data name="ConfirmDelete" xml:space="preserve">
+        <value>确认删除?</value>
+    </data>
+    <data name="ConfirmUnsync" xml:space="preserve">
+        <value>这将删除已同步的分类。确定吗？</value>
+    </data>
+    <data name="Confirmation" xml:space="preserve">
+        <value>确认</value>
+    </data>
+    <data name="ConfirmationQuestion" xml:space="preserve">
+        <value>是否确认本次操作?</value>
+    </data>
+    <data name="Contains" xml:space="preserve">
+        <value>包含</value>
+    </data>
+    <data name="Content" xml:space="preserve">
+        <value>内容</value>
+    </data>
+    <data name="ContextMenu" xml:space="preserve">
+        <value>右键菜单</value>
+    </data>
+    <data name="Contribute" xml:space="preserve">
+        <value>捐赠</value>
+    </data>
+    <data name="ContributionUsage" xml:space="preserve">
+        <value>绝大部分捐赠会用于支付服务器和我的咖啡费用</value>
+    </data>
+    <data name="CopyToClipboard" xml:space="preserve">
+        <value>复制到剪贴板</value>
+    </data>
+    <data name="Created" xml:space="preserve">
+        <value>已创建</value>
+    </data>
+    <data name="CrossWorldLinkShell" xml:space="preserve">
+        <value>跨服通讯贝</value>
+    </data>
+    <data name="CrossWorldLinkShell_Abbreviation" xml:space="preserve">
+        <value>跨服通讯贝</value>
+    </data>
+    <data name="CrowdinProject" xml:space="preserve">
+        <value>我已经在 Crowdin 上为任何有意参与的人设立了一个翻译项目</value>
+    </data>
+    <data name="CurrentPlayers" xml:space="preserve">
+        <value>当前玩家</value>
+    </data>
+    <data name="CustomTitle" xml:space="preserve">
+        <value>自定义称号</value>
+    </data>
+    <data name="Data" xml:space="preserve">
+        <value>数据</value>
+    </data>
+    <data name="Day" xml:space="preserve">
+        <value>日</value>
+    </data>
+    <data name="DefaultCategory" xml:space="preserve">
+        <value>默认类别</value>
+    </data>
+    <data name="DefaultSetting" xml:space="preserve">
+        <value>从玩家默认值继承</value>
+    </data>
+    <data name="Delete" xml:space="preserve">
+        <value>删除</value>
+    </data>
+    <data name="DeleteEncounters" xml:space="preserve">
+        <value>删除战斗</value>
+    </data>
+    <data name="DeleteHistory" xml:space="preserve">
+        <value>删除历史记录</value>
+    </data>
+    <data name="DeletePlayerSettings" xml:space="preserve">
+        <value>删除玩家设置</value>
+    </data>
+    <data name="DeletePlayers" xml:space="preserve">
+        <value>删除玩家</value>
+    </data>
+    <data name="DeleteRecordsInProgress" xml:space="preserve">
+        <value>正在删除记录...</value>
+    </data>
+    <data name="DeleteRecordsSuccess" xml:space="preserve">
+        <value>成功删除记录</value>
+    </data>
+    <data name="DiscordRoleInfo" xml:space="preserve">
+        <value>加入 Discord 并选择 Translator 身份来了解更多信息</value>
+    </data>
+    <data name="Display" xml:space="preserve">
+        <value>显示</value>
+    </data>
+    <data name="DonationsAppreciated" xml:space="preserve">
+        <value>捐赠并不是必要的，但总会得到我的诚挚感谢</value>
+    </data>
+    <data name="DuplicatePlayerError" xml:space="preserve">
+        <value>玩家已存在</value>
+    </data>
+    <data name="Duration" xml:space="preserve">
+        <value>持续时间</value>
+    </data>
+    <data name="Encounters" xml:space="preserve">
+        <value>战斗</value>
+    </data>
+    <data name="Exact" xml:space="preserve">
+        <value>精准</value>
+    </data>
+    <data name="ExaminePlayer" xml:space="preserve">
+        <value>Examine Player</value>
+    </data>
+    <data name="ExamplesExplanation" xml:space="preserve">
+        <value>Here are some examples to help you get started:</value>
+    </data>
+    <data name="ExamplesExplanation1" xml:space="preserve">
+        <value>notes:! =&gt; Find players without any notes.</value>
+    </data>
+    <data name="ExamplesExplanation2" xml:space="preserve">
+        <value>notes:* =&gt; Find players with any notes.</value>
+    </data>
+    <data name="ExamplesExplanation3" xml:space="preserve">
+        <value>fc:uwu =&gt; Find players in the Free Company 'uwu'.</value>
+    </data>
+    <data name="ExamplesTitle" xml:space="preserve">
+        <value>Examples</value>
+    </data>
+    <data name="Execute" xml:space="preserve">
+        <value>执行</value>
+    </data>
+    <data name="FL_BL_FC" xml:space="preserve">
+        <value>好友列表/黑名单/部队</value>
+    </data>
+    <data name="Failed" xml:space="preserve">
+        <value>失败</value>
+    </data>
+    <data name="Female" xml:space="preserve">
+        <value>Female</value>
+    </data>
+    <data name="FirstSeen" xml:space="preserve">
+        <value>首次遇见</value>
+    </data>
+    <data name="FocusTargetPlayer" xml:space="preserve">
+        <value>焦点目标玩家</value>
+    </data>
+    <data name="ForDevelopersTitle" xml:space="preserve">
+        <value>致开发者</value>
+    </data>
+    <data name="ForEveryoneTitle" xml:space="preserve">
+        <value>致所有人</value>
+    </data>
+    <data name="ForTranslatorsTitle" xml:space="preserve">
+        <value>致译者</value>
+    </data>
+    <data name="FreeCompany" xml:space="preserve">
+        <value>部队</value>
+    </data>
+    <data name="FreeCompany_Abbreviation" xml:space="preserve">
+        <value>部队</value>
+    </data>
+    <data name="FriendList" xml:space="preserve">
+        <value>好友列表</value>
+    </data>
+    <data name="FriendList_Abbreviation" xml:space="preserve">
+        <value>好友列表</value>
+    </data>
+    <data name="FromNow" xml:space="preserve">
+        <value>距今为止</value>
+    </data>
+    <data name="General" xml:space="preserve">
+        <value>一般</value>
+    </data>
+    <data name="Gigabyte" xml:space="preserve">
+        <value>GB</value>
+    </data>
+    <data name="Help" xml:space="preserve">
+        <value>Help</value>
+    </data>
+    <data name="HelpWithTranslation" xml:space="preserve">
+        <value>你可以帮忙提交或校对 PlayerTrack 的多语言文本</value>
+    </data>
+    <data name="HighEndContent" xml:space="preserve">
+        <value>高难副本</value>
+    </data>
+    <data name="History" xml:space="preserve">
+        <value>History</value>
+    </data>
+    <data name="Homeworld" xml:space="preserve">
+        <value>主服务器</value>
+    </data>
+    <data name="Hour" xml:space="preserve">
+        <value>时</value>
+    </data>
+    <data name="HowToSearchExplanation" xml:space="preserve">
+        <value>You can search by name or using special commands.</value>
+    </data>
+    <data name="HowToSearchTitle" xml:space="preserve">
+        <value>How to Search</value>
+    </data>
+    <data name="Icon" xml:space="preserve">
+        <value>图标</value>
+    </data>
+    <data name="Icons" xml:space="preserve">
+        <value>图标</value>
+    </data>
+    <data name="Inherit" xml:space="preserve">
+        <value>继承</value>
+    </data>
+    <data name="Integrations" xml:space="preserve">
+        <value>集成</value>
+    </data>
+    <data name="InvalidNameError" xml:space="preserve">
+        <value>请输入有效的名称</value>
+    </data>
+    <data name="Job" xml:space="preserve">
+        <value>职业</value>
+    </data>
+    <data name="KeepEncounters" xml:space="preserve">
+        <value>保留战斗</value>
+    </data>
+    <data name="KeepEncountersFromLast90Days" xml:space="preserve">
+        <value>从过去 90 天</value>
+    </data>
+    <data name="KeepEncountersInHighEndContent" xml:space="preserve">
+        <value>在高难副本中</value>
+    </data>
+    <data name="KeepEncountersInNormalContent" xml:space="preserve">
+        <value>在普通副本中</value>
+    </data>
+    <data name="KeepEncountersInOverworld" xml:space="preserve">
+        <value>在副本外</value>
+    </data>
+    <data name="KeepPlayerSettings" xml:space="preserve">
+        <value>为玩家保留设置</value>
+    </data>
+    <data name="KeepPlayers" xml:space="preserve">
+        <value>保存玩家数据</value>
+    </data>
+    <data name="KeepPlayersSeenInLast90Days" xml:space="preserve">
+        <value>但仅保存曾在过去 90 天遇见过的</value>
+    </data>
+    <data name="KeepPlayersWithAnySettings" xml:space="preserve">
+        <value>并附带全部设置</value>
+    </data>
+    <data name="KeepPlayersWithCategories" xml:space="preserve">
+        <value>并附带类别数据</value>
+    </data>
+    <data name="KeepPlayersWithEncounters" xml:space="preserve">
+        <value>并附带战斗数据</value>
+    </data>
+    <data name="KeepPlayersWithNotes" xml:space="preserve">
+        <value>并附带备注</value>
+    </data>
+    <data name="KeepSettingsForPlayersSeenInLast90Days" xml:space="preserve">
+        <value>但仅保存曾在过去 90 天遇见过的</value>
+    </data>
+    <data name="KeepSettingsForPlayersWithAnySettings" xml:space="preserve">
+        <value>并附带全部设置</value>
+    </data>
+    <data name="KeepSettingsForPlayersWithCategories" xml:space="preserve">
+        <value>并附带类别数据</value>
+    </data>
+    <data name="KeepSettingsForPlayersWithEncounters" xml:space="preserve">
+        <value>并附带战斗数据</value>
+    </data>
+    <data name="KeepSettingsForPlayersWithNotes" xml:space="preserve">
+        <value>并附带备注</value>
+    </data>
+    <data name="Kilobyte" xml:space="preserve">
+        <value>KB</value>
+    </data>
+    <data name="LS" xml:space="preserve">
+        <value>通讯贝</value>
+    </data>
+    <data name="LargeFeatureDiscussion" xml:space="preserve">
+        <value>如果你正在考虑为插件新增一个大型功能，请事先联系讨论</value>
+    </data>
+    <data name="LastLocation" xml:space="preserve">
+        <value>最后地点</value>
+    </data>
+    <data name="LastSeen" xml:space="preserve">
+        <value>最后遇见</value>
+    </data>
+    <data name="LastUpdated" xml:space="preserve">
+        <value>最后更新</value>
+    </data>
+    <data name="LastUpdatedNever" xml:space="preserve">
+        <value>永不</value>
+    </data>
+    <data name="Level" xml:space="preserve">
+        <value>等级</value>
+    </data>
+    <data name="LinkShell" xml:space="preserve">
+        <value>通讯贝</value>
+    </data>
+    <data name="LinkShell_Abbreviation" xml:space="preserve">
+        <value>通讯贝</value>
+    </data>
+    <data name="LocalPlayers" xml:space="preserve">
+        <value>你的角色</value>
+    </data>
+    <data name="Location" xml:space="preserve">
+        <value>位置</value>
+    </data>
+    <data name="Locations" xml:space="preserve">
+        <value>位置</value>
+    </data>
+    <data name="LockWindowPosition" xml:space="preserve">
+        <value>锁定窗口位置</value>
+    </data>
+    <data name="LockWindowSize" xml:space="preserve">
+        <value>锁定窗口大小</value>
+    </data>
+    <data name="Lodestone" xml:space="preserve">
+        <value>Lodestone</value>
+    </data>
+    <data name="LodestoneLocale" xml:space="preserve">
+        <value>Lodestone 区域</value>
+    </data>
+    <data name="Male" xml:space="preserve">
+        <value>Male</value>
+    </data>
+    <data name="Manual" xml:space="preserve">
+        <value>手动</value>
+    </data>
+    <data name="Megabyte" xml:space="preserve">
+        <value>MB</value>
+    </data>
+    <data name="Merge" xml:space="preserve">
+        <value>合并</value>
+    </data>
+    <data name="MergePlayers" xml:space="preserve">
+        <value>合并玩家</value>
+    </data>
+    <data name="MergePlayersDupe" xml:space="preserve">
+        <value>你不能将一个玩家与它们自己合并。</value>
+    </data>
+    <data name="MergePlayersInstructions" xml:space="preserve">
+        <value>选择要合并的玩家。这将在“笔记”、“相遇”和“历史记录”中复制它们。</value>
+    </data>
+    <data name="Minute" xml:space="preserve">
+        <value>分</value>
+    </data>
+    <data name="Name" xml:space="preserve">
+        <value>名称</value>
+    </data>
+    <data name="NameChangeAlert" xml:space="preserve">
+        <value>名称变更警告</value>
+    </data>
+    <data name="NameColor" xml:space="preserve">
+        <value>名称颜色</value>
+    </data>
+    <data name="NameWorld" xml:space="preserve">
+        <value>Name@World</value>
+    </data>
+    <data name="Nameplate" xml:space="preserve">
+        <value>铭牌</value>
+    </data>
+    <data name="NameplateColor" xml:space="preserve">
+        <value>铭牌颜色</value>
+    </data>
+    <data name="NameplateColors" xml:space="preserve">
+        <value>铭牌颜色</value>
+    </data>
+    <data name="NameplateConditions" xml:space="preserve">
+        <value>铭牌条件</value>
+    </data>
+    <data name="NameplateTitle" xml:space="preserve">
+        <value>铭牌称号</value>
+    </data>
+    <data name="NameplateUseColor" xml:space="preserve">
+        <value>使用铭牌颜色</value>
+    </data>
+    <data name="NameplateUseColorIfDead" xml:space="preserve">
+        <value>死亡时使用铭牌颜色</value>
+    </data>
+    <data name="NewCategoryHint" xml:space="preserve">
+        <value>创建新类别</value>
+    </data>
+    <data name="NewTagHint" xml:space="preserve">
+        <value>输入一个标签</value>
+    </data>
+    <data name="No" xml:space="preserve">
+        <value>否</value>
+    </data>
+    <data name="NoBackupsMessage" xml:space="preserve">
+        <value>未找到备份</value>
+    </data>
+    <data name="NoCategoryPlacement" xml:space="preserve">
+        <value>Placement for players with no category</value>
+    </data>
+    <data name="NoChange" xml:space="preserve">
+        <value>无更改</value>
+    </data>
+    <data name="NoEncountersMessage" xml:space="preserve">
+        <value>未找到战斗</value>
+    </data>
+    <data name="NoHistoryMessage" xml:space="preserve">
+        <value>No history found.</value>
+    </data>
+    <data name="NoIconsEnabledMessage" xml:space="preserve">
+        <value>未启用图标</value>
+    </data>
+    <data name="NoLocalPlayers" xml:space="preserve">
+        <value>未找到玩家角色。</value>
+    </data>
+    <data name="NoPlayersFound" xml:space="preserve">
+        <value>未找到玩家。</value>
+    </data>
+    <data name="NoRecordsToDelete" xml:space="preserve">
+        <value>无待删除记录</value>
+    </data>
+    <data name="NoSpecialPerks" xml:space="preserve">
+        <value>捐赠没有任何特殊奖励，除了我对你的诚挚感谢</value>
+    </data>
+    <data name="NoWorldError" xml:space="preserve">
+        <value>请输入服务器名</value>
+    </data>
+    <data name="None" xml:space="preserve">
+        <value>无</value>
+    </data>
+    <data name="NotApplicable" xml:space="preserve">
+        <value>不可用</value>
+    </data>
+    <data name="NotAvailable" xml:space="preserve">
+        <value>N/A</value>
+    </data>
+    <data name="Notes" xml:space="preserve">
+        <value>备注</value>
+    </data>
+    <data name="Now" xml:space="preserve">
+        <value>现在</value>
+    </data>
+    <data name="NumberOfRecordsToBeDeleted" xml:space="preserve">
+        <value>待删除记录: {0}/{1} ({2}%%)</value>
+    </data>
+    <data name="OK" xml:space="preserve">
+        <value>确定</value>
+    </data>
+    <data name="OnlyShowEnabledIcons" xml:space="preserve">
+        <value>仅显示已启用图标</value>
+    </data>
+    <data name="OnlyShowLoggedIn" xml:space="preserve">
+        <value>仅显示已登录玩家</value>
+    </data>
+    <data name="OpenForDevHelp" xml:space="preserve">
+        <value>我总是愿意帮助开发工作的</value>
+    </data>
+    <data name="OpenLodestone" xml:space="preserve">
+        <value>打开 Lodestone</value>
+    </data>
+    <data name="OpenPlayer" xml:space="preserve">
+        <value>打开玩家</value>
+    </data>
+    <data name="OpenPlayerPlate" xml:space="preserve">
+        <value>打开玩家面板</value>
+    </data>
+    <data name="OpenPlayerTrack" xml:space="preserve">
+        <value>打开 PlayerTrack</value>
+    </data>
+    <data name="OpenSettings" xml:space="preserve">
+        <value>打开设置</value>
+    </data>
+    <data name="Override" xml:space="preserve">
+        <value>覆盖</value>
+    </data>
+    <data name="Overworld" xml:space="preserve">
+        <value>主世界</value>
+    </data>
+    <data name="PitchInIntro" xml:space="preserve">
+        <value>想要帮忙吗? 这里有好几种你能帮忙的方式</value>
+    </data>
+    <data name="Player" xml:space="preserve">
+        <value>玩家</value>
+    </data>
+    <data name="PlayerAddedSuccessfully" xml:space="preserve">
+        <value>已成功添加玩家</value>
+    </data>
+    <data name="PlayerDefaults" xml:space="preserve">
+        <value>玩家默认设置</value>
+    </data>
+    <data name="PlayerInfo" xml:space="preserve">
+        <value>玩家信息</value>
+    </data>
+    <data name="PlayerList" xml:space="preserve">
+        <value>玩家列表</value>
+    </data>
+    <data name="PlayerName" xml:space="preserve">
+        <value>玩家名称</value>
+    </data>
+    <data name="PlayerStats" xml:space="preserve">
+        <value>玩家状态</value>
+    </data>
+    <data name="PlayerSummary" xml:space="preserve">
+        <value>玩家概况</value>
+    </data>
+    <data name="PlayerWorld" xml:space="preserve">
+        <value>玩家服务器</value>
+    </data>
+    <data name="Players" xml:space="preserve">
+        <value>玩家</value>
+    </data>
+    <data name="PlayersByCategory" xml:space="preserve">
+        <value>按类型筛选玩家</value>
+    </data>
+    <data name="PlayersByTag" xml:space="preserve">
+        <value>按标签排序</value>
+    </data>
+    <data name="PreserveConfigState" xml:space="preserve">
+        <value>下次加载时保留配置窗口状态</value>
+    </data>
+    <data name="PreserveMainWindowState" xml:space="preserve">
+        <value>下次加载时保留主界面窗口状态</value>
+    </data>
+    <data name="PreviouslyKnownAs" xml:space="preserve">
+        <value>先前为 {0}</value>
+    </data>
+    <data name="PreviouslyOn" xml:space="preserve">
+        <value>先前在 {0}</value>
+    </data>
+    <data name="ProximityAlert" xml:space="preserve">
+        <value>距离警告</value>
+    </data>
+    <data name="ProximityAlertMessage" xml:space="preserve">
+        <value>正在附近</value>
+    </data>
+    <data name="Purge" xml:space="preserve">
+        <value>删除</value>
+    </data>
+    <data name="RecentPlayers" xml:space="preserve">
+        <value>近期玩家</value>
+    </data>
+    <data name="RecentPlayersThreshold" xml:space="preserve">
+        <value>近期玩家阈值 (分钟)</value>
+    </data>
+    <data name="ReplaceGameTitleWithCategoryName" xml:space="preserve">
+        <value>以类别名称替换游戏称号</value>
+    </data>
+    <data name="ReplaceGameTitleWithCustomTitle" xml:space="preserve">
+        <value>以自定义称号替换游戏称号</value>
+    </data>
+    <data name="ReportFindings" xml:space="preserve">
+        <value>你可以通过插件反馈、Discord 或 GitHub 来上报任何问题</value>
+    </data>
+    <data name="Reset" xml:space="preserve">
+        <value>重置</value>
+    </data>
+    <data name="ResetCategoryTooltip" xml:space="preserve">
+        <value>重置分类名称为 {0}</value>
+    </data>
+    <data name="ResetLodestone" xml:space="preserve">
+        <value>重置 Lodestone</value>
+    </data>
+    <data name="ResetPlayers" xml:space="preserve">
+        <value>重置玩家</value>
+    </data>
+    <data name="ReviewGitHub" xml:space="preserve">
+        <value>有关任何 BUG 或者你想要的新功能，请前往 Github Issues 界面查阅提交</value>
+    </data>
+    <data name="RunAction" xml:space="preserve">
+        <value>执行操作</value>
+    </data>
+    <data name="RunBackup" xml:space="preserve">
+        <value>执行备份</value>
+    </data>
+    <data name="RunBackupBeforeDataActions" xml:space="preserve">
+        <value>保存前先执行一次备份</value>
+    </data>
+    <data name="RunBackupCleanup" xml:space="preserve">
+        <value>清理备份</value>
+    </data>
+    <data name="SQLExecutor" xml:space="preserve">
+        <value>SQL 执行器</value>
+    </data>
+    <data name="SQLExecutorRestriction" xml:space="preserve">
+        <value>仅允许 PRAGMA 和 SELECT 语句</value>
+    </data>
+    <data name="Search" xml:space="preserve">
+        <value>Search</value>
+    </data>
+    <data name="SearchIconsHint" xml:space="preserve">
+        <value>搜索图标</value>
+    </data>
+    <data name="SearchOptionsExplanation" xml:space="preserve">
+        <value>Use these options to narrow your search:</value>
+    </data>
+    <data name="SearchOptionsExplanationDC" xml:space="preserve">
+        <value>dc: Find players by their data center.</value>
+    </data>
+    <data name="SearchOptionsExplanationDefault" xml:space="preserve">
+        <value>(default): Search by name if no option is provided.</value>
+    </data>
+    <data name="SearchOptionsExplanationFC" xml:space="preserve">
+        <value>fc: Find players in a specific Free Company.</value>
+    </data>
+    <data name="SearchOptionsExplanationGender" xml:space="preserve">
+        <value>gender: Search for players by character gender.</value>
+    </data>
+    <data name="SearchOptionsExplanationNotes" xml:space="preserve">
+        <value>notes: Look for players with specific notes.</value>
+    </data>
+    <data name="SearchOptionsExplanationRace" xml:space="preserve">
+        <value>race: Search for players with by character race.</value>
+    </data>
+    <data name="SearchOptionsExplanationTags" xml:space="preserve">
+        <value>tags: Search for players with specific tags.</value>
+    </data>
+    <data name="SearchOptionsExplanationWorld" xml:space="preserve">
+        <value>world: Find players by their home world.</value>
+    </data>
+    <data name="SearchOptionsTitle" xml:space="preserve">
+        <value>Search Options</value>
+    </data>
+    <data name="SearchPlayersHint" xml:space="preserve">
+        <value>搜索玩家</value>
+    </data>
+    <data name="SearchPlayersInputHint" xml:space="preserve">
+        <value>在此键入...</value>
+    </data>
+    <data name="SearchType" xml:space="preserve">
+        <value>搜索模式</value>
+    </data>
+    <data name="SeenCount" xml:space="preserve">
+        <value>遇见次数</value>
+    </data>
+    <data name="SelectCategory" xml:space="preserve">
+        <value>选择类别</value>
+    </data>
+    <data name="SelectPlayerToDelete" xml:space="preserve">
+        <value>选择要删除的玩家</value>
+    </data>
+    <data name="SelectPlayerToUpdate" xml:space="preserve">
+        <value>选择要更新的玩家</value>
+    </data>
+    <data name="Settings" xml:space="preserve">
+        <value>设置</value>
+    </data>
+    <data name="ShowCategories" xml:space="preserve">
+        <value>显示类别</value>
+    </data>
+    <data name="ShowCategorySeparator" xml:space="preserve">
+        <value>显示类别分隔符</value>
+    </data>
+    <data name="ShowHidePlayerTrack" xml:space="preserve">
+        <value>显示/隐藏 PlayerTrack</value>
+    </data>
+    <data name="ShowHidePlayerTrackConfig" xml:space="preserve">
+        <value>显示/隐藏 PlayerTrack 设置</value>
+    </data>
+    <data name="ShowInContent" xml:space="preserve">
+        <value>在副本中显示</value>
+    </data>
+    <data name="ShowInHighEndContent" xml:space="preserve">
+        <value>在高难副本中显示</value>
+    </data>
+    <data name="ShowInOverworld" xml:space="preserve">
+        <value>在主世界中显示</value>
+    </data>
+    <data name="ShowOpenLodestone" xml:space="preserve">
+        <value>显示"打开 Lodestone"选项</value>
+    </data>
+    <data name="ShowOpenPlayerTracker" xml:space="preserve">
+        <value>显示"打开 PlayerTrack"选项</value>
+    </data>
+    <data name="ShowPlayerCountInFilter" xml:space="preserve">
+        <value>Show Player Count in Filter</value>
+    </data>
+    <data name="ShowPlayerFilter" xml:space="preserve">
+        <value>显示玩家筛选器</value>
+    </data>
+    <data name="ShowSearchBox" xml:space="preserve">
+        <value>显示搜索框</value>
+    </data>
+    <data name="ShowTags" xml:space="preserve">
+        <value>显示标签</value>
+    </data>
+    <data name="SignUpTest" xml:space="preserve">
+        <value>安装插件的测试版本，在其正式上线前帮忙发现更多 BUG</value>
+    </data>
+    <data name="Size" xml:space="preserve">
+        <value>大小</value>
+    </data>
+    <data name="SocialListAddPlayersHelpText" xml:space="preserve">
+        <value>这将把在社交列表中找到的玩家添加到 PlayerTrack 中。 如果不勾选此项，则只会更新已在列表中的玩家。</value>
+    </data>
+    <data name="SocialListDefaultCategoryHelpText" xml:space="preserve">
+        <value>当有一个新玩家加入社交列表时，可指定一个自己选择的类别。 如果玩家离开社交列表，他们不会被自动移除。</value>
+    </data>
+    <data name="SocialListSyncCategoryHelpText" xml:space="preserve">
+        <value>保持列表与一个分类自动同步。这些是无法手动添加/删除的特殊类别。</value>
+    </data>
+    <data name="SocialListWarning" xml:space="preserve">
+        <value>社交列表在特定时间更新。 当打开相应界面时，所有列表都会刷新。 此外，“好友”和“黑名单”也会在登录时更新。 对于大型部队，请确保打开并完全加载右下角的三个页面，以更新列表。</value>
+    </data>
+    <data name="SocialLists" xml:space="preserve">
+        <value>社交列表</value>
+    </data>
+    <data name="StableExperience" xml:space="preserve">
+        <value>这将帮助每个人都能获得更加稳定的使用体验</value>
+    </data>
+    <data name="StartsWith" xml:space="preserve">
+        <value>以...为开头</value>
+    </data>
+    <data name="Status" xml:space="preserve">
+        <value>状态</value>
+    </data>
+    <data name="SupportFurtherTitle" xml:space="preserve">
+        <value>想要支持更多吗？</value>
+    </data>
+    <data name="SyncWithCategory" xml:space="preserve">
+        <value>与动态分类同步</value>
+    </data>
+    <data name="SyncWithVisibility" xml:space="preserve">
+        <value>与 Visibility 同步</value>
+    </data>
+    <data name="Tags" xml:space="preserve">
+        <value>标签</value>
+    </data>
+    <data name="TargetPlayer" xml:space="preserve">
+        <value>目标玩家</value>
+    </data>
+    <data name="Terabyte" xml:space="preserve">
+        <value>TB</value>
+    </data>
+    <data name="Time" xml:space="preserve">
+        <value>时间</value>
+    </data>
+    <data name="Top" xml:space="preserve">
+        <value>Top</value>
+    </data>
+    <data name="Type" xml:space="preserve">
+        <value>类型</value>
+    </data>
+    <data name="UnassignCategoryTooltip" xml:space="preserve">
+        <value>点击以从玩家移除该分类</value>
+    </data>
+    <data name="UnassignDynamicCategoryTooltip" xml:space="preserve">
+        <value>这是一个动态分类，不能手动取消分配。</value>
+    </data>
+    <data name="Unavailable" xml:space="preserve">
+        <value>不可用</value>
+    </data>
+    <data name="Unknown" xml:space="preserve">
+        <value>未知</value>
+    </data>
+    <data name="Unverified" xml:space="preserve">
+        <value>未验证</value>
+    </data>
+    <data name="Upgrade" xml:space="preserve">
+        <value>升级</value>
+    </data>
+    <data name="Verified" xml:space="preserve">
+        <value>已验证</value>
+    </data>
+    <data name="Visibility" xml:space="preserve">
+        <value>Visibility</value>
+    </data>
+    <data name="VisibilityType" xml:space="preserve">
+        <value>可见类型</value>
+    </data>
+    <data name="Voidlist" xml:space="preserve">
+        <value>黑名单</value>
+    </data>
+    <data name="WarningZone" xml:space="preserve">
+        <value>警告: 你正在进行风险操作且这一操作不可撤销!</value>
+    </data>
+    <data name="Whitelist" xml:space="preserve">
+        <value>白名单</value>
+    </data>
+    <data name="Window" xml:space="preserve">
+        <value>窗口</value>
+    </data>
+    <data name="WorldTransferAlert" xml:space="preserve">
+        <value>大区转移警告</value>
+    </data>
+    <data name="Yes" xml:space="preserve">
+        <value>是</value>
+    </data>
+</root>

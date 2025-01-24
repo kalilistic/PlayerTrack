@@ -1,5 +1,5 @@
 name: PlayerTrack
-author: kalilistic
+author: Infi, kalilistic
 punchline: Keep track of players you meet.
 description: |-
     PlayerTrack helps you keep a record of who you meet and the content you played together.
@@ -9,5 +9,5 @@ tags:
     - player
     - track
     - orwell
-repo_url: https://github.com/kalilistic/PlayerTrack
-accepts_feedback: false
+repo_url: https://github.com/Infiziert90/PlayerTrack
+accepts_feedback: true

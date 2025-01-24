@@ -1,8 +1,13 @@
-"project_id_env": CROWDIN_PROJECT_ID
-"api_token_env": CROWDIN_PERSONAL_TOKEN
-"base_path": "."
+"project_id" : "435668"
+"base_path" : "."
+"base_url" : "https://api.crowdin.com"
 "preserve_hierarchy": true
 
-files:
-  - source: "/PlayerTrack.Plugin/Resource/Loc/en.json"
-    translation: "/PlayerTrack.Plugin/Resource/Loc/%two_letters_code%.json"
+files: [
+ {
+  "source" : "/PlayerTrack.Plugin/Resource/Language.resx",
+  "translation" : "/PlayerTrack.Plugin/Resource/Language.%two_letters_code%.resx",
+  "dest" : "/Language.resx",
+  "skip_untranslated_strings": true,
+ }
+]

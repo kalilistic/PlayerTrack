@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<Title>PlayerTrack.Plugin</Title>
-		<Authors>kalilistic</Authors>
-		<Version>3.4.15.0</Version>
+		<Authors>Infi, kalilistic</Authors>
+		<Version>3.5.0.0</Version>
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<Platforms>x64</Platforms>
 		<LangVersion>latest</LangVersion>
@@ -25,6 +25,7 @@
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<NoWarn>CS1591;MSB3277</NoWarn>
 	</PropertyGroup>
+
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>full</DebugType>
@@ -34,6 +35,7 @@
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
+
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<DebugType>pdbonly</DebugType>
 		<Optimize>true</Optimize>
@@ -43,11 +45,23 @@
 		<ErrorReport>prompt</ErrorReport>
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
+
 	<ItemGroup>
-		<PackageReference Include="Dalamud.Loc" Version="1.2.1" />
 		<PackageReference Include="DalamudPackager" Version="11.0.0" />
-		<PackageReference Include="LiteHelper" Version="0.0.6" />
+        <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
+
+        <PackageReference Include="AutoMapper" Version="12.0.1" />
+        <PackageReference Include="Dapper" Version="2.0.123" />
+        <PackageReference Include="FluentDapperLite" Version="0.0.7" />
+        <PackageReference Include="FluentMigrator" Version="3.3.2" />
+        <PackageReference Include="FluentMigrator.Abstractions" Version="3.3.2" />
+        <PackageReference Include="FluentMigrator.Runner" Version="3.3.2" />
+        <PackageReference Include="FlexConfig" Version="1.0.0" />
+        <PackageReference Include="System.Data.SQLite.Core" Version="1.0.117" />
+
+        <PackageReference Include="NetStone" Version="1.2.0" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<Reference Include="Dalamud">
 			<HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
@@ -74,52 +88,19 @@
 			<Private>False</Private>
 		</Reference>
 	</ItemGroup>
+
 	<ItemGroup>
-	  <EmbeddedResource Include="Resource\Loc\en.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	  <None Remove="Resource\Loc\de.json" />
-	  <EmbeddedResource Include="Resource\Loc\de.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	  <None Remove="Resource\Loc\es.json" />
-	  <EmbeddedResource Include="Resource\Loc\es.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	  <None Remove="Resource\Loc\fr.json" />
-	  <EmbeddedResource Include="Resource\Loc\fr.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	  <None Remove="Resource\Loc\it.json" />
-	  <EmbeddedResource Include="Resource\Loc\it.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	  <None Remove="Resource\Loc\ja.json" />
-	  <EmbeddedResource Include="Resource\Loc\ja.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	  <None Remove="Resource\Loc\no.json" />
-	  <EmbeddedResource Include="Resource\Loc\no.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	  <None Remove="Resource\Loc\pt.json" />
-	  <EmbeddedResource Include="Resource\Loc\pt.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	  <None Remove="Resource\Loc\ru.json" />
-	  <EmbeddedResource Include="Resource\Loc\ru.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </EmbeddedResource>
-	  <None Remove="Resource\Loc\zh.json" />
-	  <EmbeddedResource Include="Resource\Loc\zh.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <EmbeddedResource Update="Resource\Language.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Language.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
 	</ItemGroup>
+
 	<ItemGroup>
-	  <ProjectReference Include="..\DrunkenToad\DrunkenToad.csproj" />
-	  <ProjectReference Include="..\PlayerTrack.Domain\PlayerTrack.Domain.csproj" />
-	  <ProjectReference Include="..\PlayerTrack.Infrastructure\PlayerTrack.Infrastructure.csproj" />
-	  <ProjectReference Include="..\PlayerTrack.Models\PlayerTrack.Models.csproj" />
-	  <ProjectReference Include="..\PlayerTrack.UserInterface\PlayerTrack.UserInterface.csproj" />
+	  <Compile Update="Resource\Language.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Language.resx</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 </Project>
