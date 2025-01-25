@@ -13,12 +13,8 @@ Customization options include colors, icons, nameplates, and alerts.
 
 ## Libraries Used
 - [AutoMapper](https://github.com/AutoMapper/AutoMapper)
-- [Dalamud.ContextMenu](https://github.com/kalilistic/Dalamud.ContextMenu)
-- [Dalamud.Loc](https://github.com/kalilistic/Dalamud.Loc)
 - [Dapper](https://github.com/DapperLib/Dapper)
 - [FlexConfig](https://github.com/kalilistic/FlexConfig)
 - [FluentDapperLite](https://github.com/kalilistic/FluentDapperLite)
 - [FluentMigrator](https://github.com/fluentmigrator/fluentmigrator)
-- [LiteHelper](https://github.com/kalilistic/LiteHelper)
-- [Pilz.Dalamud](https://github.com/Pilzinsel64/Pilz.Dalamud)
 - [SQLite](https://github.com/sqlite/sqlite)
