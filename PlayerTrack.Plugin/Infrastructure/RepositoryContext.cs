@@ -71,7 +71,7 @@ public static class RepositoryContext
     public static void RunMaintenanceChecks(bool forceCheck = false)
     {
         Plugin.PluginLog.Verbose("Entering RepositoryContext.RunMaintenance()");
-        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         var config = ConfigRepository.GetPluginConfig();
 
         if (config == null)

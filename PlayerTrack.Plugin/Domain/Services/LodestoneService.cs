@@ -63,7 +63,7 @@ public class LodestoneService
                     {
                         player.LodestoneId = lodestoneId;
                         player.LodestoneStatus = LodestoneStatus.Verified;
-                        player.LodestoneVerifiedOn = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                        player.LodestoneVerifiedOn = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                         ServiceContext.PlayerDataService.UpdatePlayer(player);
                     }
                 }

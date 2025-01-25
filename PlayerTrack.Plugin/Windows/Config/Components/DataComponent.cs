@@ -212,7 +212,7 @@ public class DataComponent : ConfigViewComponent
         ImGuiHelpers.ScaledDummy(1f);
 
         var query = SqlQuery;
-        if (ImGui.InputTextMultiline("##SQLInput", ref query, 1000, ImGuiHelpers.ScaledVector2(-1, 90), ImGuiInputTextFlags.None))
+        if (ImGui.InputTextMultiline("###SQLInput", ref query, 1000, ImGuiHelpers.ScaledVector2(-1, 90), ImGuiInputTextFlags.None))
             SqlQuery = query;
 
         ImGuiHelpers.ScaledDummy(1f);

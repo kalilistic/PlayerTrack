@@ -61,7 +61,7 @@ public class PlayerEncounterService
         if (playerEncounters == null || playerEncounters.Count == 0)
             return;
 
-        var ended = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var ended = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         foreach (var playerEncounter in playerEncounters)
         {
             playerEncounter.Ended = ended;
@@ -94,7 +94,7 @@ public class PlayerEncounterService
         if (pEnc == null)
             return;
 
-        pEnc.Ended = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        pEnc.Ended = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         RepositoryContext.PlayerEncounterRepository.UpdatePlayerEncounter(pEnc);
     }
 }

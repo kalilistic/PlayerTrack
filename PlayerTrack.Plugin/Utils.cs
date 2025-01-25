@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq;
 using Dalamud.Plugin;
 using Lumina.Text.ReadOnly;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Numerics;
@@ -11,6 +11,8 @@ namespace PlayerTrack;
 
 public static class Utils
 {
+    public static readonly CultureInfo FallbackCulture = new("en");
+
     /// <summary>
     /// Get the localized string for a resource key.
     /// </summary>
@@ -18,7 +20,17 @@ public static class Utils
     /// <returns>A safe string with `"Loc Error"` if not found.</returns>
     public static string GetLoc(string key)
     {
-        return Resource.Language.ResourceManager.GetString(key) ?? $"Loc Error ({key})";
+        return Resource.Language.ResourceManager.GetString(key) ?? GetFallbackLoc(key);
+    }
+
+    /// <summary>
+    /// Get the english fallback localization
+    /// </summary>
+    /// <param name="key">Localization resource name.</param>
+    /// <returns>A safe string with `"Loc Error"` if not found.</returns>
+    public static string GetFallbackLoc(string key)
+    {
+        return Resource.Language.ResourceManager.GetString(key, FallbackCulture) ?? $"Loc Error ({key})";
     }
 
     /// <summary>

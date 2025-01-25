@@ -79,7 +79,7 @@ public class SocialListService
         // update page fields for FC
         else if (listType == SocialListType.FreeCompany)
         {
-            var currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             if (socialList.PageLastUpdated.TryGetValue(page, out _))
                 socialList.PageLastUpdated[page] = currentTime;
             else

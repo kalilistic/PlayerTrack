@@ -534,12 +534,12 @@ public class FilterComboBox
     /// <returns>Selected index.</returns>
     public int? Draw(string label, float width = 100f, float itemHeight = 30f, ImGuiComboFlags flags = ImGuiComboFlags.None)
     {
-        ImGui.SetNextItemWidth(width);
 
         var previewValue = !string.IsNullOrEmpty(SelectedItem) ? SelectedItem : string.Empty;
         int? selectedIndex = null;
 
         var localizedLabel = label;
+        ImGui.SetNextItemWidth(width);
         using (var combo = ImRaii.Combo(localizedLabel, previewValue, flags | ImGuiComboFlags.HeightLargest))
         {
             if (combo.Success)
@@ -572,7 +572,7 @@ public class FilterComboBox
     {
         using (ImRaii.ItemWidth(ImGui.GetWindowContentRegionMax().X - ImGui.GetWindowContentRegionMin().X))
         {
-            if (ImGui.InputTextWithHint("#FilterText", FilterTextHint, ref Filter, 256))
+            if (ImGui.InputTextWithHint("###FilterText", FilterTextHint, ref Filter, 256))
                 UpdateFilter();
         }
     }

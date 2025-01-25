@@ -45,11 +45,11 @@ public class PlayerAlertService
     public void SendProximityAlert(Player player) => Task.Run(() =>
     {
         if (!IsProximityAlertEnabled(player) ||
-            DateTimeOffset.UtcNow.ToUnixTimeSeconds() - player.LastAlertSent <= AlertFrequency ||
-            DateTimeOffset.UtcNow.ToUnixTimeSeconds() - player.Created <= AlertFrequency)
+            DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - player.LastAlertSent <= AlertFrequency ||
+            DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - player.Created <= AlertFrequency)
             return;
 
-        player.LastAlertSent = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        player.LastAlertSent = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         UpdatePlayerAlert(player.Id, player.LastAlertSent);
 
         Plugin.ChatGuiHandler.PluginPrintNotice([

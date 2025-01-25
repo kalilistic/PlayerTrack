@@ -62,7 +62,7 @@ public class PluginConfig : IPluginConfig
 
     public bool SyncWithVisibility { get; set; }
 
-    public long MaintenanceLastRunOn { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    public long MaintenanceLastRunOn { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
     public int RecentPlayersThreshold { get; set; } = 900000;
 

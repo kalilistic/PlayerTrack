@@ -110,7 +110,7 @@ public class PlayerProcessService
             Name = name,
             WorldId = worldId,
             ContentId = contentId,
-            Created = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+            Created = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
         };
 
         if (isSeen)
@@ -217,7 +217,7 @@ public class PlayerProcessService
     {
         PlayerEncounterService.EndPlayerEncounter(player, ServiceContext.EncounterService.GetCurrentEncounter());
         player.IsCurrent = false;
-        player.LastSeen = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        player.LastSeen = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         player.OpenPlayerEncounterId = 0;
         ServiceContext.PlayerDataService.UpdatePlayer(player);
         OnCurrentPlayerRemoved?.Invoke(player);
@@ -235,7 +235,7 @@ public class PlayerProcessService
 
     private void CreateNewPlayer(PlayerData toadPlayer, string key, bool isCurrent, int categoryId, LocationData loc)
     {
-        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         var player = new Player
         {
             Key = key,
@@ -251,7 +251,7 @@ public class PlayerProcessService
             FirstSeen = currentTime,
             IsCurrent = isCurrent,
             IsRecent = isCurrent,
-            LastSeen = isCurrent ? DateTimeOffset.UtcNow.ToUnixTimeSeconds() : 0,
+            LastSeen = isCurrent ? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() : 0,
             SeenCount = isCurrent ? 1 : 0,
         };
 
@@ -272,7 +272,7 @@ public class PlayerProcessService
                 ServiceContext.PlayerAlertService.SendPlayerNameWorldChangeAlert(player, player.Name, player.WorldId, toadPlayer.Name, toadPlayer.HomeWorld);
             }
 
-            var currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             player.Key = PlayerKeyBuilder.Build(toadPlayer.Name, toadPlayer.HomeWorld);
             player.Name = toadPlayer.Name;
             player.WorldId = toadPlayer.HomeWorld;

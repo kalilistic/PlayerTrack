@@ -223,7 +223,7 @@ public class PlayerDataService
     private List<Player> GetPlayersForDeletion()
     {
         var playersWithEncounters = RepositoryContext.PlayerEncounterRepository.GetPlayersWithEncounters();
-        var currentTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var currentTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         var options = ServiceContext.ConfigService.GetConfig().PlayerDataActionOptions;
         return ServiceContext.PlayerCacheService.GetPlayers(p =>
             (!options.KeepPlayersWithNotes || string.IsNullOrEmpty(p.Notes)) &&
@@ -237,7 +237,7 @@ public class PlayerDataService
     private List<PlayerConfig> GetPlayerConfigsForDeletion()
     {
         var playersWithEncounters = RepositoryContext.PlayerEncounterRepository.GetPlayersWithEncounters();
-        var currentTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var currentTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         var options = ServiceContext.ConfigService.GetConfig().PlayerSettingsDataActionOptions;
         return ServiceContext.PlayerCacheService.GetPlayers(p =>
             p.PlayerConfig.Id != 0 &&

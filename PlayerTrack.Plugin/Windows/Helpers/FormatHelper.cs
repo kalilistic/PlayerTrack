@@ -44,15 +44,15 @@ public static class FormatHelper
 
     public static string ToTimeSpan(this long value)
     {
-        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         string timeSpan;
         if (currentTime > value)
         {
-            timeSpan = ConvertToShortTimeSpan(DateTimeOffset.UtcNow.ToUnixTimeSeconds() - value);
+            timeSpan = ConvertToShortTimeSpan(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - value);
             return string.IsNullOrEmpty(timeSpan) ? Language.Now : $"{timeSpan} {Language.Ago}";
         }
 
-        timeSpan = ConvertToShortTimeSpan(value - DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+        timeSpan = ConvertToShortTimeSpan(value - DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
         return string.IsNullOrEmpty(timeSpan) ? Language.Now : $"{timeSpan} {Language.FromNow}";
     }
 

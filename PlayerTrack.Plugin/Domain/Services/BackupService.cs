@@ -81,7 +81,7 @@ public class BackupService
 
     private Backup CreateBackupEntry(BackupType type)
     {
-        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         bool isProtected;
         switch (type)
         {
@@ -192,7 +192,7 @@ public class BackupService
         // Run automatic scheduled backup if needed
         const long backupInterval = 43200000;
         var latestBackup = RepositoryContext.BackupRepository.GetLatestBackup();
-        if (latestBackup == null || latestBackup.Created + backupInterval < DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+        if (latestBackup == null || latestBackup.Created + backupInterval < DateTimeOffset.UtcNow.ToUnixTimeMilliseconds())
         {
             Plugin.PluginLog.Verbose($"Running automatic backup.");
             RunBackup(BackupType.Automatic);

@@ -47,7 +47,7 @@ public class PlayerListComponent : ViewComponent
             return;
         }
 
-        if (PendingFilterUpdate || (IsSearchDirty && DateTimeOffset.UtcNow.ToUnixTimeSeconds() - LastInputTime > DebounceTime))
+        if (PendingFilterUpdate || (IsSearchDirty && DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - LastInputTime > DebounceTime))
         {
             PendingFilterUpdate = false;
             IsSearchDirty = false;
@@ -184,7 +184,7 @@ public class PlayerListComponent : ViewComponent
                     else if (IsValidInput(searchInput))
                     {
                         Config.SearchInput = searchInput;
-                        LastInputTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                        LastInputTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
                         if (PlayerSearchService.IsValidSearch(Config.SearchInput))
                         {
@@ -198,7 +198,7 @@ public class PlayerListComponent : ViewComponent
                     }
                 }
 
-                if (IsSearchDirty && DateTimeOffset.UtcNow.ToUnixTimeSeconds() - LastInputTime > DebounceTime)
+                if (IsSearchDirty && DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - LastInputTime > DebounceTime)
                 {
                     IsSearchDirty = false;
                     PendingFilterUpdate = true;

@@ -60,7 +60,7 @@ public class PlayerRecentCache : IBasicPlayerCache
         {
             if (!RecentPlayerExpiry.ContainsKey(playerToRemove.Id))
             {
-                RecentPlayerExpiry.TryAdd(playerToRemove.Id, DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                RecentPlayerExpiry.TryAdd(playerToRemove.Id, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
             }
             else
             {

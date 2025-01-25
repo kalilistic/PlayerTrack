@@ -132,7 +132,7 @@ public class MainPresenter : IMainPresenter
         InvalidateCacheIfStale(PlayerCache, ref PlayerCacheLastUpdated, ref IsPlayerCacheStale);
         InvalidateCacheIfSearchChanged();
 
-        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         if (IsPlayerCacheStale && currentTime - PlayerCacheLastUpdated > CacheTtl)
         {
             PlayerCache.Clear();
@@ -204,7 +204,7 @@ public class MainPresenter : IMainPresenter
 
     private static void InvalidateCacheIfStale(IDictionary cache, ref long lastUpdated, ref bool isStale)
     {
-        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         if (isStale && currentTime - lastUpdated > CacheTtl)
         {
             cache.Clear();

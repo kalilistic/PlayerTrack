@@ -87,7 +87,7 @@ public class EncounterService
             return;
         }
 
-        CurrentEncounter.Ended = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        CurrentEncounter.Ended = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         UpdateEncounter(CurrentEncounter);
         PlayerEncounterService.EndPlayerEncounters(CurrentEncounter.Id);
         CurrentEncounter = null;
@@ -127,7 +127,7 @@ public class EncounterService
         if (allEncounters == null)
             return [];
 
-        var currentTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var currentTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         var options = ServiceContext.ConfigService.GetConfig().EncounterDataActionOptions;
         var encountersForDeletion = new List<Encounter>();
 

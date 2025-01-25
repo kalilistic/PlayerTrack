@@ -46,7 +46,7 @@ public class PlayerCacheService
 
     private void OnRecentPlayerTimerOnElapsed(object? sender, ElapsedEventArgs e)
     {
-        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         var threshold = ServiceContext.ConfigService.GetConfig().RecentPlayersThreshold;
         var expiry = PlayerRecentCache.GetExpiry();
 
@@ -703,7 +703,7 @@ public class PlayerCacheService
     private List<Player> GetPlayersForDeletion()
     {
         var playersWithEncounters = RepositoryContext.PlayerEncounterRepository.GetPlayersWithEncounters();
-        var currentTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var currentTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         var options = ServiceContext.ConfigService.GetConfig().PlayerDataActionOptions;
         return PlayerCache.Get(p =>
             (!options.KeepPlayersWithNotes || string.IsNullOrEmpty(p.Notes)) &&
@@ -717,7 +717,7 @@ public class PlayerCacheService
     private List<PlayerConfig> GetPlayerConfigsForDeletion()
     {
         var playersWithEncounters = RepositoryContext.PlayerEncounterRepository.GetPlayersWithEncounters();
-        var currentTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        var currentTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         var options = ServiceContext.ConfigService.GetConfig().PlayerSettingsDataActionOptions;
         return PlayerCache.Get(p =>
             p.PlayerConfig.Id != 0 &&

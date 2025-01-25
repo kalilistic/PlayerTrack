@@ -137,7 +137,7 @@ public static class PlayerViewMapper
             {
                 Id = pEnc.Id,
                 Time = pEnc.Created.ToTimeSpan(),
-                Duration = pEnc.Ended == 0 ? (DateTimeOffset.UtcNow.ToUnixTimeSeconds() - pEnc.Created).ToDuration() : (pEnc.Ended - pEnc.Created).ToDuration(),
+                Duration = pEnc.Ended == 0 ? (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - pEnc.Created).ToDuration() : (pEnc.Ended - pEnc.Created).ToDuration(),
                 Job = Sheets.ClassJobs[pEnc.JobId].Code,
                 Level = pEnc.JobLvl.ToString(),
                 Location = GetLastLocation(enc.TerritoryTypeId)
