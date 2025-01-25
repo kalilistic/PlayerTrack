@@ -18,10 +18,10 @@ public static class Utils
     /// Get the localized string for a resource key.
     /// </summary>
     /// <param name="key">Localization resource name.</param>
-    /// <returns>A safe string with `"Loc Error"` if not found.</returns>
+    /// <returns>The localized string, or the original if not found.</returns>
     public static string GetLoc(string key)
     {
-        return Language.ResourceManager.GetString(key, CurrentCulture) ?? $"Loc Error ({key})";
+        return Language.ResourceManager.GetString(key, CurrentCulture) ?? key;
     }
 
     /// <summary>
