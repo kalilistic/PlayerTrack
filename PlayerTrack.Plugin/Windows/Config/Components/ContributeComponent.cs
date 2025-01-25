@@ -1,5 +1,7 @@
-﻿using Dalamud.Interface.Colors;
+﻿using System.Numerics;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility;
+using Dalamud.Interface.Utility.Raii;
 using ImGuiNET;
 using PlayerTrack.Resource;
 
@@ -38,9 +40,10 @@ public class ContributeComponent : ConfigViewComponent
         Helper.BulletText(Language.NoSpecialPerks);
         Helper.BulletText(Language.ContributionUsage);
         ImGuiHelpers.ScaledDummy(1f);
-
-        ImGui.SameLine();
-        if (ImGui.Button("Ko-fi"))
-            Dalamud.Utility.Util.OpenLink("https://ko-fi.com/kalilistic");
+        using (ImRaii.PushColor(ImGuiCol.Button, new Vector4(0.12549f, 0.74902f, 0.33333f, 0.6f)))
+        {
+            if (ImGui.Button(Language.AboutKoFi))
+                Dalamud.Utility.Util.OpenLink("https://ko-fi.com/infiii");
+        }
     }
 }

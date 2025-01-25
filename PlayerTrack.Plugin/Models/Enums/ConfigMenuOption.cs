@@ -15,4 +15,5 @@ public enum ConfigMenuOption
     Data,
     Contribute,
     Help,
+    About,
 }

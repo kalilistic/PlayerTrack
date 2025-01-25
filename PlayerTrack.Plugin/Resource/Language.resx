@@ -891,4 +891,25 @@
     <data name="Yes" xml:space="preserve">
         <value>Yes</value>
     </data>
+    <data name="AboutAuthor" xml:space="preserve">
+        <value>Author:</value>
+    </data>
+    <data name="AboutVersion" xml:space="preserve">
+        <value>Version:</value>
+    </data>
+    <data name="AboutDiscord" xml:space="preserve">
+        <value>Discord:</value>
+    </data>
+    <data name="AboutDiscordThread" xml:space="preserve">
+        <value>Discord Thread</value>
+    </data>
+    <data name="AboutIssues" xml:space="preserve">
+        <value>Issues</value>
+    </data>
+    <data name="AboutKoFi" xml:space="preserve">
+        <value>Ko-Fi Tip</value>
+    </data>
+    <data name="About" xml:space="preserve">
+        <value>About</value>
+    </data>
 </root>

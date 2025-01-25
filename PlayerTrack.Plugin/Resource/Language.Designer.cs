@@ -60,6 +60,69 @@ namespace PlayerTrack.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        internal static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Author:.
+        /// </summary>
+        internal static string AboutAuthor {
+            get {
+                return ResourceManager.GetString("AboutAuthor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discord:.
+        /// </summary>
+        internal static string AboutDiscord {
+            get {
+                return ResourceManager.GetString("AboutDiscord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discord Thread.
+        /// </summary>
+        internal static string AboutDiscordThread {
+            get {
+                return ResourceManager.GetString("AboutDiscordThread", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Issues.
+        /// </summary>
+        internal static string AboutIssues {
+            get {
+                return ResourceManager.GetString("AboutIssues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ko-Fi Tip.
+        /// </summary>
+        internal static string AboutKoFi {
+            get {
+                return ResourceManager.GetString("AboutKoFi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version:.
+        /// </summary>
+        internal static string AboutVersion {
+            get {
+                return ResourceManager.GetString("AboutVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actions.
         /// </summary>
         internal static string Actions {
