@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Interface;
@@ -148,13 +147,13 @@ public static class PlayerConfigComponent
             {
                 ImGuiHelpers.ScaledDummy(2f);
 
-                DrawCheckbox("NameChangeAlert", playerConfigSet, pc => pc.AlertNameChange,
+                DrawCheckbox(Language.NameChangeAlert, playerConfigSet, pc => pc.AlertNameChange,
                              ref playerConfigSet.CurrentPlayerConfig.AlertNameChange,
                              ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-                DrawCheckbox("WorldTransferAlert", playerConfigSet, pc => pc.AlertWorldTransfer,
+                DrawCheckbox(Language.WorldTransferAlert, playerConfigSet, pc => pc.AlertWorldTransfer,
                              ref playerConfigSet.CurrentPlayerConfig.AlertWorldTransfer,
                              ref playerConfigSet.CurrentPlayerConfig.IsChanged);
-                DrawCheckbox("ProximityAlert", playerConfigSet, pc => pc.AlertProximity,
+                DrawCheckbox(Language.ProximityAlert, playerConfigSet, pc => pc.AlertProximity,
                              ref playerConfigSet.CurrentPlayerConfig.AlertProximity,
                              ref playerConfigSet.CurrentPlayerConfig.IsChanged);
             }

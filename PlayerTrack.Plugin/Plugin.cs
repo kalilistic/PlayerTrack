@@ -97,7 +97,10 @@ public class Plugin : IDalamudPlugin
     /// </summary>
     private void LanguageChanged(string langCode)
     {
-        Language.Culture = new CultureInfo(langCode);
+        var culture = new CultureInfo(langCode);
+
+        Language.Culture = culture;
+        Utils.CurrentCulture = culture;
     }
 
     private static void SetPluginVersion()

@@ -76,11 +76,6 @@ public class CategoryComponent : ConfigViewComponent
     private void DrawNoCategoryPlacement()
     {
         var noCategoryPlacement = Config.NoCategoryPlacement;
-
-        using var tabItem = ImRaii.TabItem(Language.Categories);
-        if (!tabItem.Success)
-            return;
-
         if (Helper.Combo(Language.NoCategoryPlacement, ref noCategoryPlacement, 80))
         {
             Config.NoCategoryPlacement = noCategoryPlacement;

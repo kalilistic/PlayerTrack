@@ -6,12 +6,13 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Numerics;
+using PlayerTrack.Resource;
 
 namespace PlayerTrack;
 
 public static class Utils
 {
-    public static readonly CultureInfo FallbackCulture = new("en");
+    public static CultureInfo CurrentCulture = CultureInfo.InvariantCulture;
 
     /// <summary>
     /// Get the localized string for a resource key.
@@ -20,17 +21,7 @@ public static class Utils
     /// <returns>A safe string with `"Loc Error"` if not found.</returns>
     public static string GetLoc(string key)
     {
-        return Resource.Language.ResourceManager.GetString(key) ?? GetFallbackLoc(key);
-    }
-
-    /// <summary>
-    /// Get the english fallback localization
-    /// </summary>
-    /// <param name="key">Localization resource name.</param>
-    /// <returns>A safe string with `"Loc Error"` if not found.</returns>
-    public static string GetFallbackLoc(string key)
-    {
-        return Resource.Language.ResourceManager.GetString(key, FallbackCulture) ?? $"Loc Error ({key})";
+        return Language.ResourceManager.GetString(key, CurrentCulture) ?? $"Loc Error ({key})";
     }
 
     /// <summary>

@@ -863,9 +863,6 @@
     <data name="VisibilityType" xml:space="preserve">
         <value>Type de visibilité</value>
     </data>
-    <data name="Voidlist" xml:space="preserve">
-        <value>VoidList</value>
-    </data>
     <data name="WarningZone" xml:space="preserve">
         <value>Avertissement: C'est la zone dangeureuse. Ces actions ne peuvent être défaites!</value>
     </data>
