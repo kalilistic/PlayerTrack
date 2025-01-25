@@ -35,7 +35,6 @@ public class PlayerProcessService
 
     private void ProcessCurrentPlayers(IFramework framework)
     {
-        Plugin.PluginLog.Verbose("Entering PlayerProcessService.ReconcileCurrentPlayerTimerOnElapsed()");
         Locker.EnterWriteLock();
         try
         {

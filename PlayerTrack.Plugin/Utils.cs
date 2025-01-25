@@ -18,7 +18,7 @@ public static class Utils
     /// <returns>A safe string with `"Loc Error"` if not found.</returns>
     public static string GetLoc(string key)
     {
-        return Resource.Language.ResourceManager.GetString(key) ?? "Loc Error";
+        return Resource.Language.ResourceManager.GetString(key) ?? $"Loc Error ({key})";
     }
 
     /// <summary>

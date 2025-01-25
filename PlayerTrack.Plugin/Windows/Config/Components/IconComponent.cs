@@ -49,7 +49,7 @@ public class IconComponent : ConfigViewComponent
 
     private void DrawIconSelectionControls()
     {
-        Helper.Combo("####FontAwesomeCategorySearch", ref SelectedIconCategory, IconCategories, 160);
+        Helper.Combo("###FontAwesomeCategorySearch", ref SelectedIconCategory, IconCategories, 160);
         ImGui.SameLine(170f * ImGuiHelpers.GlobalScale);
         ImGui.SetNextItemWidth(180f * ImGuiHelpers.GlobalScale);
         ImGui.InputTextWithHint("###FontAwesomeInputSearch", Language.SearchIconsHint, ref IconSearchInput, 50);

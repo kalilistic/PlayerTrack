@@ -168,7 +168,7 @@ public static class PlayerConfigComponent
                 {
                     ImGuiHelpers.ScaledDummy(2f);
 
-                    DrawCombo("VisibilityType", playerConfigSet, pc => pc.VisibilityType,
+                    DrawCombo(Language.VisibilityType, playerConfigSet, pc => pc.VisibilityType,
                               ref playerConfigSet.CurrentPlayerConfig.VisibilityType,
                               ref playerConfigSet.CurrentPlayerConfig.IsChanged, false);
                 }

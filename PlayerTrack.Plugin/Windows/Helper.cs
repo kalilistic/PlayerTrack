@@ -143,7 +143,7 @@ public static class Helper
         if (padding)
             ImGuiHelpers.ScaledDummy(1f);
 
-        var label = includeLabel ? Utils.GetLoc(key) : $"###{key}_Combo";
+        var label = includeLabel ? key : $"###{key}_Combo";
         ImGui.SetNextItemWidth(comboWidth == -1 ? comboWidth : CalcScaledComboWidth(comboWidth));
         var val = Convert.ToInt32(value);
         if (ImGui.Combo(label, ref val, localizedOptions.ToArray(), localizedOptions.Count))
@@ -171,7 +171,7 @@ public static class Helper
 
         ImGuiHelpers.ScaledDummy(1f);
         ImGui.SetNextItemWidth(CalcScaledComboWidth(comboWidth));
-        if (ImGui.Combo($"{Utils.GetLoc(key)}###{suffix}_Combo", ref value, localizedOptions.ToArray(), localizedOptions.Count))
+        if (ImGui.Combo($"{key}###{suffix}_Combo", ref value, localizedOptions.ToArray(), localizedOptions.Count))
             isChanged = true;
 
         return isChanged;
@@ -261,12 +261,10 @@ public static class Helper
         if (padding)
             ImGuiHelpers.ScaledDummy(1f);
 
-        var label = includeLabel ? Utils.GetLoc(key) : $"###{key}";
+        var label = includeLabel ? key : $"###{key}";
         ImGui.SetNextItemWidth(comboWidth == -1 ? comboWidth : CalcScaledComboWidth(comboWidth));
         if (ImGui.Combo(label, ref value, localizedOptions.ToArray(), localizedOptions.Count))
-        {
             isChanged = true;
-        }
 
         return isChanged;
     }

@@ -34,7 +34,7 @@ public class PlayerListComponent : ViewComponent
 
     public event PlayerListComponentOpenConfigDelegate? OnPlayerListComponentOpenConfig;
 
-    public override unsafe void Draw()
+    public override void Draw()
     {
         if (!PlayerSearchService.IsValidSearch(Config.SearchInput))
         {
@@ -61,13 +61,13 @@ public class PlayerListComponent : ViewComponent
         var playersCount = Presenter.GetPlayersCount();
 
         using var panelChild = ImRaii.Child("###LeftPanel", new Vector2(205 * ImGuiHelpers.GlobalScale, 0), false);
-        if (panelChild.Success)
+        if (!panelChild.Success)
             return;
 
         DrawControls(playersCount);
 
         using var listChild = ImRaii.Child("###PlayerList", new Vector2(205 * ImGuiHelpers.GlobalScale, 0), true);
-        if (listChild.Success)
+        if (!listChild.Success)
             return;
 
         if (playersCount == 0)

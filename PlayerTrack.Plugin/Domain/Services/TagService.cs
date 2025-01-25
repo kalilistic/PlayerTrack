@@ -78,6 +78,7 @@ public class TagService : CacheService<Tag>
     private void ReloadTagCache() =>
         ExecuteReloadCache(() =>
         {
+            Plugin.PluginLog.Information("Entering TagService.ReloadTagCache()");
             var tags = RepositoryContext.TagRepository.GetAllTags();
             if (tags == null)
             {

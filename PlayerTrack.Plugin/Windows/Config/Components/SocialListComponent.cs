@@ -85,7 +85,7 @@ public class SocialListComponent : ConfigViewComponent
             LastPlayerCount = Players.Count;
         }
 
-        Helper.Combo("SelectPlayer", ref SelectedPlayerIndex, PlayerNames, 250, false, false);
+        Helper.Combo("##SelectPlayer", ref SelectedPlayerIndex, PlayerNames, 250, false, false);
         Player = Players[SelectedPlayerIndex];
     }
 
@@ -167,7 +167,7 @@ public class SocialListComponent : ConfigViewComponent
     {
         if (socialListTypes.Contains(SocialListType.CrossWorldLinkShell))
         {
-            if (Helper.Combo("DataCenter", ref SelectedDataCenterIndex, DataCenterNames, 140, false, false))
+            if (Helper.Combo("##DataCenter", ref SelectedDataCenterIndex, DataCenterNames, 140, false, false))
             {
                 var dataCenterName = DataCenterNames.ElementAt(SelectedDataCenterIndex);
                 SelectedDataCenterId = Sheets.DataCenters.FirstOrDefault(x => x.Value.Name == dataCenterName).Key;

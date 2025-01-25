@@ -16,7 +16,7 @@ public class TagRepository : BaseRepository
 
     public IEnumerable<Tag>? GetAllTags()
     {
-        Plugin.PluginLog.Verbose($"Entering TagRepository.GetAllTags().");
+        Plugin.PluginLog.Verbose("Entering TagRepository.GetAllTags().");
         try
         {
             const string sql = "SELECT * FROM tags";
