@@ -62,10 +62,7 @@ public class TagService : CacheService<Tag>
     private void AddTagToCacheAndRepository(Tag tag)
     {
         tag.Id = RepositoryContext.TagRepository.CreateTag(tag);
-
-        if (Cache.TryGetValue(tag.Id, out var existingValue))
-            Cache.TryUpdate(tag.Id, tag, existingValue);
-
+        Cache.TryAdd(tag.Id, tag);
         ServiceContext.PlayerCacheService.AddTag(tag.Id);
     }
 
@@ -78,7 +75,6 @@ public class TagService : CacheService<Tag>
     private void ReloadTagCache() =>
         ExecuteReloadCache(() =>
         {
-            Plugin.PluginLog.Information("Entering TagService.ReloadTagCache()");
             var tags = RepositoryContext.TagRepository.GetAllTags();
             if (tags == null)
             {
