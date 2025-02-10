@@ -912,4 +912,7 @@
     <data name="About" xml:space="preserve">
         <value>About</value>
     </data>
+    <data name="OptionCtrlNewline" xml:space="preserve">
+        <value>Use CTRL + Enter For Newline</value>
+    </data>
 </root>

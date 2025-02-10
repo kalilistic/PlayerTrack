@@ -29,8 +29,10 @@ public static class ChatGuiExtensions
     private static SeString BuildSeString(string? pluginName, IEnumerable<Payload> payloads)
     {
         var builder = new SeStringBuilder();
-        builder.AddUiForeground($"[{pluginName}] ", 548);
+        builder.AddUiForeground(548);
+        builder.AddText($"[{pluginName}] ");
         builder.Append(payloads);
+        builder.AddUiForegroundOff();
 
         return builder.BuiltString;
     }

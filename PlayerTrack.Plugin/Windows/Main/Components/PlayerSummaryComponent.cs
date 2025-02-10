@@ -16,7 +16,6 @@ namespace PlayerTrack.Windows.Main.Components;
 
 public class PlayerSummaryComponent : ViewComponent
 {
-    private const ImGuiInputTextFlags InputFlags = ImGuiInputTextFlags.CtrlEnterForNewLine | ImGuiInputTextFlags.AllowTabInput;
     private const float SectionSpace = 2.8f;
 
     private readonly IMainPresenter Presenter;
@@ -94,9 +93,13 @@ public class PlayerSummaryComponent : ViewComponent
     private void DrawNotes(PlayerView player)
     {
         Helper.TextColored(ImGuiColors.DalamudViolet, Language.Notes);
+        var flags = ImGuiInputTextFlags.AllowTabInput;
+        if (Config.UseCtrlNewLine)
+            flags |= ImGuiInputTextFlags.CtrlEnterForNewLine;
+
         var notes = player.Notes;
         var inputSize = new Vector2(ImGui.GetWindowSize().X - (5f * ImGuiHelpers.GlobalScale), -1 - (5f * ImGuiHelpers.GlobalScale));
-        if (ImGui.InputTextMultiline("###Player_Summary_Notes_Text", ref notes, 2000, inputSize, InputFlags))
+        if (ImGui.InputTextMultiline("###Player_Summary_Notes_Text", ref notes, 2000, inputSize, flags))
         {
             player.Notes = notes;
             ServiceContext.PlayerDataService.UpdatePlayerNotes(player.Id, notes);

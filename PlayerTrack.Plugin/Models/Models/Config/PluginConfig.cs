@@ -66,6 +66,8 @@ public class PluginConfig : IPluginConfig
 
     public int RecentPlayersThreshold { get; set; } = 900000;
 
+    public bool UseCtrlNewLine { get; set; } = false;
+
     public List<FontAwesomeIcon> Icons { get; set; } =
     [
         FontAwesomeIcon.User,

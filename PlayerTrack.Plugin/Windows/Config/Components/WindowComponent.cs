@@ -77,6 +77,14 @@ public class WindowComponent : ConfigViewComponent
             ServiceContext.ConfigService.SaveConfig(Config);
             WindowConfigComponent_WindowConfigChanged?.Invoke();
         }
+
+        var useCtrlNewLine = Config.UseCtrlNewLine;
+        if (Helper.Checkbox(Language.OptionCtrlNewline, ref useCtrlNewLine))
+        {
+            Config.UseCtrlNewLine = useCtrlNewLine;
+            ServiceContext.ConfigService.SaveConfig(Config);
+            WindowConfigComponent_WindowConfigChanged?.Invoke();
+        }
     }
 
     private void DrawPlayerListTab()

@@ -1797,6 +1797,15 @@ namespace PlayerTrack.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use CTRL + Enter For Newline.
+        /// </summary>
+        internal static string OptionCtrlNewline {
+            get {
+                return ResourceManager.GetString("OptionCtrlNewline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Override.
         /// </summary>
         internal static string Override {

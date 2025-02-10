@@ -29,6 +29,8 @@ public class MainPresenter : IMainPresenter
     private long PlayerCountCacheLastUpdated;
     private string LastSearchInput = string.Empty;
 
+    private long LastCacheClear = Environment.TickCount64;
+
     public MainPresenter()
     {
         Config = ServiceContext.ConfigService.GetConfig();
@@ -174,6 +176,12 @@ public class MainPresenter : IMainPresenter
 
     public void ClearCache()
     {
+        // TODO Find better system
+        if (Environment.TickCount64 < LastCacheClear)
+            return;
+
+        LastCacheClear = Environment.TickCount64 + 1000; // 1s
+
         IsPlayerCountCacheStale = true;
         IsPlayerCacheStale = true;
         PlayerCache.Clear();
