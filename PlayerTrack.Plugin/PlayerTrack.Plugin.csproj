@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<Title>PlayerTrack.Plugin</Title>
 		<Authors>Infi, kalilistic</Authors>
-		<Version>3.5.0.1</Version>
+		<Version>3.5.0.2</Version>
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<Platforms>x64</Platforms>
 		<LangVersion>latest</LangVersion>

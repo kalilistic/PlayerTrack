@@ -15,6 +15,7 @@ public class MainPresenter : IMainPresenter
 {
     private const int CacheChunkSize = 100;
     private const long CacheTtl = 600000;
+    private const int OneSecond = 1000;
 
     private readonly PluginConfig Config;
     private readonly Dictionary<int, List<Player>> PlayerCache = new();
@@ -30,6 +31,8 @@ public class MainPresenter : IMainPresenter
     private string LastSearchInput = string.Empty;
 
     private long LastCacheClear = Environment.TickCount64;
+    private long LastDelayedCacheClear = Environment.TickCount64;
+    private bool PlayerCacheDelayedClear;
 
     public MainPresenter()
     {
@@ -59,6 +62,7 @@ public class MainPresenter : IMainPresenter
 
     public int GetPlayersCount()
     {
+        CheckDelayedCacheClear();
         InvalidateCacheIfStale(PlayerCountCache, ref PlayerCountCacheLastUpdated, ref IsPlayerCountCacheStale);
         InvalidateCacheIfSearchChanged();
 
@@ -174,13 +178,24 @@ public class MainPresenter : IMainPresenter
 
     public void ShowPanel(PanelType panelType) => CurrentPanelView().ShowPanel(panelType);
 
+    /// <summary>
+    /// Clears the cache and triggers a rebuild.
+    /// </summary>
+    /// <remarks>
+    /// Only allowed once every 1 second.
+    /// If the cooldown is active, any new clear request will be
+    /// pushed into a delayed pool which gets processed after 1 second
+    /// </remarks>
     public void ClearCache()
     {
-        // TODO Find better system
         if (Environment.TickCount64 < LastCacheClear)
+        {
+            PlayerCacheDelayedClear = true;
             return;
+        }
 
-        LastCacheClear = Environment.TickCount64 + 1000; // 1s
+        LastCacheClear = Environment.TickCount64 + OneSecond;
+        LastDelayedCacheClear = Environment.TickCount64 + OneSecond;
 
         IsPlayerCountCacheStale = true;
         IsPlayerCacheStale = true;
@@ -260,5 +275,24 @@ public class MainPresenter : IMainPresenter
         };
 
         PlayerList.OnOpenPanelView += () => PanelView.IsOpen = true;
+    }
+
+    /// <summary>
+    /// Clears the cache after 1 second of delay if there was multiple clear requests before
+    /// </summary>
+    private void CheckDelayedCacheClear()
+    {
+        if (!PlayerCacheDelayedClear)
+            return;
+
+        if (Environment.TickCount64 < LastDelayedCacheClear)
+            return;
+
+        PlayerCacheDelayedClear = false;
+
+        IsPlayerCountCacheStale = true;
+        IsPlayerCacheStale = true;
+        PlayerCache.Clear();
+        PlayerCountCache.Clear();
     }
 }

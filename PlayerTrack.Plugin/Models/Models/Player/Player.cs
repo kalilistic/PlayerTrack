@@ -11,7 +11,7 @@ namespace PlayerTrack.Models;
 
 using System.Linq;
 
-public class Player
+public class Player : IComparable<Player>, IEquatable<Player>
 {
     public int Id { get; set; }
 
@@ -85,6 +85,22 @@ public class Player
     public string PlayerListIconString { get; set; } = FontAwesomeIcon.User.ToIconString();
 
     public override int GetHashCode() => Key.GetHashCode();
+
+    public int CompareTo(Player? other)
+    {
+        if (other is null)
+            return -1;
+
+        return string.Compare(Name, other.Name, StringComparison.CurrentCultureIgnoreCase);
+    }
+
+    public bool Equals(Player? other)
+    {
+        if (other is null)
+            return false;
+
+        return GetHashCode() == other.GetHashCode();
+    }
 
     public override bool Equals(object? obj)
     {
